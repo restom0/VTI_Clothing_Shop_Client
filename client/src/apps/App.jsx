@@ -1,21 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Loginpage from "../pages/Loginpage";
-import Registerpage from "../pages/Registerpage";
-import Homepage from "../pages/Homepage";
-import Brandpage from "../pages/Brandpage";
-import Catepage from "../pages/Catepage";
-import ProductDetailpage from "../pages/ProductDetailpage";
-import Productpage from "../pages/Productpage";
-import Cartpage from "../pages/Cartpage";
-import Adminpage from "../pages/Adminpage";
-import Profilepage from "../pages/Profilepage";
-import Checkoutpage from "../pages/Checkoutpage";
-import Layout from "../layouts/Shop/Layout";
-import NotFoundpage from "../pages/NotFoundpage";
-import Forbiddenpage from "../pages/Forbiddenpage";
-import CareerLayout from "../layouts/Career/CareerLayout";
-import HelpCenterLayout from "../layouts/HelpCenter/HelpCenterLayout";
 const App = () => {
   return (
     <BrowserRouter>

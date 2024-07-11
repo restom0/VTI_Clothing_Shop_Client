@@ -15,10 +15,10 @@ import {
 } from "@material-tailwind/react";
 import { Rating } from "@mui/material";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import Pagination from "../layouts/Pagination";
+import Pagination from "../shared/Pagination";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
-import Tablist from "../layouts/Tablist";
-import { voucher } from "../constants/tab";
+import Tablist from "../shared/Tablist";
+import { voucher } from "../../constants/tab";
 const Voucher = () => {
   const [tab, setTab] = useState("ALL");
 

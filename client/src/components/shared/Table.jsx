@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import TableHeader from "./TableHeader";
-import AdminPagination from "./Admin/AdminPagination";
-import SettingButton from "./Admin/SettingButton";
+import AdminPagination from "./admin/AdminPagination";
+import SettingButton from "./admin/SettingButton";
 const Table = ({
   TABLE_HEAD,
   TABLE_ROWS,

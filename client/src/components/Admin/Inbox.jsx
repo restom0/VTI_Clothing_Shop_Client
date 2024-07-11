@@ -22,11 +22,11 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
-import TableHeader from "../../layouts/TableHeader";
+import TableHeader from "../shared/TableHeader";
 import { inbox } from "../../constants/table_head";
-import Table from "../../layouts/Table";
+import Table from "../shared/Table";
 import useOpen from "../../hooks/useOpen";
-import AdminLayout from "../../layouts/Admin/AdminLayout";
+import AdminLayout from "../../layouts/admin/AdminLayout";
 const TABLE_HEAD = [
   "Username",
   "Câu hỏi",

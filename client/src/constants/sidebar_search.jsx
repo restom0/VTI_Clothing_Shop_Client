@@ -40,11 +40,11 @@ import Comment from "../components/Admin/Comment";
 import Inventory from "../components/Admin/Inventory";
 import ImportProduct from "../components/Admin/ImportProduct";
 import OnsaleProduct from "../components/Admin/OnsaleProduct";
-import Voucher from "../components/Voucher";
 import User from "../components/Admin/User";
 import ConfirmOrder from "../components/Admin/ConfirmOrder";
 import Inbox from "../components/Admin/Inbox";
 import Web from "../components/Admin/Web";
+import Voucher from "../components/Admin/Voucher";
 const SIDEBAR_SEARCH = [
   {
     title: {

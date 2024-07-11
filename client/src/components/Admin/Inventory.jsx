@@ -25,7 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import TableHeader from "../../layouts/TableHeader";
 import { inventory } from "../../constants/table_head";
 import Table from "../../layouts/Table";
-import SettingButton from "../../layouts/Admin/SettingButton";
+import SettingButton from "../shared/admin/SettingButton";
 import useOpen from "../../hooks/useOpen";
 import Tablist from "../../layouts/Tablist";
 import { inventory_tab } from "../../constants/tab";

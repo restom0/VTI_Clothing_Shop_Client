@@ -25,7 +25,7 @@ import {
   RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
-import { account_menu } from "../../constants/menu_item";
+import { account_menu } from "../../../constants/menu_item";
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);

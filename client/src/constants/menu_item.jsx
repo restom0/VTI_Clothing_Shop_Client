@@ -11,12 +11,12 @@ import {
   RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
-import UserInfo from "../components/UserInfo";
-import Order from "../components/Order";
-import ProductSeen from "../components/ProductSeen";
-import ProductLove from "../components/ProductLove";
-import ProductRating from "../components/ProductRating";
-import Voucher from "../components/Voucher";
+import UserInfo from "../components/shop/UserInfo";
+import Order from "../components/shop/Order";
+import ProductSeen from "../components/shop/ProductSeen";
+import ProductLove from "../components/shop/ProductLove";
+import ProductRating from "../components/shop/ProductRating";
+import Voucher from "../components/shop/Voucher";
 const account_menu = [
   {
     label: "Trang cá nhân",
@@ -146,4 +146,5 @@ const profile_menu = [
     link: <Voucher />,
   },
 ];
-export { account_menu, profile_menu, footer_menu };
+const report_items = ["doanh thu", "thương hiệu", "danh mục", "sản phẩm"];
+export { account_menu, profile_menu, footer_menu, report_items };

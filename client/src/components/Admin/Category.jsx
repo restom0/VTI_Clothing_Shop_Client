@@ -25,7 +25,7 @@ import React from "react";
 import TableHeader from "../../layouts/TableHeader";
 import { category } from "../../constants/table_head";
 import useOpen from "../../hooks/useOpen";
-import SettingButton from "../../layouts/Admin/SettingButton";
+import SettingButton from "../shared/admin/SettingButton";
 import Table from "../../layouts/Table";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 

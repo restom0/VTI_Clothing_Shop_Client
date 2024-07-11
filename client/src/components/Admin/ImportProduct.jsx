@@ -25,9 +25,9 @@ import InfoIcon from "@mui/icons-material/Info";
 import EditIcon from "@mui/icons-material/Edit";
 import Pagination from "../../layouts/Pagination";
 import { importproduct } from "../../constants/table_head";
-import AdminPagination from "../../layouts/Admin/AdminPagination";
+import AdminPagination from "../shared/admin/AdminPagination";
 import Table from "../../layouts/Table";
-import SettingButton from "../../layouts/Admin/SettingButton";
+import SettingButton from "../shared/admin/SettingButton";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 const TABS = [

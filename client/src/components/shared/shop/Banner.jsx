@@ -27,7 +27,7 @@ import {
   Bars2Icon,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
-import { account_menu, profile_menu } from "../../constants/menu_item";
+import { account_menu, profile_menu } from "../../../constants/menu_item";
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);

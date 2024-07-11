@@ -26,13 +26,13 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
-import Pagination from "../layouts/Pagination";
-import Tablist from "../layouts/Tablist";
-import { allorder_tab } from "../constants/tab";
-import TableHeader from "../layouts/TableHeader";
-import { order } from "../constants/table_head";
-import SettingButton from "../layouts/Admin/SettingButton";
-import useOpen from "../hooks/useOpen";
+import Pagination from "../shared/Pagination";
+import Tablist from "../shared/Tablist";
+import { allorder_tab } from "../../constants/tab";
+import TableHeader from "../shared/TableHeader";
+import { order } from "../../constants/table_head";
+import SettingButton from "../shared/admin/SettingButton";
+import useOpen from "../../hooks/useOpen";
 
 const TABLE_ROWS = [
   {

@@ -20,8 +20,8 @@ import React, { useState } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import useOpen from "../../hooks/useOpen";
-import Table from "../Table";
-import Tablist from "../Tablist";
+import Table from "../../components/shared/Table";
+import Tablist from "../../components/shared/Tablist";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import { Toast } from "../../configs/SweetAlert2";
@@ -34,6 +34,7 @@ const AdminLayout = ({
   TABLE_ROWS,
   noDelete,
   noUpdate,
+  noDetail,
   updateContent,
   deleteContent,
   headerDetail,
@@ -89,21 +90,38 @@ const AdminLayout = ({
 
         {tablist && <Tablist TABS={tablist} tab={tab} setTab={setTab} />}
 
-        <Table
-          TABLE_HEAD={TABLE_HEAD}
-          TABLE_ROWS={TABLE_ROWS}
-          active={active}
-          setActive={setActive}
-          handleUpdateOpen={handleUpdateOpen}
-          handleDeleteOpen={handleDeleteOpen}
-          handleDetailOpen={handleDetailOpen}
-          updateContent={updateContent}
-          deleteContent={deleteContent}
-          noDelete={noDelete}
-          noUpdate={noUpdate}
-          data={data}
-          handleData={handleData}
-        />
+        {noDetail ? (
+          <Table
+            TABLE_HEAD={TABLE_HEAD}
+            TABLE_ROWS={TABLE_ROWS}
+            active={active}
+            setActive={setActive}
+            handleUpdateOpen={handleUpdateOpen}
+            handleDeleteOpen={handleDeleteOpen}
+            updateContent={updateContent}
+            deleteContent={deleteContent}
+            noDelete={noDelete}
+            noUpdate={noUpdate}
+            data={data}
+            handleData={handleData}
+          />
+        ) : (
+          <Table
+            TABLE_HEAD={TABLE_HEAD}
+            TABLE_ROWS={TABLE_ROWS}
+            active={active}
+            setActive={setActive}
+            handleUpdateOpen={handleUpdateOpen}
+            handleDeleteOpen={handleDeleteOpen}
+            handleDetailOpen={handleDetailOpen}
+            updateContent={updateContent}
+            deleteContent={deleteContent}
+            noDelete={noDelete}
+            noUpdate={noUpdate}
+            data={data}
+            handleData={handleData}
+          />
+        )}
       </Container>
       <Dialog
         open={detailOpen}

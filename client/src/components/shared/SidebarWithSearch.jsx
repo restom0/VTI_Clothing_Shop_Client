@@ -27,13 +27,13 @@ import {
   CubeTransparentIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import AdminNavbar from "./Admin/AdminNavbar";
+import AdminNavbar from "./admin/AdminNavbar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import PublicIcon from "@mui/icons-material/Public";
-import { SIDEBAR_SEARCH } from "../constants/sidebar_search";
+import { SIDEBAR_SEARCH } from "../../constants/sidebar_search";
 import PropTypes from "prop-types";
 const SidebarWithSearch = ({ tab, setTab }) => {
-  const [open, setOpen] = React.useState(1);
+  const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
 
   const handleOpen = (value) => {

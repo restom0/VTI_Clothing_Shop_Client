@@ -28,11 +28,11 @@ import {
   CubeTransparentIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import AdminNavbar from "./Admin/AdminNavbar";
+import AdminNavbar from "./admin/AdminNavbar";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { profile_menu } from "../constants/menu_item";
+import { profile_menu } from "../../constants/menu_item";
 const ProfileSidebar = ({ tab, setTab }) => {
   const [open, setOpen] = React.useState(1);
   const [openAlert, setOpenAlert] = React.useState(true);

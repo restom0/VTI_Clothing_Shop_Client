@@ -26,9 +26,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import Pagination from "../../layouts/Pagination";
 import { comment } from "../../constants/table_head";
 import TableHeader from "../../layouts/TableHeader";
-import SettingButton from "../../layouts/Admin/SettingButton";
+import SettingButton from "../shared/admin/SettingButton";
 import useOpen from "../../hooks/useOpen";
-import AdminPagination from "../../layouts/Admin/AdminPagination";
+import AdminPagination from "../shared/admin/AdminPagination";
 import Table from "../../layouts/Table";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 

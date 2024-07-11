@@ -18,12 +18,12 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/solid";
-import Pagination from "../layouts/Pagination";
-const ProductLove = () => {
+import Pagination from "../shared/Pagination";
+const ProductSeen = () => {
   return (
     <>
       <Typography variant="h4" color="blue-gray" className="my-3">
-        Sản phẩm yêu thích
+        Sản phẩm đã xem
       </Typography>
       <div className="grid grid-cols-3 gap-4">
         <Card className="mt-6">
@@ -40,9 +40,6 @@ const ProductLove = () => {
             <Typography variant="h5" color="blue-gray" className=" text-center">
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
         <Card className="mt-6">
@@ -63,9 +60,6 @@ const ProductLove = () => {
             >
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
         <Card className="mt-6">
@@ -86,9 +80,6 @@ const ProductLove = () => {
             >
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
         <Card className="mt-6">
@@ -109,9 +100,6 @@ const ProductLove = () => {
             >
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
         <Card className="mt-6">
@@ -132,9 +120,6 @@ const ProductLove = () => {
             >
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
         <Card className="mt-6">
@@ -155,9 +140,6 @@ const ProductLove = () => {
             >
               $155.00
             </Typography>
-            <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
-            </Button>
           </CardFooter>
         </Card>
       </div>
@@ -166,4 +148,4 @@ const ProductLove = () => {
   );
 };
 
-export default ProductLove;
+export default ProductSeen;

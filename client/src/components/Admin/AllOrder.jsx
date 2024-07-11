@@ -25,7 +25,7 @@ import TableHeader from "../../layouts/TableHeader";
 import { allorder } from "../../constants/table_head";
 import Tablist from "../../layouts/Tablist";
 import { allorder_tab } from "../../constants/tab";
-import SettingButton from "../../layouts/Admin/SettingButton";
+import SettingButton from "../shared/admin/SettingButton";
 import useOpen from "../../hooks/useOpen";
 import Table from "../../layouts/Table";
 import AdminLayout from "../../layouts/Admin/AdminLayout";

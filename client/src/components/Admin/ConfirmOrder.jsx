@@ -1,7 +1,8 @@
 import React from "react";
+import NotFoundpage from "../../pages/NotFoundpage";
 
 const ConfirmOrder = () => {
-  return <div>ConfirmOrder</div>;
+  return <NotFoundpage />;
 };
 
 export default ConfirmOrder;
