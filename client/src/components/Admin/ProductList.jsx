@@ -16,22 +16,15 @@ import {
 } from "@material-tailwind/react";
 import { Container, Rating } from "@mui/material";
 import React from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InfoIcon from "@mui/icons-material/Info";
-import { productdetail } from "../../constants/table_head";
-import TableHeader from "../../layouts/TableHeader";
-import Table from "../../layouts/Table";
-import useOpen from "../../hooks/useOpen";
-import AdminLayout from "../../layouts/Admin/AdminLayout";
-import { HeartIcon } from "@heroicons/react/24/outline";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "../../assets/swiper.css";
+import "../../configs/swiper.css";
+import AdminLayout from "../../layouts/Admin/AdminLayout";
+import { productdetail } from "../../constants/table_head";
+import CloseIcon from "@mui/icons-material/Close";
 const ProductList = () => {
   const [active, setActive] = React.useState(1);
 
@@ -207,7 +200,16 @@ const ProductList = () => {
                 </div>
                 <div className="grid grid-cols-2">
                   <Dialog open={open} handler={handleOpen}>
-                    <DialogHeader>Its a simple dialog.</DialogHeader>
+                    <DialogHeader className="pb-0 flex justify-between">
+                      <Typography variant="h4">Nhập giá sản phẩm</Typography>
+                      <IconButton
+                        className="border-none"
+                        variant="outlined"
+                        onClick={handleOpen}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </DialogHeader>
                     <DialogBody>
                       The key to more success is to have a lot of pillows. Put
                       it this way, it took me twenty five years to get these

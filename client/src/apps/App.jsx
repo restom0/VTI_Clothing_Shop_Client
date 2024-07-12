@@ -1,5 +1,20 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "../layouts/Shop/Layout";
+import Homepage from "../pages/Homepage";
+import Loginpage from "../pages/Loginpage";
+import Registerpage from "../pages/Registerpage";
+import Brandpage from "../pages/Brandpage";
+import Catepage from "../pages/Catepage";
+import ProductDetailpage from "../pages/ProductDetailpage";
+import Productpage from "../pages/Productpage";
+import Cartpage from "../pages/Cartpage";
+import Profilepage from "../pages/Profilepage";
+import Checkoutpage from "../pages/Checkoutpage";
+import Forbiddenpage from "../pages/Forbiddenpage";
+import NotFoundpage from "../pages/NotFoundpage";
+import Adminpage from "../pages/Adminpage";
+import CareerLayout from "../layouts/Career/CareerLayout";
+import HelpCenterLayout from "../layouts/HelpCenter/HelpCenterLayout";
 const App = () => {
   return (
     <BrowserRouter>
@@ -22,7 +37,7 @@ const App = () => {
         </Route>
         <Route path="/dashboard" element={<Adminpage />} />
         <Route path="/careers/" element={<CareerLayout />}></Route>
-        <Route path="/help-center" element={<HelpCenterLayout />}></Route>
+        <Route path="/help-center/" element={<HelpCenterLayout />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,3 @@
-import React from "react";
-import Banner from "../layouts/Shop/Banner";
-import NavbarWithSublist from "../layouts/Shop/NavbarWithSublist";
 import {
   Button,
   Card,
@@ -10,9 +7,8 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../layouts/Pagination";
+import Pagination from "../components/shared/Pagination";
 const Cartpage = () => {
   const navigate = useNavigate();
   return (

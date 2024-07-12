@@ -17,19 +17,11 @@ import {
   CardBody,
 } from "@material-tailwind/react";
 import { Container, Divider, Rating } from "@mui/material";
-import React, { useState } from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-
-import TableHeader from "../../layouts/TableHeader";
-import { allorder } from "../../constants/table_head";
-import Tablist from "../../layouts/Tablist";
+import { useState } from "react";
 import { allorder_tab } from "../../constants/tab";
-import SettingButton from "../shared/admin/SettingButton";
-import useOpen from "../../hooks/useOpen";
-import Table from "../../layouts/Table";
+import { allorder } from "../../constants/table_head";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
-import Pagination from "../../layouts/Pagination";
+import Pagination from "../shared/Pagination";
 const AllOrder = () => {
   const [tab, setTab] = useState("ALL");
   const [active, setActive] = useState(1);

@@ -19,6 +19,8 @@ import { set } from "date-fns";
 import KpiReport from "./KpiReport";
 import { plugins } from "chart.js/auto";
 import { report_items } from "../../constants/menu_item";
+import Table from "../shared/Table";
+import Pagination from "../shared/Pagination";
 
 const Report = () => {
   const [tab, setTab] = React.useState("doanh thu");
@@ -133,7 +135,75 @@ const Report = () => {
       },
     },
   };
-
+  const TABLE_HEAD = [
+    { label: "Tên", col: 1 },
+    { label: "Số lượng bán ra", col: 1 },
+    { label: "Doanh thu", col: 1 },
+    { label: "Đánh giá", col: 1 },
+  ];
+  const TABLE_ROWS = [
+    {
+      name: "Nike",
+      quantity: 100,
+      revenue: 1000000,
+      rating: 5,
+    },
+    {
+      name: "Adidas",
+      quantity: 90,
+      revenue: 900000,
+      rating: 4,
+    },
+    {
+      name: "Puma",
+      quantity: 80,
+      revenue: 800000,
+      rating: 3,
+    },
+    {
+      name: "Converse",
+      quantity: 70,
+      revenue: 700000,
+      rating: 2,
+    },
+    {
+      name: "Balenciaga",
+      quantity: 60,
+      revenue: 600000,
+      rating: 1,
+    },
+    {
+      name: "Gucci",
+      quantity: 50,
+      revenue: 500000,
+      rating: 5,
+    },
+    {
+      name: "Dior",
+      quantity: 40,
+      revenue: 400000,
+      rating: 4,
+    },
+    {
+      name: "Louis Vuitton",
+      quantity: 30,
+      revenue: 300000,
+      rating: 3,
+    },
+    {
+      name: "Hermes",
+      quantity: 20,
+      revenue: 200000,
+      rating: 2,
+    },
+    {
+      name: "Chanel",
+      quantity: 10,
+      revenue: 100000,
+      rating: 1,
+    },
+  ];
+  const [active, setActive] = React.useState(1);
   const handleTab = (e) => setTab(e.target.value);
   return (
     <>
@@ -184,8 +254,8 @@ const Report = () => {
       </Container>
       <div>
         <KpiReport tab={tab} />
-        <section className="mx-8 ">
-          <Card className="mb-5">
+        <section className="mx-8 grid grid-cols-2 gap-4 ">
+          <Card>
             <CardBody className="mx-auto my-auto w-full ">
               <Line data={lineData} options={lineOptions} />
             </CardBody>
@@ -196,6 +266,18 @@ const Report = () => {
             </CardBody>
           </Card>
         </section>
+        <Container className="mt-5">
+          <Table
+            TABLE_HEAD={TABLE_HEAD}
+            TABLE_ROWS={TABLE_ROWS}
+            active={active}
+            setActive={setActive}
+            noDelete
+            noUpdate
+            data
+            handleData
+          />
+        </Container>
       </div>
     </>
   );

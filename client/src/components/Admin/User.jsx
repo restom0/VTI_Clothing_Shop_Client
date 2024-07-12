@@ -15,15 +15,11 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Container } from "@mui/material";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
-import TableHeader from "../../layouts/TableHeader";
-import { user } from "../../constants/table_head";
-import Table from "../../layouts/Table";
+import { useState } from "react";
 import useOpen from "../../hooks/useOpen";
+import Table from "../shared/Table";
+import { user } from "../../constants/table_head";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TABLE_ROWS = [
   {
@@ -34,7 +30,7 @@ const TABLE_ROWS = [
   },
 ];
 const User = () => {
-  const [active, setActive] = React.useState(1);
+  const [active, setActive] = useState(1);
   const {
     detailOpen,
     updateOpen,
@@ -78,7 +74,16 @@ const User = () => {
         noUpdate
       />
       <Dialog open={detailOpen} handler={handleDetailOpen} size="xs">
-        <DialogHeader>Thông tin người dùng</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Thông tin người dùng</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleDetailOpen}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-2 text-center">

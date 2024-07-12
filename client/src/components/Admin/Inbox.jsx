@@ -26,7 +26,7 @@ import TableHeader from "../shared/TableHeader";
 import { inbox } from "../../constants/table_head";
 import Table from "../shared/Table";
 import useOpen from "../../hooks/useOpen";
-import AdminLayout from "../../layouts/admin/AdminLayout";
+import AdminLayout from "../../layouts/Admin/AdminLayout";
 const TABLE_HEAD = [
   "Username",
   "Câu hỏi",

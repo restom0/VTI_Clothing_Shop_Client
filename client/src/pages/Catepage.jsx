@@ -1,26 +1,9 @@
-import React from "react";
-import Banner from "../layouts/Shop/Banner";
-import NavbarWithSublist from "../layouts/Shop/NavbarWithSublist";
-import BreadcrumbsWithIcon from "../layouts/BreadCrumbs";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Option,
-  Radio,
-  Select,
-  Typography,
-} from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
-import Footer from "../layouts/Shop/Footer";
-import CategoryFilter from "../layouts/Shop/CategoryFilter";
-import BrandFilter from "../layouts/Shop/BrandFilter";
-import ProductList from "../components/Admin/ProductList";
-import ShopList from "../layouts/Shop/ShopList";
-import ProductFilter from "../layouts/Shop/ProductFilter";
-
+import BreadcrumbsWithIcon from "../components/shared/BreadCrumbs";
+import CategoryFilter from "../components/shared/shop/CategoryFilter";
+import BrandFilter from "../components/shared/shop/BrandFilter";
+import ProductFilter from "../components/shared/shop/ProductFilter";
+import ShopList from "../components/shared/shop/ShopList";
 const Catepage = () => {
   const { id } = useParams();
   const products = [

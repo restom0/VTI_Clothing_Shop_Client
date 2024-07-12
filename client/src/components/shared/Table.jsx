@@ -38,6 +38,7 @@ const Table = ({
         <tbody>
           {TABLE_ROWS.slice((active - 1) * 6, active * 6).map((row, index) => (
             <tr key={index} className="border-b border-gray-200">
+              <td className="p-4">{index + 1}</td>
               {Object.values(row).map((value, index) => (
                 <td
                   key={index}

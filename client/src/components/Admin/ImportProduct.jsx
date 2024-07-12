@@ -17,33 +17,11 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 import { Container, Rating } from "@mui/material";
-import React, { useState } from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InfoIcon from "@mui/icons-material/Info";
-import EditIcon from "@mui/icons-material/Edit";
-import Pagination from "../../layouts/Pagination";
-import { importproduct } from "../../constants/table_head";
-import AdminPagination from "../shared/admin/AdminPagination";
-import Table from "../../layouts/Table";
-import SettingButton from "../shared/admin/SettingButton";
-import useOpen from "../../hooks/useOpen";
+import { useState } from "react";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
-const TABS = [
-  {
-    label: "Tất cả",
-    value: "ALL",
-  },
-  {
-    label: "Còn hàng",
-    value: "AVAILABLE",
-  },
-  {
-    label: "Hết hàng",
-    value: "OUT_OF_STOCK",
-  },
-];
+import { importproduct } from "../../constants/table_head";
+import useOpen from "../../hooks/useOpen";
+import CloseIcon from "@mui/icons-material/Close";
 const TABLE_ROWS = [
   {
     name: "001",
@@ -412,7 +390,16 @@ const ImportProduct = () => {
         </div>
       </AdminLayout>
       <Dialog open={open} handler={handleOpen} size="xl">
-        <DialogHeader>Nhập sản phẩm mới</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Nhập sản phẩm mới</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleOpen}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-3 gap-4">

@@ -1,6 +1,4 @@
 import React from "react";
-import Banner from "../layouts/Shop/Banner";
-import NavbarWithSublist from "../layouts/Shop/NavbarWithSublist";
 import {
   Accordion,
   AccordionBody,
@@ -9,8 +7,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
-  CardHeader,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -22,7 +18,6 @@ import {
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Navigation } from "swiper/modules";
@@ -31,15 +26,10 @@ import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
-import "../assets/swiper.css";
-import { Container, Divider, Rating } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-
-import { styled } from "@mui/material/styles";
-import Footer from "../layouts/Shop/Footer";
+import "../configs/swiper.css";
+import { Container, Rating } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import Pagination from "../layouts/Pagination";
+import Pagination from "../components/shared/Pagination";
 const product = {
   id: 0,
   colors: [
@@ -116,19 +106,7 @@ const ProductDetailpage = () => {
   const [active, setActive] = React.useState(1);
   const handleOpen = () => setOpen(!open);
   const [description, setDescription] = React.useState(false);
-  const [review, setReview] = React.useState(false);
   const [star, setStar] = React.useState(false);
-  const VisuallyHiddenInput = styled("input")({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
   const { id } = useLocation();
 
   return (
@@ -416,9 +394,6 @@ const ProductDetailpage = () => {
                         <Typography variant="h6" className="mt-3">
                           {review.user}
                         </Typography>
-                        {/* <Typography color="gray" className="mt-3">
-                          Tham gia từ 1 tháng trước
-                        </Typography> */}
                       </div>
                     </div>
                   </div>
@@ -447,202 +422,6 @@ const ProductDetailpage = () => {
                 </CardBody>
               </Card>
             ))}
-            {/* <Card className="mt-5 pt-5">
-              <CardBody className="grid grid-cols-12 gap-20">
-                <div className="col-span-4">
-                  <div className="flex justify-around">
-                    <Avatar
-                      size="lg"
-                      variant="circular"
-                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                      alt="tania andrew"
-                      className="my-auto"
-                    />
-                    <div className="flex flex-col">
-                      <Typography variant="h6" className="mt-3">
-                        Tania Andrew
-                      </Typography>
-                      <Typography color="gray" className="mt-3">
-                        Tham gia từ 1 tháng trước
-                      </Typography>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-8">
-                  <div className="flex items-center">
-                    <Rating
-                      readOnly
-                      value={5}
-                      className="disabled text-amber-500"
-                    />
-                    <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
-                      Cực kì hài lòng
-                    </Typography>
-                  </div>
-                  <Typography className="mt-1 text-sm">
-                    Cách đây 3 ngày
-                  </Typography>
-                  <Typography className="pt-3 pe-10 pb-5">
-                    The craftsmanship and quality materials are exactly what you
-                    expect from Fjall. I sent these back for three reasons. 1)
-                    The taper below the knee wasn't strong enough. Not a fan of
-                    excess material in that area of a pant. 2) The stretch was
-                    nice & very comfortable, but the durability for anything
-                    other than high alpine(no bushwacking) or post hike pub
-                    probably fails. 3) When considering the materials used, many
-                    other manufactuers sell a similar pant for 50% less the
-                    cost.
-                  </Typography>
-                </div>
-              </CardBody>
-            </Card>
-            <Card className="mt-5 pt-5">
-              <CardBody className="grid grid-cols-12 gap-20">
-                <div className="col-span-4">
-                  <div className="flex justify-around">
-                    <Avatar
-                      size="lg"
-                      variant="circular"
-                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                      alt="tania andrew"
-                      className="my-auto"
-                    />
-                    <div className="flex flex-col">
-                      <Typography variant="h6" className="mt-3">
-                        Tania Andrew
-                      </Typography>
-                      <Typography color="gray" className="mt-3">
-                        Tham gia từ 1 tháng trước
-                      </Typography>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-8">
-                  <div className="flex items-center">
-                    <Rating
-                      readOnly
-                      value={5}
-                      className="disabled text-amber-500"
-                    />
-                    <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
-                      Cực kì hài lòng
-                    </Typography>
-                  </div>
-                  <Typography className="mt-1 text-sm">
-                    Cách đây 3 ngày
-                  </Typography>
-                  <Typography className="pt-3 pe-10 pb-5">
-                    The craftsmanship and quality materials are exactly what you
-                    expect from Fjall. I sent these back for three reasons. 1)
-                    The taper below the knee wasn't strong enough. Not a fan of
-                    excess material in that area of a pant. 2) The stretch was
-                    nice & very comfortable, but the durability for anything
-                    other than high alpine(no bushwacking) or post hike pub
-                    probably fails. 3) When considering the materials used, many
-                    other manufactuers sell a similar pant for 50% less the
-                    cost.
-                  </Typography>
-                </div>
-              </CardBody>
-            </Card>
-            <Card className="mt-5 pt-5">
-              <CardBody className="grid grid-cols-12 gap-20">
-                <div className="col-span-4">
-                  <div className="flex justify-around">
-                    <Avatar
-                      size="lg"
-                      variant="circular"
-                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                      alt="tania andrew"
-                      className="my-auto"
-                    />
-                    <div className="flex flex-col">
-                      <Typography variant="h6" className="mt-3">
-                        Tania Andrew
-                      </Typography>
-                      <Typography color="gray" className="mt-3">
-                        Tham gia từ 1 tháng trước
-                      </Typography>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-8">
-                  <div className="flex items-center">
-                    <Rating
-                      readOnly
-                      value={5}
-                      className="disabled text-amber-500"
-                    />
-                    <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
-                      Cực kì hài lòng
-                    </Typography>
-                  </div>
-                  <Typography className="mt-1 text-sm">
-                    Cách đây 3 ngày
-                  </Typography>
-                  <Typography className="pt-3 pe-10 pb-5">
-                    The craftsmanship and quality materials are exactly what you
-                    expect from Fjall. I sent these back for three reasons. 1)
-                    The taper below the knee wasn't strong enough. Not a fan of
-                    excess material in that area of a pant. 2) The stretch was
-                    nice & very comfortable, but the durability for anything
-                    other than high alpine(no bushwacking) or post hike pub
-                    probably fails. 3) When considering the materials used, many
-                    other manufactuers sell a similar pant for 50% less the
-                    cost.
-                  </Typography>
-                </div>
-              </CardBody>
-            </Card>
-            <Card className="mt-5 pt-5">
-              <CardBody className="grid grid-cols-12 gap-20">
-                <div className="col-span-4">
-                  <div className="flex justify-around">
-                    <Avatar
-                      size="lg"
-                      variant="circular"
-                      src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                      alt="tania andrew"
-                      className="my-auto"
-                    />
-                    <div className="flex flex-col">
-                      <Typography variant="h6" className="mt-3">
-                        Tania Andrew
-                      </Typography>
-                      <Typography color="gray" className="mt-3">
-                        Tham gia từ 1 tháng trước
-                      </Typography>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-8">
-                  <div className="flex items-center">
-                    <Rating
-                      readOnly
-                      value={5}
-                      className="disabled text-amber-500"
-                    />
-                    <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
-                      Cực kì hài lòng
-                    </Typography>
-                  </div>
-                  <Typography className="mt-1 text-sm">
-                    Cách đây 3 ngày
-                  </Typography>
-                  <Typography className="pt-3 pe-10 pb-5">
-                    The craftsmanship and quality materials are exactly what you
-                    expect from Fjall. I sent these back for three reasons. 1)
-                    The taper below the knee wasn't strong enough. Not a fan of
-                    excess material in that area of a pant. 2) The stretch was
-                    nice & very comfortable, but the durability for anything
-                    other than high alpine(no bushwacking) or post hike pub
-                    probably fails. 3) When considering the materials used, many
-                    other manufactuers sell a similar pant for 50% less the
-                    cost.
-                  </Typography>
-                </div>
-              </CardBody>
-            </Card> */}
           </div>
           <Pagination
             page={Math.ceil(reviews.length / 4)}

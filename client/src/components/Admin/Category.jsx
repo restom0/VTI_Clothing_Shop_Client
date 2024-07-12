@@ -16,18 +16,10 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { Container } from "@mui/material";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
-import TableHeader from "../../layouts/TableHeader";
-import { category } from "../../constants/table_head";
-import useOpen from "../../hooks/useOpen";
-import SettingButton from "../shared/admin/SettingButton";
-import Table from "../../layouts/Table";
+import { useState } from "react";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
+import { category } from "../../constants/table_head";
+import CloseIcon from "@mui/icons-material/Close";
 
 const TABLE_ROWS = [
   {
@@ -36,8 +28,8 @@ const TABLE_ROWS = [
   },
 ];
 const Category = () => {
-  const [active, setActive] = React.useState(1);
-  const [addOpen, setAddOpen] = React.useState(false);
+  const [active, setActive] = useState(1);
+  const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
   return (
     <>
@@ -115,7 +107,16 @@ const Category = () => {
         </div>
       </AdminLayout>
       <Dialog open={addOpen} handler={handleAddOpen} size="md">
-        <DialogHeader>Thêm danh mục</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Thêm danh mục</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleAddOpen}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">

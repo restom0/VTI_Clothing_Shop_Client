@@ -20,6 +20,7 @@ const TableHeader = ({ TABLE_HEAD, noUpdate, noDelete }) => {
     <>
       <thead>
         <tr className="text-gray-900  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <th className="p-4">STT</th>
           {TABLE_HEAD.map(({ label, col }, index) => (
             <th
               key={index}

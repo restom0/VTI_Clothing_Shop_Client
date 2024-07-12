@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-
-import Notificationpage from "../layouts/Notificationpage";
+import { useState } from "react";
+import Notificationpage from "../shared/Notificationpage";
 import { fail_checkout, success_checkout } from "../../constants/notification";
 const Step3Checkout = () => {
   const [check, setCheck] = useState(true);

@@ -16,19 +16,13 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
-import { Container, Divider, Rating } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InfoIcon from "@mui/icons-material/Info";
-import EditIcon from "@mui/icons-material/Edit";
-import TableHeader from "../../layouts/TableHeader";
-import { changePriceList, onsaleproduct } from "../../constants/table_head";
-import Table from "../../layouts/Table";
+import { Container, Divider, Pagination, Rating } from "@mui/material";
 import useOpen from "../../hooks/useOpen";
+import { changePriceList, onsaleproduct } from "../../constants/table_head";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
-import TableRow from "../../layouts/TableRow";
-import Pagination from "../../layouts/Pagination";
+import TableHeader from "../shared/TableHeader";
+import CloseIcon from "@mui/icons-material/Close";
+
 const TABLE_ROWS = [
   {
     name: "001",
@@ -404,7 +398,16 @@ const OnsaleProduct = () => {
         size="lg"
         className="overflow-y-auto"
       >
-        <DialogHeader>Nhập giá sản phẩm</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Nhập giá sản phẩm</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleOpen}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div>
@@ -550,7 +553,16 @@ const OnsaleProduct = () => {
         </DialogFooter>
       </Dialog>
       <Dialog open={opens} handler={handleOpens} size="xl">
-        <DialogHeader>Nhập giá hàng loạt</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Nhập giá hàng loạt</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleOpens}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-12 gap-8">

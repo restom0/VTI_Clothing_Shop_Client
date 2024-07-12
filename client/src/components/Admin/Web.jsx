@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -17,17 +17,11 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { Container, Rating } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import TableHeader from "../../layouts/TableHeader";
-import { web } from "../../constants/table_head";
-import Table from "../../layouts/Table";
-import useOpen from "../../hooks/useOpen";
-import AdminLayout from "../../layouts/Admin/AdminLayout";
-import { Toast } from "../../configs/SweetAlert2";
 import Swal from "sweetalert2";
+import useOpen from "../../hooks/useOpen";
+import { Toast } from "../../configs/SweetAlert2";
+import Table from "../shared/Table";
+import { web } from "../../constants/table_head";
 const Web = () => {
   const [open, setOpen] = React.useState(false);
 
@@ -47,7 +41,7 @@ const Web = () => {
       role: "USER",
     },
   ];
-  React.useEffect(() => {
+  useEffect(() => {
     if (updateOpen) {
       Swal.fire({
         title: "Bạn chắc chắn muốn khôi phục chứ?",

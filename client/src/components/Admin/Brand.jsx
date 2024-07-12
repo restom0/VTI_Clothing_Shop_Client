@@ -18,13 +18,10 @@ import {
 } from "@material-tailwind/react";
 import { Container } from "@mui/material";
 import React from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen";
-import TableHeader from "../../layouts/TableHeader";
-import { brand } from "../../constants/table_head";
-import SettingButton from "../shared/admin/SettingButton";
-import Table from "../../layouts/Table";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
-
+import { brand } from "../../constants/table_head";
 const TABLE_ROWS = [
   {
     name: "001",
@@ -119,7 +116,16 @@ const Brand = () => {
         </div>
       </AdminLayout>
       <Dialog open={addOpen} handler={handleAddOpen} size="md">
-        <DialogHeader>Thêm thương hiệu</DialogHeader>
+        <DialogHeader className="pb-0 flex justify-between">
+          <Typography variant="h4">Thêm thương hiệu</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleDetailOpen}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -156,55 +162,6 @@ const Brand = () => {
           </Button>
         </DialogFooter>
       </Dialog>
-      {/* <Container className="mt-5">
-        <div className="flex items-center justify-between mb-5">
-          <Typography variant="h3" color="blue-gray" className="font-bold">
-            Thương hiệu
-          </Typography>
-          <div className="flex items-center justify-between gap-4">
-            <Button
-              className=" !border-gray-300"
-              color="gray"
-              variant="outlined"
-            >
-              Thêm mới
-            </Button>
-          </div>
-        </div>
-        <Table
-          TABLE_HEAD={brand}
-          TABLE_ROWS={TABLE_ROWS}
-          active={active}
-          setActive={setActive}
-          handleDetailOpen={handleDetailOpen}
-          handleUpdateOpen={handleUpdateOpen}
-          handleDeleteOpen={handleDeleteOpen}
-          updateContent="Chỉnh sửa"
-          deleteContent="Xóa"
-        />
-      </Container>
-      <Dialog open={detailOpen} handler={handleDetailOpen}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
-        <DialogBody>
-          The key to more success is to have a lot of pillows. Put it this way,
-          it took me twenty five years to get these plants, twenty five years of
-          blood sweat and tears, and I&apos;m never giving up, I&apos;m just
-          getting started. I&apos;m up to something. Fan luv.
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
-      </Dialog> */}
     </>
   );
 };

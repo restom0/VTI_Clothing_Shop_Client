@@ -25,7 +25,7 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "../../assets/swiper.css";
+import "../../../configs/swiper.css";
 import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
 import { Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";

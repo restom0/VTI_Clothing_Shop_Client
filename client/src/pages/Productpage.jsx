@@ -1,36 +1,9 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Banner from "../layouts/Shop/Banner";
-import NavbarWithSublist from "../layouts/Shop/NavbarWithSublist";
-import Footer from "../layouts/Shop/Footer";
-import {
-  Navbar,
-  Collapse,
-  Typography,
-  Button,
-  IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Radio,
-  Input,
-  Option,
-  Select,
-} from "@material-tailwind/react";
-import BreadcrumbsWithIcon from "../layouts/BreadCrumbs";
-import Pagination from "../layouts/Pagination";
-import ProductCard from "../layouts/Shop/ProductCard";
-import ShopList from "../layouts/Shop/ShopList";
-import BrandFilter from "../layouts/Shop/BrandFilter";
-import CategoryFilter from "../layouts/Shop/CategoryFilter";
-import ProductFilter from "../layouts/Shop/ProductFilter";
+import BreadcrumbsWithIcon from "../components/shared/BreadCrumbs";
+import BrandFilter from "../components/shared/shop/BrandFilter";
+import CategoryFilter from "../components/shared/shop/CategoryFilter";
+import ProductFilter from "../components/shared/shop/ProductFilter";
+import ShopList from "../components/shared/shop/ShopList";
+
 const Productpage = () => {
   const products = [
     {

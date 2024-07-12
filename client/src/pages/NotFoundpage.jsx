@@ -1,5 +1,4 @@
-import React from "react";
-import Notificationpage from "../layouts/Notificationpage";
+import Notificationpage from "../components/shared/Notificationpage";
 import { not_found } from "../constants/notification";
 
 const NotFoundpage = () => {

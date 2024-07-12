@@ -41,7 +41,7 @@ const SidebarWithSearch = ({ tab, setTab }) => {
   };
   return (
     <div>
-      <Card className="relative h-[92vh] overflow-y-auto overflow-x-hidden w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 z-10 bg-gray-100">
+      <Card className="relative h-[92vh] overflow-y-auto overflow-x-hidden w-full max-w-[20rem] py-4 shadow-xl shadow-blue-gray-900/5 z-10 bg-gray-100">
         {/* <div className="mb-2 flex items-center gap-4 p-4">
           <img
           src="https://d1.awsstatic.com/partner-network/partner_marketing_web_team/600x400_VTI.d8eba650f439bfec6d3eef0034c2e59a323353c1.png"
@@ -55,7 +55,7 @@ const SidebarWithSearch = ({ tab, setTab }) => {
             label="Search"
           />
         </div> */}
-        <List>
+        <List className="px-2">
           {SIDEBAR_SEARCH.map((item, index) =>
             item.title ? (
               <>
@@ -96,6 +96,12 @@ const SidebarWithSearch = ({ tab, setTab }) => {
                           onClick={() => {
                             setTab(subitem.label);
                           }}
+                          style={{
+                            backgroundColor:
+                              tab === subitem.label ? "white" : "transparent",
+                            color:
+                              tab === subitem.label ? "#006edc" : "inherit",
+                          }}
                         >
                           <ListItemPrefix>
                             <ChevronRightIcon
@@ -116,6 +122,12 @@ const SidebarWithSearch = ({ tab, setTab }) => {
                   key={item.sublist[0].label}
                   selected={tab == item.sublist[0].label}
                   onClick={() => setTab(item.sublist[0].label)}
+                  style={{
+                    backgroundColor:
+                      tab === item.sublist[0].label ? "white" : "transparent",
+                    color:
+                      tab === item.sublist[0].label ? "#006edc" : "inherit",
+                  }}
                 >
                   <ListItemPrefix>
                     <PublicIcon strokeWidth={3} className="h-3 w-5" />

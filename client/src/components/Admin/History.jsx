@@ -9,13 +9,10 @@ import {
 } from "@material-tailwind/react";
 import { Container } from "@mui/material";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
-
-import React from "react";
-import TableHeader from "../../layouts/TableHeader";
-import { history } from "../../constants/table_head";
-import Table from "../../layouts/Table";
+import { useState } from "react";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
+import { history } from "../../constants/table_head";
 
 const TABLE_ROWS = [
   {
@@ -26,7 +23,7 @@ const TABLE_ROWS = [
   },
 ];
 const History = () => {
-  const [active, setActive] = React.useState(1);
+  const [active, setActive] = useState(1);
   const { updateOpen, deleteOpen, handleUpdateOpen, handleDeleteOpen } =
     useOpen();
 

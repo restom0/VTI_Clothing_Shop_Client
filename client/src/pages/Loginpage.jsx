@@ -3,7 +3,6 @@ import { Button, Input } from "@material-tailwind/react";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Icon from "../assets/Icon";
-import axios from "axios";
 import { Container } from "@mui/material";
 
 function Loginpage() {

@@ -18,19 +18,9 @@ import {
 } from "@material-tailwind/react";
 import { Container, Rating, TableHead } from "@mui/material";
 import React from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import InfoIcon from "@mui/icons-material/Info";
-import EditIcon from "@mui/icons-material/Edit";
-import Pagination from "../../layouts/Pagination";
-import { comment } from "../../constants/table_head";
-import TableHeader from "../../layouts/TableHeader";
-import SettingButton from "../shared/admin/SettingButton";
 import useOpen from "../../hooks/useOpen";
-import AdminPagination from "../shared/admin/AdminPagination";
-import Table from "../../layouts/Table";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
+import { comment } from "../../constants/table_head";
 
 const Comment = () => {
   const [active, setActive] = React.useState(1);

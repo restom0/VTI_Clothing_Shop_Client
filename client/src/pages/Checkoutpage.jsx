@@ -1,30 +1,12 @@
 import React from "react";
-import Banner from "../layouts/Shop/Banner";
-import NavbarWithSublist from "../layouts/Shop/NavbarWithSublist";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Checkbox,
-  Input,
-  List,
-  ListItem,
-  Radio,
-  Step,
-  Stepper,
-  Textarea,
-  Typography,
-} from "@material-tailwind/react";
+import { Step, Stepper } from "@material-tailwind/react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Container, Divider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import Step1Checkout from "../components/Step1Checkout";
-import Step2Checkout from "../components/Step2Checkout";
-import Step3Checkout from "../components/Step3Checkout";
+import { Container } from "@mui/material";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import Footer from "../layouts/Shop/Footer";
+import Step1Checkout from "../components/Shop/Step1Checkout";
+import Step2Checkout from "../components/Shop/Step2Checkout";
+import Step3Checkout from "../components/Shop/Step3Checkout";
 const Checkoutpage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
