@@ -113,11 +113,6 @@ const OnsaleProduct = () => {
         name="Nhập giá"
         TABLE_HEAD={onsaleproduct}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
-        handleDetailOpen={handleDetailOpen}
-        handleUpdateOpen={handleUpdateOpen}
-        handleDeleteOpen={handleDeleteOpen}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"

@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.context.annotation.DependsOn;
+
+import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
 
@@ -23,10 +27,6 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user_id;
-
-    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private OnSaleProduct product_id;
 
@@ -37,4 +37,15 @@ public class OrderItem {
     @Column(name = "quantity")
     @Pattern(regexp = NUMBER, message = "Invalid quantity")
     private Integer quantity;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime created_at;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updated_at;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deleted_at;
 }

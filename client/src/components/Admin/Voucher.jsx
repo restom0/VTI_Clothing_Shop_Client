@@ -97,32 +97,17 @@ const TABLE_ROWS = [
   },
 ];
 const Voucher = () => {
-  const [active, setActive] = React.useState(1);
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
   const handleOpen = () => setOpen(!open);
   const handleOpens = () => setOpens(!opens);
-  const {
-    detailOpen,
-    handleDetailOpen,
-    updateOpen,
-    handleUpdateOpen,
-    deleteOpen,
-    handleDeleteOpen,
-  } = useOpen();
-
   return (
     <>
       <AdminLayout
         name="Khuyến mãi"
         TABLE_HEAD={voucher}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
-        handleDetailOpen={handleDetailOpen}
-        handleUpdateOpen={handleUpdateOpen}
-        handleDeleteOpen={handleDeleteOpen}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -573,16 +558,8 @@ const Voucher = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>Xác nhận</span>
           </Button>
         </DialogFooter>
       </Dialog>
@@ -740,16 +717,8 @@ const Voucher = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
+          <Button variant="gradient" color="green" onClick={handleOpens}>
+            <span>Xác nhận</span>
           </Button>
         </DialogFooter>
       </Dialog>

@@ -3,11 +3,13 @@ package vn.vti.clothing_shop.repositories;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import vn.vti.clothing_shop.entities.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface CommentRepository extends JpaRepository<Comment, Long>{
     @Override
     @Query("SELECT c FROM Comment c WHERE c.deleted_at IS NULL")

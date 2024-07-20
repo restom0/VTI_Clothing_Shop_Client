@@ -2,8 +2,15 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.CommentCreateRequest;
-import vn.vti.clothing_shop.dto.in.CommentUpdateRequest;
+import org.springframework.stereotype.Service;
+import vn.vti.clothing_shop.dto.in.CommentCreateDTO;
+import vn.vti.clothing_shop.dto.in.CommentUpdateDTO;
+import vn.vti.clothing_shop.dto.out.CommentDTO;
+import vn.vti.clothing_shop.mappers.CommentMapper;
+import vn.vti.clothing_shop.mappers.ProductMapper;
+import vn.vti.clothing_shop.mappers.UserMapper;
+import vn.vti.clothing_shop.requests.CommentCreateRequest;
+import vn.vti.clothing_shop.requests.CommentUpdateRequest;
 import vn.vti.clothing_shop.entities.Comment;
 import vn.vti.clothing_shop.entities.Product;
 import vn.vti.clothing_shop.entities.User;
@@ -16,66 +23,54 @@ import vn.vti.clothing_shop.services.interfaces.CommentService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CommentServiceImplementation implements CommentService {
-    @Autowired
+
     private final CommentRepository commentRepository;
-
-    @Autowired
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final ProductMapper productMapper;
+    private final CommentMapper commentMapper;
+    private final UserMapper userMapper;
 
     @Autowired
-    private final UserRepository userRepository;
-
-    public CommentServiceImplementation(CommentRepository commentRepository, ProductRepository productRepository, UserRepository userRepository) {
+    public CommentServiceImplementation(CommentRepository commentRepository, ProductRepository productRepository, UserRepository userRepository, ProductMapper productMapper, CommentMapper commentMapper, UserMapper userMapper) {
         this.commentRepository = commentRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.productMapper = productMapper;
+        this.commentMapper = commentMapper;
+        this.userMapper = userMapper;
     }
 
-    public List<Comment> getAllComments(){
-        return commentRepository.findAll();
+    public List<CommentDTO> getAllComments(){
+        return this.commentRepository.findAll().stream()
+                .map(this.commentMapper::EntityToDTO)
+                .collect(Collectors.toList());
     };
-    public List<Comment> getCommentById(Long product_id){
-        return commentRepository.findByProductId(product_id);
+    public List<CommentDTO> getCommentById(Long product_id){
+        return commentRepository.findByProductId(product_id).stream()
+                .map(this.commentMapper::EntityToDTO)
+                .collect(Collectors.toList());
     };
-    public Boolean createComment(CommentCreateRequest commentCreateRequest,Long user_id){
-        Product product = this.productRepository.findById(commentCreateRequest.getProduct_id()).orElse(null);
-        User user = this.userRepository.findById(user_id).orElse(null);
-        if(product==null){
-            throw new NotFoundException("Product not found");
-        }
-        if(user==null){
-            throw new NotFoundException("User not found");
-        }
-        Comment comment = new Comment();
-        comment.setProduct_id(product);
-        comment.setContent(commentCreateRequest.getContent());
-        comment.setStar(commentCreateRequest.getStar());
-        comment.setStatus(commentCreateRequest.getStar() >= 2.5);
-        comment.setUser_id(user);
+    public Boolean createComment(Long user_id, CommentCreateDTO commentCreateDTO){
+        Product product = this.productRepository.findById(commentCreateDTO.getProduct_id()).orElseThrow(()->new NotFoundException("Product not found"));
+        User user = this.userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
+        this.commentRepository.save(this.commentMapper.CommentCreateDTOToEntity(commentCreateDTO,user,product));
+        return true;
+    };
+    public Boolean updateComment(Long id, Long user_id, CommentUpdateDTO commentUpdateDTO){
+        Comment comment= this.commentRepository.findByProductIdAndId(id,commentUpdateDTO.getId(),user_id)
+                .orElseThrow(()->new NotFoundException("Comment not found"));
+        this.commentRepository.save(this.commentMapper.CommentUpdateDTOToEntity(commentUpdateDTO,comment));
+        return true;
+    };
+    public Boolean deleteComment(Long id){
+        Comment comment = this.commentRepository.findById(id).orElseThrow(()->new NotFoundException("Comment not found"));
+        comment.setDeleted_at(LocalDateTime.now());
         this.commentRepository.save(comment);
-        return true;
-    };
-    public Boolean updateComment(Long id, CommentUpdateRequest commentUpdateRequest, Long user_id){
-        Optional<Comment> comment= this.commentRepository.findByProductIdAndId(id,commentUpdateRequest.getProduct_id(),user_id);
-        if(comment.isEmpty()){
-            throw new NotFoundException("Comment not found");
-        }
-        Comment newComment=comment.get();
-        newComment.setContent(commentUpdateRequest.getContent());
-        newComment.setStar(commentUpdateRequest.getStar());
-        newComment.setStatus(commentUpdateRequest.getStar()>=2.5);
-        return true;
-    };
-    public Boolean deleteComment(Long id,Long user_id){
-        Optional<Comment> comment = this.commentRepository.findByUserIdAndId(id,user_id);
-        if(comment.isEmpty()){
-            throw new NotFoundException("Comment not found");
-        }
-        Comment newComment = comment.get();
-        newComment.setDeleted_at(LocalDateTime.now());
         return true;
     };
 }

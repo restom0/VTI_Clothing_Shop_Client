@@ -22,6 +22,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { brand } from "../../constants/table_head";
+import useFetch from "../../hooks/useFetch";
+import { useAddBrandMutation, useGetBrandsQuery } from "../../apis/Brand";
+import { useSelector } from "react-redux";
+import { Toast } from "../../configs/SweetAlert2";
 const TABLE_ROWS = [
   {
     name: "001",
@@ -29,25 +33,47 @@ const TABLE_ROWS = [
   },
 ];
 const Brand = () => {
-  const {
-    detailOpen,
-    updateOpen,
-    deleteOpen,
-    handleDetailOpen,
-    handleUpdateOpen,
-    handleDeleteOpen,
-  } = useOpen();
-  const [active, setActive] = React.useState(1);
+  const { data: brands, error, isLoading } = useGetBrandsQuery();
+  const selectedId = useSelector((state) => state.selectedId.value);
   const [addOpen, setAddOpen] = React.useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
+  const [name, setName] = React.useState(
+    brands ? (brands.object ? brands.object[selectedId].name : "") : ""
+  );
+  const [description, setDescription] = React.useState(
+    brands ? (brands.object ? brands.object[selectedId].description : "") : ""
+  );
+  const [addBrand, { isLoading: isAdded, error: AddError }] =
+    useAddBrandMutation();
+
+  const handleAddSubmit = async () => {
+    try {
+      await addBrand({ name, description })
+        .unwrap()
+        .then(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Thêm thương hiệu thành công",
+          });
+          handleAddOpen();
+          setName("");
+          setDescription("");
+        });
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: "Thêm thương hiệu thất bại",
+      });
+    }
+  };
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <>
       <AdminLayout
         name="Danh sách thương hiệu"
         TABLE_HEAD={brand}
-        TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
+        TABLE_ROWS={brands.object ? brands.object : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"
@@ -59,14 +85,22 @@ const Brand = () => {
                 Tên thương hiệu:
               </Typography>
               <Typography variant="medium" className="my-auto">
-                Nike
+                {brands
+                  ? brands.object
+                    ? brands.object[selectedId].name
+                    : ""
+                  : ""}
               </Typography>
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
             <Typography variant="medium">
-              Thương hiệu thể thao hàng đầu thế giới
+              {brands
+                ? brands.object
+                  ? brands.object[selectedId].description
+                  : ""
+                : ""}
             </Typography>
           </Container>
         }
@@ -82,12 +116,19 @@ const Brand = () => {
                 Tên thương hiệu:
               </Typography>
               <Input
-                value={"Nike"}
+                value={
+                  brands
+                    ? brands.object
+                      ? brands.object[selectedId].name
+                      : ""
+                    : ""
+                }
                 placeholder="Nike"
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
@@ -98,8 +139,15 @@ const Brand = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              value={"Thương hiệu thể thao hàng đầu thế giới"}
-              placeholder="Thương hiệu thể thao hàng đầu thế giới"
+              value={
+                brands
+                  ? brands.object
+                    ? brands.object[selectedId].name
+                    : ""
+                  : ""
+              }
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Nhập văn bản dưới 255 kí tự"
             />
           </Container>
         }
@@ -121,7 +169,7 @@ const Brand = () => {
           <IconButton
             className="border-none"
             variant="outlined"
-            onClick={handleDetailOpen}
+            onClick={handleAddOpen}
           >
             <CloseIcon />
           </IconButton>
@@ -157,8 +205,13 @@ const Brand = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button variant="gradient" color="green" onClick={handleAddOpen}>
-            <span>Cập nhật</span>
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={handleAddSubmit}
+            disabled={isAdded}
+          >
+            <span>Thêm mới</span>
           </Button>
         </DialogFooter>
       </Dialog>

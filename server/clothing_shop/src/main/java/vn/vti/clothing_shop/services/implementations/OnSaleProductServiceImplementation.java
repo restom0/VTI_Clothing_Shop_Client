@@ -1,52 +1,44 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import vn.vti.clothing_shop.constants.Filter;
+import vn.vti.clothing_shop.dto.out.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.OnSaleProduct;
+import vn.vti.clothing_shop.exceptions.NotFoundException;
+import vn.vti.clothing_shop.mappers.OnSaleProductMapper;
 import vn.vti.clothing_shop.repositories.OnSaleProductRepository;
+import vn.vti.clothing_shop.services.interfaces.OnSaleProductService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
-@Component
-public class OnSaleProductServiceImplementation {
-    @Autowired
+@Service
+public class OnSaleProductServiceImplementation implements OnSaleProductService {
+
     private final OnSaleProductRepository onSaleProductRepository;
+    private final OnSaleProductMapper onSaleProductMapper;
 
-    public OnSaleProductServiceImplementation(OnSaleProductRepository onSaleProductRepository) {
+    @Autowired
+    public OnSaleProductServiceImplementation(OnSaleProductRepository onSaleProductRepository, OnSaleProductMapper onSaleProductMapper) {
         this.onSaleProductRepository = onSaleProductRepository;
+        this.onSaleProductMapper = onSaleProductMapper;
     }
 
-    //on sale product have like 2 situation: onsale with no end date and onsale with end date. Get list of all on sale products have the latest available date if there are not any other available date now  choose the lastest data with null end date
-    public List<OnSaleProduct> getAllOnSaleProducts() {
-        List<OnSaleProduct> onSaleProductsWithNullEndDate = this.onSaleProductRepository.findAllByNullEndDateAndAvailableDateAfterNow();
-        List<OnSaleProduct> onSaleProductsWithEndDate = this.onSaleProductRepository.findAllByEndDateNotNullAndAvailableDateAfterNowAndEndDateBeforeNow();
-        for (OnSaleProduct onSaleProduct : onSaleProductsWithEndDate) {
-            for (OnSaleProduct onSaleProductWithNullEndDate : onSaleProductsWithNullEndDate) {
-                if (Objects.equals(onSaleProductWithNullEndDate.getProduct_id().getId(), onSaleProduct.getProduct_id().getId())) {
-                    if (onSaleProductWithNullEndDate.getAvailable_date().isBefore(onSaleProduct.getAvailable_date())) {
-                        onSaleProductsWithNullEndDate.remove(onSaleProductWithNullEndDate);
-                        break;
-                    }
+    public List<OnSaleProductDTO> getAllOnSaleProducts() {
+        List<OnSaleProduct> NullEndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNullEnd();
+        List<OnSaleProduct> EndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNotNullEnd();
+        EndDateOnSaleProducts.forEach(EndDateOnSaleProduct -> {
+            NullEndDateOnSaleProducts.forEach(NullEndDateOnSaleProduct->{
+                if(!EndDateOnSaleProduct.getId().equals(NullEndDateOnSaleProduct.getId())){
+                    NullEndDateOnSaleProducts.add(EndDateOnSaleProduct);
                 }
-            }
-            onSaleProductsWithNullEndDate.add(onSaleProduct);
-        }
-        return onSaleProductsWithNullEndDate;
+            });
+        });
+        return this.onSaleProductMapper.EntityToDTO(NullEndDateOnSaleProducts);
     }
-    public OnSaleProduct getOnSaleProductById(Long id) {
-        List<OnSaleProduct> onSaleProductsWithNullEndDate = this.onSaleProductRepository.findByIdAndNullEndDateAndAvailableDateAfterNow(id);
-        List<OnSaleProduct> onSaleProductsWithEndDate = this.onSaleProductRepository.findByIdAndEndDateNotNullAndAvailableDateAfterNowAndEndDateBeforeNow(id);
-        if (onSaleProductsWithEndDate.isEmpty() && onSaleProductsWithNullEndDate.isEmpty()) {
-            return null;
-        }
-        else if (onSaleProductsWithEndDate.isEmpty()) {
-            return onSaleProductsWithNullEndDate.get(onSaleProductsWithNullEndDate.size() - 1);
-        }
-        return onSaleProductsWithEndDate.get(onSaleProductsWithEndDate.size() - 1);
+    public OnSaleProductDTO getOnSaleProductById(Long id) {
+        OnSaleProduct onSaleProduct = this.onSaleProductRepository.findById(id).orElseThrow(()->new NotFoundException("OnSaleProduct not found"));
+        return this.onSaleProductMapper.EntityToDTO(onSaleProduct);
     }
 }
 

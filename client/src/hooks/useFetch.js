@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
+import { SHOP_LOCAL_URL } from "../configs/Api";
 
-const useFetch = (url) => {
+const useFetch = (resources) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch(url)
+    fetch(SHOP_LOCAL_URL + resources)
       .then((res) => res.json())
       .then((data) => setData(data));
-  }, [url]);
+  }, [resources]);
 
   return [data];
 };

@@ -27,6 +27,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name="name",nullable = false)
     private String name;
 
@@ -61,6 +62,7 @@ public class User {
     private String salt;
 
     @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
     private UserGender gender;
 
     @CreationTimestamp

@@ -7,6 +7,9 @@ const Toast = withReactContent(Swal).mixin({
   showConfirmButton: false,
   timer: 1500,
   timerProgressBar: true,
+  customClass: {
+    container: "!z-[10000]",
+  },
   didOpen: (toast) => {
     toast.onmouseenter = Swal.stopTimer;
     toast.onmouseleave = Swal.resumeTimer;

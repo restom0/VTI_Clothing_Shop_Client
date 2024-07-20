@@ -34,7 +34,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateSalt(Long id) {
+    public String generateSalt(String id) {
         return buildSalt(id);
     }
 
@@ -45,10 +45,10 @@ public class JwtService {
     public long getExpirationTime() {
         return jwtExpiration;
     }
-    public String buildSalt(Long id) {
+    public String buildSalt(String id) {
         return Jwts
                 .builder()
-                .subject(String.valueOf(id))
+                .subject(id)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + this.getExpirationTime() ))
                 .signWith(getSignInKey())
@@ -72,7 +72,7 @@ public class JwtService {
         return (id.equals(String.valueOf(user.getId()))) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

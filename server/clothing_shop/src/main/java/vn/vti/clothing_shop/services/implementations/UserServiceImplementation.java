@@ -1,15 +1,19 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.UserCreateRequest;
-import vn.vti.clothing_shop.dto.in.UserUpdateRequest;
-import vn.vti.clothing_shop.dto.out.ErrorResponse;
-import vn.vti.clothing_shop.dto.out.ResponseHandler;
+import vn.vti.clothing_shop.dto.in.UserCreateDTO;
+import vn.vti.clothing_shop.dto.in.UserReadDTO;
+import vn.vti.clothing_shop.dto.in.UserUpdateDTO;
+import vn.vti.clothing_shop.dto.in.UserUpdatePasswordDTO;
+import vn.vti.clothing_shop.dto.out.UserDTO;
+import vn.vti.clothing_shop.mappers.UserMapper;
+import vn.vti.clothing_shop.requests.UserCreateRequest;
+import vn.vti.clothing_shop.requests.UserUpdatePasswordRequest;
+import vn.vti.clothing_shop.requests.UserUpdateRequest;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
@@ -18,126 +22,88 @@ import vn.vti.clothing_shop.repositories.UserRepository;
 import vn.vti.clothing_shop.services.JwtService;
 import vn.vti.clothing_shop.services.interfaces.UserService;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
 public class UserServiceImplementation implements UserService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
+    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    @Autowired
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImplementation(JwtService jwtService, UserRepository userRepository) {
+    @Autowired
+    public UserServiceImplementation(JwtService jwtService, UserRepository userRepository, UserMapper userMapper,PasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
-
-    public String getUser(String username, String email, String phone_number, String password){
-        try {
-                User user = null;
-                if(username != null){
-                    user = this.userRepository.findByUsername(username);
-                    if (user == null) {
-                        throw new BadRequestException("Thông tin đăng nhập không chính xác");
-                    }
-                }
-                if (email != null) {
-                    user = this.userRepository.findByEmail(email);
-                    if (user == null) {
-                        throw new BadRequestException("Thông tin đăng nhập không chính xác");
-                    }
-                }
-                if (phone_number != null) {
-                    user = this.userRepository.findByPhoneNumber(phone_number);
-                    if (user == null) throw new BadRequestException("Thông tin đăng nhập không chính xác");
-                }
-//                if(passwordEncoder.matches(user.password, password)){
-                    return jwtService.generateToken(user);
-                //}
-                //else
-                    //throw new BadRequestException("Thông tin đăng nhập không chính xác");
-
-        }
-        catch (Exception e) {
-            throw new InternalServerErrorException("Server error");
-        }
+    public List<UserDTO> getAllUsers(){
+        return userMapper.EntityToDTO(userRepository.findAll());
     };
-    public Boolean addUser(UserCreateRequest user){
-                User newUser = new User();
-                newUser.setUsername(user.getUsername());
-                newUser.setEmail(user.getEmail());
-                newUser.setPhone_number(user.getPhone_number());
-                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-                newUser.setName(user.getName());
-                newUser.setBirthday(user.getBirthday());
-                newUser.setAvatar_url(user.getAvatar_url());
-                newUser.setRole(user.getRole());
-                newUser.setAddress(user.getAddress());
-                newUser.setSalt(jwtService.generateSalt(this.countUser()));
-                newUser.setGender(user.getGender());
-                userRepository.save(newUser);
-                return true;
+    public String getUser(UserReadDTO userReadDTO){
+        User user = userReadDTO.getUsername()!=null ?
+                this.userRepository
+                        .findByUsername(userReadDTO.getUsername())
+                        .orElseThrow(()->new NotFoundException("Người dùng không tồn tại"))
+                :(
+                        userReadDTO.getEmail()!=null ?
+                                this.userRepository
+                                        .findByEmail(userReadDTO.getEmail())
+                                        .orElseThrow(()->new NotFoundException("Người dùng không tồn tại")) :
+                        this.userRepository
+                                .findByPhoneNumber(userReadDTO.getPhone_number())
+                                .orElseThrow(()->new NotFoundException("Người dùng không tồn tại"))
+                );
+        return userMapper.ReadDTOToEntity(user,userReadDTO) ? jwtService.generateToken(user) : null;
     }
+    public Boolean addUser(UserCreateDTO userCreateDTO){
+        this.userRepository.findByUsername(userCreateDTO.getUsername()).ifPresent(u->{throw new BadRequestException("Tên đăng nhập đã tồn tại");});
+        this.userRepository.findByEmail(userCreateDTO.getEmail()).ifPresent(u->{throw new BadRequestException("Email đã tồn tại");});
+        this.userRepository.findByPhoneNumber(userCreateDTO.getPhone_number()).ifPresent(u->{throw new BadRequestException("Số điện thoại đã tồn tại");});
+        userRepository.save(userMapper.createNormalUser(userCreateDTO));
+        return true;
+    }
+
     public Long countUser(){
         return userRepository.count();
     };
-    public Boolean updateUser(UserUpdateRequest user,Long id){
-        try {
-            Optional<User> userUpdateOptional = userRepository.findById(id);
-            if (userUpdateOptional.isEmpty()) {
-                throw new NotFoundException("Người dùng không tồn tại");
-            } else {
-                User userUpdate = userUpdateOptional.get();
-                userUpdate.setName(user.getName());
-                userUpdate.setBirthday(user.getBirthday());
-                userUpdate.setAvatar_url(user.getAvatar_url());
-                userUpdate.setAddress(user.getAddress());
-                userUpdate.setGender(user.getGender());
-                userRepository.save(userUpdate);
-                return true;
-            }
-        }
-        catch (Exception e) {
-            throw new InternalServerErrorException("Server error");
-        }
-    }
-    public Boolean updateUserPassword(String password,Long id){
-        try {
-            Optional<User> userUpdateOptional = userRepository.findById(id);
-            if (userUpdateOptional.isEmpty()) {
-                throw new NotFoundException("Người dùng không tồn tại");
-            } else {
-                User userUpdate = userUpdateOptional.get();
-                userUpdate.setPassword(passwordEncoder.encode(password));
-                userUpdate.setSalt(jwtService.generateSalt(this.countUser()));
-                userRepository.save(userUpdate);
-                return true;
-            }
-        }
-        catch (Exception e) {
-            throw new InternalServerErrorException("Server error");
-        }
 
+    public UserDTO getUserById(Long id){
+        return userMapper.EntityToDTO(userRepository.findById(id).orElseThrow(()->new NotFoundException("Người dùng không tồn tại")));
+    };
+    public Boolean updateUser(UserUpdateDTO userUpdateDTO){
+        User user = this.userRepository.findById(userUpdateDTO.getId()).orElseThrow(()->new NotFoundException("Người dùng không tồn tại"));
+        this.userRepository
+                .findByEmail(userUpdateDTO.getEmail())
+                .ifPresent(u->{
+                    if(!Objects.equals(u.getEmail(),user.getEmail()))
+                        throw new BadRequestException("Email đã tồn tại");
+                });
+        this.userRepository
+                .findByPhoneNumber(userUpdateDTO.getPhone_number())
+                .ifPresent(u->{
+                    if(!Objects.equals(u.getPhone_number(),user.getPhone_number()))
+                        throw new BadRequestException("Số điện thoại đã tồn tại");
+                });
+        this.userRepository.save(userMapper.UpdateDTOToEntity(user,userUpdateDTO));
+        return true;
+    }
+    public Boolean updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO){
+        User user = this.userRepository
+                .findById(userUpdatePasswordDTO.getId())
+                .orElseThrow(()->new NotFoundException("Người dùng không tồn tại"));
+        this.userRepository.save(userMapper.UpdatePasswordDTOToEntity(user,userUpdatePasswordDTO));
+        return true;
     };
     public Boolean deleteUser(Long id){
-        try {
-            Optional<User> userDeleteOptional = userRepository.findById(id);
-            if (userDeleteOptional.isEmpty()) {
-                throw new NotFoundException("Người dùng không tồn tại");
-            } else {
-                User userDelete = userDeleteOptional.get();
-                if(userDelete.getDeleted_at() != null){
-                    throw new NotFoundException("Người dùng không tồn tại");
-                }
-                userDelete.setDeleted_at(LocalDateTime.now());
-                return true;
-            }
-        }
-        catch (Exception e) {
-            throw new InternalServerErrorException("Server error");
-        }
+        User user = this.userRepository.findById(id).orElseThrow(()->new NotFoundException("Người dùng không tồn tại"));
+        user.setDeleted_at(LocalDateTime.now());
+        this.userRepository.save(user);
+        return true;
     };
 }

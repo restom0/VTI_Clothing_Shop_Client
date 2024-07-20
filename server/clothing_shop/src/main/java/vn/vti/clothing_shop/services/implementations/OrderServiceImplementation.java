@@ -1,10 +1,19 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.constants.PaymentMethod;
 import vn.vti.clothing_shop.constants.PaymentStatus;
-import vn.vti.clothing_shop.dto.in.OrderCreateRequest;
-import vn.vti.clothing_shop.dto.in.OrderUpdateRequest;
+import vn.vti.clothing_shop.dto.in.OrderCreateDTO;
+import vn.vti.clothing_shop.dto.in.OrderUpdateDTO;
+import vn.vti.clothing_shop.dto.out.OrderDTO;
+import vn.vti.clothing_shop.entities.Voucher;
+import vn.vti.clothing_shop.exceptions.BadRequestException;
+import vn.vti.clothing_shop.exceptions.ForbiddenException;
+import vn.vti.clothing_shop.mappers.OrderItemMapper;
+import vn.vti.clothing_shop.mappers.OrderMapper;
+import vn.vti.clothing_shop.requests.OrderCreateRequest;
+import vn.vti.clothing_shop.requests.OrderUpdateRequest;
 import vn.vti.clothing_shop.entities.Order;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
@@ -15,76 +24,85 @@ import vn.vti.clothing_shop.repositories.VoucherRepository;
 import vn.vti.clothing_shop.services.interfaces.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class OrderServiceImplementation implements OrderService {
-    @Autowired
+
     private final OrderItemRepository orderItemRepository;
-
-    @Autowired
     private final OrderRepository orderRepository;
-
-    @Autowired
     private final UserRepository userRepository;
+    private final VoucherRepository voucherRepository;
+    private final OrderMapper orderMapper;
 
     @Autowired
-    private final VoucherRepository voucherRepository;
-
-    public OrderServiceImplementation(OrderItemRepository orderItemRepository, OrderRepository orderRepository, UserRepository userRepository, VoucherRepository voucherRepository) {
+    public OrderServiceImplementation(OrderItemRepository orderItemRepository, OrderRepository orderRepository, UserRepository userRepository, VoucherRepository voucherRepository, OrderMapper orderMapper) {
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.voucherRepository = voucherRepository;
+        this.orderMapper = orderMapper;
     }
 
-    public List<Order> getAllOrders(){
-        return this.orderRepository.findAll();
-    };
-    public List<Order> getAllOrdersByUserId(Long userId){
-        return this.orderRepository.findAllByUserId(userId);
-    };
-    public Order getOrderByIdAndUserId(Long id,Long userId){
-        Optional<Order> order = this.orderRepository.findOrderByIdAndUserId(id,userId);
-        return order.orElse(null);
-    };
-    public Boolean addOrder(OrderCreateRequest orderCreateRequest,Long userId){
-        User user = this.userRepository.findById(userId).orElse(null);
-        if(user==null){
-            throw new NotFoundException("User not found");
+    public List<OrderDTO> getAllOrders(){
+        return this.orderRepository.findAll()
+                .stream()
+                .map(order -> this.orderMapper
+                        .EntityToDTO(order,this.orderItemRepository.findAllByOrderId(order.getId())))
+                .toList();
+    }
+
+    public List<OrderDTO> getAllOrdersByUserId(Long userId){
+        return this.orderRepository.findAllByUserId(userId)
+                .stream()
+                .map(order -> this.orderMapper
+                        .EntityToDTO(order,this.orderItemRepository.findAllByOrderId(order.getId())))
+                .toList();
+    }
+    public OrderDTO getOrderByIdAndUserId(Long id,Long userId){
+        return orderMapper.EntityToDTO(this.orderRepository.findOrderByIdAndUserId(id,userId).orElseThrow(()-> new NotFoundException("Order not found")),this.orderItemRepository.findAllByOrderId(id));
+    }
+    public OrderDTO addOrder(OrderCreateDTO orderCreateDTO){
+        User user = this.userRepository.findById(orderCreateDTO.getUser_id()).orElseThrow(()->new ForbiddenException("User not found"));
+        return orderMapper.EntityToDTO(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).orElseGet(()->{
+            return this.orderRepository.save(orderMapper.CreateDTOToEntity(orderCreateDTO,user));
+        }),new ArrayList<>());
+    }
+    private void subtractStock(Long id){
+        Voucher voucher = voucherRepository.findById(id).orElseThrow(()->new NotFoundException("Voucher not found"));
+        if(voucher.getStock() < 0
+                || voucher.getExpired_date().isBefore(LocalDateTime.now())
+                || voucher.getAvailable_date().isAfter(LocalDateTime.now())){
+            throw new BadRequestException("Voucher out of stock");
         }
-        Order order = new Order();
-        order.setUser_id(user);
-        order.setAddress(orderCreateRequest.getAddress() != null ? orderCreateRequest.getAddress() : user.getAddress());
-        order.setPhone_number(orderCreateRequest.getPhone_number()!=null ? orderCreateRequest.getPhone_number() : user.getPhone_number());
-        order.setReceiver_name(orderCreateRequest.getReceiver_name()!=null ? orderCreateRequest.getReceiver_name() : user.getName());
-        order.setPresent(orderCreateRequest.isPresent());
-        order.setPayment_method(PaymentMethod.valueOf(orderCreateRequest.getPayment_method()));
-        order.setPayment_status(PaymentStatus.ONHOLD);
-        order.setVoucherId(orderCreateRequest.getVoucherId()!=null ? this.voucherRepository.findById(orderCreateRequest.getVoucherId()).orElse(null) : null);
-        this.orderRepository.save(order);
-        return true;
+        voucher.setStock(voucher.getStock()-1);
+        voucherRepository.save(voucher);
     };
-    public Boolean updateOrder(OrderUpdateRequest orderUpdateRequest, Long id){
-        Order order = this.orderRepository.findById(id).orElse(null);
-        if(order==null){
-            throw new NotFoundException("Order not found");
+    private void addStock(Long id){
+        Voucher voucher = voucherRepository.findById(id).orElseThrow(()->new NotFoundException("Voucher not found"));
+        if(voucher.getStock() < 0
+                || voucher.getExpired_date().isBefore(LocalDateTime.now())
+                || voucher.getAvailable_date().isAfter(LocalDateTime.now())){
+            throw new BadRequestException("Voucher out of stock");
         }
-        order.setAddress(orderUpdateRequest.getAddress()!=null ? orderUpdateRequest.getAddress() : order.getAddress());
-        order.setPhone_number(orderUpdateRequest.getPhone_number()!=null ? orderUpdateRequest.getPhone_number() : order.getPhone_number());
-        order.setReceiver_name(orderUpdateRequest.getReceiver_name()!=null ? orderUpdateRequest.getReceiver_name() : order.getReceiver_name());
-        order.setPayment_status(orderUpdateRequest.getPayment_status()!=null? PaymentStatus.valueOf(orderUpdateRequest.getPayment_status()) : order.getPayment_status());
-        this.orderRepository.save(order);
+        voucher.setStock(voucher.getStock()+1);
+        voucherRepository.save(voucher);
+    };
+    public Boolean updateOrder(OrderUpdateDTO orderUpdateDTO){
+        Order order = this.orderRepository.findById(orderUpdateDTO.getId()).orElseThrow(()-> new NotFoundException("Order not found"));
+        Voucher voucher = this.voucherRepository.findById(orderUpdateDTO.getVoucherId()).orElseThrow(()-> new NotFoundException("Voucher not found"));
+        subtractStock(voucher.getId());
+        this.orderRepository.save(orderMapper.UpdateDTOToEntity(orderUpdateDTO,order,voucher));
         return true;
 
-    };
+    }
     public Boolean deleteOrder(Long id) {
-        Order order = this.orderRepository.findById(id).orElse(null);
-        if (order == null) {
-            throw new NotFoundException("Order not found");
-        }
+        Order order = this.orderRepository.findById(id).orElseThrow(()-> new NotFoundException("Order not found"));
+        addStock(order.getVoucherId().getId());
         order.setDeleted_at(LocalDateTime.now());
         this.orderRepository.save(order);
         return true;
-    };
+    }
 }

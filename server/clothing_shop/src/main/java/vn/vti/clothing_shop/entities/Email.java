@@ -38,6 +38,6 @@ public class Email {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at",columnDefinition = "TIMESTAMP")
     private LocalDateTime deleted_at;
 }

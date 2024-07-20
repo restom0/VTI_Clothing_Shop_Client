@@ -1,16 +1,25 @@
 package vn.vti.clothing_shop.services.interfaces;
 
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.UserCreateRequest;
-import vn.vti.clothing_shop.dto.in.UserUpdateRequest;
-import vn.vti.clothing_shop.entities.User;
+import vn.vti.clothing_shop.dto.in.UserCreateDTO;
+import vn.vti.clothing_shop.dto.in.UserReadDTO;
+import vn.vti.clothing_shop.dto.in.UserUpdateDTO;
+import vn.vti.clothing_shop.dto.in.UserUpdatePasswordDTO;
+import vn.vti.clothing_shop.dto.out.UserDTO;
+import vn.vti.clothing_shop.requests.UserCreateRequest;
+import vn.vti.clothing_shop.requests.UserUpdatePasswordRequest;
+import vn.vti.clothing_shop.requests.UserUpdateRequest;
+
+import java.util.List;
 
 @Component
 public interface UserService {
-    String  getUser(String username, String email,String phone_number, String password);
+    List<UserDTO> getAllUsers();
+    String  getUser(UserReadDTO userReadDTO);
     Long countUser();
-    Boolean addUser(UserCreateRequest user);
-    Boolean updateUser(UserUpdateRequest user,Long id);
-    Boolean updateUserPassword(String password,Long id);
+    UserDTO getUserById(Long id);
+    Boolean addUser(UserCreateDTO userCreateDTO);
+    Boolean updateUser(UserUpdateDTO userUpdateDTO);
+    Boolean updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO);
     Boolean deleteUser(Long id);
 }

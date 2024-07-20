@@ -61,7 +61,7 @@ const ProductCard = ({ id, colors, price, rating, imageUrl, title }) => {
 };
 
 ProductCard.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   colors: PropTypes.arrayOf(
     PropTypes.shape({
       color: PropTypes.string.isRequired,

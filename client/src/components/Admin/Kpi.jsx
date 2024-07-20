@@ -15,13 +15,6 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";
 
 const KpiCard = ({ title, percentage, price, color, icon }) => {
-  KpiCard.propTypes = {
-    title: PropTypes.string.isRequired,
-    percentage: PropTypes.string.isRequired,
-    price: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    icon: PropTypes.element.isRequired,
-  };
   return (
     <Card className="shadow-sm border border-gray-200 !rounded-lg mb-7">
       <CardBody className="p-4">
@@ -98,5 +91,11 @@ const Kpi = () => {
     </section>
   );
 };
-
+KpiCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  percentage: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  icon: PropTypes.element.isRequired,
+};
 export default Kpi;

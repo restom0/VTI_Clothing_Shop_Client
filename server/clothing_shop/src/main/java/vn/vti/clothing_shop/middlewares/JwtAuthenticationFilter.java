@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import vn.vti.clothing_shop.entities.User;
+import vn.vti.clothing_shop.exceptions.UnauthorizeException;
 import vn.vti.clothing_shop.repositories.UserRepository;
 import vn.vti.clothing_shop.services.JwtService;
 
@@ -25,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
+    @Autowired
     public JwtAuthenticationFilter(
             JwtService jwtService,
             HandlerExceptionResolver handlerExceptionResolver, UserRepository userRepository
@@ -35,45 +38,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            final String jwt = authHeader.substring(7);
-            final String userId = jwtService.extractId(jwt);
+            final String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                final String jwt = authHeader.substring(7);
 
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            if (userId != null && authentication == null) {
-                User user = userRepository.findById(Long.parseLong(userId)).orElse(null);
-                if(user == null) {
-                    filterChain.doFilter(request, response);
-                    return;
+                if (jwtService.isTokenExpired(jwt)) {
+                    throw new UnauthorizeException("Token expired");
                 }
-                if (jwtService.isTokenValid(jwt, user)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            null
-                    );
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                final String userId = jwtService.extractId(jwt);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                if (userId != null && authentication == null) {
+                    User user = userRepository.findById(Long.parseLong(userId)).orElse(null);
+                    if (user == null) {
+                        throw new UnauthorizeException("User not found");
+                    }
+                    if (jwtService.isTokenValid(jwt, user)) {
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                user, null, null);
+
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
                 }
             }
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
-            handlerExceptionResolver.resolveException(request, response, null, exception);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"message\": \"" + exception.getMessage() +
+                    "\n\t"+"\"statusCode\": " + HttpServletResponse.SC_UNAUTHORIZED + "}");
         }
     }
 }

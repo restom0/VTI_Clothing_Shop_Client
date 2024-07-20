@@ -36,27 +36,32 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
+import { useGetBrandsQuery } from "../../../apis/BrandApi";
+import { useGetCategoriesQuery } from "../../../apis/CategoryApi";
+import Loading from "../Loading";
 
-const brands = [
-  "Adidas",
-  "Nike",
-  "Puma",
-  "Converse",
-  "Vans",
-  "New Balance",
-  "Balenciaga",
-  "Gucci",
-];
-const categories = [
-  "Áo",
-  "Quần",
-  "Giày",
-  "Phụ kiện",
-  "Túi xách",
-  "Đồng hồ",
-  "Mắt kính",
-  "Nước hoa",
-];
+// const brands = [
+//   "Adidas",
+//   "Nike",
+//   "Puma",
+//   "Converse",
+//   "Vans",
+//   "New Balance",
+//   "Balenciaga",
+//   "Gucci",
+// ];
+// const categories = {
+//   object: [
+//     { name: "Áo", id: 0 },
+//     { name: "Quần", id: 1 },
+//     { name: "Giày", id: 2 },
+//     { name: "Phụ kiện", id: 3 },
+//     { name: "Túi xách", id: 4 },
+//     { name: "Đồng hồ", id: 5 },
+//     { name: "Mắt kính", id: 6 },
+//     { name: "Nước hoa", id: 7 },
+//   ],
+// };
 const cart_items = [
   {
     id: 0,
@@ -70,37 +75,30 @@ const cart_items = [
     title: "Abisko Trail Stretch Trousers M",
   },
 ];
-const NavListMenu = ({ name, type }) => {
+
+const NavListMenu = ({ name, type, data }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  var navListMenuItems = [];
-  switch (type) {
-    case "brand":
-      navListMenuItems = brands.map((brand) => ({ title: brand }));
-      break;
-    case "category":
-      navListMenuItems = categories.map((category) => ({
-        title: category,
-      }));
-      break;
-  }
-  const renderItems = navListMenuItems.map(({ title }, key) => (
-    <a href={"/" + type + "/" + key} key={key}>
-      <MenuItem className="flex items-center gap-5 rounded-lg">
-        <div>
-          <Typography
-            variant="h6"
-            color="blue-gray"
-            className="flex items-center text-sm font-bold"
-          >
-            {title}
-          </Typography>
-        </div>
-      </MenuItem>
-    </a>
-  ));
-
+  if (!data || data.length <= 0) return;
+  const renderItems =
+    data &&
+    data.object.length > 0 &&
+    data.object.map(({ name, id }, key) => (
+      <a href={"/" + type + "/" + id} key={key}>
+        <MenuItem className="flex items-center gap-5 rounded-lg">
+          <div>
+            <Typography
+              variant="h6"
+              color="blue-gray"
+              className="flex items-center text-sm font-bold"
+            >
+              {name}
+            </Typography>
+          </div>
+        </MenuItem>
+      </a>
+    ));
   return (
     <React.Fragment>
       <Menu
@@ -136,7 +134,15 @@ const NavListMenu = ({ name, type }) => {
           </Typography>
         </MenuHandler>
         <MenuList className="hidden max-w-screen-xl rounded-xl lg:block">
-          <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
+          <ul
+            className={
+              "grid" +
+              (data.object.length <= 3
+                ? "mx-auto grid-cols-" + data.object.length
+                : " grid-cols-3") +
+              " gap-y-2 outline-none outline-0"
+            }
+          >
             {renderItems}
           </ul>
         </MenuList>
@@ -149,46 +155,108 @@ const NavListMenu = ({ name, type }) => {
 };
 
 const NavList = () => {
+  const navigate = useNavigate();
+  const {
+    data: brands,
+    error: error_1,
+    isLoading: isLoading_1,
+  } = useGetBrandsQuery();
+  const {
+    data: categories,
+    error: error_2,
+    isLoading: isLoading_2,
+  } = useGetCategoriesQuery();
+  if (error_1 || error_2) return navigate("/error");
   return (
-    <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-      <Typography
-        as="a"
-        href="/product"
-        variant="small"
-        color="blue-gray"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          Danh sách sản phẩm
-        </ListItem>
-      </Typography>
-
-      {/* <NavListMenu name="Sản phẩm" type="product" /> */}
-      <NavListMenu name="Thương hiệu" type="brand" />
-      <NavListMenu name="Loại sản phẩm" type="category" />
-      <Typography
-        as="a"
-        href="/about-us"
-        variant="small"
-        color="blue-gray"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          Về chúng tôi
-        </ListItem>
-      </Typography>
-      <Typography
-        as="a"
-        href="/contact"
-        variant="small"
-        color="blue-gray"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          Liên hệ
-        </ListItem>
-      </Typography>
-    </List>
+    <>
+      {isLoading_1 || isLoading_2 ? (
+        <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
+          <Typography
+            as="div"
+            variant="small"
+            className="rounded-lg w-[158.85px] bg-gray-300"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              &nbsp;
+            </ListItem>
+          </Typography>
+          <Typography
+            as="div"
+            variant="small"
+            className="rounded-lg w-[128.28px] bg-gray-300"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              &nbsp;
+            </ListItem>
+          </Typography>
+          <Typography
+            as="div"
+            variant="small"
+            className="rounded-lg w-[139.99px] bg-gray-300"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              &nbsp;
+            </ListItem>
+          </Typography>
+          <Typography
+            as="div"
+            variant="small"
+            className="rounded-lg w-[105.78px] bg-gray-300"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              &nbsp;
+            </ListItem>
+          </Typography>
+          <Typography
+            as="div"
+            variant="small"
+            className="rounded-lg w-[73.04px] bg-gray-300"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              &nbsp;
+            </ListItem>
+          </Typography>
+        </List>
+      ) : (
+        <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
+          <Typography
+            as="a"
+            href="/product"
+            variant="small"
+            color="blue-gray"
+            className="font-medium"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              Danh sách sản phẩm
+            </ListItem>
+          </Typography>
+          <NavListMenu name="Thương hiệu" type="brand" data={brands} />
+          <NavListMenu name="Loại sản phẩm" type="category" data={categories} />
+          <Typography
+            as="a"
+            href="/about-us"
+            variant="small"
+            color="blue-gray"
+            className="font-medium"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              Về chúng tôi
+            </ListItem>
+          </Typography>
+          <Typography
+            as="a"
+            href="/contact"
+            variant="small"
+            color="blue-gray"
+            className="font-medium"
+          >
+            <ListItem className="flex items-center gap-2 py-2 pr-4">
+              Liên hệ
+            </ListItem>
+          </Typography>
+        </List>
+      )}
+    </>
   );
 };
 const NavbarWithSublist = () => {
@@ -430,5 +498,13 @@ const NavbarWithSublist = () => {
 NavListMenu.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  data: PropTypes.shape({
+    object: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+      }).isRequired
+    ).isRequired,
+  }).isRequired,
 };
 export default NavbarWithSublist;

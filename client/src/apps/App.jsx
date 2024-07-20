@@ -15,6 +15,7 @@ import NotFoundpage from "../pages/NotFoundpage";
 import Adminpage from "../pages/Adminpage";
 import CareerLayout from "../layouts/Career/CareerLayout";
 import HelpCenterLayout from "../layouts/HelpCenter/HelpCenterLayout";
+import Errorpage from "../pages/Errorpage";
 const App = () => {
   return (
     <BrowserRouter>
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="forbidden" element={<Forbiddenpage />} />
           <Route path="*" element={<NotFoundpage />} />
         </Route>
+        <Route path="/error" element={<Errorpage />} />
         <Route path="/dashboard" element={<Adminpage />} />
         <Route path="/careers/" element={<CareerLayout />}></Route>
         <Route path="/help-center/" element={<HelpCenterLayout />}></Route>

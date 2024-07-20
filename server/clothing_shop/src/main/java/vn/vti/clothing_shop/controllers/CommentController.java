@@ -1,7 +1,6 @@
 package vn.vti.clothing_shop.controllers;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,9 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import vn.vti.clothing_shop.dto.in.CommentCreateRequest;
-import vn.vti.clothing_shop.dto.in.CommentUpdateRequest;
-import vn.vti.clothing_shop.dto.out.ResponseHandler;
+import vn.vti.clothing_shop.mappers.CommentMapper;
+import vn.vti.clothing_shop.requests.CommentCreateRequest;
+import vn.vti.clothing_shop.requests.CommentUpdateRequest;
+import vn.vti.clothing_shop.responses.ResponseHandler;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
 import vn.vti.clothing_shop.services.implementations.CommentServiceImplementation;
@@ -21,12 +21,16 @@ import vn.vti.clothing_shop.utils.ParameterUtils;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    @Autowired
-    private final CommentServiceImplementation commentServiceImplementation;
 
-    public CommentController(CommentServiceImplementation commentServiceImplementation) {
+    private final CommentServiceImplementation commentServiceImplementation;
+    private final CommentMapper commentMapper;
+
+    @Autowired
+    public CommentController(CommentServiceImplementation commentServiceImplementation, CommentMapper commentMapper) {
         this.commentServiceImplementation = commentServiceImplementation;
+        this.commentMapper = commentMapper;
     }
+
 
     @GetMapping("/")
     public ResponseEntity<?> getAllComment(){
@@ -44,6 +48,7 @@ public class CommentController {
     }
     @PostMapping("/")
     public ResponseEntity<?> addComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest, BindingResult bindingResult){
+
         if (bindingResult.hasErrors()) {
             return ParameterUtils.showBindingResult(bindingResult);
         }
@@ -51,7 +56,7 @@ public class CommentController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
             Long userId = user.getId();
-            if(this.commentServiceImplementation.createComment(commentCreateRequest,userId)){
+            if(this.commentServiceImplementation.createComment(userId,commentMapper.CommentCreateRequestToCommentCreateDTO(commentCreateRequest))){
                 return ResponseHandler.responseBuilder(201,"Bình luận đã được gửi",null,HttpStatus.CREATED);
             }
             throw new InternalServerErrorException("Server Error");
@@ -69,7 +74,7 @@ public class CommentController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
             Long userId = user.getId();
-            if(this.commentServiceImplementation.updateComment(id,commentUpdateRequest,userId)){
+            if(this.commentServiceImplementation.updateComment(id,userId,commentMapper.CommentUpdateRequestToCommentUpdateDTO(commentUpdateRequest))){
                 return ResponseHandler.responseBuilder(201,"Bình luận đã được gửi",null,HttpStatus.CREATED);
             }
             throw new InternalServerErrorException("Server Error");
@@ -86,8 +91,7 @@ public class CommentController {
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
-            Long userId = user.getId();
-            if(this.commentServiceImplementation.deleteComment(id,userId)){
+            if(this.commentServiceImplementation.deleteComment(id)){
                 return ResponseHandler.responseBuilder(200,"Bình luận đã được xóa",null,HttpStatus.OK);
             }
             throw new InternalServerErrorException("Server Error");

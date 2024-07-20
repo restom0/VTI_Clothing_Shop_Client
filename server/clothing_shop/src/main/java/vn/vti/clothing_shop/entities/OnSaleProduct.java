@@ -1,6 +1,9 @@
 package vn.vti.clothing_shop.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +21,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`onsale_product`")
+@Table(name = "`on_sale_product`")
 public class OnSaleProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +33,16 @@ public class OnSaleProduct {
 
     @Column(name = "sale_price",columnDefinition = "FLOAT(10,2)",nullable = false)
     @Pattern(regexp = NUMBER, message = "Sale price must be a number")
-    private float sale_price;
+    private Float sale_price;
 
     @Column(name = "discount",columnDefinition = "FLOAT(10,2)")
-    @Pattern(regexp = NUMBER, message = "Discount must be a number")
-    private float discount;
+    @DecimalMin(value = "0.00", message = "Discount must be greater than or equal to 0")
+    @DecimalMax(value = "100.00", message = "Discount must be less than or equal to 100")
+    private Float discount;
 
-    @Column(name = "available_date",columnDefinition = "TIMESTAMP",nullable = false)
-    private LocalDateTime available_date;
-
-    @Column(name = "end_date",columnDefinition = "TIMESTAMP")
-    private LocalDateTime end_date;
+    @ManyToOne
+    @JoinColumn(name = "input_sale_id",referencedColumnName = "id")
+    private InputSale input_sale_id;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -50,7 +52,7 @@ public class OnSaleProduct {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at",columnDefinition = "TIMESTAMP")
     private LocalDateTime deleted_at;
 }
 //Table sale_product_price_list{

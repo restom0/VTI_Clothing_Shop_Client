@@ -32,13 +32,14 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import PublicIcon from "@mui/icons-material/Public";
 import { SIDEBAR_SEARCH } from "../../constants/sidebar_search";
 import PropTypes from "prop-types";
-const SidebarWithSearch = ({ tab, setTab }) => {
-  const [open, setOpen] = React.useState(0);
-  const [openAlert, setOpenAlert] = React.useState(true);
+import { useDispatch, useSelector } from "react-redux";
+import { setSidebarItem } from "../../features/slices/sidebar_itemSlice";
+import { setOpenAccordion } from "../../features/slices/openAccordion";
+const SidebarWithSearch = () => {
+  const sidebar_item = useSelector((state) => state.sidebar_item.value);
+  const openAccordion = useSelector((state) => state.openAccordion.value);
+  const dispatch = useDispatch();
 
-  const handleOpen = (value) => {
-    setOpen(open === value ? -1 : value);
-  };
   return (
     <div>
       <Card className="relative h-[92vh] overflow-y-auto overflow-x-hidden w-full max-w-[20rem] py-4 shadow-xl shadow-blue-gray-900/5 z-10 bg-gray-100">
@@ -60,19 +61,19 @@ const SidebarWithSearch = ({ tab, setTab }) => {
             item.title ? (
               <>
                 <Accordion
-                  open={open === index}
+                  open={openAccordion === index}
                   icon={
                     <ChevronDownIcon
                       strokeWidth={2.5}
                       className={`mx-auto h-4 w-4 transition-transform ${
-                        open === index ? "rotate-180" : ""
+                        openAccordion === index ? "rotate-180" : ""
                       }`}
                     />
                   }
                 >
-                  <ListItem className="p-0" selected={open === index}>
+                  <ListItem className="p-0" selected={openAccordion === index}>
                     <AccordionHeader
-                      onClick={() => handleOpen(index)}
+                      onClick={() => dispatch(setOpenAccordion(index))}
                       className="border-b-0 p-3"
                     >
                       <ListItemPrefix>{item.title.icon}</ListItemPrefix>
@@ -91,16 +92,18 @@ const SidebarWithSearch = ({ tab, setTab }) => {
                     <List className="p-0" key={"list-" + item.title.label}>
                       {item.sublist.map((subitem) => (
                         <ListItem
-                          selected={tab == subitem}
+                          selected={sidebar_item == subitem}
                           key={subitem.label}
-                          onClick={() => {
-                            setTab(subitem.label);
-                          }}
+                          onClick={() => dispatch(setSidebarItem(subitem))}
                           style={{
                             backgroundColor:
-                              tab === subitem.label ? "white" : "transparent",
+                              sidebar_item === subitem.label
+                                ? "white"
+                                : "transparent",
                             color:
-                              tab === subitem.label ? "#006edc" : "inherit",
+                              sidebar_item === subitem.label
+                                ? "#006edc"
+                                : "inherit",
                           }}
                         >
                           <ListItemPrefix>
@@ -120,13 +123,17 @@ const SidebarWithSearch = ({ tab, setTab }) => {
               <>
                 <ListItem
                   key={item.sublist[0].label}
-                  selected={tab == item.sublist[0].label}
-                  onClick={() => setTab(item.sublist[0].label)}
+                  selected={sidebar_item == item.sublist[0].label}
+                  onClick={() => dispatch(setSidebarItem(item.sublist[0]))}
                   style={{
                     backgroundColor:
-                      tab === item.sublist[0].label ? "white" : "transparent",
+                      sidebar_item === item.sublist[0].label
+                        ? "white"
+                        : "transparent",
                     color:
-                      tab === item.sublist[0].label ? "#006edc" : "inherit",
+                      sidebar_item === item.sublist[0].label
+                        ? "#006edc"
+                        : "inherit",
                   }}
                 >
                   <ListItemPrefix>
@@ -144,7 +151,7 @@ const SidebarWithSearch = ({ tab, setTab }) => {
 };
 
 SidebarWithSearch.propTypes = {
-  tab: PropTypes.number.isRequired,
+  tab: PropTypes.string.isRequired,
   setTab: PropTypes.func.isRequired,
 };
 export default SidebarWithSearch;

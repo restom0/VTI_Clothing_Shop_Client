@@ -28,7 +28,6 @@ const TABLE_ROWS = [
   },
 ];
 const Category = () => {
-  const [active, setActive] = useState(1);
   const [addOpen, setAddOpen] = useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
   return (
@@ -37,8 +36,6 @@ const Category = () => {
         name="Danh sách danh mục"
         TABLE_HEAD={category}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"

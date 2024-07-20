@@ -1,18 +1,21 @@
 package vn.vti.clothing_shop.configs;
 
-import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import vn.vti.clothing_shop.middlewares.JwtAuthenticationFilter;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -23,9 +26,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder encoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -35,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/product/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/product/**").authenticated()
 
+                        .requestMatchers(HttpMethod.GET,"/product/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/brand/**").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/brand/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/brand/**").authenticated()
@@ -49,12 +54,29 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/chat/**").authenticated()
 
                         .requestMatchers(HttpMethod.GET, "/order/**").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/imported-product/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/imported-product/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/imported-product/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/imported-product/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable);
         return http.build();
 
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

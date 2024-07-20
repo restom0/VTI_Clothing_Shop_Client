@@ -67,8 +67,6 @@ const ProductList = () => {
         name="Danh sách sản phẩm"
         TABLE_HEAD={productdetail}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
         deleteContent="Xóa sản phẩm"
         updateContent="Chỉnh sửa sản phẩm"
         size="xl"

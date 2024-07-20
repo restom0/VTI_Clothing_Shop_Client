@@ -23,18 +23,12 @@ const TABLE_ROWS = [
   },
 ];
 const History = () => {
-  const [active, setActive] = useState(1);
-  const { updateOpen, deleteOpen, handleUpdateOpen, handleDeleteOpen } =
-    useOpen();
-
   return (
     <>
       <AdminLayout
         name="Lịch sử hoạt động"
         TABLE_HEAD={history}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
         noUpdate
         noDelete
         noDetail

@@ -1,6 +1,7 @@
 package vn.vti.clothing_shop.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -35,9 +36,20 @@ public class ImportedProduct {
     @JoinColumn(name = "color_id",referencedColumnName = "id")
     private Color color_id;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id",referencedColumnName = "id")
-    private Type type_id;
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
+    @Column(name = "slider_url_1")
+    private String slider_url_1;
+
+    @Column(name = "slider_url_2")
+    private String slider_url_2;
+
+    @Column(name = "slider_url_3")
+    private String slider_url_3;
+
+    @Column(name = "slider_url_4")
+    private String slider_url_4;
 
     @ManyToOne
     @JoinColumn(name = "material_id",referencedColumnName = "id")
@@ -47,15 +59,20 @@ public class ImportedProduct {
     private String sku;
 
     @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
     private ClothGender gender;
 
     @NotNull(message = "Import price is required")
-    @Pattern(regexp = NUMBER, message = "Import price must be a number")
     @Column(name = "importPrice",nullable = false)
+    @Min(value = 0, message = "Import price must be positive")
     private Integer importPrice;
 
+    @Min(value = 1, message = "Import number must be greater than 0")
+    @NotNull(message = "Import number is required")
+    private Integer importNumber;
+
     @NotNull(message = "Stock is required")
-    @Pattern(regexp = NUMBER, message = "Stock must be a number")
+    @Min(value = 0, message = "Stock must be positive")
     @Column(name = "stock",nullable = false)
     private Integer stock;
 
@@ -67,21 +84,6 @@ public class ImportedProduct {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at",columnDefinition = "TIMESTAMP")
     private LocalDateTime deleted_at;
 }
-//Table import_product_price_list{
-//id integer [pk]
-//product_id integer [ref: < products.id]
-//size_id integer [ref: < sizes.id]
-//color_id integer [ref: < colors.id]
-//type_id integer [ref:< types.id]
-//material_id integer [ref: < material.id]
-//sku string
-//gender gender
-//importPrice integer
-//stock integer
-//created_at timestamp
-//updated_at timestamp
-//deleted_at timestamp
-//}

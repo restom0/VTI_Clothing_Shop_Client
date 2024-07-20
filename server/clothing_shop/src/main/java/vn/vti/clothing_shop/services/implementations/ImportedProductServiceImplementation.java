@@ -1,10 +1,15 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.in.ImportedProductCreateRequest;
-import vn.vti.clothing_shop.dto.in.ImportedProductUpdateRequest;
+import vn.vti.clothing_shop.dto.in.ImportedProductCreateDTO;
+import vn.vti.clothing_shop.dto.in.ImportedProductUpdateDTO;
+import vn.vti.clothing_shop.dto.out.ImportedProductDTO;
+import vn.vti.clothing_shop.mappers.ColorMapper;
+import vn.vti.clothing_shop.mappers.ImportedProductMapper;
+import vn.vti.clothing_shop.mappers.MaterialMapper;
+import vn.vti.clothing_shop.mappers.SizeMapper;
 import vn.vti.clothing_shop.entities.*;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
@@ -13,183 +18,137 @@ import vn.vti.clothing_shop.services.interfaces.ImportedProductService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Component
+@Service
 public class ImportedProductServiceImplementation implements ImportedProductService {
-    @Autowired
+
     private final ImportedProductRepository importedProductRepository;
-
-    @Autowired
     private final ProductRepository productRepository;
-
-    @Autowired
     private final ColorRepository colorRepository;
-
-    @Autowired
     private final SizeRepository sizeRepository;
-
-    @Autowired
-    private final TypeRepository typeRepository;
-
-    @Autowired
     private final MaterialRepository materialRepository;
+    private final ImportedProductMapper importedProductMapper;
+    private final ColorMapper colorMapper;
+    private final SizeMapper sizeMapper;
+    private final MaterialMapper materialMapper;
 
-    public ImportedProductServiceImplementation(ImportedProductRepository importedProductRepository, ProductRepository productRepository, ColorRepository colorRepository, SizeRepository sizeRepository, TypeRepository typeRepository, MaterialRepository materialRepository) {
+    @Autowired
+    public ImportedProductServiceImplementation(ImportedProductRepository importedProductRepository, ProductRepository productRepository, ColorRepository colorRepository, SizeRepository sizeRepository, MaterialRepository materialRepository, ImportedProductMapper importedProductMapper, ColorMapper colorMapper, SizeMapper sizeMapper, MaterialMapper materialMapper) {
         this.importedProductRepository = importedProductRepository;
         this.productRepository = productRepository;
         this.colorRepository = colorRepository;
         this.sizeRepository = sizeRepository;
-        this.typeRepository = typeRepository;
         this.materialRepository = materialRepository;
+        this.importedProductMapper = importedProductMapper;
+        this.colorMapper = colorMapper;
+        this.sizeMapper = sizeMapper;
+        this.materialMapper = materialMapper;
     }
 
-    public List<ImportedProduct> getAllImportedProducts() {
-        return this.importedProductRepository.findAll();
+    public List<ImportedProductDTO> getAllImportedProducts() {
+        return this.importedProductRepository
+                .findAll()
+                .stream()
+                .map(importedProductMapper::EntityToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Boolean addImportedProduct(ImportedProductCreateRequest importedProductCreateRequest) {
-        Product product = productRepository.findById(importedProductCreateRequest.getProduct_id()).orElse(null);
-        if (product == null) {
-            throw new NotFoundException("Product not found");
-        }
-        if (colorRepository.findByColor(importedProductCreateRequest.getColor_code()).isEmpty()) {
-            Color newColor = new Color();
-            newColor.setColor(importedProductCreateRequest.getColor_code());
-            newColor.setName(importedProductCreateRequest.getColor_name());
-            newColor.setCategory_id(product.getCategory_id());
-            colorRepository.save(newColor);
-        }
-        Optional<Color> color = colorRepository.findByColor(importedProductCreateRequest.getColor_code());
-
-        if (sizeRepository.findBySize(importedProductCreateRequest.getSize()).isEmpty()) {
-            Size newSize = new Size();
-            newSize.setSize(importedProductCreateRequest.getSize());
-            newSize.setHeight(importedProductCreateRequest.getHeight());
-            newSize.setWeight(importedProductCreateRequest.getWeight());
-            newSize.setCategory_id(product.getCategory_id());
-            sizeRepository.save(newSize);
-        }
-        Optional<Size> size = sizeRepository.findBySize(importedProductCreateRequest.getSize());
-
-        if (typeRepository.findByName(importedProductCreateRequest.getType()).isEmpty()) {
-            Type newType = new Type();
-            newType.setName(importedProductCreateRequest.getType());
-            newType.setCategory_id(product.getCategory_id());
-            typeRepository.save(newType);
-        }
-        Optional<Type> type = typeRepository.findByName(importedProductCreateRequest.getSize());
-
-        if (materialRepository.findByName(importedProductCreateRequest.getMaterial()).isEmpty()) {
-            Material newMaterial = new Material();
-            newMaterial.setName(importedProductCreateRequest.getMaterial());
-            newMaterial.setCategory_id(product.getCategory_id());
-            materialRepository.save(newMaterial);
-        }
-        Optional<Material> material = materialRepository.findByName(importedProductCreateRequest.getMaterial());
-        if (color.isEmpty() || size.isEmpty() || type.isEmpty() || material.isEmpty()) {
-            throw new BadRequestException("Invalid data");
-        }
-        String sku = product.getId() + "-" + color.get().getId() + "-" + size.get().getId() + "-" + type.get().getId() + "-" + material.get().getId();
-        ImportedProduct importedProduct = new ImportedProduct();
-        importedProduct.setProduct_id(product);
-        importedProduct.setSize_id(size.get());
-        importedProduct.setColor_id(color.get());
-        importedProduct.setType_id(type.get());
-        importedProduct.setMaterial_id(material.get());
-        importedProduct.setSku(sku);
-        importedProduct.setGender(importedProductCreateRequest.getGender());
-        importedProduct.setStock(importedProductCreateRequest.getStock());
-        importedProduct.setImportPrice(importedProductCreateRequest.getImportPrice());
-        importedProductRepository.save(importedProduct);
+    public Boolean addImportedProduct(ImportedProductCreateDTO importedProductCreateDTO) {
+        Product product = productRepository
+                .findById(importedProductCreateDTO.getProduct_id())
+                .orElseThrow(()-> new NotFoundException("Product not found"));
+        Color color = colorRepository
+                .findByColor(importedProductCreateDTO.getColor().getColor_code())
+                .orElseGet(() -> {
+                    Color newColor = colorMapper.ColorCreateDTOToEntity(importedProductCreateDTO.getColor(), product.getCategory_id());
+                    return colorRepository.save(newColor);
+                });
+        Size size = sizeRepository
+                .findBySize(importedProductCreateDTO.getSize().getSize())
+                .orElseGet(() -> {
+                    Size newSize = sizeMapper.SizeCreateDTOToEntity(importedProductCreateDTO.getSize(), product.getCategory_id());
+                    return sizeRepository.save(newSize);
+                });
+        Material material = materialRepository
+                .findByName(importedProductCreateDTO.getMaterial().getName())
+                .orElseGet(() -> {
+                    Material newMaterial = materialMapper.MaterialCreateDTOToEntity(importedProductCreateDTO.getMaterial(), product.getCategory_id());
+                    return materialRepository.save(newMaterial);
+                });
+        importedProductRepository.save(importedProductMapper.ImportedProductCreateDTOToEntity(importedProductCreateDTO, product, color, size, material));
         return true;
     }
 
     public Boolean deleteImportedProduct(Long id) {
-        return null;
-    }
-
-    public Boolean updateImportedProduct(ImportedProductUpdateRequest importedProductUpdateRequest, Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            throw new NotFoundException("Product not found");
-        }
-        if (colorRepository.findByColor(importedProductUpdateRequest.getColor_code()).isEmpty()) {
-            Color newColor = new Color();
-            newColor.setColor(importedProductUpdateRequest.getColor_code());
-            newColor.setName(importedProductUpdateRequest.getColor_name());
-            newColor.setCategory_id(product.getCategory_id());
-            colorRepository.save(newColor);
-        }
-        Optional<Color> color = colorRepository.findByColor(importedProductUpdateRequest.getColor_code());
-
-        if (sizeRepository.findBySize(importedProductUpdateRequest.getSize()).isEmpty()) {
-            Size newSize = new Size();
-            newSize.setSize(importedProductUpdateRequest.getSize());
-            newSize.setHeight(importedProductUpdateRequest.getHeight());
-            newSize.setWeight(importedProductUpdateRequest.getWeight());
-            newSize.setCategory_id(product.getCategory_id());
-            sizeRepository.save(newSize);
-        }
-        Optional<Size> size = sizeRepository.findBySize(importedProductUpdateRequest.getSize());
-
-        if (typeRepository.findByName(importedProductUpdateRequest.getType()).isEmpty()) {
-            Type newType = new Type();
-            newType.setName(importedProductUpdateRequest.getType());
-            newType.setCategory_id(product.getCategory_id());
-            typeRepository.save(newType);
-        }
-        Optional<Type> type = typeRepository.findByName(importedProductUpdateRequest.getSize());
-
-        if (materialRepository.findByName(importedProductUpdateRequest.getMaterial()).isEmpty()) {
-            Material newMaterial = new Material();
-            newMaterial.setName(importedProductUpdateRequest.getMaterial());
-            newMaterial.setCategory_id(product.getCategory_id());
-            materialRepository.save(newMaterial);
-        }
-        Optional<Material> material = materialRepository.findByName(importedProductUpdateRequest.getMaterial());
-        if (color.isEmpty() || size.isEmpty() || type.isEmpty() || material.isEmpty()) {
-            throw new BadRequestException("Invalid data");
-        }
-        String sku = product.getId() + "-" + color.get().getId() + "-" + size.get().getId() + "-" + type.get().getId() + "-" + material.get().getId();
-        ImportedProduct importedProduct = new ImportedProduct();
-        importedProduct.setProduct_id(product);
-        importedProduct.setSize_id(size.get());
-        importedProduct.setColor_id(color.get());
-        importedProduct.setType_id(type.get());
-        importedProduct.setMaterial_id(material.get());
-        importedProduct.setSku(sku);
-        importedProduct.setGender(importedProductUpdateRequest.getGender());
-        importedProduct.setImportPrice(importedProductUpdateRequest.getImportPrice());
-        importedProduct.setStock(importedProductUpdateRequest.getStock());
-        importedProductRepository.save(importedProduct);
+        ImportedProduct importedProduct = importedProductRepository
+                .findById(id)
+                .orElseThrow(()-> new NotFoundException("Imported product not found"));
+        importedProductRepository.delete(importedProduct);
         return true;
     }
 
-    public ImportedProduct getImportedProductById(Long id) {
-        if (importedProductRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("Imported product not found");
-        }
-        return importedProductRepository.findById(id).get();
+    public Boolean updateImportedProduct(ImportedProductUpdateDTO importedProductUpdateDTO) {
+        ImportedProduct importedProduct = importedProductRepository
+                .findById(importedProductUpdateDTO.getId())
+                .orElseThrow(()-> new NotFoundException("Imported product not found"));
+        Product product = productRepository
+                .findById(importedProductUpdateDTO.getProduct_id())
+                .orElseThrow(()-> new NotFoundException("Product not found"));
+        Color color = colorRepository
+                .findById(importedProductUpdateDTO.getColor().getId())
+                .orElseThrow(()-> new NotFoundException("Color not found"));
+        Size size = sizeRepository
+                .findById(importedProductUpdateDTO.getSize().getId())
+                .orElseThrow(()-> new NotFoundException("Size not found"));
+        Material material = materialRepository
+                .findById(importedProductUpdateDTO.getMaterial().getId())
+                .orElseThrow(()-> new NotFoundException("Material not found"));
+        importedProductRepository.save(importedProductMapper
+                .ImportedProductUpdateDTOToEntity(
+                        importedProduct,
+                        importedProductUpdateDTO,
+                        product,
+                        this.colorRepository
+                                .save(colorMapper
+                                        .ColorUpdateDTOToEntity(importedProductUpdateDTO.getColor(), color)),
+                        this.sizeRepository
+                                .save(sizeMapper
+                                        .SizeUpdateDTOToEntity(importedProductUpdateDTO.getSize(), size)),
+                        this.materialRepository
+                                .save(materialMapper
+                                        .MaterialUpdateDTOToEntity(importedProductUpdateDTO.getMaterial(), material))));
+        return true;
     }
 
-    public List<ImportedProduct> getImportedProductByFilter(Filter filter, Long id) {
+    public ImportedProductDTO getImportedProductById(Long id) {
+        return importedProductMapper
+                .EntityToDTO(importedProductRepository
+                        .findById(id)
+                        .orElseThrow(()-> new NotFoundException("Imported product not found")));
+    }
+
+    public List<ImportedProductDTO> getImportedProductByFilter(Filter filter, Long id) {
         if (filter == Filter.PRODUCTS) {
-            return importedProductRepository.findAll();
+            return this.getAllImportedProducts();
         } else if (filter == Filter.PRODUCT) {
-            if (importedProductRepository.findByProductId(id).isEmpty()) {
-                throw new NotFoundException("Imported product not found");
-            }
-            return List.of(importedProductRepository.findByProductId(id).get());
+            return importedProductRepository
+                    .findByProductId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
         } else if (filter == Filter.CATEGORY) {
-            if (importedProductRepository.findByCategoryId(id).isEmpty()) {
-                throw new NotFoundException("Imported product not found");
-            }
-            return List.of(importedProductRepository.findByCategoryId(id).get());
+            return importedProductRepository
+                    .findByCategoryId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
         } else if (filter == Filter.BRAND) {
-            if (importedProductRepository.findByBrandId(id).isEmpty()) {
-                throw new NotFoundException("Imported product not found");
-            }
-            return List.of(importedProductRepository.findByBrandId(id).get());
+            return importedProductRepository
+                    .findByBrandId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
         }
         throw new BadRequestException("Invalid filter");
     }

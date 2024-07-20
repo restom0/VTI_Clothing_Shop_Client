@@ -12,11 +12,13 @@ import {
 import TableHeader from "./TableHeader";
 import AdminPagination from "./admin/AdminPagination";
 import SettingButton from "./admin/SettingButton";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedId } from "../../features/slices/selectIdPrice";
 const Table = ({
   TABLE_HEAD,
   TABLE_ROWS,
-  active,
-  setActive,
+  // active,
+  // setActive,
   handleDetailOpen,
   handleUpdateOpen,
   handleDeleteOpen,
@@ -27,6 +29,8 @@ const Table = ({
   data,
   handleData,
 }) => {
+  const active = useSelector((state) => state.active.value);
+  const dispatch = useDispatch();
   return (
     <Card>
       <table className="w-full min-w-max table-auto text-center">
@@ -38,13 +42,15 @@ const Table = ({
         <tbody>
           {TABLE_ROWS.slice((active - 1) * 6, active * 6).map((row, index) => (
             <tr key={index} className="border-b border-gray-200">
-              <td className="p-4">{index + 1}</td>
-              {Object.values(row).map((value, index) => (
+              {Object.values(row).map((value, index1) => (
                 <td
-                  key={index}
+                  key={index1}
                   className="p-4"
-                  onClick={handleDetailOpen}
-                  colSpan={TABLE_HEAD[index].col}
+                  onClick={() => {
+                    handleDetailOpen(),
+                      dispatch(setSelectedId(index + (active - 1) * 6));
+                  }}
+                  colSpan={index1 == 0 ? 1 : TABLE_HEAD[index1 - 1].col}
                 >
                   <Typography
                     variant="small"
@@ -57,6 +63,7 @@ const Table = ({
               ))}
               {(!noDelete || !noUpdate) && (
                 <SettingButton
+                  id={index + (active - 1) * 6}
                   handleDeleteOpen={handleDeleteOpen}
                   handleUpdateOpen={handleUpdateOpen}
                   updateContent={updateContent}
@@ -69,11 +76,7 @@ const Table = ({
           ))}
         </tbody>
       </table>
-      <AdminPagination
-        page={Math.ceil(TABLE_ROWS.length / 6)}
-        active={active}
-        setActive={setActive}
-      />
+      <AdminPagination page={Math.ceil(TABLE_ROWS.length / 6)} />
     </Card>
   );
 };
@@ -86,16 +89,14 @@ Table.propTypes = {
     })
   ).isRequired,
   TABLE_ROWS: PropTypes.array.isRequired,
-  active: PropTypes.number.isRequired,
-  setActive: PropTypes.func.isRequired,
-  handleDetailOpen: PropTypes.func.isRequired,
-  handleUpdateOpen: PropTypes.func.isRequired,
-  handleDeleteOpen: PropTypes.func.isRequired,
-  updateContent: PropTypes.string.isRequired,
-  deleteContent: PropTypes.string.isRequired,
+  handleDetailOpen: PropTypes.func,
+  handleUpdateOpen: PropTypes.func,
+  handleDeleteOpen: PropTypes.func,
+  updateContent: PropTypes.string,
+  deleteContent: PropTypes.string,
   noUpdate: PropTypes.bool,
   noDelete: PropTypes.bool,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.array.isRequired,
   handleData: PropTypes.func.isRequired,
 };
 export default Table;

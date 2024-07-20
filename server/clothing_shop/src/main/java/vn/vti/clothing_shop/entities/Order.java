@@ -28,7 +28,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "address")
+    @Column(name= "address",nullable = false)
     private String address;
 
     @Column(name= "phone_number",columnDefinition = "VARCHAR(255)",nullable = false)
@@ -38,15 +38,15 @@ public class Order {
     @Column(name= "receiver_name",columnDefinition = "VARCHAR(255)",nullable = false)
     private String receiver_name;
 
-    @Column(name= "isPresent",columnDefinition = "TINYINT(1)",nullable = false)
-    @Pattern(regexp = BOOLEAN,message = "Invalid isPresent")
-    private boolean isPresent;
+    @Column(name= "isPresent",columnDefinition = "TINYINT(1) DEFAULT 0",nullable = false)
+    private Boolean isPresent;
 
-    @Column(name= "payment_status",columnDefinition = "ENUM('ONHOLD|CONFIRMED|DELIVERING|COMPLETED|CANCELLED')",nullable = false)
-    @Pattern(regexp = "ONHOLD|CONFIRMED|DELIVERING|COMPLETED|CANCELLED",message = "Invalid payment_status")
+    @Column(name= "payment_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentStatus payment_status;
 
     @Column(name="payment_method",nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentMethod payment_method;
 
     @ManyToOne

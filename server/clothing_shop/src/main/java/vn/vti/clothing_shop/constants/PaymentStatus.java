@@ -1,7 +1,8 @@
 package vn.vti.clothing_shop.constants;
 
 public enum PaymentStatus {
-        ONHOLD,
+        NOT_CONFIRMED,
+        ON_HOLD,
         CONFIRMED,
         DELIVERING,
         COMPLETED,

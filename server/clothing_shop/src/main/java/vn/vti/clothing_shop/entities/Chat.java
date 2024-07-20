@@ -28,7 +28,7 @@ public class Chat {
     @Column(name = "content",nullable = false)
     private String content;
 
-    @Column(name = "reply")
+    @Column(name = "reply",columnDefinition = "varchar(255)")
     private String reply;
 
     @CreationTimestamp
@@ -39,6 +39,6 @@ public class Chat {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at",columnDefinition = "TIMESTAMP")
     private LocalDateTime deleted_at;
 }

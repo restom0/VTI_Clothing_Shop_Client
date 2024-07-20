@@ -6,29 +6,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.in.ImportedProductCreateRequest;
-import vn.vti.clothing_shop.dto.in.ImportedProductUpdateRequest;
-import vn.vti.clothing_shop.dto.out.ResponseHandler;
+import vn.vti.clothing_shop.mappers.ImportedProductMapper;
+import vn.vti.clothing_shop.requests.ImportedProductCreateRequest;
+import vn.vti.clothing_shop.requests.ImportedProductUpdateRequest;
+import vn.vti.clothing_shop.responses.ResponseHandler;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
 import vn.vti.clothing_shop.services.implementations.ImportedProductServiceImplementation;
 import vn.vti.clothing_shop.utils.ParameterUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/imported-product")
 public class ImportedProductController {
-    @Autowired
-    private final ImportedProductServiceImplementation importedProductServiceImplementation;
 
-    public ImportedProductController(ImportedProductServiceImplementation importedProductServiceImplementation) {
+    private final ImportedProductServiceImplementation importedProductServiceImplementation;
+    private final ImportedProductMapper importedProductMapper;
+
+    @Autowired
+    public ImportedProductController(ImportedProductServiceImplementation importedProductServiceImplementation, ImportedProductMapper importedProductMapper) {
         this.importedProductServiceImplementation = importedProductServiceImplementation;
+        this.importedProductMapper = importedProductMapper;
     }
+
     @GetMapping("/")
     public ResponseEntity<Object> getAllImportedProducts(){
         try{
@@ -38,13 +39,20 @@ public class ImportedProductController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
+
     @PostMapping ("/")
-    public ResponseEntity<?> addImportedProduct(@RequestBody @Valid ImportedProductCreateRequest importedProductCreateRequest, BindingResult bindingResult){
+    public ResponseEntity<?> addImportedProduct(
+            @RequestBody
+            @Valid
+            ImportedProductCreateRequest importedProductCreateRequest,
+            BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            if(importedProductServiceImplementation.addImportedProduct(importedProductCreateRequest)){
+            if(importedProductServiceImplementation
+                    .addImportedProduct(importedProductMapper
+                            .ImportedProductCreateRequestToImportedProductCreateDTO(importedProductCreateRequest))){
                 return ResponseHandler.responseBuilder(201,"Thêm sản phẩm nhập khẩu thành công",null, HttpStatus.CREATED);
             }
             throw new InternalServerErrorException("Thêm sản phẩm nhập khẩu thất bại");
@@ -53,13 +61,24 @@ public class ImportedProductController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateImportedProduct(@RequestBody @Valid ImportedProductUpdateRequest importedProductUpdateRequest, @PathVariable @NotNull(message = "Vui lòng chọn sản phẩm") Long id, @org.jetbrains.annotations.NotNull BindingResult bindingResult){
+    public ResponseEntity<?> updateImportedProduct(
+            @RequestBody
+            @Valid
+            ImportedProductUpdateRequest importedProductUpdateRequest,
+            @PathVariable
+            @NotNull(message = "Vui lòng chọn sản phẩm")
+            Long id,
+            @org.jetbrains.annotations.NotNull
+            BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            if(importedProductServiceImplementation.updateImportedProduct(importedProductUpdateRequest,id)){
+            if(importedProductServiceImplementation
+                    .updateImportedProduct(importedProductMapper
+                            .ImportedProductUpdateRequestToImportedProductUpdateDTO(importedProductUpdateRequest,id))){
                 return ResponseHandler.responseBuilder(200,"Cập nhật sản phẩm nhập khẩu thành công",null, HttpStatus.OK);
             }
             throw new InternalServerErrorException("Cập nhật sản phẩm nhập khẩu thất bại");
@@ -68,15 +87,18 @@ public class ImportedProductController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteImportedProduct(@PathVariable @NotNull(message = "Vui lòng chọn sản phẩm") Long id, @org.jetbrains.annotations.NotNull BindingResult bindingResult){
+    public ResponseEntity<?> deleteImportedProduct(
+            @PathVariable
+            @NotNull(message = "Vui lòng chọn sản phẩm")
+            Long id,
+            @org.jetbrains.annotations.NotNull
+            BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            if(id == null){
-                throw new BadRequestException("Vui lòng chọn sản phẩm");
-            }
             if(importedProductServiceImplementation.deleteImportedProduct(id)){
                 return ResponseHandler.responseBuilder(200,"Xóa sản phẩm nhập khẩu thành công",null, HttpStatus.OK);
             }
@@ -86,8 +108,15 @@ public class ImportedProductController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
+
     @GetMapping("/{filter}/{id}")
-    public ResponseEntity<?> getImportedProductById(@PathVariable @NotNull(message = "Vui lòng chọn bộ lọc") Filter filter, @PathVariable @NotNull(message = "Vui lòng chọn sản phẩm") Long id, @org.jetbrains.annotations.NotNull BindingResult bindingResult){
+    public ResponseEntity<?> getImportedProductById(
+            @PathVariable
+            @NotNull(message = "Vui lòng chọn bộ lọc")
+            Filter filter,
+            @PathVariable
+            @NotNull(message = "Vui lòng chọn sản phẩm") Long id,
+            @org.jetbrains.annotations.NotNull BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return ParameterUtils.showBindingResult(bindingResult);
         }

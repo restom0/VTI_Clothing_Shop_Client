@@ -5,9 +5,15 @@ const useOpen = () => {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const handleDetailOpen = () => setDetailOpen(!detailOpen);
-  const handleUpdateOpen = () => setUpdateOpen(!updateOpen);
-  const handleDeleteOpen = () => setDeleteOpen(!deleteOpen);
+  const handleDetailOpen = () => {
+    setDetailOpen(!detailOpen);
+  };
+  const handleUpdateOpen = () => {
+    setUpdateOpen(!updateOpen);
+  };
+  const handleDeleteOpen = () => {
+    setDeleteOpen(!deleteOpen);
+  };
 
   return {
     detailOpen,

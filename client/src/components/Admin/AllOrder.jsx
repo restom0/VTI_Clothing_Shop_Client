@@ -72,8 +72,6 @@ const AllOrder = () => {
         tablist={allorder_tab}
         TABLE_HEAD={allorder}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         noUpdate
@@ -273,8 +271,6 @@ const AllOrder = () => {
             </CardBody>
           </Card>
         }
-        headerUpdate=""
-        bodyUpdate=""
       >
         <div className="flex items-center justify-between gap-4">
           <Input
@@ -286,120 +282,6 @@ const AllOrder = () => {
           />
         </div>
       </AdminLayout>
-
-      {/* <Container className="mt-5">
-        <div className="flex items-center justify-between mb-5">
-          <Typography variant="h3" color="blue-gray" className="font-bold">
-            Danh sách đơn hàng
-          </Typography>
-          <div className="flex items-center justify-between gap-4">
-            <Input
-              size="sm"
-              label="Tìm kiếm"
-              iconFamily="material-icons"
-              iconName="search"
-              placeholder="Tìm kiếm sản phẩm"
-            />
-          </div>
-        </div>
-
-        <Tablist TABS={allorder_tab} tab={tab} setTab={setTab} />
-
-        <Table
-          TABLE_HEAD={allorder}
-          TABLE_ROWS={TABLE_ROWS}
-          active={active}
-          setActive={setActive}
-          handleUpdateOpen={handleUpdateOpen}
-          handleDeleteOpen={handleDeleteOpen}
-          handleDetailOpen={handleDetailOpen}
-          updateContent="Chỉnh sửa"
-          deleteContent="Xóa"
-        >
-          {TABLE_ROWS.map(
-            ({ id, name, address, phone, sum, status }, index) => (
-              <tr key={name} className="even:bg-blue-gray-50/50">
-                <td className="p-4 cursor-pointer" onClick={handleDetailOpen}>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {id}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {name}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {address}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {phone}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {sum}
-                  </Typography>
-                </td>
-                <td className="p-4">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal"
-                  >
-                    {status}
-                  </Typography>
-                </td>
-              </tr>
-            )
-          )}
-        </Table>
-      </Container>
-      <Dialog open={detailOpen} handler={handleDetailOpen}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
-        <DialogBody>
-          The key to more success is to have a lot of pillows. Put it this way,
-          it took me twenty five years to get these plants, twenty five years of
-          blood sweat and tears, and I&apos;m never giving up, I&apos;m just
-          getting started. I&apos;m up to something. Fan luv.
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
-      </Dialog> */}
     </>
   );
 };

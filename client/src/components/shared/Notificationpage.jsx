@@ -14,9 +14,16 @@ export function Notificationpage({ noti }) {
           color="blue-gray"
           className="mt-10 !text-3xl !leading-snug md:!text-4xl"
         >
-          {noti.name} <br /> {noti.message}
+          {noti.name}
         </Typography>
-        <Typography className="mt-8 mb-14 text-[18px] font-normal text-gray-500 mx-auto md:max-w-sm">
+        <Typography
+          variant="h6"
+          color="blue-gray"
+          className="mt-5 !text-2xl !leading-snug md:!text-2xl"
+        >
+          {noti.message}
+        </Typography>
+        <Typography className="mt-8 mb-14 text-[18px] font-normal text-gray-500 mx-auto md:max-w-lg">
           {noti.subtitile}
         </Typography>
         <Button

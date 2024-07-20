@@ -2,6 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { FlagIcon } from "@heroicons/react/24/solid";
 import SecurityIcon from "@mui/icons-material/Security";
+import IconError from "../assets/IconError";
 const success_checkout = {
   icon: (
     <svg
@@ -73,4 +74,10 @@ const forbidden = {
   message: "Bạn không có quyền truy cập trang này",
   subtitile: "Vui lòng liên hệ với quản trị viên để biết thêm thông tin",
 };
-export { success_checkout, fail_checkout, not_found, forbidden };
+const error = {
+  icon: <IconError />,
+  name: "Bảo trì hệ thống",
+  message: "Đã có lỗi xảy ra",
+  subtitile: "Vui lòng thử lại sau hoặc liên hệ với quản trị viên",
+};
+export { success_checkout, fail_checkout, not_found, forbidden, error };

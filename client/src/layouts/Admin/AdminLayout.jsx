@@ -25,6 +25,7 @@ import Tablist from "../../components/shared/Tablist";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import { Toast } from "../../configs/SweetAlert2";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminLayout = ({
   children,
@@ -46,7 +47,6 @@ const AdminLayout = ({
   overflow,
 }) => {
   const [tab, setTab] = useState("ALL");
-  const [active, setActive] = useState(1);
   const {
     detailOpen,
     updateOpen,
@@ -94,8 +94,6 @@ const AdminLayout = ({
           <Table
             TABLE_HEAD={TABLE_HEAD}
             TABLE_ROWS={TABLE_ROWS}
-            active={active}
-            setActive={setActive}
             handleUpdateOpen={handleUpdateOpen}
             handleDeleteOpen={handleDeleteOpen}
             updateContent={updateContent}
@@ -109,8 +107,6 @@ const AdminLayout = ({
           <Table
             TABLE_HEAD={TABLE_HEAD}
             TABLE_ROWS={TABLE_ROWS}
-            active={active}
-            setActive={setActive}
             handleUpdateOpen={handleUpdateOpen}
             handleDeleteOpen={handleDeleteOpen}
             handleDetailOpen={handleDetailOpen}
@@ -180,12 +176,15 @@ AdminLayout.propTypes = {
   TABLE_ROWS: PropTypes.array.isRequired,
   noDelete: PropTypes.bool,
   noUpdate: PropTypes.bool,
-  updateContent: PropTypes.node.isRequired,
-  deleteContent: PropTypes.node.isRequired,
-  headerDetail: PropTypes.node.isRequired,
-  bodyDetail: PropTypes.node.isRequired,
-  headerUpdate: PropTypes.node.isRequired,
-  bodyUpdate: PropTypes.node.isRequired,
-  size: PropTypes.string.isRequired,
+  noDetail: PropTypes.bool,
+  updateContent: PropTypes.string,
+  deleteContent: PropTypes.string,
+  headerDetail: PropTypes.string,
+  bodyDetail: PropTypes.node,
+  headerUpdate: PropTypes.string,
+  bodyUpdate: PropTypes.node,
+  size: PropTypes.string,
+  sizeUpdate: PropTypes.string,
+  overflow: PropTypes.bool,
 };
 export default AdminLayout;

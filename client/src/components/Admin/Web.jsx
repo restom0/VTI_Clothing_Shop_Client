@@ -85,18 +85,6 @@ const Web = () => {
   }, [deleteOpen, handleDeleteOpen]);
   return (
     <>
-      {/* <AdminLayout
-        name="Danh sách trang web"
-        TABLE_HEAD={web}
-        TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
-        handleUpdateOpen={handleUpdateOpen}
-        handleDeleteOpen={handleDeleteOpen}
-        handleDetailOpen={handleDetailOpen}
-        updateContent="Khôi phục trang web"
-        deleteContent="Bảo trì trang web"
-      ></AdminLayout> */}
       <Container className="mt-5">
         <div className="flex items-center justify-between mb-5">
           <Typography variant="h4" color="blue-gray" className="font-bold">
@@ -130,8 +118,6 @@ const Web = () => {
         <Table
           TABLE_HEAD={web}
           TABLE_ROWS={TABLE_ROWS}
-          active={active}
-          setActive={setActive}
           handleUpdateOpen={handleUpdateOpen}
           handleDeleteOpen={handleDeleteOpen}
           handleDetailOpen={handleDetailOpen}

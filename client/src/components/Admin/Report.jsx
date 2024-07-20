@@ -203,7 +203,6 @@ const Report = () => {
       rating: 1,
     },
   ];
-  const [active, setActive] = React.useState(1);
   const handleTab = (e) => setTab(e.target.value);
   return (
     <>
@@ -270,8 +269,6 @@ const Report = () => {
           <Table
             TABLE_HEAD={TABLE_HEAD}
             TABLE_ROWS={TABLE_ROWS}
-            active={active}
-            setActive={setActive}
             noDelete
             noUpdate
             data

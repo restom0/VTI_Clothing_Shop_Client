@@ -19,10 +19,13 @@ import java.time.LocalDateTime;
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    @Column(name="name",nullable = false)
-    public String name;
+    @Column(name="name",nullable = false,unique = true)
+    private String name;
+
+    @Column(name="description")
+    private String description;
 
     @CreationTimestamp
     @Column(name = "created_at")

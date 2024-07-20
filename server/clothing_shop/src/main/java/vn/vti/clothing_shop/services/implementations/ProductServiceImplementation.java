@@ -2,8 +2,14 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.ProductCreateRequest;
-import vn.vti.clothing_shop.dto.in.ProductUpdateRequest;
+import vn.vti.clothing_shop.dto.in.ProductCreateDTO;
+import vn.vti.clothing_shop.dto.in.ProductUpdateDTO;
+import vn.vti.clothing_shop.dto.out.ProductDTO;
+import vn.vti.clothing_shop.mappers.BrandMapper;
+import vn.vti.clothing_shop.mappers.CategoryMapper;
+import vn.vti.clothing_shop.mappers.ProductMapper;
+import vn.vti.clothing_shop.requests.ProductCreateRequest;
+import vn.vti.clothing_shop.requests.ProductUpdateRequest;
 import vn.vti.clothing_shop.entities.Brand;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Product;
@@ -20,49 +26,44 @@ import java.util.Optional;
 
 @Component
 public class ProductServiceImplementation implements ProductService {
-    @Autowired
+
     private final ProductRepository productRepository;
-
-    @Autowired
     private final BrandRepository brandRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProductMapper productMapper;
+    private final CategoryMapper categoryMapper;
+    private final BrandMapper brandMapper;
 
     @Autowired
-    private final CategoryRepository categoryRepository;
-
-    public ProductServiceImplementation(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImplementation(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository, ProductMapper productMapper, CategoryMapper categoryMapper, BrandMapper brandMapper) {
         this.productRepository = productRepository;
         this.brandRepository = brandRepository;
         this.categoryRepository = categoryRepository;
+        this.productMapper = productMapper;
+        this.categoryMapper = categoryMapper;
+        this.brandMapper = brandMapper;
     }
 
-    public List<Product> getAllProducts(){
-        return this.productRepository.findAll();
+    public List<ProductDTO> getAllProducts(){
+        return this.productRepository
+                .findAll()
+                .stream()
+                .map(productMapper::EntityToDTO)
+                .toList();
     };
-    public Boolean addProduct(ProductCreateRequest productCreateRequest){
-        Brand brand =this.brandRepository.findById(productCreateRequest.getBrand_id()).orElse(null);
-        if(brand==null){
-            throw new NotFoundException("Brand not found");
-        }
-        Category category = this.categoryRepository.findById(productCreateRequest.getBrand_id()).orElse(null);
-        if(category==null){
-            throw new NotFoundException("Category not found");
-        }
-        Product product = new Product();
-        product.setName(productCreateRequest.getName());
-        product.setShort_description((productCreateRequest.getShort_description()));
-        product.setImageUrl(productCreateRequest.getImageUrl());
-        product.setBrand_id(brand);
-        product.setCategory_id(category);
-        this.productRepository.save(product);
+    public Boolean addProduct(ProductCreateDTO productCreateDTO){
+        Brand brand =this.brandRepository
+                .findById(productCreateDTO.getBrand_id())
+                .orElseThrow(()->new NotFoundException("Brand not found"));
+        Category category = this.categoryRepository
+                .findById(productCreateDTO.getCategory_id())
+                .orElseThrow(()->new NotFoundException("Category not found"));
+        this.productRepository.save(productMapper.ProductCreateDTOToEntity(productCreateDTO,category,brand));
         return true;
     };
     public Boolean deleteProduct(Long id){
         try{
-            Optional<Product> product = this.productRepository.findById(id);
-            if(product.isEmpty()){
-                throw new NotFoundException("Product not found");
-            }
-            Product result = product.get();
+            Product result = this.productRepository.findById(id).orElseThrow(()->new NotFoundException("Product not found"));
             result.setDeleted_at(LocalDateTime.now());
             return true;
         }
@@ -70,39 +71,32 @@ public class ProductServiceImplementation implements ProductService {
             throw new InternalServerErrorException("Server error");
         }
     };
-    public Boolean updateProduct(ProductUpdateRequest productUpdateRequest,Long id){
+    public Boolean updateProduct(ProductUpdateDTO productUpdateDTO){
         try{
-            Optional<Product> product = this.productRepository.findById(id);
-            if(product.isEmpty()){
-                throw new NotFoundException("Product not found");
-            }
-            Brand brand =this.brandRepository.findById(productUpdateRequest.getBrand_id()).orElse(null);
-            if(brand==null){
-                throw new NotFoundException("Brand not found");
-            }
-            Category category = this.categoryRepository.findById(productUpdateRequest.getBrand_id()).orElse(null);
-            if(category==null){
-                throw new NotFoundException("Category not found");
-            }
-            Product result = product.get();
-            result.setName(productUpdateRequest.getName());
-            result.setShort_description((productUpdateRequest.getShort_description()));
-            result.setImageUrl(productUpdateRequest.getImageUrl());
-            result.setBrand_id(brand);
-            result.setCategory_id(category);
+            Product product = this.productRepository
+                    .findById(productUpdateDTO.getId())
+                    .orElseThrow(()->new NotFoundException("Product not found"));
+            Brand brand =this.brandRepository
+                    .findById(productUpdateDTO.getBrand_id())
+                    .orElseThrow(()->new NotFoundException("Brand not found"));
+            Category category = this.categoryRepository
+                    .findById(productUpdateDTO.getBrand_id())
+                    .orElseThrow(()->new NotFoundException("Category not found"));
+            this.productRepository.save(productMapper.ProductUpdateDTOToEntity(productUpdateDTO,category,brand,product));
             return true;
         }
         catch (Exception e){
             throw new InternalServerErrorException("Server error");
         }
     };
-    public Product getProductById(Long id){
+    public ProductDTO getProductById(Long id){
         try{
-            Optional<Product> product = this.productRepository.findById(id);
-            if(product.isEmpty()){
-                throw new NotFoundException("Product not found");
-            }
-            return product.get();
+            return productMapper
+                    .EntityToDTO(
+                            this.productRepository
+                                    .findById(id)
+                                    .orElseThrow(()->new NotFoundException("Product not found"))
+                    );
         }
         catch (Exception e){
             throw new InternalServerErrorException("Server error");

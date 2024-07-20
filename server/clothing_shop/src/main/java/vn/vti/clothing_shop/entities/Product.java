@@ -30,21 +30,6 @@ public class Product {
     @Column(name= "short_description")
     private String short_description;
 
-    @Column(name = "imageUrl")
-    private String imageUrl;
-
-    @Column(name = "slider_url_1")
-    private String slider_url_1;
-
-    @Column(name = "slider_url_2")
-    private String slider_url_2;
-
-    @Column(name = "slider_url_3")
-    private String slider_url_3;
-
-    @Column(name = "slider_url_4")
-    private String slider_url_4;
-
     @ManyToOne
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category_id;

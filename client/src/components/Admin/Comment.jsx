@@ -23,16 +23,6 @@ import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { comment } from "../../constants/table_head";
 
 const Comment = () => {
-  const [active, setActive] = React.useState(1);
-  const {
-    detailOpen,
-    handleDetailOpen,
-    updateOpen,
-    handleUpdateOpen,
-    deleteOpen,
-    handleDeleteOpen,
-  } = useOpen();
-
   const TABLE_ROWS = [
     {
       name: "001",
@@ -47,11 +37,6 @@ const Comment = () => {
         name="Lượt bình luận"
         TABLE_HEAD={comment}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
-        handleUpdateOpen={handleUpdateOpen}
-        handleDeleteOpen={handleDeleteOpen}
-        updateContent=""
         deleteContent="Khóa bình luận"
         noUpdate
         size="lg"
@@ -89,8 +74,6 @@ const Comment = () => {
             </div>
           </Container>
         }
-        headerUpdate=""
-        bodyUpdate=""
       >
         <div className="flex items-center justify-between gap-4">
           <Select label="Phân loại theo">

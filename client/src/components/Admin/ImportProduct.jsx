@@ -31,30 +31,16 @@ const TABLE_ROWS = [
   },
 ];
 const ImportProduct = () => {
-  const {
-    detailOpen,
-    updateOpen,
-    deleteOpen,
-    handleDetailOpen,
-    handleUpdateOpen,
-    handleDeleteOpen,
-  } = useOpen();
-
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
-  const [active, setActive] = useState(1);
   return (
     <>
       <AdminLayout
         name="Nhập hàng"
         TABLE_HEAD={importproduct}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
-        handleUpdateOpen={handleUpdateOpen}
-        handleDeleteOpen={handleDeleteOpen}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -629,16 +615,8 @@ const ImportProduct = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
+          <Button variant="gradient" color="green" onClick={handleOpen}>
+            <span>Xác nhận</span>
           </Button>
         </DialogFooter>
       </Dialog>

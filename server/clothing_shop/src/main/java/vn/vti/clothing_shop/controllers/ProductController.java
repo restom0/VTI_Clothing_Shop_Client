@@ -6,29 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import vn.vti.clothing_shop.dto.in.ProductCreateRequest;
-import vn.vti.clothing_shop.dto.in.ProductUpdateRequest;
-import vn.vti.clothing_shop.dto.out.ResponseHandler;
+import vn.vti.clothing_shop.mappers.ProductMapper;
+import vn.vti.clothing_shop.requests.ProductCreateRequest;
+import vn.vti.clothing_shop.requests.ProductUpdateRequest;
+import vn.vti.clothing_shop.responses.ResponseHandler;
 import vn.vti.clothing_shop.entities.Product;
-import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.services.implementations.ProductServiceImplementation;
 import vn.vti.clothing_shop.utils.ParameterUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping(value = "/product")
 public class ProductController {
-    @Autowired
-    private final ProductServiceImplementation productServiceImplementation;
 
-    public ProductController(ProductServiceImplementation productServiceImplementation) {
+    private final ProductServiceImplementation productServiceImplementation;
+    private final ProductMapper productMapper;
+
+    @Autowired
+    public ProductController(ProductServiceImplementation productServiceImplementation, ProductMapper productMapper) {
         this.productServiceImplementation = productServiceImplementation;
+        this.productMapper = productMapper;
     }
 
     @GetMapping("/")
@@ -47,9 +46,8 @@ public class ProductController {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            if(productServiceImplementation.addProduct(productCreateRequest)) {
-                return ResponseHandler.responseBuilder(201, "Thêm sản phẩm thành công", productServiceImplementation.addProduct(productCreateRequest), HttpStatus.CREATED);
-            }
+            if(productServiceImplementation.addProduct(productMapper.ProductCreateRequestToProductCreateDTO(productCreateRequest)))
+                return ResponseHandler.responseBuilder(201, "Thêm sản phẩm thành công", null, HttpStatus.CREATED);
             throw new InternalServerErrorException("Thêm sản phẩm thất bại");
         }
         catch (Exception e){
@@ -62,9 +60,9 @@ public class ProductController {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            if(productServiceImplementation.updateProduct(productUpdateRequest,id)){
+            if(productServiceImplementation.updateProduct(productMapper.ProductUpdateRequestToProductUpdateDTO(id,productUpdateRequest)))
                 return ResponseHandler.responseBuilder(200,"Cập nhật sản phẩm thành công",null, HttpStatus.OK);
-            }
+
             throw new InternalServerErrorException("Cập nhật sản phẩm thất bại");
         }
         catch (Exception e){
@@ -92,11 +90,7 @@ public class ProductController {
             return ParameterUtils.showBindingResult(bindingResult);
         }
         try {
-            Product product = productServiceImplementation.getProductById(id);
-            if(product!=null){
-                return ResponseHandler.responseBuilder(200,"Lấy sản phẩm thành công",product, HttpStatus.OK);
-            }
-            throw new NotFoundException("Sản phẩm không tồn tại");
+                return ResponseHandler.responseBuilder(200,"Lấy sản phẩm thành công",productServiceImplementation.getProductById(id), HttpStatus.OK);
         }
         catch (Exception e){
             return ResponseHandler.exceptionBuilder(e);

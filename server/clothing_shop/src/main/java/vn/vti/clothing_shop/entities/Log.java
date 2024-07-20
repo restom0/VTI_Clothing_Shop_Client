@@ -30,6 +30,7 @@ public class Log {
     private String method;
 
     @Column(name = "`column`")
+    @Enumerated(EnumType.STRING)
     private Filter column;
 
     @Column(name = "`detail`")

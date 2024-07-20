@@ -2,23 +2,20 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Button, CardFooter, IconButton } from "@material-tailwind/react";
 import React from "react";
 import PropTypes from "prop-types";
-const AdminPagination = ({ page, active, setActive }) => {
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decrement,
+  increment,
+  setActive,
+} from "../../../features/slices/activeSlice";
+const AdminPagination = ({ page }) => {
+  const active = useSelector((state) => state.active.value);
+  const dispatch = useDispatch();
   const getItemProps = (index) => ({
     variant: active === index ? "filled" : "text",
-    color: "gray",
-    onClick: () => setActive(index),
+    className: active === index ? "bg-[#006edc] text-white" : "",
+    onClick: () => dispatch(setActive(index)),
   });
-  const next = () => {
-    if (active === page) return;
-
-    setActive(active + 1);
-  };
-
-  const prev = () => {
-    if (active === 1) return;
-
-    setActive(active - 1);
-  };
   return (
     <>
       {page != 1 && (
@@ -29,7 +26,7 @@ const AdminPagination = ({ page, active, setActive }) => {
               <Button
                 variant="text"
                 className="flex items-center gap-2"
-                onClick={prev}
+                onClick={() => dispatch(decrement())}
                 disabled={active === 1}
               >
                 <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
@@ -46,7 +43,7 @@ const AdminPagination = ({ page, active, setActive }) => {
               <Button
                 variant="text"
                 className="flex items-center gap-2"
-                onClick={next}
+                onClick={() => dispatch(increment())}
                 disabled={active === page}
               >
                 <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
@@ -60,7 +57,5 @@ const AdminPagination = ({ page, active, setActive }) => {
 };
 AdminPagination.propTypes = {
   page: PropTypes.number.isRequired,
-  active: PropTypes.number.isRequired,
-  setActive: PropTypes.func.isRequired,
 };
 export default AdminPagination;

@@ -78,12 +78,8 @@ const Inventory = () => {
         tablist={inventory_tab}
         TABLE_HEAD={inventory}
         TABLE_ROWS={TABLE_ROWS}
-        active={active}
-        setActive={setActive}
         updateContent="Chỉnh sửa"
-        handleUpdateOpen={handleUpdateOpen}
         deleteContent="Xóa"
-        handleDeleteOpen={handleDeleteOpen}
         size="xl"
         headerDetail={"Chi tiết sản phẩm #" + "001"}
         bodyDetail={
@@ -253,8 +249,6 @@ const Inventory = () => {
             </div>
           </section>
         }
-        headerUpdate=""
-        bodyUpdate=""
         noUpdate
       >
         <div className="flex items-center justify-between gap-4">
