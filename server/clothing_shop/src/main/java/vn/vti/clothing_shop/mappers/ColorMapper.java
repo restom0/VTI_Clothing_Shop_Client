@@ -3,10 +3,10 @@ package vn.vti.clothing_shop.mappers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.ColorCreateDTO;
-import vn.vti.clothing_shop.dto.in.ColorUpdateDTO;
-import vn.vti.clothing_shop.dto.out.CategoryDTO;
-import vn.vti.clothing_shop.dto.out.ColorDTO;
+import vn.vti.clothing_shop.dtos.ins.ColorCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ColorUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.CategoryDTO;
+import vn.vti.clothing_shop.dtos.outs.ColorDTO;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Color;
 

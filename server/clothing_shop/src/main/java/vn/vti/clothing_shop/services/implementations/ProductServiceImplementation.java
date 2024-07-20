@@ -2,14 +2,12 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.ProductCreateDTO;
-import vn.vti.clothing_shop.dto.in.ProductUpdateDTO;
-import vn.vti.clothing_shop.dto.out.ProductDTO;
+import vn.vti.clothing_shop.dtos.ins.ProductCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ProductUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ProductDTO;
 import vn.vti.clothing_shop.mappers.BrandMapper;
 import vn.vti.clothing_shop.mappers.CategoryMapper;
 import vn.vti.clothing_shop.mappers.ProductMapper;
-import vn.vti.clothing_shop.requests.ProductCreateRequest;
-import vn.vti.clothing_shop.requests.ProductUpdateRequest;
 import vn.vti.clothing_shop.entities.Brand;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Product;
@@ -22,7 +20,6 @@ import vn.vti.clothing_shop.services.interfaces.ProductService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProductServiceImplementation implements ProductService {

@@ -2,18 +2,13 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.constants.PaymentMethod;
-import vn.vti.clothing_shop.constants.PaymentStatus;
-import vn.vti.clothing_shop.dto.in.OrderCreateDTO;
-import vn.vti.clothing_shop.dto.in.OrderUpdateDTO;
-import vn.vti.clothing_shop.dto.out.OrderDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.OrderDTO;
 import vn.vti.clothing_shop.entities.Voucher;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.ForbiddenException;
-import vn.vti.clothing_shop.mappers.OrderItemMapper;
 import vn.vti.clothing_shop.mappers.OrderMapper;
-import vn.vti.clothing_shop.requests.OrderCreateRequest;
-import vn.vti.clothing_shop.requests.OrderUpdateRequest;
 import vn.vti.clothing_shop.entities.Order;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
@@ -26,7 +21,6 @@ import vn.vti.clothing_shop.services.interfaces.OrderService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderServiceImplementation implements OrderService {

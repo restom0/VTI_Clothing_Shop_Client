@@ -1,10 +1,9 @@
 package vn.vti.clothing_shop.services.interfaces;
 
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.OrderItemCreateDTO;
-import vn.vti.clothing_shop.dto.in.OrderItemUpdateDTO;
-import vn.vti.clothing_shop.dto.out.OrderItemDTO;
-import vn.vti.clothing_shop.entities.OrderItem;
+import vn.vti.clothing_shop.dtos.ins.OrderItemCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderItemUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.OrderItemDTO;
 
 import java.util.List;
 

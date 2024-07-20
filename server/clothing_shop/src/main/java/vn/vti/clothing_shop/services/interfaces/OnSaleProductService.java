@@ -1,9 +1,6 @@
 package vn.vti.clothing_shop.services.interfaces;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.out.OnSaleProductDTO;
-import vn.vti.clothing_shop.entities.OnSaleProduct;
+import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 
 import java.util.List;
 

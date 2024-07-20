@@ -2,18 +2,16 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.ChatCreateDTO;
-import vn.vti.clothing_shop.dto.in.ChatReplyDTO;
-import vn.vti.clothing_shop.dto.in.ChatUpdateDTO;
-import vn.vti.clothing_shop.dto.out.ChatDTO;
+import vn.vti.clothing_shop.dtos.ins.ChatCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ChatReplyDTO;
+import vn.vti.clothing_shop.dtos.ins.ChatUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ChatDTO;
 import vn.vti.clothing_shop.entities.Chat;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.mappers.ChatMapper;
 import vn.vti.clothing_shop.repositories.ChatRepository;
 import vn.vti.clothing_shop.repositories.UserRepository;
-import vn.vti.clothing_shop.requests.ChatCreateRequest;
-import vn.vti.clothing_shop.requests.ChatUpdateRequest;
 import vn.vti.clothing_shop.services.interfaces.ChatService;
 
 import java.time.LocalDateTime;

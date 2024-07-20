@@ -2,12 +2,12 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.BrandCreateDTO;
-import vn.vti.clothing_shop.dto.in.BrandUpdateDTO;
-import vn.vti.clothing_shop.dto.out.BrandDTO;
-import vn.vti.clothing_shop.dto.out.ColorDTO;
-import vn.vti.clothing_shop.dto.out.MaterialDTO;
-import vn.vti.clothing_shop.dto.out.SizeDTO;
+import vn.vti.clothing_shop.dtos.ins.BrandCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.BrandUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.BrandDTO;
+import vn.vti.clothing_shop.dtos.outs.ColorDTO;
+import vn.vti.clothing_shop.dtos.outs.MaterialDTO;
+import vn.vti.clothing_shop.dtos.outs.SizeDTO;
 import vn.vti.clothing_shop.entities.Brand;
 import vn.vti.clothing_shop.exceptions.ConflictException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;

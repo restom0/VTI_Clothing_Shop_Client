@@ -1,12 +1,9 @@
 package vn.vti.clothing_shop.services.interfaces;
 
 import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.in.ImportedProductCreateDTO;
-import vn.vti.clothing_shop.dto.in.ImportedProductUpdateDTO;
-import vn.vti.clothing_shop.dto.out.ImportedProductDTO;
-import vn.vti.clothing_shop.requests.ImportedProductCreateRequest;
-import vn.vti.clothing_shop.requests.ImportedProductUpdateRequest;
-import vn.vti.clothing_shop.entities.ImportedProduct;
+import vn.vti.clothing_shop.dtos.ins.ImportedProductCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ImportedProductUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ImportedProductDTO;
 
 import java.util.List;
 

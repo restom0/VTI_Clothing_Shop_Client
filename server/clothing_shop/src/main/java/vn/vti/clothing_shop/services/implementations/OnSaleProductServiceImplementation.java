@@ -2,8 +2,7 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.out.OnSaleProductDTO;
+import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.OnSaleProduct;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.mappers.OnSaleProductMapper;

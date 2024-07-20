@@ -2,9 +2,9 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.CategoryCreateDTO;
-import vn.vti.clothing_shop.dto.in.CategoryUpdateDTO;
-import vn.vti.clothing_shop.dto.out.*;
+import vn.vti.clothing_shop.dtos.ins.CategoryCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.CategoryUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.*;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.exceptions.ConflictException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;

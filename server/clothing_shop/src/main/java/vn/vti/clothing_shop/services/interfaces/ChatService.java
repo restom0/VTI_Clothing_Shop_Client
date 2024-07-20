@@ -1,11 +1,9 @@
 package vn.vti.clothing_shop.services.interfaces;
 
-import vn.vti.clothing_shop.dto.in.ChatCreateDTO;
-import vn.vti.clothing_shop.dto.in.ChatReplyDTO;
-import vn.vti.clothing_shop.dto.in.ChatUpdateDTO;
-import vn.vti.clothing_shop.dto.out.ChatDTO;
-import vn.vti.clothing_shop.requests.ChatCreateRequest;
-import vn.vti.clothing_shop.requests.ChatUpdateRequest;
+import vn.vti.clothing_shop.dtos.ins.ChatCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ChatReplyDTO;
+import vn.vti.clothing_shop.dtos.ins.ChatUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ChatDTO;
 
 import java.util.List;
 

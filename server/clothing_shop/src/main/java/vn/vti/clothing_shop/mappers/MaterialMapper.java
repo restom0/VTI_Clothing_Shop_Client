@@ -3,10 +3,10 @@ package vn.vti.clothing_shop.mappers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.MaterialCreateDTO;
-import vn.vti.clothing_shop.dto.in.MaterialUpdateDTO;
-import vn.vti.clothing_shop.dto.out.CategoryDTO;
-import vn.vti.clothing_shop.dto.out.MaterialDTO;
+import vn.vti.clothing_shop.dtos.ins.MaterialCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.MaterialUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.CategoryDTO;
+import vn.vti.clothing_shop.dtos.outs.MaterialDTO;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Material;
 

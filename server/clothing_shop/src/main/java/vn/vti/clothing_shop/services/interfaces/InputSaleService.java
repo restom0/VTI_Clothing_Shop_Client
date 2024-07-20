@@ -1,8 +1,8 @@
 package vn.vti.clothing_shop.services.interfaces;
 
-import vn.vti.clothing_shop.dto.in.InputSaleCreateDTO;
-import vn.vti.clothing_shop.dto.in.InputSaleUpdateDTO;
-import vn.vti.clothing_shop.dto.out.InputSaleDTO;
+import vn.vti.clothing_shop.dtos.ins.InputSaleCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.InputSaleUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.InputSaleDTO;
 
 import java.util.List;
 

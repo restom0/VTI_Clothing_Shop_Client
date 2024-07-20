@@ -1,18 +1,11 @@
 package vn.vti.clothing_shop.mappers;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Pattern;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.InputSaleCreateDTO;
-import vn.vti.clothing_shop.dto.in.OnSaleProductCreateDTO;
-import vn.vti.clothing_shop.dto.in.OnSaleProductUpdateDTO;
-import vn.vti.clothing_shop.dto.out.OnSaleProductDTO;
+import vn.vti.clothing_shop.dtos.ins.OnSaleProductCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.OnSaleProductUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.ImportedProduct;
 import vn.vti.clothing_shop.entities.InputSale;
 import vn.vti.clothing_shop.entities.OnSaleProduct;

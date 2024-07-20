@@ -2,10 +2,10 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.InputSaleCreateDTO;
-import vn.vti.clothing_shop.dto.in.InputSaleUpdateDTO;
-import vn.vti.clothing_shop.dto.out.InputSaleDTO;
-import vn.vti.clothing_shop.dto.out.OnSaleProductDTO;
+import vn.vti.clothing_shop.dtos.ins.InputSaleCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.InputSaleUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.InputSaleDTO;
+import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.ImportedProduct;
 import vn.vti.clothing_shop.entities.InputSale;
 import vn.vti.clothing_shop.entities.OnSaleProduct;

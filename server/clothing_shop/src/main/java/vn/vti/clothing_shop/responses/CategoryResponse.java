@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.vti.clothing_shop.dto.out.*;
-import vn.vti.clothing_shop.entities.Category;
+import vn.vti.clothing_shop.dtos.outs.*;
 
 import java.util.List;
 

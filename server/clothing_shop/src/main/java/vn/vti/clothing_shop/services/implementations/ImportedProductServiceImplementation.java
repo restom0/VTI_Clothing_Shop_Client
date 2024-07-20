@@ -3,9 +3,9 @@ package vn.vti.clothing_shop.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.constants.Filter;
-import vn.vti.clothing_shop.dto.in.ImportedProductCreateDTO;
-import vn.vti.clothing_shop.dto.in.ImportedProductUpdateDTO;
-import vn.vti.clothing_shop.dto.out.ImportedProductDTO;
+import vn.vti.clothing_shop.dtos.ins.ImportedProductCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.ImportedProductUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ImportedProductDTO;
 import vn.vti.clothing_shop.mappers.ColorMapper;
 import vn.vti.clothing_shop.mappers.ImportedProductMapper;
 import vn.vti.clothing_shop.mappers.MaterialMapper;
@@ -17,7 +17,6 @@ import vn.vti.clothing_shop.repositories.*;
 import vn.vti.clothing_shop.services.interfaces.ImportedProductService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

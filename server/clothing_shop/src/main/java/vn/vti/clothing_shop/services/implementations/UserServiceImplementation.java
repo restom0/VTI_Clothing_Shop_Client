@@ -1,32 +1,25 @@
 package vn.vti.clothing_shop.services.implementations;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.UserCreateDTO;
-import vn.vti.clothing_shop.dto.in.UserReadDTO;
-import vn.vti.clothing_shop.dto.in.UserUpdateDTO;
-import vn.vti.clothing_shop.dto.in.UserUpdatePasswordDTO;
-import vn.vti.clothing_shop.dto.out.UserDTO;
+import vn.vti.clothing_shop.dtos.ins.UserCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.UserReadDTO;
+import vn.vti.clothing_shop.dtos.ins.UserUpdateDTO;
+import vn.vti.clothing_shop.dtos.ins.UserUpdatePasswordDTO;
+import vn.vti.clothing_shop.dtos.outs.UserDTO;
 import vn.vti.clothing_shop.mappers.UserMapper;
-import vn.vti.clothing_shop.requests.UserCreateRequest;
-import vn.vti.clothing_shop.requests.UserUpdatePasswordRequest;
-import vn.vti.clothing_shop.requests.UserUpdateRequest;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
-import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.repositories.UserRepository;
 import vn.vti.clothing_shop.services.JwtService;
 import vn.vti.clothing_shop.services.interfaces.UserService;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class UserServiceImplementation implements UserService {

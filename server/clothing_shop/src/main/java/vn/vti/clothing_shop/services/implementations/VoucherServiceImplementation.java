@@ -2,15 +2,14 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.VoucherCreateDTO;
-import vn.vti.clothing_shop.dto.in.VoucherUpdateDTO;
-import vn.vti.clothing_shop.dto.out.VoucherDTO;
+import vn.vti.clothing_shop.dtos.ins.VoucherCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.VoucherUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.VoucherDTO;
 import vn.vti.clothing_shop.entities.Voucher;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.mappers.VoucherMapper;
 import vn.vti.clothing_shop.repositories.VoucherRepository;
-import vn.vti.clothing_shop.requests.VoucherCreateRequest;
 import vn.vti.clothing_shop.services.interfaces.VoucherService;
 
 import java.time.LocalDateTime;

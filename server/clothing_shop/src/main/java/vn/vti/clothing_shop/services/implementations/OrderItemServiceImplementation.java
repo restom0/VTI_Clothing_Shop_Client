@@ -2,9 +2,9 @@ package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.OrderItemCreateDTO;
-import vn.vti.clothing_shop.dto.in.OrderItemUpdateDTO;
-import vn.vti.clothing_shop.dto.out.OrderItemDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderItemCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderItemUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.OrderItemDTO;
 import vn.vti.clothing_shop.entities.*;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
 import vn.vti.clothing_shop.exceptions.NotFoundException;

@@ -1,16 +1,13 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import vn.vti.clothing_shop.dto.in.CommentCreateDTO;
-import vn.vti.clothing_shop.dto.in.CommentUpdateDTO;
-import vn.vti.clothing_shop.dto.out.CommentDTO;
+import vn.vti.clothing_shop.dtos.ins.CommentCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.CommentUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.CommentDTO;
 import vn.vti.clothing_shop.mappers.CommentMapper;
 import vn.vti.clothing_shop.mappers.ProductMapper;
 import vn.vti.clothing_shop.mappers.UserMapper;
-import vn.vti.clothing_shop.requests.CommentCreateRequest;
-import vn.vti.clothing_shop.requests.CommentUpdateRequest;
 import vn.vti.clothing_shop.entities.Comment;
 import vn.vti.clothing_shop.entities.Product;
 import vn.vti.clothing_shop.entities.User;
@@ -22,7 +19,6 @@ import vn.vti.clothing_shop.services.interfaces.CommentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

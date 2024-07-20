@@ -1,14 +1,11 @@
 package vn.vti.clothing_shop.services.interfaces;
 
 import org.springframework.stereotype.Component;
-import vn.vti.clothing_shop.dto.in.UserCreateDTO;
-import vn.vti.clothing_shop.dto.in.UserReadDTO;
-import vn.vti.clothing_shop.dto.in.UserUpdateDTO;
-import vn.vti.clothing_shop.dto.in.UserUpdatePasswordDTO;
-import vn.vti.clothing_shop.dto.out.UserDTO;
-import vn.vti.clothing_shop.requests.UserCreateRequest;
-import vn.vti.clothing_shop.requests.UserUpdatePasswordRequest;
-import vn.vti.clothing_shop.requests.UserUpdateRequest;
+import vn.vti.clothing_shop.dtos.ins.UserCreateDTO;
+import vn.vti.clothing_shop.dtos.ins.UserReadDTO;
+import vn.vti.clothing_shop.dtos.ins.UserUpdateDTO;
+import vn.vti.clothing_shop.dtos.ins.UserUpdatePasswordDTO;
+import vn.vti.clothing_shop.dtos.outs.UserDTO;
 
 import java.util.List;
 
