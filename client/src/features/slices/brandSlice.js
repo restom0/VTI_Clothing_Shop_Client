@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: null,
+  value: {},
 };
 
 export const brandSlice = createSlice({
@@ -11,9 +11,12 @@ export const brandSlice = createSlice({
     setBrand: (state, action) => {
       state.value = action.payload;
     },
+    resetBrand: (state) => {
+      state.value = {};
+    },
   },
 });
 
-export const { setBrand } = brandSlice.actions;
+export const { setBrand, resetBrand } = brandSlice.actions;
 
 export default brandSlice.reducer;

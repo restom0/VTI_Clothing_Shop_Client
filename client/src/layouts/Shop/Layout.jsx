@@ -11,15 +11,6 @@ const Layout = () => {
   const [loading, setLoading] = useState(
     localStorage.getItem("isLoading") === true
   );
-
-  useEffect(() => {
-    const isLoading = localStorage.getItem("isLoading");
-    if (isLoading === false) {
-      setLoading(false);
-    }
-  }, []); // Empty dependency array means this effect runs once on mount
-
-  if (loading) return <Loading />;
   return (
     <>
       <>

@@ -1,108 +1,64 @@
 import React, { useState } from "react";
-import { Button, Input } from "@material-tailwind/react";
+import { Button, Input, Radio, Typography } from "@material-tailwind/react";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
-import withReactContent from "sweetalert2-react-content";
-import Swal from "sweetalert2";
+import { useRegisterMutation } from "../apis/AccountApi";
+import ImageUpload from "../components/ImageUpload";
+import CryptoJS from "crypto-js";
 import axios from "axios";
+import { Toast } from "../configs/SweetAlert2";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAvatar, resetAvatar } from "../features/slices/avatar_urlSlice";
+
 const Registerpage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phone_number, setPhone_Number] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
-  const register = async (
-    username,
-    password,
-    phoneNumber,
-    confirmPassword,
-    firstname,
-    lastname,
-    email,
-    birthday
-  ) => {
-    // try {
-    //   if (password !== confirmPassword) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "Password and confirm password are not the same",
-    //     });
-    //     return;
-    //   }
-    //   const data = {
-    //     username: username,
-    //     password: password,
-    //     phoneNumber: phoneNumber,
-    //     emailAddress: email,
-    //     firstName: firstname,
-    //     lastName: lastname,
-    //     birthDate: birthday,
-    //   };
-    //   const result = await axios.post(
-    //     "http://localhost:8099/auth/register",
-    //     data,
-    //     { mode: "cors" },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   if (result.status === 200) {
-    //     Toast.fire({
-    //       icon: "success",
-    //       title: "Register successfully",
-    //     }).then(() => {
-    //       localStorage.setItem("token", result.data.token);
-    //       window.location.href = "/Dashboard";
-    //     });
-    //   }
-    // } catch (error) {
-    //   if (error.response.data.username) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.username,
-    //     });
-    //   } else if (error.response.data.password) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.password,
-    //     });
-    //   } else if (error.response.data.phoneNumber) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.phoneNumber,
-    //     });
-    //   } else if (error.response.data.emailAddress) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.emailAddress,
-    //     });
-    //   } else if (error.response.data.firstName) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.firstName,
-    //     });
-    //   } else if (error.response.data.lastName) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.lastName,
-    //     });
-    //   } else if (error.response.data.birthDate) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.birthDate,
-    //     });
-    //   }
-    // }
+  const [gender, setGender] = useState("");
+  const [address, setAddress] = useState("");
+  const avatar_url = useSelector((state) => state.avatar_url.value);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [register, { isLoading, error }] = useRegisterMutation();
+
+  const handleRegister = async () => {
+    const message = await register({
+      name: firstname + " " + lastname,
+      username,
+      password,
+      phone_number,
+      email,
+      birthday,
+      avatar_url,
+      public_id_avatar_url: avatar_url.publicId,
+      address,
+      gender,
+    });
+    if (message.data.statusCode === 201) {
+      Toast.fire({
+        icon: "success",
+        title: "Đăng ký thành công",
+      }).then(() => {
+        navigate("/login");
+      });
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: message.data.message,
+      });
+    }
   };
   return (
     <div
-      className="pt-10 h-screen"
+      className="py-10 h-full"
       style={{
         backgroundImage:
           "url('https://giaiphapzalo.com/wp-content/uploads/2021/09/pagebg-1-1920x705.jpg')",
@@ -142,7 +98,7 @@ const Registerpage = () => {
           <div className="w-100 mx-5 my-5">
             <Input
               variant="standard"
-              label="Username"
+              label="Tên đăng nhập"
               placeholder="nguyenvana"
               onChange={(e) => setUsername(e.target.value)}
               value={username}
@@ -162,21 +118,92 @@ const Registerpage = () => {
               variant="standard"
               label="Số điện thoại"
               placeholder="0912345678"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              value={phoneNumber}
+              onChange={(e) => setPhone_Number(e.target.value)}
+              value={phone_number}
             />
+          </div>
+          <div className="flex flex-col">
+            <div className="w-100 my-5 mx-5">
+              <Input
+                variant="standard"
+                label="Ngày sinh"
+                placeholder="01-01-1990"
+                type="date"
+                onChange={(e) => setBirthday(e.target.value)}
+                value={birthday}
+              />
+            </div>
+            <div className="w-100 flex justify-start gap-4 mx-5 my-5">
+              <Typography variant="small" color="blue-gray" className="my-auto">
+                Giới tính:
+              </Typography>
+              <Radio
+                size="small"
+                name="gender"
+                label="Nam"
+                value="MALE"
+                onClick={(e) => setGender(e.target.defaultValue)}
+              />
+              <Radio
+                name="gender"
+                label="Nữ"
+                value="FEMALE"
+                onClick={(e) => setGender(e.target.defaultValue)}
+              />
+            </div>
           </div>
           <div className="w-100 my-5 mx-5">
-            <Input
-              variant="standard"
-              label="Ngày sinh"
-              placeholder="01-01-1990"
-              type="date"
-              onChange={(e) => setBirthday(e.target.value)}
-              value={birthday}
-            />
+            {avatar_url === "" ? (
+              <div className="flex items-center justify-center w-full">
+                <label
+                  htmlFor="avatar_url"
+                  className="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg
+                      className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 16"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                      />
+                    </svg>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                      <span className="font-semibold">Click to upload</span> or
+                      drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    </p>
+                  </div>
+                  <ImageUpload image="avatar_url" />
+                </label>
+              </div>
+            ) : (
+              <div className="flex justify-around">
+                <img
+                  src={avatar_url}
+                  alt="avatar"
+                  className="h-[150px] w-[150px] rounded-full"
+                />
+                <Button
+                  onClick={() => dispatch(deleteAvatar())}
+                  color="red"
+                  className="w-1/3"
+                >
+                  Xóa ảnh
+                </Button>
+              </div>
+            )}
           </div>
-          <div className="w-100 my-5 mx-5"></div>
+
           <div className="w-100 my-5 mx-5">
             <Input
               variant="standard"
@@ -204,7 +231,7 @@ const Registerpage = () => {
               disabled={
                 username === "" &&
                 password === "" &&
-                phoneNumber === "" &&
+                phone_number === "" &&
                 confirmPassword === "" &&
                 firstname === "" &&
                 lastname === "" &&
@@ -216,8 +243,10 @@ const Registerpage = () => {
               onClick={() => {
                 setPassword("");
                 setUsername("");
-                setPhoneNumber("");
+                setPhone_Number("");
                 setConfirmPassword("");
+                setPassword("");
+                dispatch(resetAvatar());
                 setFirstname("");
                 setLastname("");
                 setEmail("");
@@ -225,6 +254,7 @@ const Registerpage = () => {
               }}
               color="red"
               className="w-full"
+              loading={isLoading}
             >
               Hủy
             </Button>
@@ -232,9 +262,11 @@ const Registerpage = () => {
           <div className="w-100 my-5 mx-5">
             <Button
               disabled={
+                isLoading ||
                 username === "" ||
                 password === "" ||
-                phoneNumber === "" ||
+                phone_number === "" ||
+                password !== confirmPassword ||
                 confirmPassword === "" ||
                 firstname === "" ||
                 lastname === "" ||
@@ -243,20 +275,10 @@ const Registerpage = () => {
                   ? true
                   : false
               }
-              onClick={() => {
-                register(
-                  username,
-                  password,
-                  phoneNumber,
-                  confirmPassword,
-                  firstname,
-                  lastname,
-                  email,
-                  birthday
-                );
-              }}
+              onClick={handleRegister}
               color="indigo"
               className="w-full"
+              loading={isLoading}
             >
               Đăng ký
             </Button>
@@ -273,6 +295,7 @@ const Registerpage = () => {
               }}
               color="indigo"
               className="w-full"
+              loading={isLoading}
             >
               Đã có tài khoản
             </Button>
@@ -283,6 +306,7 @@ const Registerpage = () => {
               variant="outlined"
               color="blue-gray"
               className="flex items-center justify-center gap-3 w-full"
+              loading={isLoading}
             >
               <img
                 src="https://docs.material-tailwind.com/icons/google.svg"

@@ -18,7 +18,7 @@ const AdminPagination = ({ page }) => {
   });
   return (
     <>
-      {page != 1 && (
+      {page > 1 && (
         <CardFooter>
           <div className="flex items-center justify-between border-blue-gray-50 p-1">
             <div></div>

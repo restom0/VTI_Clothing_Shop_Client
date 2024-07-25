@@ -22,6 +22,21 @@ import { changePriceList, onsaleproduct } from "../../constants/table_head";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import TableHeader from "../shared/TableHeader";
 import CloseIcon from "@mui/icons-material/Close";
+import {
+  useCreateInputSaleMutation,
+  useDeleteInputSaleMutation,
+  useGetInputSalesQuery,
+  useUpdateInputSaleMutation,
+} from "../../apis/InputSaleApi";
+import Loading from "../shared/Loading";
+import { filter_items } from "../../constants/menu_item";
+import { useGetBrandsQuery } from "../../apis/BrandApi";
+import { useGetCategoriesQuery } from "../../apis/CategoryApi";
+import {
+  useGetColorsQuery,
+  useGetMaterialsQuery,
+  useGetSizesQuery,
+} from "../../apis/ImportedProductApi";
 
 const TABLE_ROWS = [
   {
@@ -92,6 +107,7 @@ const TABLE_ROWS = [
   },
 ];
 const OnsaleProduct = () => {
+  const [filter, setFilter] = React.useState("ALL");
   const [active, setActive] = React.useState(1);
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
@@ -106,13 +122,53 @@ const OnsaleProduct = () => {
     deleteOpen,
     handleDeleteOpen,
   } = useOpen();
-
+  const { data: inputSale, error, isLoading } = useGetInputSalesQuery();
+  const {
+    data: brands,
+    error: brandsError,
+    isLoading: brandsLoading,
+  } = useGetBrandsQuery();
+  const {
+    data: categories,
+    error: categoriesError,
+    isLoading: categoriesLoading,
+  } = useGetCategoriesQuery();
+  const {
+    data: colors,
+    error: colorsError,
+    isLoading: colorsLoading,
+  } = useGetColorsQuery();
+  const {
+    data: sizes,
+    error: sizesError,
+    isLoading: sizesLoading,
+  } = useGetSizesQuery();
+  const {
+    data: materials,
+    error: materialsError,
+    isLoading: materialsLoading,
+  } = useGetMaterialsQuery();
+  const [addInputSale, { error: addError, isLoading: isAdded }] =
+    useCreateInputSaleMutation();
+  const [updateInputSale, { error: updateError, isLoading: isUpdated }] =
+    useUpdateInputSaleMutation();
+  const [deleteInputSale, { error: deleteError, isLoading: isDeleted }] =
+    useDeleteInputSaleMutation();
+  if (
+    isLoading ||
+    brandsLoading ||
+    colorsLoading ||
+    sizesLoading ||
+    materialsLoading
+  )
+    return <Loading />;
+  else if (error) return <div>Error: {error.message}</div>;
   return (
     <>
       <AdminLayout
         name="Nhập giá"
         TABLE_HEAD={onsaleproduct}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={inputSale ? inputSale.object : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -232,7 +288,11 @@ const OnsaleProduct = () => {
                           className: "before:content-none after:content-none",
                         }}
                       >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
+                        {filter_items.map((item, index) => (
+                          <Option key={index} value={item.value}>
+                            {item.label}
+                          </Option>
+                        ))}
                       </Select>
                     </div>
                   </div>
@@ -424,8 +484,14 @@ const OnsaleProduct = () => {
                       labelProps={{
                         className: "before:content-none after:content-none",
                       }}
+                      value={filter}
+                      onChange={(e) => setFilter(e)}
                     >
-                      <Option value="Áo thun nam">Áo thun nam</Option>
+                      {filter_items.map((item, index) => (
+                        <Option key={index} value={item.value}>
+                          {item.label}
+                        </Option>
+                      ))}
                     </Select>
                   </div>
                 </div>
@@ -672,7 +738,7 @@ const OnsaleProduct = () => {
                 >
                   Danh sách sản phẩm
                 </Typography>
-                <table className="w-full min-w-max table-auto text-left">
+                <table className="w-full text-center table-auto ">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                   <tbody>
                     {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(

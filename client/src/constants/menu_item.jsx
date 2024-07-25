@@ -147,4 +147,13 @@ const profile_menu = [
   },
 ];
 const report_items = ["doanh thu", "thương hiệu", "danh mục", "sản phẩm"];
-export { account_menu, profile_menu, footer_menu, report_items };
+const filter_items = [
+  { value: "ALL", label: "Tất cả" },
+  { value: "PRODUCT", label: "Sản phẩm" },
+  { value: "BRAND", label: "Thương hiệu" },
+  { value: "CATEGORY", label: "Danh mục" },
+  { value: "COLOR", label: "Màu sắc" },
+  { value: "SIZE", label: "Kích thước" },
+  { value: "MATERIAL", label: "Chất liệu" },
+];
+export { account_menu, profile_menu, footer_menu, report_items, filter_items };

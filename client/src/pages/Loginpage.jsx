@@ -4,49 +4,60 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Icon from "../assets/Icon";
 import { Container } from "@mui/material";
+import { accountApi, useLoginMutation } from "../apis/AccountApi";
+import { Toast } from "../configs/SweetAlert2";
+import { useNavigate } from "react-router-dom";
 
 function Loginpage() {
-  const [email, setEmail] = React.useState("");
+  const navigate = useNavigate();
+  const [input, setInput] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const [data, setData] = React.useState({});
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+    if (password !== "") {
+      handleSetData(e.target.value, password);
+    }
   };
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+    if (input !== "") {
+      handleSetData(input, e.target.value);
+    }
   };
-
-  const login = async (email, password) => {
-    // try {
-    //   const data = {
-    //     phoneNumber: email,
-    //     password: password,
-    //   };
-    //   const result = await axios.post("http://localhost:8099/auth/login", data);
-    //   if (result.status === 200) {
-    //     Toast.fire({
-    //       icon: "success",
-    //       title: "Login successfully",
-    //     }).then(() => {
-    //       localStorage.setItem("user", email);
-    //       localStorage.setItem("id", result.data.user_id);
-    //       localStorage.setItem("token", result.data.token);
-    //       window.location.href = "/Dashboard";
-    //     });
-    //   }
-    // } catch (error) {
-    //   if (error.response.data.phoneNumber) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.phoneNumber,
-    //     });
-    //   } else if (error.response.data.password) {
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: error.response.data.password,
-    //     });
-    //   }
-    // }
+  const handleSetData = (input, password) => {
+    const emailRegExp = new RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
+    const phoneNumberRegExp = new RegExp(/^[0-9]{10,11}$/);
+    if (emailRegExp.test(input)) {
+      setData({
+        email: input,
+        password: password,
+      });
+    } else if (phoneNumberRegExp.test(input)) {
+      setData({
+        phoneNumber: input,
+        password: password,
+      });
+    } else {
+      setData({
+        username: input,
+        password: password,
+      });
+    }
   };
+  const handleLogin = async () => {
+    const message = await login(data);
+    if (message.data.statusCode === 200) {
+      Toast.fire({
+        icon: "success",
+        title: "Đăng nhập thành công",
+      }).then(() => {
+        localStorage.setItem("token", message.data.object);
+        navigate("/");
+      });
+    }
+  };
+  const [login, { isLoading, error }] = useLoginMutation();
   return (
     <>
       <div className="grid lg:grid-cols-3 sm:grid-cols-1 lg:border-r-4">
@@ -63,9 +74,10 @@ function Loginpage() {
                 <Input
                   size="lg"
                   variant="outlined"
-                  label="Email hoặc số điện thoại"
+                  label="Tên đăng nhập, email hoặc số điện thoại"
                   placeholder="nguyenvana@gmail.com"
-                  onChange={handleEmailChange}
+                  onChange={handleInputChange}
+                  value={input}
                 />
               </div>
               <div className="mb-5">
@@ -76,6 +88,7 @@ function Loginpage() {
                   placeholder="Mật khẩu"
                   type="password"
                   onChange={handlePasswordChange}
+                  value={password}
                 />
               </div>
               <div className="mb-5 text-right">
@@ -87,8 +100,12 @@ function Loginpage() {
               </div>
               <Button
                 color="indigo"
-                className="w-full mb-5"
-                onClick={() => login(email, password)}
+                className="w-full mb-5 mx-auto"
+                disabled={input === "" || password === ""}
+                loading={isLoading}
+                onClick={() => {
+                  handleLogin();
+                }}
               >
                 Đăng nhập
               </Button>
@@ -105,6 +122,7 @@ function Loginpage() {
                 }}
                 color="indigo"
                 className="w-full mb-5"
+                loading={isLoading}
               >
                 Đăng ký
               </Button>
@@ -113,6 +131,7 @@ function Loginpage() {
                 variant="outlined"
                 color="blue-gray"
                 className="flex items-center justify-center gap-3 w-full"
+                loading={isLoading}
               >
                 <img
                   src="https://docs.material-tailwind.com/icons/google.svg"

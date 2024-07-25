@@ -1,5 +1,5 @@
 const SHOP_LOCAL_URL = "http://127.0.0.1:8080/";
-const SHOP_URL = "http://127.0.0.1:8080/";
+const SHOP_URL = "https://vti-clothing-shop.onrender.com/";
 const api_routes = {
   vouchers: "voucher/",
   products: "product/",
@@ -13,5 +13,6 @@ const api_routes = {
   on_sale_products: "on-sale-product/",
   comments: "comment/",
   chat: "chat/",
+  log: "log/",
 };
 export { SHOP_LOCAL_URL, SHOP_URL, api_routes };

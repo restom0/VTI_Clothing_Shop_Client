@@ -26,6 +26,7 @@ import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import { Toast } from "../../configs/SweetAlert2";
 import { useDispatch, useSelector } from "react-redux";
+import { useDeleteBrandMutation } from "../../apis/BrandApi";
 
 const AdminLayout = ({
   children,
@@ -45,22 +46,28 @@ const AdminLayout = ({
   size,
   sizeUpdate,
   overflow,
+  updateSubmit,
+  handleDeleteSubmit,
+  isUpdated,
+  isDeleted,
 }) => {
   const [tab, setTab] = useState("ALL");
+  const selectedId = useSelector((state) => state.selectedId.value);
+
   const {
     detailOpen,
     updateOpen,
     deleteOpen,
-    data,
     handleDetailOpen,
     handleUpdateOpen,
     handleDeleteOpen,
-    handleData,
   } = useOpen();
   React.useEffect(() => {
     if (deleteOpen) {
       Swal.fire({
-        title: "Bạn có chắc chắn muốn xóa?",
+        title:
+          "Bạn có chắc chắn muốn xóa?" +
+          (selectedId === -1 ? "" : TABLE_ROWS.find(row => row.id === selectedId)?.name || ""),
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xác nhận",
@@ -69,15 +76,37 @@ const AdminLayout = ({
         cancelButtonColor: "#2962ff",
       }).then((result) => {
         if (result.isConfirmed) {
-          Toast.fire({
-            icon: "success",
-            title: "Xóa thành công",
-          });
+          handleDeleteSubmit();
         }
         handleDeleteOpen();
       });
     }
-  }, [deleteOpen, handleDeleteOpen]);
+  }, [
+    deleteOpen,
+    handleDeleteOpen,
+    TABLE_ROWS,
+    selectedId,
+    handleDeleteSubmit,
+  ]);
+  const handleUpdateSubmit = async () => {
+    try {
+      const message = await updateSubmit();
+      if (message.data.statusCode === 200) {
+        Toast.fire({
+          icon: "success",
+          title: "Cập nhật thành công",
+        }).then(() => {
+          handleUpdateOpen();
+        });
+      }
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: "Cập nhật thất bại",
+      });
+    }
+  };
+
   return (
     <>
       <Container className="mt-5">
@@ -100,8 +129,7 @@ const AdminLayout = ({
             deleteContent={deleteContent}
             noDelete={noDelete}
             noUpdate={noUpdate}
-            data={data}
-            handleData={handleData}
+            isDeleted={isDeleted}
           />
         ) : (
           <Table
@@ -114,8 +142,7 @@ const AdminLayout = ({
             deleteContent={deleteContent}
             noDelete={noDelete}
             noUpdate={noUpdate}
-            data={data}
-            handleData={handleData}
+            isDeleted={isDeleted}
           />
         )}
       </Container>
@@ -146,6 +173,7 @@ const AdminLayout = ({
               <Button
                 variant="gradient"
                 color="red"
+                loading={isDeleted}
                 onClick={() => {
                   handleDetailOpen(), handleDeleteOpen();
                 }}
@@ -160,8 +188,13 @@ const AdminLayout = ({
         <DialogHeader>{headerUpdate}</DialogHeader>
         <DialogBody>{bodyUpdate}</DialogBody>
         <DialogFooter>
-          <Button variant="gradient" color="green" onClick={handleUpdateOpen}>
-            <span>Xác nhận</span>
+          <Button
+            variant="gradient"
+            color="green"
+            loading={isUpdated}
+            onClick={handleUpdateSubmit}
+          >
+            {!isUpdated && <span>Xác nhận</span>}
           </Button>
         </DialogFooter>
       </Dialog>

@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { SHOP_LOCAL_URL, api_routes } from "../configs/Api";
+import { SHOP_LOCAL_URL, SHOP_URL, api_routes } from "../configs/Api";
 
 export const accountApi = createApi({
   reducerPath: "AccountApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_LOCAL_URL + api_routes.users }),
+  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.users }),
   tagTypes: ["Account"],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -16,27 +16,29 @@ export const accountApi = createApi({
     }),
     register: builder.mutation({
       query: ({
-        email,
-        username,
-        phoneNumber,
-        password,
         name,
-        address,
+        username,
+        password,
+        phone_number,
+        email,
         birthday,
         avatar_url,
+        public_id_avatar_url,
+        address,
         gender,
       }) => ({
-        url: api_routes.users + " register",
+        url: "register",
         method: "POST",
         body: {
-          email,
-          username,
-          phoneNumber,
-          password,
           name,
-          address,
+          username,
+          password,
+          phone_number,
+          email,
           birthday,
           avatar_url,
+          public_id_avatar_url,
+          address,
           gender,
         },
       }),

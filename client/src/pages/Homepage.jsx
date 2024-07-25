@@ -10,6 +10,8 @@ import "../configs/swiper.css";
 import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
 import { homepage_slides } from "../constants/slide";
 import HomeProductList from "../components/shared/shop/HomeProductList";
+import { useGetProductsQuery } from "../apis/ProductApi";
+import Loading from "../components/shared/Loading";
 const new_products = [
   {
     id: 0,
@@ -211,6 +213,15 @@ const collection_products = [
   },
 ];
 const Homepage = () => {
+  const { data: products, isLoading, error } = useGetProductsQuery();
+  console.log(products);
+  if (isLoading)
+    return (
+      <div className="h-[500px]">
+        <Loading />
+      </div>
+    );
+  if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <>
       <div className="w-full h-[500px] mb-5">

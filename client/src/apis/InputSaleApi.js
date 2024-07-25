@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL } from "../configs/Api";
+import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 
 export const InputSaleApi = createApi({
   reducerPath: "InputSaleApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: SHOP_LOCAL_URL + api_routes.input_sales,
+    baseUrl: SHOP_URL + api_routes.input_sales,
   }),
   tagTypes: ["InputSale"],
   endpoints: (builder) => ({

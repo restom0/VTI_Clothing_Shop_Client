@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL } from "../configs/Api";
+import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 
 export const commentApi = createApi({
   reducerPath: "CommentApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_LOCAL_URL + api_routes.comments }),
+  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.comments }),
   tagTypes: ["Comment"],
   endpoints: (builder) => ({
     getComments: builder.query({
@@ -21,28 +21,36 @@ export const commentApi = createApi({
         }),
         invalidatesTags: ["Comment"],
       }),
-      updateComment: builder.mutation({
-        query: ({ id, content }) => ({
-          url: `${id}`,
-          method: "PUT",
-          body: { content },
-        }),
-        invalidatesTags: ["Comment"],
+    }),
+    addComment: builder.mutation({
+      query: ({ product_id, content, star }) => ({
+        url: "",
+        method: "POST",
+        body: { product_id, content, star },
       }),
-      deleteComment: builder.mutation({
-        query: (id) => ({
-          url: `${id}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Comment"],
+      invalidatesTags: ["Comment"],
+    }),
+    updateComment: builder.mutation({
+      query: ({ id, content }) => ({
+        url: `${id}`,
+        method: "PUT",
+        body: { content },
       }),
+      invalidatesTags: ["Comment"],
+    }),
+    deleteComment: builder.mutation({
+      query: (id) => ({
+        url: `${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Comment"],
     }),
   }),
 });
 export const {
   useGetCommentsQuery,
   useGetCommentQuery,
-  useCreateCommentMutation,
-  useUpdateCommentMutation,
+  useAddCommentMutation,
   useDeleteCommentMutation,
-} = CommentApi;
+  useUpdateCommentMutation,
+} = commentApi;

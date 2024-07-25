@@ -17,35 +17,55 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Container } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { brand } from "../../constants/table_head";
 import useFetch from "../../hooks/useFetch";
-import { useAddBrandMutation, useGetBrandsQuery } from "../../apis/Brand";
-import { useSelector } from "react-redux";
+import {
+  useAddBrandMutation,
+  useDeleteBrandMutation,
+  useGetBrandsQuery,
+  useUpdateBrandMutation,
+} from "../../apis/BrandApi";
+import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "../../configs/SweetAlert2";
-const TABLE_ROWS = [
-  {
-    name: "001",
-    role: "USER",
-  },
-];
+import { useNavigate } from "react-router-dom";
+import { resetSelectedId } from "../../features/slices/selectIdSlice";
+import Loading from "../shared/Loading";
+import {
+  resetDescription,
+  setDescription,
+} from "../../features/slices/descriptionSlice";
+import { resetName, setName } from "../../features/slices/nameSlice";
 const Brand = () => {
+  const navigate = useNavigate();
   const { data: brands, error, isLoading } = useGetBrandsQuery();
   const selectedId = useSelector((state) => state.selectedId.value);
+  const name = useSelector((state) => state.name.value);
+  const description = useSelector((state) => state.description.value);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(resetSelectedId());
+    dispatch(resetName());
+    dispatch(resetDescription());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedId === -1) {
+      dispatch(resetName());
+      dispatch(resetDescription());
+    }
+  }, [selectedId, dispatch]);
+
   const [addOpen, setAddOpen] = React.useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
-  const [name, setName] = React.useState(
-    brands ? (brands.object ? brands.object[selectedId].name : "") : ""
-  );
-  const [description, setDescription] = React.useState(
-    brands ? (brands.object ? brands.object[selectedId].description : "") : ""
-  );
+
   const [addBrand, { isLoading: isAdded, error: AddError }] =
     useAddBrandMutation();
-
+  const [updateBrand, { isLoading: isUpdated, error: updateError }] =
+    useUpdateBrandMutation();
   const handleAddSubmit = async () => {
     try {
       await addBrand({ name, description })
@@ -54,19 +74,56 @@ const Brand = () => {
           Toast.fire({
             icon: "success",
             title: "Thêm thương hiệu thành công",
+          }).then(() => {
+            handleAddOpen();
+            dispatch(resetName());
+            dispatch(resetDescription());
           });
-          handleAddOpen();
-          setName("");
-          setDescription("");
         });
     } catch (err) {
       Toast.fire({
         icon: "error",
         title: "Thêm thương hiệu thất bại",
+      }).then(() => {
+        // if (err.originalStatus === 401) {
+        //   localStorage.clear();
+        //   navigate("/login");
+        // }
       });
     }
   };
-  if (isLoading) return <div>Loading...</div>;
+  const updateSubmit = async () => {
+    const message = await updateBrand({
+      id: brands.object[selectedId].id,
+      name: name === "" ? brands.object[selectedId].name : name,
+      description:
+        description === ""
+          ? brands.object[selectedId].description
+          : description,
+    });
+    return message;
+  };
+  const [deleteBrand, { isLoading: isDeleted, error: deleteError }] =
+    useDeleteBrandMutation();
+  const handleDeleteSubmit = async () => {
+    try {
+      const message = await deleteBrand(brands.object[selectedId].id);
+      if (message.data.statusCode === 200) {
+        Toast.fire({
+          icon: "success",
+          title: "Xóa thành công",
+        }).then(() => {
+          dispatch(resetSelectedId());
+        });
+      }
+    } catch (err) {
+      Toast.fire({
+        icon: "error",
+        title: "Xóa thất bại",
+      });
+    }
+  };
+  if (isLoading) return <Loading />;
   if (error) return <div>An error occurred: {error.message}</div>;
   return (
     <>
@@ -77,7 +134,7 @@ const Brand = () => {
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"
-        headerDetail="Chi tiết thương hiệu"
+        headerDetail={"Chi tiết thương hiệu  #" + selectedId}
         bodyDetail={
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -85,22 +142,20 @@ const Brand = () => {
                 Tên thương hiệu:
               </Typography>
               <Typography variant="medium" className="my-auto">
-                {brands
-                  ? brands.object
-                    ? brands.object[selectedId].name
-                    : ""
-                  : ""}
+                {selectedId === -1
+                  ? ""
+                  : brands.object.find((row) => row.id === selectedId)?.name ||
+                    ""}
               </Typography>
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
             <Typography variant="medium">
-              {brands
-                ? brands.object
-                  ? brands.object[selectedId].description
-                  : ""
-                : ""}
+              {selectedId === -1
+                ? ""
+                : brands.object.find((row) => row.id === selectedId)
+                    ?.description || ""}
             </Typography>
           </Container>
         }
@@ -117,18 +172,19 @@ const Brand = () => {
               </Typography>
               <Input
                 value={
-                  brands
-                    ? brands.object
-                      ? brands.object[selectedId].name
-                      : ""
-                    : ""
+                  selectedId === -1
+                    ? ""
+                    : name === ""
+                    ? brands.object.find((row) => row.id === selectedId)
+                        ?.name || ""
+                    : name
                 }
                 placeholder="Nike"
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => dispatch(setName(e.target.value))}
               />
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
@@ -140,17 +196,20 @@ const Brand = () => {
                 className: "before:content-none after:content-none",
               }}
               value={
-                brands
-                  ? brands.object
-                    ? brands.object[selectedId].name
-                    : ""
-                  : ""
+                selectedId === -1
+                  ? ""
+                  : description === ""
+                  ? brands.object.find((row) => row.id === selectedId)
+                      ?.description || ""
+                  : description
               }
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => dispatch(setDescription(e.target.value))}
               placeholder="Nhập văn bản dưới 255 kí tự"
             />
           </Container>
         }
+        updateSubmit={updateSubmit}
+        handleDeleteSubmit={handleDeleteSubmit}
       >
         <div className="flex items-center justify-between gap-4">
           <Button
@@ -158,8 +217,9 @@ const Brand = () => {
             color="gray"
             variant="outlined"
             onClick={handleAddOpen}
+            loading={isAdded}
           >
-            Thêm mới
+            {isAdded ? "Đang thêm..." : "Thêm mới"}
           </Button>
         </div>
       </AdminLayout>
@@ -190,6 +250,7 @@ const Brand = () => {
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
+                onChange={(e) => dispatch(setName(e.target.value))}
               />
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
@@ -201,6 +262,7 @@ const Brand = () => {
                 className: "before:content-none after:content-none",
               }}
               placeholder="Thương hiệu thể thao hàng đầu thế giới"
+              onChange={(e) => dispatch(setDescription(e.target.value))}
             />
           </Container>
         </DialogBody>
@@ -209,9 +271,9 @@ const Brand = () => {
             variant="gradient"
             color="green"
             onClick={handleAddSubmit}
-            disabled={isAdded}
+            loading={isAdded}
           >
-            <span>Thêm mới</span>
+            {!isAdded && <span>Thêm mới</span>}
           </Button>
         </DialogFooter>
       </Dialog>

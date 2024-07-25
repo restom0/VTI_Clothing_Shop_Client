@@ -1,10 +1,10 @@
-import { IconButton, Tooltip } from "@material-tailwind/react";
+import { Button, IconButton, Tooltip } from "@material-tailwind/react";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { setSelectedId } from "../../../features/slices/selectIdPrice";
+import { setSelectedId } from "../../../features/slices/selectIdSlice";
 
 const SettingButton = ({
   handleUpdateOpen,
@@ -13,6 +13,8 @@ const SettingButton = ({
   deleteContent,
   noUpdate,
   noDelete,
+  isDeleted,
+  isUpdated,
   id,
 }) => {
   const dispatch = useDispatch();
@@ -21,26 +23,39 @@ const SettingButton = ({
       <div className="flex items-center gap-4 justify-around">
         {!noUpdate && (
           <Tooltip content={updateContent}>
-            <IconButton
-              color="green"
-              onClick={() => {
-                handleUpdateOpen(), dispatch(setSelectedId(id));
-              }}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
+            {isUpdated ? (
+              <Button color="red" loading={isUpdated}>
+                {isUpdated && ""}
+              </Button>
+            ) : (
+              <IconButton
+                color="green"
+                loading={isUpdated}
+                onClick={() => {
+                  handleUpdateOpen(), dispatch(setSelectedId(id));
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
           </Tooltip>
         )}
         {!noDelete && (
           <Tooltip content={deleteContent}>
-            <IconButton
-              color="red"
-              onClick={() => {
-                handleDeleteOpen(), dispatch(setSelectedId(id));
-              }}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
+            {isDeleted ? (
+              <Button color="red" loading={isDeleted}>
+                {isDeleted && ""}
+              </Button>
+            ) : (
+              <IconButton
+                color="red"
+                onClick={() => {
+                  handleDeleteOpen(), dispatch(setSelectedId(id));
+                }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
           </Tooltip>
         )}
       </div>

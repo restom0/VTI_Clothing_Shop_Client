@@ -20,6 +20,7 @@ import useOpen from "../../hooks/useOpen";
 import Table from "../shared/Table";
 import { user } from "../../constants/table_head";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGetUsersQuery } from "../../apis/UserApi";
 
 const TABLE_ROWS = [
   {
@@ -40,6 +41,7 @@ const User = () => {
     handleDeleteOpen,
   } = useOpen();
 
+  const { data: users, error, isLoading } = useGetUsersQuery();
   return (
     <Container className="mt-5">
       <div className="flex items-center justify-between mb-5">

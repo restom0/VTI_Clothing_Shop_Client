@@ -24,7 +24,6 @@ const comment = [
 ];
 
 const importproduct = [
-  { label: "Mã số", col: 1 },
   { label: "Tên", col: 1 },
   { label: "Màu sắc", col: 1 },
   { label: "Kích thước", col: 1 },
@@ -108,11 +107,9 @@ const voucher = [
   { label: "Số lượng", col: 1 },
 ];
 const productdetail = [
-  { label: "Hình ảnh", col: 1 },
   { label: "Tên", col: 1 },
-  { label: "Reviews", col: 1 },
-  { label: "Giá nhập", col: 1 },
-  { label: "Giá bán", col: 1 },
+  { label: "Thương hiệu", col: 1 },
+  { label: "Danh mục", col: 1 },
 ];
 const user = [
   { label: "Tên", col: 1 },

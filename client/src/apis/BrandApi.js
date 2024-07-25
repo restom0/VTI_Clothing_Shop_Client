@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL } from "../configs/Api";
+import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 
 export const brandApi = createApi({
   reducerPath: "brandApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_LOCAL_URL + api_routes.brands }),
+  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.brands }),
   tagTypes: ["Brand"],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -15,26 +15,26 @@ export const brandApi = createApi({
       providesTags: (result, error, id) => [{ type: "Brand", id }],
     }),
     addBrand: builder.mutation({
-      query: ({ name, decription }) => ({
+      query: ({ name, description }) => ({
         url: "",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "POST",
-        body: { name, decription },
+        body: { name, description },
       }),
       invalidatesTags: ["Brand"],
     }),
     updateBrand: builder.mutation({
-      query: ({ id, name, decription }) => ({
+      query: ({ id, name, description }) => ({
         url: `${id}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "PUT",
-        body: { name, decription },
+        body: { name, description },
       }),
       invalidatesTags: ["Brand"],
     }),

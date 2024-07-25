@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL } from "../configs/Api";
+import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: SHOP_LOCAL_URL + api_routes.categories,
+    baseUrl: SHOP_URL + api_routes.categories,
   }),
   tagTypes: ["Category"],
   endpoints: (builder) => ({
@@ -17,26 +17,26 @@ export const categoryApi = createApi({
       providesTags: (result, error, id) => [{ type: "Category", id }],
     }),
     addCategory: builder.mutation({
-      query: ({ name }) => ({
+      query: ({ name, description }) => ({
         url: "",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "POST",
-        body: { name },
+        body: { name, description },
       }),
       invalidatesTags: ["Category"],
     }),
     updateCategory: builder.mutation({
-      query: ({ id, name }) => ({
+      query: ({ id, name, description }) => ({
         url: `${id}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "PUT",
-        body: { name },
+        body: { name, description },
       }),
       invalidatesTags: ["Category"],
     }),

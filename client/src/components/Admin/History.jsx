@@ -13,22 +13,25 @@ import { useState } from "react";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { history } from "../../constants/table_head";
+import { useGetLogsQuery } from "../../apis/LogApi";
+import Loading from "../shared/Loading";
+import { useNavigate } from "react-router-dom";
 
-const TABLE_ROWS = [
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-];
 const History = () => {
+  const navigate = useNavigate();
+  const {
+    data: logs,
+    isLoading: isLogsLoading,
+    error: logsError,
+  } = useGetLogsQuery();
+  if (isLogsLoading) return <Loading />;
+  if (logsError) return navigate("/error");
   return (
     <>
       <AdminLayout
         name="Lịch sử hoạt động"
         TABLE_HEAD={history}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={logs ? logs.objects : []}
         noUpdate
         noDelete
         noDetail

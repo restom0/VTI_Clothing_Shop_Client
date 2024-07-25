@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL } from "../configs/Api";
+import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 
 export const ProductApi = createApi({
   reducerPath: "ProductApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_LOCAL_URL + api_routes.products }),
+  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.products }),
   tagTypes: ["Product"],
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -15,10 +15,14 @@ export const ProductApi = createApi({
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
     createProduct: builder.mutation({
-      query: ({ name, price, description, image }) => ({
+      query: ({ name, price, brand_id, category_id }) => ({
         url: "",
         method: "POST",
-        body: { name, price, description, image },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: { name, price, brand_id, category_id },
       }),
       invalidatesTags: ["Product"],
     }),
@@ -26,6 +30,10 @@ export const ProductApi = createApi({
       query: ({ id, name, price, description, image }) => ({
         url: `${id}`,
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: { name, price, description, image },
       }),
       invalidatesTags: ["Product"],
@@ -35,6 +43,10 @@ export const ProductApi = createApi({
         url: `${id}`,
         method: "DELETE",
       }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       invalidatesTags: ["Product"],
     }),
   }),

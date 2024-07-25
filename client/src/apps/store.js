@@ -5,7 +5,18 @@ import sidebar_itemReducer from "../features/slices/sidebar_itemSlice";
 import openAccordionReducer from "../features/slices/openAccordion";
 import filterReducer from "../features/slices/filterSlice";
 import brandReducer from "../features/slices/brandSlice";
-import selectedIdReducer from "../features/slices/selectIdPrice";
+import selectedIdReducer from "../features/slices/selectIdSlice";
+import sortReducer from "../features/slices/sortSlice";
+import nameReducer from "../features/slices/nameSlice";
+import descriptionReducer from "../features/slices/descriptionSlice";
+import categoryReducer from "../features/slices/categorySlice";
+import avatar_urlReducer from "../features/slices/avatar_urlSlice";
+import slider1Reducer from "../features/slices/slider1Slice";
+import slider2Reducer from "../features/slices/slider2Slice";
+import slider3Reducer from "../features/slices/slider3Slice";
+import slider4Reducer from "../features/slices/slider4Slice";
+import productReducer from "../features/slices/productSlice";
+import importedProductReducer from "../features/slices/importedProductSlice";
 
 import { brandApi } from "../apis/BrandApi";
 import { categoryApi } from "../apis/CategoryApi";
@@ -20,6 +31,7 @@ import { onSaleProductApi } from "../apis/OnSaleProductApi";
 import { OrderApi } from "../apis/OrderApi";
 import { OrderItemApi } from "../apis/OrderItemApi";
 import { ProductApi } from "../apis/ProductApi";
+import { logApi } from "../apis/LogApi";
 
 export const store = configureStore({
   reducer: {
@@ -29,6 +41,18 @@ export const store = configureStore({
     filter: filterReducer,
     brand: brandReducer,
     selectedId: selectedIdReducer,
+    sort: sortReducer,
+    name: nameReducer,
+    description: descriptionReducer,
+    category: categoryReducer,
+    avatar_url: avatar_urlReducer,
+    slider1: slider1Reducer,
+    slider2: slider2Reducer,
+    slider3: slider3Reducer,
+    slider4: slider4Reducer,
+    product: productReducer,
+    importedProduct: importedProductReducer,
+
     [brandApi.reducerPath]: brandApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
@@ -42,6 +66,7 @@ export const store = configureStore({
     [OrderApi.reducerPath]: OrderApi.reducer,
     [OrderItemApi.reducerPath]: OrderItemApi.reducer,
     [ProductApi.reducerPath]: ProductApi.reducer,
+    [logApi.reducerPath]: logApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -57,5 +82,6 @@ export const store = configureStore({
       .concat(onSaleProductApi.middleware)
       .concat(OrderApi.middleware)
       .concat(OrderItemApi.middleware)
-      .concat(ProductApi.middleware),
+      .concat(ProductApi.middleware)
+      .concat(logApi.middleware),
 });
