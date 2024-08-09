@@ -31,7 +31,7 @@ const History = () => {
       <AdminLayout
         name="Lịch sử hoạt động"
         TABLE_HEAD={history}
-        TABLE_ROWS={logs ? logs.objects : []}
+        TABLE_ROWS={logs ? (logs.objects ? logs.objects : []) : []}
         noUpdate
         noDelete
         noDetail

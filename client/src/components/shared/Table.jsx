@@ -33,7 +33,6 @@ const Table = ({
   const active = useSelector((state) => state.active.value);
   const sort = useSelector((state) => state.sort);
   const dispatch = useDispatch();
-
   return (
     <Card>
       <table className="w-full min-w-max table-auto text-center">
