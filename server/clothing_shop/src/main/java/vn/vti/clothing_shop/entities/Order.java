@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import vn.vti.clothing_shop.constants.PaymentMethod;
 import vn.vti.clothing_shop.constants.PaymentStatus;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.PHONE_NUMBER;
 @AllArgsConstructor
 @Entity
 @Table(name = "`order`")
-public class Order {
+public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,8 +39,11 @@ public class Order {
     @Column(name= "receiver_name",columnDefinition = "VARCHAR(255)",nullable = false)
     private String receiver_name;
 
-    @Column(name= "isPresent",columnDefinition = "TINYINT(1) DEFAULT 0",nullable = false)
+    @Column(name= "isPresent", columnDefinition = "BOOLEAN DEFAULT false", nullable = false)
     private Boolean isPresent;
+
+    @Column(name= "total_price", nullable = false)
+    private Long total_price;
 
     @Column(name= "payment_status", nullable = false)
     @Enumerated(EnumType.STRING)

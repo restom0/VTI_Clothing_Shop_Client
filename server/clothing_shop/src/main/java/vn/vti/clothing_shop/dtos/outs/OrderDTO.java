@@ -18,7 +18,8 @@ public class OrderDTO {
     private String address;
     private String phone_number;
     private String receiver_name;
-    private boolean isPresent;
+    private Boolean isPresent;
+    private Long total_price;
     private PaymentStatus payment_status;
     private PaymentMethod payment_method;
     private VoucherDTO voucherId;

@@ -39,10 +39,10 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody @Valid UserReadRequest userReadRequest, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try {
+            if(bindingResult.hasErrors()){
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             return  ResponseHandler.responseBuilder(200,"Đăng nhập thành công", userServiceImplementation.getUser(userMapper.ReadRequestToReadDTO(userReadRequest)), HttpStatus.OK);
         }
         catch (Exception e){

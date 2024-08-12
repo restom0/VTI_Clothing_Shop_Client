@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
                 description = "API for VTI Clothing Shop"
         ),
         servers = @Server(
-                url = "http://localhost:8080/",
+                url = "https://vti-clothing-shop.onrender.com/",
                 description = "VTI Clothing Shop"
         )
 )

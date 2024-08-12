@@ -18,9 +18,14 @@ public class ImportedProductCreateDTO {
     private Integer importNumber;
     private ClothGender gender;
     private Integer importPrice;
-    private String imageUrl;
+    private String image_url;
     private String slider_url_1;
     private String slider_url_2;
     private String slider_url_3;
     private String slider_url_4;
+    private String public_id_url;
+    private String public_id_slider_url_1;
+    private String public_id_slider_url_2;
+    private String public_id_slider_url_3;
+    private String public_id_slider_url_4;
 }

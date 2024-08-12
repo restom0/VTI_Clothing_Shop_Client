@@ -1,6 +1,9 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.ins.OrderItemCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderItemUpdateDTO;
@@ -37,12 +40,17 @@ public class OrderItemServiceImplementation implements OrderItemService {
         this.importedProductRepository = importedProductRepository;
     }
 
+    //@Cacheable(value = "orderItems")
     public List<OrderItemDTO> getAllOrderItem(){
         return orderItemMapper.ListEntityToListDTO(orderItemRepository.findAll());
     };
+
+    //@Cacheable(value = "orderItems", key = "#orderId")
     public List<OrderItemDTO> getAllOrderItemsByOrderId(Long orderId){
         return orderItemMapper.ListEntityToListDTO(orderItemRepository.findAllByOrderId(orderId));
     };
+
+    //@Cacheable(value = "orderItems", key = "#id,#orderId")
     public OrderItemDTO getOrderItemByIdAndOrderId(Long id,Long orderId){
         return orderItemMapper.EntityToDTO(orderItemRepository.findByIdAndOrderId(id,orderId).orElseThrow(()-> new NotFoundException("OrderItem not found")));
     };
@@ -51,6 +59,7 @@ public class OrderItemServiceImplementation implements OrderItemService {
         return products.stream().mapToLong(ImportedProduct::getStock).sum();
     }
 
+    //@CacheEvict(value = "orderItems", allEntries = true)
     public Boolean addOrderItem(OrderItemCreateDTO orderItemCreateDTO){
         Order order = orderRepository.findById(orderItemCreateDTO.getOrder_id()).orElseThrow(()-> new NotFoundException("Order not found"));
         OnSaleProduct onSaleProduct = onSaleProductRepository.findById(orderItemCreateDTO.getProduct_id()).orElseThrow(()-> new NotFoundException("OnSaleProduct not found"));
@@ -74,6 +83,8 @@ public class OrderItemServiceImplementation implements OrderItemService {
         orderItemRepository.save(orderItem);
         return true;
     };
+
+    //@CachePut(value = "orderItems")
     public Boolean updateOrderItem(OrderItemUpdateDTO orderItemUpdateDTO){
         Order order = orderRepository.findOrderByIdAndUserId(orderItemUpdateDTO.getOrder_id(),orderItemUpdateDTO.getUser_id()).orElseThrow(()-> new NotFoundException("Order not found"));
         OrderItem orderItem = this.orderItemRepository.findByIdAndOrderId(orderItemUpdateDTO.getId(),order.getId()).orElseThrow(()-> new NotFoundException("OrderItem not found"));
@@ -147,6 +158,8 @@ public class OrderItemServiceImplementation implements OrderItemService {
             }
         });
     }
+
+    //@CacheEvict(value = "orderItems", allEntries = true)
     public Boolean deleteOrderItem(Long id){
         List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(id);
         orderItems.forEach((orderItem)->{

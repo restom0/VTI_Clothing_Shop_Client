@@ -48,7 +48,7 @@ public class ImportedProductCreateRequest {
     private Integer importPrice;
 
     @NotBlank(message = "Image URL is required")
-    private String imageUrl;
+    private String image_url;
 
     @NotBlank(message = "Slider_1 is required")
     private String slider_url_1;
@@ -61,6 +61,21 @@ public class ImportedProductCreateRequest {
 
     @NotBlank(message = "Slider_4 is required")
     private String slider_url_4;
+
+    @NotBlank(message = "Public ID URL is required")
+    private String public_id_url;
+
+    @NotBlank(message = "Public ID Slider_1 is required")
+    private String public_id_slider_url_1;
+
+    @NotBlank(message = "Public ID Slider_2 is required")
+    private String public_id_slider_url_2;
+
+    @NotBlank(message = "Public ID Slider_3 is required")
+    private String public_id_slider_url_3;
+
+    @NotBlank(message = "Public ID Slider_4 is required")
+    private String public_id_slider_url_4;
 
     @NotNull(message = "Stock is required")
     @Min(value = 1, message = "Stock must be positive")

@@ -1,6 +1,10 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import vn.vti.clothing_shop.dtos.ins.ProductCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.ProductUpdateDTO;
@@ -41,13 +45,13 @@ public class ProductServiceImplementation implements ProductService {
         this.brandMapper = brandMapper;
     }
 
+    //@Cacheable(value = "products")
     public List<ProductDTO> getAllProducts(){
-        return this.productRepository
-                .findAll()
-                .stream()
-                .map(productMapper::EntityToDTO)
-                .toList();
+        return this.productMapper.EntityListToDTOList(this.productRepository.findAll());
     };
+
+    //@CacheEvict(value = "products", allEntries = true)
+    @Transactional
     public Boolean addProduct(ProductCreateDTO productCreateDTO){
         Brand brand =this.brandRepository
                 .findById(productCreateDTO.getBrand_id())
@@ -58,6 +62,9 @@ public class ProductServiceImplementation implements ProductService {
         this.productRepository.save(productMapper.ProductCreateDTOToEntity(productCreateDTO,category,brand));
         return true;
     };
+
+    //@CacheEvict(value = "products", allEntries = true)
+    @Transactional
     public Boolean deleteProduct(Long id){
         try{
             Product result = this.productRepository.findById(id).orElseThrow(()->new NotFoundException("Product not found"));
@@ -68,6 +75,8 @@ public class ProductServiceImplementation implements ProductService {
             throw new InternalServerErrorException("Server error");
         }
     };
+
+    //@CachePut(value = "products")
     public Boolean updateProduct(ProductUpdateDTO productUpdateDTO){
         try{
             Product product = this.productRepository
@@ -86,6 +95,8 @@ public class ProductServiceImplementation implements ProductService {
             throw new InternalServerErrorException("Server error");
         }
     };
+
+    //@Cacheable(value = "products", key = "#id")
     public ProductDTO getProductById(Long id){
         try{
             return productMapper

@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SizeUpdateDTO {
-    private Long id;
+    private Long size_id;
     private String size;
     private String height;
     private String weight;

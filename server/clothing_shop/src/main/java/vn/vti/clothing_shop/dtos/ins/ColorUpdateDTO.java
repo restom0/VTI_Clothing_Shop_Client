@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ColorUpdateDTO {
-    private Long id;
+    private Long color_id;
     private String color_code;
     private String color_name;
 }

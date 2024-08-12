@@ -1,5 +1,6 @@
 package vn.vti.clothing_shop.dtos.ins;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +22,6 @@ public class UserCreateDTO {
     private String address;
     private LocalDate birthday;
     private String avatar_url;
+    private String public_id_avatar_url;
     private UserGender gender;
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
     @Override
-    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL")
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL ORDER BY o.id DESC")
     @NotNull
     List<Order> findAll();
 
@@ -32,4 +32,20 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.user_id = ?1 AND o.payment_status = NOT_CONFIRMED")
     Optional<Order>findByUserIdWithNOT_CONFIRMEDStatus(Long userId);
+
+    @Override
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.deleted_at IS NULL")
+    long count();
+
+    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
+    long sumTotalPrice();
+
+    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED GROUP BY year(o.created_at), month(o.created_at)")
+    List<Long> countCompletedOrderByMonth();
+
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
+    long countCompletedOrder();
+
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
+    List<Order> findAllCompletedOrder();
 }

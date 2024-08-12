@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class ImportedProductController {
         this.importedProductMapper = importedProductMapper;
     }
 
-    @GetMapping("/")
+    @GetMapping(value = "/",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getAllImportedProducts(){
         try{
             return ResponseHandler.responseBuilder(200,"Lấy danh sách sản phẩm nhập khẩu thành công",importedProductServiceImplementation.getAllImportedProducts(), HttpStatus.OK);
@@ -46,10 +47,10 @@ public class ImportedProductController {
             @Valid
             ImportedProductCreateRequest importedProductCreateRequest,
             BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try {
+            if (bindingResult.hasErrors()) {
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             if(importedProductServiceImplementation
                     .addImportedProduct(importedProductMapper
                             .ImportedProductCreateRequestToImportedProductCreateDTO(importedProductCreateRequest))){
@@ -72,10 +73,11 @@ public class ImportedProductController {
             Long id,
             @org.jetbrains.annotations.NotNull
             BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try {
+            if (bindingResult.hasErrors()) {
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
+
             if(importedProductServiceImplementation
                     .updateImportedProduct(importedProductMapper
                             .ImportedProductUpdateRequestToImportedProductUpdateDTO(importedProductUpdateRequest,id))){
@@ -92,12 +94,7 @@ public class ImportedProductController {
     public ResponseEntity<?> deleteImportedProduct(
             @PathVariable
             @NotNull(message = "Vui lòng chọn sản phẩm")
-            Long id,
-            @org.jetbrains.annotations.NotNull
-            BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+            Long id){
         try {
             if(importedProductServiceImplementation.deleteImportedProduct(id)){
                 return ResponseHandler.responseBuilder(200,"Xóa sản phẩm nhập khẩu thành công",null, HttpStatus.OK);
@@ -115,11 +112,7 @@ public class ImportedProductController {
             @NotNull(message = "Vui lòng chọn bộ lọc")
             Filter filter,
             @PathVariable
-            @NotNull(message = "Vui lòng chọn sản phẩm") Long id,
-            @org.jetbrains.annotations.NotNull BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+            @NotNull(message = "Vui lòng chọn sản phẩm") Long id){
         try {
             return ResponseHandler.responseBuilder(200,"Lấy sản phẩm nhập khẩu thành công",importedProductServiceImplementation.getImportedProductByFilter(filter,id), HttpStatus.OK);
             }
@@ -127,5 +120,33 @@ public class ImportedProductController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
+    @GetMapping("/colors")
+    public ResponseEntity<?> getColors(){
+        try {
+            return ResponseHandler.responseBuilder(200,"Lấy danh sách màu thành công",importedProductServiceImplementation.getColors(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return ResponseHandler.exceptionBuilder(e);
+        }
+    }
 
+    @GetMapping("/materials")
+    public ResponseEntity<?> getMaterials(){
+        try {
+            return ResponseHandler.responseBuilder(200,"Lấy danh sách chất liệu thành công",importedProductServiceImplementation.getMaterials(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return ResponseHandler.exceptionBuilder(e);
+        }
+    }
+
+    @GetMapping("/sizes")
+    public ResponseEntity<?> getSizes(){
+        try {
+            return ResponseHandler.responseBuilder(200,"Lấy danh sách kích cỡ thành công",importedProductServiceImplementation.getSizes(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return ResponseHandler.exceptionBuilder(e);
+        }
+    }
 }

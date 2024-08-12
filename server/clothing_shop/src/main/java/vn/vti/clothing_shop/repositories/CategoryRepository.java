@@ -12,10 +12,19 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Override
-    @Query("SELECT c FROM Category c WHERE c.deleted_at IS NULL")
+    @Query("SELECT c FROM Category c WHERE c.deleted_at IS NULL ORDER BY c.id DESC")
     @NotNull
     List<Category> findAll();
 
+    @Override
+    @Query("SELECT c FROM Category c WHERE c.id = :id AND c.deleted_at IS NULL")
+    @NotNull
+    Optional<Category> findById(@NotNull Long id);
+
     @Query("SELECT c FROM Category c WHERE c.name = :name AND c.deleted_at IS NULL")
     Optional<Category> findByName(String name);
+
+    @Override
+    @Query("SELECT COUNT(c) FROM Category c WHERE c.deleted_at IS NULL")
+    long count();
 }

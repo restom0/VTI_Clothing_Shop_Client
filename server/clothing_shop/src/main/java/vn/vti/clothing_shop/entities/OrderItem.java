@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.context.annotation.DependsOn;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
@@ -21,7 +22,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
 @DependsOn("order")
 @Entity
 @Table(name = "`order_item`")
-public class OrderItem {
+public class OrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

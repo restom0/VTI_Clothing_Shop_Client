@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat,Long> {
     @Override
-    @Query("SELECT c FROM Chat c WHERE c.deleted_at IS NULL")
+    @Query("SELECT c FROM Chat c WHERE c.deleted_at IS NULL ORDER BY c.id DESC")
     @NotNull
     List<Chat> findAll();
     @Query("SELECT c FROM Chat c WHERE c.sender_id = ?1 AND c.deleted_at IS NULL")

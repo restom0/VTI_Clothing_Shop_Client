@@ -13,10 +13,21 @@ import java.util.Optional;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long>{
     @Override
-    @Query("SELECT b FROM Brand b WHERE b.deleted_at IS NULL")
+    @Query("SELECT b FROM Brand b WHERE b.deleted_at IS NULL ORDER BY b.id DESC")
     @NotNull
     List<Brand> findAll();
 
+    @Override
+    @Query("SELECT b FROM Brand b WHERE b.id = :id AND b.deleted_at IS NULL")
+    @NotNull
+    Optional<Brand> findById(@NotNull Long id);
+
     @Query("SELECT b FROM Brand b WHERE b.name = :name AND b.deleted_at IS NULL")
     Optional<Brand> findByName(String name);
+
+    @Override
+    @Query("SELECT COUNT(b) FROM Brand b WHERE b.deleted_at IS NULL")
+    long count();
+
+
 }

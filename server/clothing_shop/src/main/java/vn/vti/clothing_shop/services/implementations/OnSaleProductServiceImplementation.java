@@ -1,6 +1,7 @@
 package vn.vti.clothing_shop.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.OnSaleProduct;
@@ -23,6 +24,7 @@ public class OnSaleProductServiceImplementation implements OnSaleProductService 
         this.onSaleProductMapper = onSaleProductMapper;
     }
 
+    //@Cacheable(value = "onSaleProducts")
     public List<OnSaleProductDTO> getAllOnSaleProducts() {
         List<OnSaleProduct> NullEndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNullEnd();
         List<OnSaleProduct> EndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNotNullEnd();

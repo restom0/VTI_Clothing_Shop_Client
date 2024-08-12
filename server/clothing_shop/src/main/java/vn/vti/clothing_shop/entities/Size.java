@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
@@ -23,7 +24,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
                 @UniqueConstraint(columnNames = {"size", "category_id"}),
                 @UniqueConstraint(columnNames = {"weight", "category_id"}),
                 @UniqueConstraint(columnNames = {"height", "category_id"})})
-public class Size {
+public class Size implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

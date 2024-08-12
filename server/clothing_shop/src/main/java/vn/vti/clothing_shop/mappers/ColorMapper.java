@@ -10,6 +10,8 @@ import vn.vti.clothing_shop.dtos.outs.ColorDTO;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Color;
 
+import java.util.List;
+
 @Component
 public class ColorMapper {
     private final ModelMapper modelMapper;
@@ -25,6 +27,10 @@ public class ColorMapper {
         return colorDTO;
     }
 
+    public List<ColorDTO> EntityToDTO(List<Color> colors) {
+        return colors.stream().map(this::EntityToDTO).toList();
+    }
+
     public Color toEntity(ColorDTO colorDTO) {
         Color color = modelMapper.map(colorDTO, Color.class);
         color.setCategory_id(modelMapper.map(colorDTO.getCategory_id(), Category.class));
@@ -33,13 +39,14 @@ public class ColorMapper {
 
     public Color ColorCreateDTOToEntity(ColorCreateDTO colorCreateDTO, Category category) {
         Color color = modelMapper.map(colorCreateDTO, Color.class);
+        color.setColor_code(colorCreateDTO.getColor_code().toUpperCase());
         color.setCategory_id(category);
         return color;
     }
 
     public Color ColorUpdateDTOToEntity(ColorUpdateDTO colorUpdateDTO, Color color) {
-        color.setColor(colorUpdateDTO.getColor_code());
-        color.setName(colorUpdateDTO.getColor_name());
+        color.setColor_code(colorUpdateDTO.getColor_code().toUpperCase());
+        color.setColor_name(colorUpdateDTO.getColor_name());
         return color;
     }
 }

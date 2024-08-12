@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import vn.vti.clothing_shop.constants.UserGender;
 import vn.vti.clothing_shop.constants.UserRole;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -23,7 +24,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "`user`")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,6 +44,8 @@ public class User {
     @Column(name = "avatar_url")
     private String avatar_url;
 
+    @Column(name = "public_id_avatar_url")
+    private String public_id_avatar_url;
 
     @Column(name = "email",unique = true)
     @Pattern(regexp = EMAIL,message = "Invalid email")
@@ -53,6 +56,7 @@ public class User {
     private String phone_number;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Column(name="address")

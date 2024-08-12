@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.EMAIL;
@@ -21,7 +22,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.EMAIL;
 @AllArgsConstructor
 @Entity
 @Table(name = "`email`")
-public class Email {
+public class Email implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

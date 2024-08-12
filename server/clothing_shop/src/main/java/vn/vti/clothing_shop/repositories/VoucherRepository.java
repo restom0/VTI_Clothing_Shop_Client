@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher,Long> {
     @Override
-    @Query("SELECT v FROM Voucher v WHERE v.deleted_at IS NULL")
+    @Query("SELECT v FROM Voucher v WHERE v.deleted_at IS NULL ORDER BY v.id DESC")
     @NotNull
     List<Voucher> findAll();
 

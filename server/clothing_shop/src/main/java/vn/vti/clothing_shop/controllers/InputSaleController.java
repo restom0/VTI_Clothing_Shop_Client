@@ -39,10 +39,7 @@ public class InputSaleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getInputSaleById(@PathVariable @NotNull(message = "Vui lòng nhập id") Long id, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+    public ResponseEntity<?> getInputSaleById(@PathVariable @NotNull(message = "Vui lòng nhập id") Long id){
         try{
             return ResponseHandler.responseBuilder(200,"Lấy sản phẩm nhập thành công",inputSaleServiceImplementation.getInputSaleById(id), HttpStatus.OK);
         }
@@ -69,10 +66,10 @@ public class InputSaleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateInputSale(@PathVariable @NotNull(message = "Vui lòng nhập id") Long id, @RequestBody @Valid @NotNull(message = "Vui lòng nhập thông tin sản phẩm nhập") InputSaleUpdateRequest inputSaleUpdateRequest, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try{
+            if (bindingResult.hasErrors()) {
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             if(inputSaleServiceImplementation.updateInputSale(inputSaleMapper.UpdateRequestToUpdateDTO(inputSaleUpdateRequest, id))){
                 return ResponseHandler.responseBuilder(200,"Cập nhật sản phẩm nhập thành công",null, HttpStatus.OK);
             }
@@ -84,10 +81,7 @@ public class InputSaleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteInputSale(@PathVariable @NotNull(message = "Vui lòng nhập id") Long id, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+    public ResponseEntity<?> deleteInputSale(@PathVariable @NotNull(message = "Vui lòng nhập id") Long id){
         try{
             if(inputSaleServiceImplementation.deleteInputSale(id)){
                 return ResponseHandler.responseBuilder(200,"Xóa sản phẩm nhập thành công",null, HttpStatus.OK);

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long>{
     @Override
-    @Query("SELECT c FROM Comment c WHERE c.deleted_at IS NULL")
+    @Query("SELECT c FROM Comment c WHERE c.deleted_at IS NULL ORDER BY c.id DESC")
     @NotNull
     List<Comment> findAll();
 
@@ -24,4 +24,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 
     @Query("SELECT c FROM Comment c WHERE c.id = ?1 AND c.user_id=?2 AND c.deleted_at IS NULL")
     Optional<Comment> findByUserIdAndId(Long id, Long user_id);
+
+    @Query("SELECT c.product_id, SUM(c.star) FROM Comment c WHERE c.deleted_at IS NULL GROUP BY c.product_id ORDER BY SUM(c.star) DESC")
+    List<Object[]> sumRatingByProductId();
 }

@@ -14,4 +14,13 @@ public class UserReadDTO {
     private String email;
     private String phone_number;
     private String password;
+    @Override
+    public String toString() {
+        return "UserReadDTO{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

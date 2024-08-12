@@ -1,6 +1,10 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.ins.CommentCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.CommentUpdateDTO;
@@ -41,28 +45,40 @@ public class CommentServiceImplementation implements CommentService {
         this.userMapper = userMapper;
     }
 
+    //@Cacheable(value = "comments")
     public List<CommentDTO> getAllComments(){
         return this.commentRepository.findAll().stream()
                 .map(this.commentMapper::EntityToDTO)
                 .collect(Collectors.toList());
     };
+
+    //@Cacheable(value = "comments", key = "#product_id")
     public List<CommentDTO> getCommentById(Long product_id){
         return commentRepository.findByProductId(product_id).stream()
                 .map(this.commentMapper::EntityToDTO)
                 .collect(Collectors.toList());
     };
+
+    //@CacheEvict(value = "comments", allEntries = true)
+    @Transactional
     public Boolean createComment(Long user_id, CommentCreateDTO commentCreateDTO){
         Product product = this.productRepository.findById(commentCreateDTO.getProduct_id()).orElseThrow(()->new NotFoundException("Product not found"));
         User user = this.userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
         this.commentRepository.save(this.commentMapper.CommentCreateDTOToEntity(commentCreateDTO,user,product));
         return true;
     };
+
+    //@CachePut(value = "comments")
+    @Transactional
     public Boolean updateComment(Long id, Long user_id, CommentUpdateDTO commentUpdateDTO){
         Comment comment= this.commentRepository.findByProductIdAndId(id,commentUpdateDTO.getId(),user_id)
                 .orElseThrow(()->new NotFoundException("Comment not found"));
         this.commentRepository.save(this.commentMapper.CommentUpdateDTOToEntity(commentUpdateDTO,comment));
         return true;
     };
+
+    //@CacheEvict(value = "comments", allEntries = true)
+    @Transactional
     public Boolean deleteComment(Long id){
         Comment comment = this.commentRepository.findById(id).orElseThrow(()->new NotFoundException("Comment not found"));
         comment.setDeleted_at(LocalDateTime.now());

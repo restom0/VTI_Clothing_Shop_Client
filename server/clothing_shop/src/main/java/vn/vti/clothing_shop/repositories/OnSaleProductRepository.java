@@ -18,7 +18,8 @@ public interface OnSaleProductRepository extends JpaRepository<OnSaleProduct,Lon
             "JOIN onSaleProduct.input_sale_id inputSale " +
             "WHERE inputSale.end_date IS NULL " +
             "AND inputSale.available_date <= CURRENT_TIMESTAMP " +
-            "AND onSaleProduct.deleted_at IS NULL")
+            "AND onSaleProduct.deleted_at IS NULL " +
+            "ORDER BY onSaleProduct.id DESC")
     List<OnSaleProduct> findAllAvailableByNullEnd();
 
     @Query("SELECT onSaleProduct " +

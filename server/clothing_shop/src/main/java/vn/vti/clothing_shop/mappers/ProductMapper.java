@@ -12,6 +12,9 @@ import vn.vti.clothing_shop.entities.Product;
 import vn.vti.clothing_shop.requests.ProductCreateRequest;
 import vn.vti.clothing_shop.requests.ProductUpdateRequest;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class ProductMapper {
 
@@ -31,6 +34,10 @@ public class ProductMapper {
         productDTO.setCategory_id(categoryMapper.EntityToDTO(product.getCategory_id()));
         productDTO.setBrand_id(brandMapper.EntityToDTO(product.getBrand_id()));
         return productDTO;
+    }
+
+    public List<ProductDTO> EntityListToDTOList(List<Product> products){
+        return products.stream().map(this::EntityToDTO).collect(Collectors.toList());
     }
 
     public ProductCreateDTO ProductCreateRequestToProductCreateDTO(ProductCreateRequest productCreateRequest){

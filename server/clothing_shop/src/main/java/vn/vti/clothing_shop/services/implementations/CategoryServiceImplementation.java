@@ -1,6 +1,10 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.ins.CategoryCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.CategoryUpdateDTO;
@@ -17,6 +21,7 @@ import vn.vti.clothing_shop.responses.CategoryResponse;
 import vn.vti.clothing_shop.services.interfaces.CategoryService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,12 +48,15 @@ public class CategoryServiceImplementation implements CategoryService {
         this.materialMapper = materialMapper;
     }
 
+    //@Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategories() {
         return this.categoryRepository.findAll().stream()
                 .map(categoryMapper::EntityToDTO)
                 .collect(Collectors.toList());
     }
 
+    //@CacheEvict(value = "categories", allEntries = true)
+    @Transactional
     public Boolean addCategory(CategoryCreateDTO categoryCreateDTO) {
         if (this.categoryRepository.findByName(categoryCreateDTO.getName()).isPresent()) {
             throw new ConflictException("Category already exists");
@@ -57,26 +65,35 @@ public class CategoryServiceImplementation implements CategoryService {
         return true;
     };
 
+    //@CachePut(value = "categories")
+    @Transactional
     public Boolean updateCategory(CategoryUpdateDTO categoryUpdateDTO){
         Category category = this.categoryRepository.findById(categoryUpdateDTO.getId()).orElseThrow(() -> new NotFoundException("Category not found"));
-        if(this.categoryRepository.findByName(categoryUpdateDTO.getName()).isPresent()){
+        if(this.categoryRepository.findByName(categoryUpdateDTO.getName()).isPresent()&& !Objects.equals(category.getId(), categoryUpdateDTO.getId())){
             throw new ConflictException("Category already exists");
         }
         this.categoryRepository.save(categoryMapper.CategoryUpdateDTOToEntity(categoryUpdateDTO,category));
         return true;
     };
 
+    //@CacheEvict(value = "categories", allEntries = true)
+    @Transactional
     public Boolean deleteCategory(Long id){
         Category category = this.categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found"));
         this.categoryRepository.delete(category);
         return true;
     };
 
+    //@Cacheable(value = "categories", key = "#id")
     public CategoryResponse getCategoryById(Long id) {
         CategoryDTO category = categoryMapper.EntityToDTO(this.categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Brand not found")));
         List<ColorDTO> colorDTOS = this.colorRepository.findByCategory_id(category.getId()).stream().map(colorMapper::EntityToDTO).toList();
         List<SizeDTO> sizeDTOS = this.sizeRepository.findByCategory_id(category.getId()).stream().map(sizeMapper::EntityToDTO).toList();
         List<MaterialDTO> materialDTOS = this.materialRepository.findByCategory_id(category.getId()).stream().map(materialMapper::EntityToDTO).toList();
         return new CategoryResponse(category, colorDTOS, sizeDTOS, materialDTOS);
+    }
+
+    public Long countCategory(){
+        return categoryRepository.count();
     }
 }

@@ -1,11 +1,18 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.constants.Filter;
 import vn.vti.clothing_shop.dtos.ins.ImportedProductCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.ImportedProductUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.ColorDTO;
 import vn.vti.clothing_shop.dtos.outs.ImportedProductDTO;
+import vn.vti.clothing_shop.dtos.outs.MaterialDTO;
+import vn.vti.clothing_shop.dtos.outs.SizeDTO;
 import vn.vti.clothing_shop.mappers.ColorMapper;
 import vn.vti.clothing_shop.mappers.ImportedProductMapper;
 import vn.vti.clothing_shop.mappers.MaterialMapper;
@@ -45,6 +52,7 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
         this.materialMapper = materialMapper;
     }
 
+    //@Cacheable(value = "importedProducts")
     public List<ImportedProductDTO> getAllImportedProducts() {
         return this.importedProductRepository
                 .findAll()
@@ -53,6 +61,8 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
                 .collect(Collectors.toList());
     }
 
+    //@CacheEvict(value = "importedProducts", allEntries = true)
+    @Transactional
     public Boolean addImportedProduct(ImportedProductCreateDTO importedProductCreateDTO) {
         Product product = productRepository
                 .findById(importedProductCreateDTO.getProduct_id())
@@ -70,7 +80,7 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
                     return sizeRepository.save(newSize);
                 });
         Material material = materialRepository
-                .findByName(importedProductCreateDTO.getMaterial().getName())
+                .findByName(importedProductCreateDTO.getMaterial().getMaterial())
                 .orElseGet(() -> {
                     Material newMaterial = materialMapper.MaterialCreateDTOToEntity(importedProductCreateDTO.getMaterial(), product.getCategory_id());
                     return materialRepository.save(newMaterial);
@@ -79,6 +89,8 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
         return true;
     }
 
+    //@CacheEvict(value = "importedProducts", allEntries = true)
+    @Transactional
     public Boolean deleteImportedProduct(Long id) {
         ImportedProduct importedProduct = importedProductRepository
                 .findById(id)
@@ -87,6 +99,8 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
         return true;
     }
 
+    //@CachePut(value = "importedProducts")
+    @Transactional
     public Boolean updateImportedProduct(ImportedProductUpdateDTO importedProductUpdateDTO) {
         ImportedProduct importedProduct = importedProductRepository
                 .findById(importedProductUpdateDTO.getId())
@@ -95,13 +109,13 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
                 .findById(importedProductUpdateDTO.getProduct_id())
                 .orElseThrow(()-> new NotFoundException("Product not found"));
         Color color = colorRepository
-                .findById(importedProductUpdateDTO.getColor().getId())
+                .findById(importedProductUpdateDTO.getColor().getColor_id())
                 .orElseThrow(()-> new NotFoundException("Color not found"));
         Size size = sizeRepository
-                .findById(importedProductUpdateDTO.getSize().getId())
+                .findById(importedProductUpdateDTO.getSize().getSize_id())
                 .orElseThrow(()-> new NotFoundException("Size not found"));
         Material material = materialRepository
-                .findById(importedProductUpdateDTO.getMaterial().getId())
+                .findById(importedProductUpdateDTO.getMaterial().getMaterial_id())
                 .orElseThrow(()-> new NotFoundException("Material not found"));
         importedProductRepository.save(importedProductMapper
                 .ImportedProductUpdateDTOToEntity(
@@ -120,6 +134,7 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
         return true;
     }
 
+    //@Cacheable(value = "importedProducts", key = "#id")
     public ImportedProductDTO getImportedProductById(Long id) {
         return importedProductMapper
                 .EntityToDTO(importedProductRepository
@@ -127,18 +142,19 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
                         .orElseThrow(()-> new NotFoundException("Imported product not found")));
     }
 
+    //@Cacheable(value = "importedProducts", key = "#filter, #id")
     public List<ImportedProductDTO> getImportedProductByFilter(Filter filter, Long id) {
-        if (filter == Filter.PRODUCTS) {
+        if (filter == Filter.ALL) {
             return this.getAllImportedProducts();
         } else if (filter == Filter.PRODUCT) {
             return importedProductRepository
-                    .findByProductId(id)
+                    .findAllWithPositiveStockByProductId(id)
                     .stream()
                     .map(importedProductMapper::EntityToDTO)
                     .collect(Collectors.toList());
         } else if (filter == Filter.CATEGORY) {
             return importedProductRepository
-                    .findByCategoryId(id)
+                    .findAllWithPositiveStockByCategoryId(id)
                     .stream()
                     .map(importedProductMapper::EntityToDTO)
                     .collect(Collectors.toList());
@@ -149,6 +165,39 @@ public class ImportedProductServiceImplementation implements ImportedProductServ
                     .map(importedProductMapper::EntityToDTO)
                     .collect(Collectors.toList());
         }
+        else if(filter == Filter.COLOR){
+            return importedProductRepository
+                    .findAllWithPositiveStockByColorId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
+        }
+        else if(filter == Filter.SIZE){
+            return importedProductRepository
+                    .findAllWithPositiveStockBySizeId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
+        }
+        else if(filter == Filter.MATERIAL){
+            return importedProductRepository
+                    .findAllWithPositiveStockByMaterialId(id)
+                    .stream()
+                    .map(importedProductMapper::EntityToDTO)
+                    .collect(Collectors.toList());
+        }
         throw new BadRequestException("Invalid filter");
     }
+    //@Cacheable(value = "colors")
+    public List<ColorDTO> getColors(){
+        return colorMapper.EntityToDTO(colorRepository.findAll());
+    };
+    //@Cacheable(value = "materials")
+    public List<MaterialDTO> getMaterials(){
+        return materialMapper.EntityToDTO(materialRepository.findAll());
+    };
+    //@Cacheable(value = "sizes")
+    public List<SizeDTO> getSizes(){
+        return sizeMapper.EntityToDTO(sizeRepository.findAll());
+    };
 }

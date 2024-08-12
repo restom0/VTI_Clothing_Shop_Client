@@ -1,18 +1,16 @@
 package vn.vti.clothing_shop.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import vn.vti.clothing_shop.constants.Filter;
 import vn.vti.clothing_shop.constants.InputSaleFilter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "`input_sale`")
-public class InputSale {
+public class InputSale implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,25 +33,24 @@ public class InputSale {
     @Column(name = "filter_id")
     private Long filter_id;
 
-
-    @NotNull(message = "Sale price is required")
-    @DecimalMin(value = "0.00", message = "Sale price must be greater than 0")
-    @Column(name = "sale_percentage",columnDefinition = "FLOAT(10,2)",nullable = false)
+    @NotNull(message = "Sale percentage is required")
+    @DecimalMin(value = "0.00", message = "Sale percentage must be greater than 0")
+    @Column(name = "sale_percentage", columnDefinition = "NUMERIC(10,2)", nullable = false)
     private Float salePercentage;
 
     @NotNull(message = "Discount is required")
     @DecimalMin(value = "0.00", message = "Discount must be greater than 0")
     @DecimalMax(value = "100.00", message = "Discount must be less than or equal to 100")
-    @Column(name = "discount",columnDefinition = "FLOAT(10,2)",nullable = false)
+    @Column(name = "discount", columnDefinition = "NUMERIC(10,2)", nullable = false)
     private Float discount;
 
     @Future(message = "Available date must be in the future")
     @NotNull(message = "Available date is required")
-    @Column(name = "available_date",columnDefinition = "TIMESTAMP",nullable = false)
+    @Column(name = "available_date", nullable = false)
     private LocalDateTime available_date;
 
     @Future(message = "End date must be in the future")
-    @Column(name = "end_date",columnDefinition = "TIMESTAMP")
+    @Column(name = "end_date")
     private LocalDateTime end_date;
 
     @CreationTimestamp
@@ -64,6 +61,6 @@ public class InputSale {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at",columnDefinition = "TIMESTAMP")
+    @Column(name = "deleted_at")
     private LocalDateTime deleted_at;
 }

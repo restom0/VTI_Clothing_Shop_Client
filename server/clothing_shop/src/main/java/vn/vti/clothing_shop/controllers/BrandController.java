@@ -56,10 +56,10 @@ public class BrandController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBrand(@RequestBody @Valid BrandUpdateRequest brandUpdateRequest, @PathVariable @NotNull(message = "Vui lòng chọn brand") Long id, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try {
+            if (bindingResult.hasErrors()) {
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             if(brandServiceImplementation.updateBrand(brandMapper.BrandUpdateRequestToBrandUpdateDTO(brandUpdateRequest,id))){
                 return ResponseHandler.responseBuilder(200,"Cập nhật thương hiệu thành công",null, HttpStatus.OK);
             }
@@ -70,10 +70,7 @@ public class BrandController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBrand(@PathVariable @NotNull(message = "Vui lòng chọn brand") Long id, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+    public ResponseEntity<?> deleteBrand(@PathVariable @NotNull(message = "Vui lòng chọn brand") Long id){
         try {
             if(brandServiceImplementation.deleteBrand(id)){
                 return ResponseHandler.responseBuilder(200,"Xóa thương hiệu thành công",null, HttpStatus.OK);

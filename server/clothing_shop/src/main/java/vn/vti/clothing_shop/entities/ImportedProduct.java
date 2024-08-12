@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import vn.vti.clothing_shop.constants.ClothGender;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
@@ -19,7 +20,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.NUMBER;
 @AllArgsConstructor
 @Entity
 @Table(name = "`imported_product`")
-public class ImportedProduct {
+public class ImportedProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +38,7 @@ public class ImportedProduct {
     private Color color_id;
 
     @Column(name = "imageUrl")
-    private String imageUrl;
+    private String image_url;
 
     @Column(name = "slider_url_1")
     private String slider_url_1;
@@ -50,6 +51,21 @@ public class ImportedProduct {
 
     @Column(name = "slider_url_4")
     private String slider_url_4;
+
+    @Column(name = "public_id_url")
+    private String public_id_url;
+
+    @Column(name = "public_id_slider_url_1")
+    private String public_id_slider_url_1;
+
+    @Column(name = "public_id_slider_url_2")
+    private String public_id_slider_url_2;
+
+    @Column(name = "public_id_slider_url_3")
+    private String public_id_slider_url_3;
+
+    @Column(name = "public_id_slider_url_4")
+    private String public_id_slider_url_4;
 
     @ManyToOne
     @JoinColumn(name = "material_id",referencedColumnName = "id")

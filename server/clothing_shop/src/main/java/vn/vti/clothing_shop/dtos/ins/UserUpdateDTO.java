@@ -20,5 +20,6 @@ public class UserUpdateDTO {
     private String address;
     private LocalDate birthday;
     private String avatar_url;
+    private String public_id_avatar_url;
     private UserGender gender;
 }

@@ -15,4 +15,5 @@ public interface CategoryService {
     Boolean updateCategory(CategoryUpdateDTO categoryUpdateDTO);
     Boolean deleteCategory(Long id);
     CategoryResponse getCategoryById(Long id);
+    Long countCategory();
 }

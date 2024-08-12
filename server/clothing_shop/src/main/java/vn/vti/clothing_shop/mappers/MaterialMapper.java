@@ -10,6 +10,8 @@ import vn.vti.clothing_shop.dtos.outs.MaterialDTO;
 import vn.vti.clothing_shop.entities.Category;
 import vn.vti.clothing_shop.entities.Material;
 
+import java.util.List;
+
 @Component
 public class MaterialMapper {
     private final ModelMapper modelMapper;
@@ -25,14 +27,19 @@ public class MaterialMapper {
         return materialDTO;
     }
 
+    public List<MaterialDTO> EntityToDTO(List<Material> materials) {
+        return materials.stream().map(this::EntityToDTO).toList();
+    }
+
     public Material MaterialCreateDTOToEntity(MaterialCreateDTO materialCreateDTO, Category category) {
         Material material = modelMapper.map(materialCreateDTO, Material.class);
+        material.setName(materialCreateDTO.getMaterial());
         material.setCategory_id(category);
         return material;
     }
 
     public Material MaterialUpdateDTOToEntity(MaterialUpdateDTO materialUpdateDTO, Material material) {
-        material.setName(materialUpdateDTO.getName());
+        material.setName(materialUpdateDTO.getMaterial());
         return material;
     }
 }

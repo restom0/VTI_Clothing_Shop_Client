@@ -1,5 +1,6 @@
 package vn.vti.clothing_shop.requests;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,21 @@ public class ImportedProductUpdateRequest {
     @Min(value = 1, message = "Product ID must be greater than 0")
     @Max(value = Long.MAX_VALUE, message = "Product ID is too large")
     private Long product_id;
+
+    @NotNull(message = "Color ID is required")
+    @Min(value = 1, message = "Color ID must be greater than 0")
+    @Max(value = Long.MAX_VALUE, message = "Color ID is too large")
+    private Long color_id;
+
+    @NotNull(message = "Size ID is required")
+    @Min(value = 1, message = "Size ID must be greater than 0")
+    @Max(value = Long.MAX_VALUE, message = "Size ID is too large")
+    private Long size_id;
+
+    @NotNull(message = "Material ID is required")
+    @Min(value = 1, message = "Material ID must be greater than 0")
+    @Max(value = Long.MAX_VALUE, message = "Material ID is too large")
+    private Long material_id;
 
     @NotBlank(message = "Color code is required")
     private String color_code;
@@ -49,7 +65,7 @@ public class ImportedProductUpdateRequest {
     private Integer importNumber;
 
     @NotBlank(message = "Image URL is required")
-    private String imageUrl;
+    private String image_url;
 
     @NotBlank(message = "Slider_1 is required")
     private String slider_url_1;
@@ -62,4 +78,19 @@ public class ImportedProductUpdateRequest {
 
     @NotBlank(message = "Slider_4 is required")
     private String slider_url_4;
+
+    @NotBlank(message = "Public ID URL is required")
+    private String public_id_url;
+
+    @NotBlank(message = "Public ID Slider_1 is required")
+    private String public_id_slider_url_1;
+
+    @NotBlank(message = "Public ID Slider_2 is required")
+    private String public_id_slider_url_2;
+
+    @NotBlank(message = "Public ID Slider_3 is required")
+    private String public_id_slider_url_3;
+
+    @NotBlank(message = "Public ID Slider_4 is required")
+    private String public_id_slider_url_4;
 }

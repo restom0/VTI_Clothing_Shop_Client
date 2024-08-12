@@ -1,15 +1,16 @@
-package vn.vti.clothing_shop.dtos.ins;
+package vn.vti.clothing_shop.dtos.outs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MaterialUpdateDTO {
-    private Long material_id;
-    private String material;
+public class UserLoginDTO {
+    private String avatar_url;
+    private String name;
+    private String token;
 }

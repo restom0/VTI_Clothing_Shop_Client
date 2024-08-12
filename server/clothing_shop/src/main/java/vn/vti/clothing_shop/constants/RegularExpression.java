@@ -6,6 +6,6 @@ public class RegularExpression {
     public static final String NUMBER = "^[0-9]*$|^[0-9]*\\.[0-9]*$";
     public static final String INTEGER = "^[0-9]*$";
     public static final String STAR_RATING = "^[0-5]$|^[0-4]\\.[0-9]$|^5\\.0$";
-    public static final String COLOR = "^#([a-f0-9]{6})$";
+    public static final String COLOR = "^#([a-fA-F0-9]{6})$";
     public static final String BOOLEAN = "true|false";
 }

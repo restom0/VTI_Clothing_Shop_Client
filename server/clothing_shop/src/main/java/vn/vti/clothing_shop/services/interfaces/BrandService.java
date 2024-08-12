@@ -10,9 +10,10 @@ import java.util.List;
 
 @Component
 public interface BrandService {
-    public List<BrandDTO> getAllBrands();
-    public Boolean addBrand(BrandCreateDTO brandCreateDTO);
-    public Boolean updateBrand(BrandUpdateDTO brandUpdateDTO);
-    public Boolean deleteBrand(Long id);
-    public BrandResponse getBrandById(Long id);
+    List<BrandDTO> getAllBrands();
+    Boolean addBrand(BrandCreateDTO brandCreateDTO);
+    Boolean updateBrand(BrandUpdateDTO brandUpdateDTO);
+    Boolean deleteBrand(Long id);
+    BrandResponse getBrandById(Long id);
+    Long countBrand();
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem,Long> {
     @Override
-    @Query("SELECT oi FROM OrderItem oi WHERE oi.deleted_at IS NULL")
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.deleted_at IS NULL ORDER BY oi.id DESC")
     @NotNull
     List<OrderItem> findAll();
 
@@ -26,4 +26,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Long> {
 
     @Query("SELECT oi FROM OrderItem oi WHERE oi.id = ?1 AND oi.order_id = ?2 AND oi.deleted_at IS NULL")
     Optional<OrderItem> findByIdAndOrderId(Long id, Long orderId);
+
+    @Query("SELECT SUM(oi.quantity) FROM OrderItem oi JOIN Order o " +
+            "WHERE o.payment_status = COMPLETED AND oi.deleted_at IS NULL")
+    Optional<Long> sumQuantitiesByOrderId(Long orderId);
 }

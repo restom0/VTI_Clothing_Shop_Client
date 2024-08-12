@@ -1,6 +1,10 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.ins.InputSaleCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.InputSaleUpdateDTO;
@@ -39,9 +43,12 @@ public class InputSaleServiceImplementation implements InputSaleService {
         this.onSaleProductMapper = onSaleProductMapper;
     }
 
+    //@Cacheable(value = "inputSales", key = "#id")
     public List<OnSaleProductDTO> getOnSaleProductsByInputSaleId(Long id){
         return this.onSaleProductMapper.EntityToDTO(this.onSaleProductRepository.findByInputSaleId(id));
     }
+
+    //@Cacheable(value = "inputSales")
     public List<InputSaleDTO> getAllInputSale(){
         List<InputSale> inputSales = inputSaleRepository.findAll();
         List<List<OnSaleProduct>> onSaleProducts = new ArrayList<>();
@@ -50,6 +57,8 @@ public class InputSaleServiceImplementation implements InputSaleService {
         });
         return inputSaleMapper.EntityToDTO(inputSaleRepository.findAll(),onSaleProducts);
     };
+
+    //@Cacheable(value = "inputSales", key = "#id")
     public InputSaleDTO getInputSaleById(Long id){
         InputSale inputSale = inputSaleRepository.findById(id).orElseThrow(()->new NotFoundException("InputSale not found"));
         List<OnSaleProduct> onSaleProducts = onSaleProductRepository.findByInputSaleId(id);
@@ -92,6 +101,8 @@ public class InputSaleServiceImplementation implements InputSaleService {
         });
     }
 
+    //@CacheEvict(value = "inputSales", allEntries = true)
+    @Transactional
     public  Boolean createInputSale(InputSaleCreateDTO inputSaleCreateDTO){
         InputSale inputSale = inputSaleMapper.CreateDTOToEntity(inputSaleCreateDTO);
         switch (inputSaleCreateDTO.getFilter()){
@@ -120,6 +131,7 @@ public class InputSaleServiceImplementation implements InputSaleService {
         this.inputSaleRepository.save(inputSale);
         return true;
     };
+
     private void updateListOnSaleProduct(List<OnSaleProduct> onSaleProducts,InputSale inputSale){
         if(onSaleProducts.isEmpty()) return;
         onSaleProducts.forEach(onSaleProduct -> {
@@ -129,6 +141,9 @@ public class InputSaleServiceImplementation implements InputSaleService {
             this.onSaleProductRepository.save(onSaleProduct);
         });
     }
+
+    //@CachePut(value = "inputSales")
+    @Transactional
     public Boolean updateInputSale(InputSaleUpdateDTO inputSaleUpdateDTO){
         InputSale inputSale = inputSaleRepository.findById(inputSaleUpdateDTO.getId()).orElseThrow(()->new NotFoundException("InputSale not found"));
         List<OnSaleProduct> onSaleProducts = onSaleProductRepository.findByInputSaleId(inputSale.getId());
@@ -136,6 +151,9 @@ public class InputSaleServiceImplementation implements InputSaleService {
         inputSaleRepository.save(inputSaleMapper.UpdateDTOToEntity(inputSaleUpdateDTO,inputSale));
         return true;
     };
+
+    //@CacheEvict(value = "inputSales", allEntries = true)
+    @Transactional
     public Boolean deleteInputSale(Long id){
         InputSale inputSale = inputSaleRepository.findById(id).orElseThrow(()->new RuntimeException("InputSale not found"));
         List<OnSaleProduct> onSaleProducts = onSaleProductRepository.findByInputSaleId(inputSale.getId());

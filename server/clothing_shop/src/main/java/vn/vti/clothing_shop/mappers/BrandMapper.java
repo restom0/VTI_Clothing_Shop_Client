@@ -39,6 +39,7 @@ public class BrandMapper {
     }
     public Brand BrandUpdateDTOToEntity(BrandUpdateDTO brandUpdateDTO,Brand brand) {
         brand.setName(brandUpdateDTO.getName());
+        brand.setDescription(brandUpdateDTO.getDescription());
         return brand;
     }
 }

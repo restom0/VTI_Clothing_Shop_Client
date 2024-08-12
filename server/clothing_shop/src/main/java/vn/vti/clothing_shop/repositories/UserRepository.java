@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     @Override
-    @Query("SELECT u FROM User u WHERE u.id = ?1 AND u.deleted_at IS NULL")
+    @Query("SELECT u FROM User u WHERE u.id = ?1 AND u.deleted_at IS NULL ORDER BY u.id ASC")
     @NotNull
     Optional<User> findById(@NotNull Long id);
     @Query("SELECT u FROM User u WHERE u.username = ?1 AND u.deleted_at IS NULL")

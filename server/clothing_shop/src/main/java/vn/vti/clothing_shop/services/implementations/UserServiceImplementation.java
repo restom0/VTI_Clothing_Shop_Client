@@ -1,7 +1,11 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import vn.vti.clothing_shop.dtos.ins.UserCreateDTO;
@@ -9,6 +13,7 @@ import vn.vti.clothing_shop.dtos.ins.UserReadDTO;
 import vn.vti.clothing_shop.dtos.ins.UserUpdateDTO;
 import vn.vti.clothing_shop.dtos.ins.UserUpdatePasswordDTO;
 import vn.vti.clothing_shop.dtos.outs.UserDTO;
+import vn.vti.clothing_shop.dtos.outs.UserLoginDTO;
 import vn.vti.clothing_shop.mappers.UserMapper;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
@@ -35,10 +40,15 @@ public class UserServiceImplementation implements UserService {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
+
+    //@Cacheable(value = "users")
     public List<UserDTO> getAllUsers(){
         return userMapper.EntityToDTO(userRepository.findAll());
     };
-    public String getUser(UserReadDTO userReadDTO){
+
+    //@CachePut(value = "users")
+    @Transactional
+    public UserLoginDTO getUser(UserReadDTO userReadDTO){
         User user = userReadDTO.getUsername()!=null ?
                 this.userRepository
                         .findByUsername(userReadDTO.getUsername())
@@ -52,8 +62,12 @@ public class UserServiceImplementation implements UserService {
                                 .findByPhoneNumber(userReadDTO.getPhone_number())
                                 .orElseThrow(()->new NotFoundException("Người dùng không tồn tại"))
                 );
-        return userMapper.ReadDTOToEntity(user,userReadDTO) ? jwtService.generateToken(user) : null;
+        if(!userMapper.ReadDTOToEntity(user,userReadDTO)) throw new BadRequestException("Sai mật khẩu");
+        return userMapper.EntityToLoginDTO(user,jwtService.generateToken(user));
     }
+
+    //@CacheEvict(value = "users", allEntries = true)
+    @Transactional
     public Boolean addUser(UserCreateDTO userCreateDTO){
         this.userRepository.findByUsername(userCreateDTO.getUsername()).ifPresent(u->{throw new BadRequestException("Tên đăng nhập đã tồn tại");});
         this.userRepository.findByEmail(userCreateDTO.getEmail()).ifPresent(u->{throw new BadRequestException("Email đã tồn tại");});
@@ -62,13 +76,18 @@ public class UserServiceImplementation implements UserService {
         return true;
     }
 
+    //@Cacheable(value = "users")
     public Long countUser(){
         return userRepository.count();
     };
 
+    //@Cacheable(value = "user", key = "#id")
     public UserDTO getUserById(Long id){
         return userMapper.EntityToDTO(userRepository.findById(id).orElseThrow(()->new NotFoundException("Người dùng không tồn tại")));
     };
+
+    //@CachePut(value = "user")
+    @Transactional
     public Boolean updateUser(UserUpdateDTO userUpdateDTO){
         User user = this.userRepository.findById(userUpdateDTO.getId()).orElseThrow(()->new NotFoundException("Người dùng không tồn tại"));
         this.userRepository
@@ -86,6 +105,9 @@ public class UserServiceImplementation implements UserService {
         this.userRepository.save(userMapper.UpdateDTOToEntity(user,userUpdateDTO));
         return true;
     }
+
+    //@CachePut(value = "user")
+    @Transactional
     public Boolean updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO){
         User user = this.userRepository
                 .findById(userUpdatePasswordDTO.getId())
@@ -93,6 +115,9 @@ public class UserServiceImplementation implements UserService {
         this.userRepository.save(userMapper.UpdatePasswordDTOToEntity(user,userUpdatePasswordDTO));
         return true;
     };
+
+    //@CacheEvict(value = "users", allEntries = true)
+    @Transactional
     public Boolean deleteUser(Long id){
         User user = this.userRepository.findById(id).orElseThrow(()->new NotFoundException("Người dùng không tồn tại"));
         user.setDeleted_at(LocalDateTime.now());

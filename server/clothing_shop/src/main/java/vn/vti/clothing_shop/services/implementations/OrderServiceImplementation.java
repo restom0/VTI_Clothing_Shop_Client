@@ -1,9 +1,15 @@
 package vn.vti.clothing_shop.services.implementations;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.ins.OrderCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.BrandDTO;
+import vn.vti.clothing_shop.dtos.outs.CategoryDTO;
 import vn.vti.clothing_shop.dtos.outs.OrderDTO;
 import vn.vti.clothing_shop.entities.Voucher;
 import vn.vti.clothing_shop.exceptions.BadRequestException;
@@ -40,6 +46,7 @@ public class OrderServiceImplementation implements OrderService {
         this.orderMapper = orderMapper;
     }
 
+    //@Cacheable(value = "orders")
     public List<OrderDTO> getAllOrders(){
         return this.orderRepository.findAll()
                 .stream()
@@ -48,6 +55,7 @@ public class OrderServiceImplementation implements OrderService {
                 .toList();
     }
 
+    //@Cacheable(value = "orders", key = "#userId")
     public List<OrderDTO> getAllOrdersByUserId(Long userId){
         return this.orderRepository.findAllByUserId(userId)
                 .stream()
@@ -55,9 +63,14 @@ public class OrderServiceImplementation implements OrderService {
                         .EntityToDTO(order,this.orderItemRepository.findAllByOrderId(order.getId())))
                 .toList();
     }
+
+    //@Cacheable(value = "orders", key = "#id,#userId")
     public OrderDTO getOrderByIdAndUserId(Long id,Long userId){
         return orderMapper.EntityToDTO(this.orderRepository.findOrderByIdAndUserId(id,userId).orElseThrow(()-> new NotFoundException("Order not found")),this.orderItemRepository.findAllByOrderId(id));
     }
+
+    //@CacheEvict(value = "orders", allEntries = true)
+    @Transactional
     public OrderDTO addOrder(OrderCreateDTO orderCreateDTO){
         User user = this.userRepository.findById(orderCreateDTO.getUser_id()).orElseThrow(()->new ForbiddenException("User not found"));
         return orderMapper.EntityToDTO(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).orElseGet(()->{
@@ -84,6 +97,9 @@ public class OrderServiceImplementation implements OrderService {
         voucher.setStock(voucher.getStock()+1);
         voucherRepository.save(voucher);
     };
+
+    //@CachePut(value = "orders")
+    @Transactional
     public Boolean updateOrder(OrderUpdateDTO orderUpdateDTO){
         Order order = this.orderRepository.findById(orderUpdateDTO.getId()).orElseThrow(()-> new NotFoundException("Order not found"));
         Voucher voucher = this.voucherRepository.findById(orderUpdateDTO.getVoucherId()).orElseThrow(()-> new NotFoundException("Voucher not found"));
@@ -92,6 +108,9 @@ public class OrderServiceImplementation implements OrderService {
         return true;
 
     }
+
+    //@CacheEvict(value = "orders", allEntries = true)
+    @Transactional
     public Boolean deleteOrder(Long id) {
         Order order = this.orderRepository.findById(id).orElseThrow(()-> new NotFoundException("Order not found"));
         addStock(order.getVoucherId().getId());
@@ -99,4 +118,11 @@ public class OrderServiceImplementation implements OrderService {
         this.orderRepository.save(order);
         return true;
     }
+
+    public BrandDTO getMaxBrand(){
+        return null;
+    };
+    public CategoryDTO getMaxCategory(){
+        return null;
+    };
 }

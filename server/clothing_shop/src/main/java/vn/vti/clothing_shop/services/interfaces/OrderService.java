@@ -3,6 +3,8 @@ package vn.vti.clothing_shop.services.interfaces;
 import org.springframework.stereotype.Component;
 import vn.vti.clothing_shop.dtos.ins.OrderCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderUpdateDTO;
+import vn.vti.clothing_shop.dtos.outs.BrandDTO;
+import vn.vti.clothing_shop.dtos.outs.CategoryDTO;
 import vn.vti.clothing_shop.dtos.outs.OrderDTO;
 
 import java.util.List;
@@ -15,4 +17,6 @@ public interface OrderService {
     OrderDTO addOrder(OrderCreateDTO orderCreateDTO);
     Boolean updateOrder(OrderUpdateDTO orderUpdateDTO);
     Boolean deleteOrder(Long id);
+    BrandDTO getMaxBrand();
+    CategoryDTO getMaxCategory();
 }

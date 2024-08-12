@@ -1,8 +1,11 @@
 package vn.vti.clothing_shop.constants;
 
 public enum Filter {
-    PRODUCTS,
+    ALL,
     PRODUCT,
     CATEGORY,
-    BRAND
+    BRAND,
+    COLOR,
+    SIZE,
+    MATERIAL
 }

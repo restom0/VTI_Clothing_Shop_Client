@@ -59,10 +59,10 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCategory(@RequestBody @Valid CategoryUpdateRequest categoryUpdateRequest, @PathVariable @NotNull(message = "Vui lòng chọn category") Long id, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try {
+            if(bindingResult.hasErrors()){
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             if(categoryServiceImplementation.updateCategory(categoryMapper.CategoryUpdateRequestToCategoryUpdateDTO(categoryUpdateRequest,id))){
                 return ResponseHandler.responseBuilder(200,"Cập nhật danh mục thành công",null, HttpStatus.OK);
             }
@@ -74,10 +74,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable @NotNull(message = "Vui lòng chọn category") Long id, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+    public ResponseEntity<?> deleteCategory(@PathVariable @NotNull(message = "Vui lòng chọn category") Long id){
         try {
             if(categoryServiceImplementation.deleteCategory(id)){
                 return ResponseHandler.responseBuilder(200,"Xóa danh mục thành công",null, HttpStatus.OK);
@@ -89,10 +86,7 @@ public class CategoryController {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryById(@PathVariable @NotNull(message = "Vui lòng chọn brand") Long id, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
+    public ResponseEntity<?> getCategoryById(@PathVariable @NotNull(message = "Vui lòng chọn brand") Long id){
         try {
             return ResponseHandler.responseBuilder(200,"Lấy thông tin thương hiệu thành công",categoryServiceImplementation.getCategoryById(id), HttpStatus.OK);
         }

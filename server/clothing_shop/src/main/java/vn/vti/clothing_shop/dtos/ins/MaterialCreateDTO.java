@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MaterialCreateDTO {
-    private String name;
+    private String material;
 }

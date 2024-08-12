@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ImportedProductRepository extends JpaRepository<ImportedProduct,Long> {
     @Override
     @Query("SELECT ip FROM ImportedProduct ip " +
-            "WHERE ip.deleted_at IS NULL")
+            "WHERE ip.deleted_at IS NULL ORDER BY ip.id DESC")
     @NotNull
     List<ImportedProduct> findAll();
 
@@ -22,6 +22,7 @@ public interface ImportedProductRepository extends JpaRepository<ImportedProduct
 
     @Query("SELECT ip FROM ImportedProduct ip WHERE ip.product_id.id = ?1 AND ip.deleted_at IS NULL")
     List<ImportedProduct> findByProductId(Long id);
+
 
     @Query("SELECT ip " +
             "FROM ImportedProduct ip " +

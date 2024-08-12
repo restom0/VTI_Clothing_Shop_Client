@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static vn.vti.clothing_shop.constants.RegularExpression.STAR_RATING;
@@ -23,7 +24,7 @@ import static vn.vti.clothing_shop.constants.RegularExpression.STAR_RATING;
 @AllArgsConstructor
 @Entity
 @Table(name = "`comment`")
-public class Comment {
+public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

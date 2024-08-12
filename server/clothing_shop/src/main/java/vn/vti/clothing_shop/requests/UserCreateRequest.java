@@ -1,5 +1,6 @@
 package vn.vti.clothing_shop.requests;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -41,6 +42,7 @@ public class UserCreateRequest {
     private LocalDate birthday;
 
     private String avatar_url;
+    private String public_id_avatar_url;
 
     @NotNull(message = "Gender is required")
     private UserGender gender;

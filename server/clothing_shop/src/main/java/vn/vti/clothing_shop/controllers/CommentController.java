@@ -48,11 +48,10 @@ public class CommentController {
     }
     @PostMapping("/")
     public ResponseEntity<?> addComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest, BindingResult bindingResult){
-
-        if (bindingResult.hasErrors()) {
-            return ParameterUtils.showBindingResult(bindingResult);
-        }
         try{
+            if (bindingResult.hasErrors()) {
+                return ParameterUtils.showBindingResult(bindingResult);
+            }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User user = (User) authentication.getPrincipal();
             Long userId = user.getId();

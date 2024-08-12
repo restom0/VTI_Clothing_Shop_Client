@@ -1,5 +1,6 @@
 package vn.vti.clothing_shop.dtos.outs;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ColorDTO {
+@JsonTypeName("ColorDTO")
+public class ColorDTO extends BaseDTO {
     private Long id;
-    private String color;
-    private String name;
+    private String color_code;
+    private String color_name;
     private CategoryDTO category_id;
 }

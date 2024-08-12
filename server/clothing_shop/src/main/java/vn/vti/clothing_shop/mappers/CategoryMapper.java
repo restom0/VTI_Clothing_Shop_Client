@@ -39,6 +39,7 @@ public class CategoryMapper {
     }
     public Category CategoryUpdateDTOToEntity(CategoryUpdateDTO categoryUpdateDTO,Category category) {
         category.setName(categoryUpdateDTO.getName());
+        category.setDescription(categoryUpdateDTO.getDescription());
         return category;
     }
 }

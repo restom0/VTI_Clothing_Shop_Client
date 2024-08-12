@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface EmailRepository extends JpaRepository<Email,Long> {
     @Override
-    @Query("SELECT e FROM Email e WHERE e.deleted_at IS NULL")
+    @Query("SELECT e FROM Email e WHERE e.deleted_at IS NULL ORDER BY e.id DESC")
     @NotNull
     List<Email> findAll();
 
