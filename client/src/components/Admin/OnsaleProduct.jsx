@@ -1,24 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { input, Input, Option } from "@material-tailwind/react";
+import dayjs from "dayjs";
+
 import {
-  Button,
   Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   IconButton,
-  Typography,
   Dialog,
-  Tooltip,
-  Input,
-  Tabs,
-  TabsHeader,
-  Tab,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  Pagination,
+  Rating,
   Select,
-  Option,
-} from "@material-tailwind/react";
-import { Container, Divider, Pagination, Rating } from "@mui/material";
-import useOpen from "../../hooks/useOpen";
-import { changePriceList, onsaleproduct } from "../../constants/table_head";
+  MenuItem,
+  TextField,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  InputAdornment,
+  OutlinedInput,
+} from "@mui/material";
+import { Typography, Button } from "@material-tailwind/react";
+import {
+  changePriceList,
+  changePricesList,
+  onsaleproduct,
+} from "../../constants/table_head";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import TableHeader from "../shared/TableHeader";
 import CloseIcon from "@mui/icons-material/Close";
@@ -34,9 +42,18 @@ import { useGetBrandsQuery } from "../../apis/BrandApi";
 import { useGetCategoriesQuery } from "../../apis/CategoryApi";
 import {
   useGetColorsQuery,
+  useGetImportedProductQuery,
+  useGetImportedProductsQuery,
   useGetMaterialsQuery,
   useGetSizesQuery,
 } from "../../apis/ImportedProductApi";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useGetProductsQuery } from "../../apis/ProductApi";
+import { set } from "date-fns";
+import { useSelector } from "react-redux";
 
 const TABLE_ROWS = [
   {
@@ -107,22 +124,37 @@ const TABLE_ROWS = [
   },
 ];
 const OnsaleProduct = () => {
-  const [filter, setFilter] = React.useState("ALL");
+  const [filters, setFilters] = React.useState("ALL");
+  const [values, setValues] = React.useState(null);
+  const [prices, setPrices] = React.useState(100);
+  const [discounts, setDiscounts] = React.useState(0);
+  const [startDates, setStartDates] = React.useState(null);
+  const [endDates, setEndDates] = React.useState(null);
+  const [value, setValue] = React.useState(null);
+  const [price, setPrice] = React.useState(100);
+  const [discount, setDiscount] = React.useState(0);
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [import_product, setImport_Product] = React.useState(null);
+  const [updateSalePercentage, setUpdateSalePercentage] = React.useState(100);
+  const [updateDiscount, setUpdateDiscount] = React.useState(0);
+  const [updateStartDate, setUpdateStartDate] = React.useState(null);
+  const [updateEndDate, setUpdateEndDate] = React.useState(null);
+  const [updateFilter, setUpdateFilter] = React.useState(null);
+  const [updateFilterId, setUpdateFilterId] = React.useState(null);
   const [active, setActive] = React.useState(1);
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
-  const handleOpen = () => setOpen(!open);
-  const handleOpens = () => setOpens(!opens);
-  const {
-    detailOpen,
-    handleDetailOpen,
-    updateOpen,
-    handleUpdateOpen,
-    deleteOpen,
-    handleDeleteOpen,
-  } = useOpen();
+  const handleOpen = () => setOpen(true);
+  const handleOpens = () => setOpens(true);
+  const selectedId = useSelector((state) => state.selectedId.value);
   const { data: inputSale, error, isLoading } = useGetInputSalesQuery();
+  const {
+    data: products,
+    error: productsError,
+    isLoading: productsLoading,
+  } = useGetProductsQuery();
   const {
     data: brands,
     error: brandsError,
@@ -148,7 +180,53 @@ const OnsaleProduct = () => {
     error: materialsError,
     isLoading: materialsLoading,
   } = useGetMaterialsQuery();
-  const [addInputSale, { error: addError, isLoading: isAdded }] =
+  const {
+    data: import_products,
+    error: import_productsError,
+    isLoading: import_productsLoading,
+  } = useGetImportedProductsQuery();
+  const {
+    data: previews,
+    error: previewsError,
+    isLoading: previewsLoading,
+  } = useGetImportedProductQuery(
+    { filter: filters, id: values },
+    {
+      skip: !values && filters !== "ALL",
+    }
+  );
+
+  useEffect(() => {
+    if (values || (!values && filters === "ALL")) {
+      setImport_Product(
+        previews?.object.map((preview) => {
+          return {
+            sku: preview.product_id.name,
+            color: preview.color_id.color_name,
+            size: preview.size_id.size,
+            material: preview.material_id.name,
+            importPrice: preview.importPrice.toLocaleString("en-US"),
+            salePrice: (
+              ((preview.importPrice * prices) / 100) *
+              (1 - discounts / 100)
+            ).toLocaleString("en-US"),
+          };
+        }) || []
+      );
+    }
+  }, [values, previews, filters, prices, discounts]);
+  useEffect(() => {
+    if (selectedId !== -1) {
+      const search = inputSale?.object.find((item) => item.id === selectedId);
+      setUpdateFilter(search?.filter);
+      setUpdateFilterId(search?.filter_id);
+      setUpdateSalePercentage(search?.salePercentage);
+      setUpdateDiscount(search?.discount);
+      setUpdateStartDate(search?.available_date);
+      setUpdateEndDate(search?.end_date);
+    }
+  }, [selectedId, inputSale?.object]);
+  const [createInputSale, { error: addError, isLoading: isAdded }] =
     useCreateInputSaleMutation();
   const [updateInputSale, { error: updateError, isLoading: isUpdated }] =
     useUpdateInputSaleMutation();
@@ -159,25 +237,90 @@ const OnsaleProduct = () => {
     brandsLoading ||
     colorsLoading ||
     sizesLoading ||
-    materialsLoading
+    categoriesLoading ||
+    materialsLoading ||
+    productsLoading ||
+    import_productsLoading
   )
     return <Loading />;
-  else if (error) return <div>Error: {error.message}</div>;
+  else if (
+    error ||
+    brandsError ||
+    categoriesError ||
+    materialsError ||
+    sizesError ||
+    colorsError ||
+    productsError ||
+    import_productsError
+  )
+    return <div>Error: {error.message}</div>;
+  const handleCloseOpens = () => {
+    setOpens(false);
+  };
+  const handleCloseOpen = () => {
+    setOpen(false);
+  };
+  const handleAddImportedProduct = async () => {
+    const message = await createInputSale({
+      filter: "ALL",
+      filter_id: value,
+      salePercentage: Number(price),
+      discount: Number(discount),
+      available_date: startDate,
+      end_date: endDate,
+    }).unwrap();
+  };
+  const handleAddImportedProducts = async () => {
+    const message = await createInputSale({
+      filter: filters,
+      filter_id: values || 1,
+      salePercentage: Number(prices),
+      discount: Number(discounts),
+      available_date: startDates,
+      end_date: endDates,
+    }).unwrap();
+  };
+  const handleResetAddImportedProduct = async () => {
+    setPrice(100);
+    setDiscount(0);
+    setValue(null);
+    setStartDate(null);
+    setEndDate(null);
+  };
+  const handleResetAddImportedProducts = async () => {
+    setFilters("ALL");
+    setPrices(100);
+    setDiscounts(0);
+    setValues(null);
+    setStartDates(null);
+    setEndDates(null);
+  };
+  const ListInputSales = inputSale?.object.map((item, index) => {
+    return {
+      id: item.id,
+      filter: item.filter,
+      filter_id: item.filter_id,
+      salePercentage: item.salePercentage + "%",
+      discount: item.discount + "%",
+      available_date: new Date(item.available_date).toLocaleDateString("en-GB"),
+      end_date: new Date(item.end_date).toLocaleDateString("en-GB"),
+    };
+  });
   return (
     <>
       <AdminLayout
-        name="Nhập giá"
+        name="Lên giá sản phẩm"
         TABLE_HEAD={onsaleproduct}
-        TABLE_ROWS={inputSale ? inputSale.object : []}
+        TABLE_ROWS={ListInputSales ? ListInputSales : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
-        headerDetail={"Chi tiết lần nhập giá #" + "001"}
+        headerDetail={"Chi tiết lần nhập giá"}
         bodyDetail={
           <Container>
             <div className="grid grid-cols-3 mb-5">
               <Typography
-                variant="h3"
+                variant="h4"
                 color="blue-gray"
                 className="font-bold col-span-3 text-center mb-5"
               >
@@ -257,9 +400,9 @@ const OnsaleProduct = () => {
               </tbody>
             </table>
             <Pagination
-              page={Math.ceil(TABLE_ROWS.length / 6)}
-              active={subActive}
-              setActive={setSubActive}
+              count={Math.ceil(TABLE_ROWS.length / 6)}
+              page={subActive}
+              onChange={setSubActive}
             />
           </Container>
         }
@@ -270,114 +413,143 @@ const OnsaleProduct = () => {
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-5">
                 <Typography
-                  variant="h4"
+                  variant="h3"
                   color="blue-gray"
                   className="font-bold col-span-3 text-center mb-5"
                 >
                   Thông tin nhập
                 </Typography>
                 <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
+                  <div className="grid grid-cols-3 gap-4 mb-5">
                     <Typography variant="h6" color="blue-gray">
                       Loại nhập:
                     </Typography>
-                    <div>
+                    <FormControl
+                      size="small"
+                      className="col-span-2"
+                      fullWidth
+                      required
+                    >
                       <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
+                        id="demo-simple-select2"
+                        value={updateFilter}
+                        disabled
                       >
                         {filter_items.map((item, index) => (
-                          <Option key={index} value={item.value}>
+                          <MenuItem key={index} value={item.value}>
                             {item.label}
-                          </Option>
+                          </MenuItem>
                         ))}
                       </Select>
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
+                    </FormControl>
+                    <Typography
+                      variant="h6"
+                      className="my-auto"
+                      color="blue-gray"
+                    >
                       Tên:
                     </Typography>
-                    <div>
+                    <FormControl
+                      size="small"
+                      className="col-span-2"
+                      fullWidth
+                      required
+                      disabled
+                    >
                       <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
+                        id="demo-simple-select2"
+                        value={filter_items}
+                        onChange={(e) => setUpdateFilterId(e.target.value)}
                       >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
+                        {filter_items.map((item, index) => (
+                          <MenuItem key={index} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
                       </Select>
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
+                    </FormControl>
+                    <Typography
+                      variant="h6"
+                      color="blue-gray"
+                      className="my-auto"
+                    >
                       Giá trị gia tăng:
                     </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
+                    <OutlinedInput
+                      endAdornment={
+                        <InputAdornment position="end">%</InputAdornment>
+                      }
+                      className="col-span-2"
+                      size="small"
+                      value={updateSalePercentage}
+                      onChange={(e) => setUpdateSalePercentage(e.target.value)}
+                    />
+                    <Typography
+                      variant="h6"
+                      color="blue-gray"
+                      className="my-auto"
+                    >
                       Giảm giá:
                     </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
+                    <OutlinedInput
+                      className="col-span-2"
+                      size="small"
+                      value={updateDiscount}
+                      onChange={(e) => setUpdateDiscount(e.target.value)}
+                      endAdornment={
+                        <InputAdornment position="end">%</InputAdornment>
+                      }
+                    />
+                    <Typography
+                      variant="h6"
+                      color="blue-gray"
+                      className="my-auto"
+                    >
                       Ngày áp dụng
                     </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
+                    <div className="col-span-2">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={["DatePicker"]}>
+                          <DatePicker
+                            label="Ngày áp dụng"
+                            slotProps={{
+                              textField: { size: "medium", required: true },
+                            }}
+                            value={dayjs(updateStartDate)}
+                            onChange={(newValue) =>
+                              setUpdateStartDate(newValue)
+                            }
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
                     </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4">
-                    <Typography variant="h6" color="blue-gray">
+                    <Typography
+                      variant="h6"
+                      color="blue-gray"
+                      className="my-auto"
+                    >
                       Ngày kết thúc
                     </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
+                    <div className="col-span-2">
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={["DatePicker"]}>
+                          <DatePicker
+                            label="Ngày kết thúc"
+                            slotProps={{
+                              textField: { size: "medium", required: true },
+                            }}
+                            value={dayjs(updateEndDate)}
+                            onChange={(newValue) => setUpdateEndDate(newValue)}
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="col-span-7">
                 <Typography
-                  variant="h4"
+                  variant="h5"
                   color="blue-gray"
                   className="font-bold text-center mb-5"
                 >
@@ -386,24 +558,41 @@ const OnsaleProduct = () => {
                 <table className="w-full min-w-max table-auto text-left">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                   <tbody>
-                    {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(
-                      (row, index) => (
+                    {import_products?.object
+                      ?.filter(
+                        (product) => product.product_id.id === updateFilterId
+                      )
+                      .map((product, index) => (
                         <tr
                           key={index}
                           className="text-center border-b border-gray-200"
                         >
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
-                              {value}
-                            </td>
-                          ))}
+                          {/* <td className="p-2">{product.id}</td> */}
+                          <td className="p-2">{product.sku}</td>
+                          {/* <td className="p-2">{product.color_id.color_name}</td>
+                          <td className="p-2">{product.size_id.size}</td>
+                          <td className="p-2">{product.material_id.name}</td> */}
+                          <td className="p-2">
+                            {product.importPrice.toLocaleString("en-US")} đ
+                          </td>
+                          <td className="p-2">
+                            {(
+                              ((product.importPrice * updateSalePercentage) /
+                                100) *
+                              (1 - updateDiscount / 100)
+                            ).toLocaleString("en-US")}{" "}
+                            đ
+                          </td>
                         </tr>
-                      )
-                    )}
+                      ))}
                   </tbody>
                 </table>
                 <Pagination
-                  page={Math.ceil(TABLE_ROWS.length / 6)}
+                  count={Math.ceil(
+                    import_products?.object?.filter(
+                      (product) => product.product_id.id === updateFilterId
+                    ).length / 6
+                  )}
                   active={subActive}
                   setActive={setSubActive}
                 />
@@ -412,29 +601,28 @@ const OnsaleProduct = () => {
           </Container>
         }
       >
-        <div className="w-8/12 flex items-center justify-between gap-8">
+        <div className="w-7/12 flex items-center justify-between gap-4">
           <Button
-            className=" !border-gray-300 w-full"
-            color="gray"
+            className="w-full border-gray-400"
             variant="outlined"
             onClick={handleOpens}
           >
-            Nhập giá hàng loạt
+            Nhập nhiều
           </Button>
           <Button
-            className=" !border-gray-300 w-full"
-            color="gray"
+            className="w-full border-gray-400"
             variant="outlined"
             onClick={handleOpen}
           >
-            Nhập giá sản phẩm
+            Nhập đơn
           </Button>
-          <Input
-            size="sm"
+          <TextField
+            size="small"
+            className="w-full"
             label="Tìm kiếm"
             iconFamily="material-icons"
             iconName="search"
-            placeholder="Tìm kiếm sản phẩm"
+            placeholder="Tìm kiếm lần nhập"
           />
 
           {/* <Select label="Phân loại theo">
@@ -447,338 +635,448 @@ const OnsaleProduct = () => {
             </Select> */}
         </div>
       </AdminLayout>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        size="lg"
-        className="overflow-y-auto"
-      >
-        <DialogHeader className="pb-0 flex justify-between">
-          <Typography variant="h4">Nhập giá sản phẩm</Typography>
+      <Dialog maxWidth="xl" open={open} onClose={handleCloseOpen}>
+        <DialogTitle className="pb-0 flex justify-between">
+          <Typography variant="h5">Nhập giá từng sản phẩm</Typography>
           <IconButton
             className="border-none"
             variant="outlined"
-            onClick={handleOpen}
+            onClick={handleCloseOpen}
           >
             <CloseIcon />
           </IconButton>
-        </DialogHeader>
-        <DialogBody>
-          <Container>
-            <div>
-              <Typography
-                variant="h4"
-                color="blue-gray"
-                className="font-bold text-center mb-5"
-              >
-                Thông tin nhập
-              </Typography>
-              <div className="mx-auto grid grid-cols-2 gap-8 mb-5">
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Loại nhập:
-                  </Typography>
-                  <div>
-                    <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={filter}
-                      onChange={(e) => setFilter(e)}
-                    >
-                      {filter_items.map((item, index) => (
-                        <Option key={index} value={item.value}>
-                          {item.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Tên:
-                  </Typography>
-                  <div>
-                    <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    >
-                      <Option value="Áo thun nam">Áo thun nam</Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Giá trị gia tăng:
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Giảm giá:
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày áp dụng
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      type="date"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày kết thúc
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      type="date"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Divider />
-            <div>
-              <Typography
-                variant="h4"
-                color="blue-gray"
-                className="font-bold text-center mt-5 mb-5"
-              >
-                Xem trước
-              </Typography>
-              <table className="w-full min-w-max table-auto text-left">
-                <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
-                <tbody>
-                  {TABLE_ROWS.slice(0, 1).map((row, index) => (
-                    <tr
-                      key={index}
-                      className="text-center border-b border-gray-200"
-                    >
-                      {Object.values(row).map((value, index) => (
-                        <td className="p-2" key={index}>
-                          {value}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Container>
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
-      <Dialog open={opens} handler={handleOpens} size="xl">
-        <DialogHeader className="pb-0 flex justify-between">
-          <Typography variant="h4">Nhập giá hàng loạt</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleOpens}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogHeader>
-        <DialogBody>
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-5">
+              <div className="col-span-5 grid grid-cols-2 gap-4">
                 <Typography
                   variant="h4"
                   color="blue-gray"
-                  className="font-bold col-span-3 text-center mb-5"
+                  className="font-bold text-center col-span-2"
                 >
                   Thông tin nhập
                 </Typography>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Loại nhập:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Tên:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
+                <div className="w-full col-span-2">
+                  <FormControl size="medium" fullWidth required>
+                    <InputLabel id="demo-simple-select-label2">Tên</InputLabel>
+                    <Select
+                      label="Tên"
+                      labelId="demo-simple-select-label2"
+                      id="demo-simple-select2"
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                    >
+                      {products?.object?.map((product, index) => (
+                        <MenuItem key={index} value={product.id}>
+                          {product.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Giá trị gia tăng:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Giảm giá:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
+                <div>
+                  <TextField
+                    className="w-full"
+                    label="Giá trị gia tăng"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    }}
+                    required
+                    size="medium"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={price}
+                    onChange={(e) =>
+                      setPrice(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày áp dụng
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
+                <div>
+                  <TextField
+                    className="w-full"
+                    label="Giảm giá"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    }}
+                    required
+                    size="medium"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={discount}
+                    onChange={(e) =>
+                      setDiscount(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 100
+                          ? 100
+                          : e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Ngày áp dụng"
+                        slotProps={{
+                          textField: { size: "medium", required: true },
                         }}
+                        value={startDate}
+                        onChange={(newValue) => setStartDate(newValue)}
                       />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày kết thúc
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Ngày kết thúc"
+                        slotProps={{
+                          textField: {
+                            size: "medium",
+                          },
                         }}
+                        value={endDate}
+                        onChange={(newValue) => setEndDate(newValue)}
                       />
-                    </div>
-                  </div>
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="h-full">
+                  <Button
+                    variant="outlined"
+                    color="white"
+                    className="h-full bg-green-600"
+                    onClick={handleAddImportedProduct}
+                  >
+                    Áp dụng
+                  </Button>
+                </div>
+                <div className="flex justify-end gap-8">
+                  <Button
+                    variant="contained"
+                    color="red"
+                    onClick={handleResetAddImportedProduct}
+                  >
+                    Hủy
+                  </Button>
                 </div>
               </div>
               <div className="col-span-7">
                 <Typography
                   variant="h4"
                   color="blue-gray"
-                  className="font-bold text-center mb-5"
+                  className="font-bold text-center !mb-5"
                 >
                   Danh sách sản phẩm
                 </Typography>
                 <table className="w-full text-center table-auto ">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                   <tbody>
-                    {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(
-                      (row, index) => (
+                    {import_products?.object
+                      ?.filter((product) => product.product_id.id === value)
+                      .map((product, index) => (
                         <tr
                           key={index}
                           className="text-center border-b border-gray-200"
                         >
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
-                              {value}
-                            </td>
-                          ))}
+                          {/* <td className="p-2">{product.id}</td> */}
+                          <td className="p-2">{product.sku}</td>
+                          {/* <td className="p-2">{product.color_id.color_name}</td>
+                          <td className="p-2">{product.size_id.size}</td>
+                          <td className="p-2">{product.material_id.name}</td> */}
+                          <td className="p-2">
+                            {product.importPrice.toLocaleString("en-US")} đ
+                          </td>
+                          <td className="p-2">
+                            {(
+                              ((product.importPrice * price) / 100) *
+                              (1 - discount / 100)
+                            ).toLocaleString("en-US")}{" "}
+                            đ
+                          </td>
                         </tr>
-                      )
-                    )}
+                      ))}
                   </tbody>
                 </table>
-                <Pagination
-                  page={Math.ceil(TABLE_ROWS.length / 6)}
-                  active={subActive}
-                  setActive={setSubActive}
-                />
+                <div className="flex justify-between mt-3">
+                  <Typography variant="p">
+                    Tất cả:{" "}
+                    {
+                      import_products?.object?.filter(
+                        (product) => product.product_id.id === value
+                      ).length
+                    }{" "}
+                    lô hàng
+                  </Typography>
+                  {Math.ceil(
+                    import_products?.object?.filter(
+                      (product) => product.product_id.id === value
+                    ).length / 5
+                  ) > 1 && (
+                    <Pagination
+                      count={Math.ceil(
+                        import_products?.object?.filter(
+                          (product) => product.product_id.id === value
+                        ).length / 5
+                      )}
+                      page={subActive}
+                      onChange={(e, value) => setSubActive(value)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </Container>
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleDetailOpen}
-            className="mr-1"
+        </DialogContent>
+      </Dialog>
+      <Dialog maxWidth="xl" open={opens} onClose={handleCloseOpens}>
+        <DialogTitle className="pb-0 flex justify-between">
+          <Typography variant="h5">Nhập giá nhiều sản phẩm</Typography>
+          <IconButton
+            className="border-none"
+            variant="outlined"
+            onClick={handleCloseOpens}
           >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleDetailOpen}>
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Container>
+            <div className="grid grid-cols-12 gap-8">
+              <div className="col-span-5 grid grid-cols-2 gap-4">
+                <Typography
+                  variant="h6"
+                  color="blue-gray"
+                  className="font-bold text-center col-span-2"
+                >
+                  Thông tin nhập
+                </Typography>
+                <FormControl size="medium" fullWidth required>
+                  <InputLabel id="demo-simple-select-label1">
+                    Loại nhập
+                  </InputLabel>
+                  <Select
+                    label="Loại nhập"
+                    labelId="demo-simple-select-label1"
+                    id="demo-simple-select1"
+                    value={filters}
+                    onChange={(e) => setFilters(e.target.value)}
+                  >
+                    {filter_items.map((item, index) => (
+                      <MenuItem key={index} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <div className="w-full">
+                  <FormControl size="medium" fullWidth required>
+                    <InputLabel id="demo-simple-select-label2" className="">
+                      Tên
+                    </InputLabel>
+                    <Select
+                      label="Tên"
+                      labelId="demo-simple-select-label2"
+                      id="demo-simple-select2"
+                      disabled={filters === "ALL"}
+                      value={values}
+                      onChange={(e) => setValues(e.target.value)}
+                    >
+                      {filters === "PRODUCT" &&
+                        products?.object?.map((brand, index) => (
+                          <MenuItem key={index} value={brand.id}>
+                            {brand.name}
+                          </MenuItem>
+                        ))}
+                      {filters === "BRAND" &&
+                        brands?.object?.map((brand, index) => (
+                          <MenuItem key={index} value={brand.id}>
+                            {brand.name}
+                          </MenuItem>
+                        ))}
+                      {filters === "CATEGORY" &&
+                        categories?.object?.map((category, index) => (
+                          <MenuItem key={index} value={category.id}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      {filters === "COLOR" &&
+                        colors?.object?.map((color, index) => (
+                          <MenuItem key={index} value={color.id}>
+                            {color.color_name}
+                          </MenuItem>
+                        ))}
+                      {filters === "SIZE" &&
+                        sizes?.object?.map((size, index) => (
+                          <MenuItem key={index} value={size.id}>
+                            {size.size}
+                          </MenuItem>
+                        ))}
+                      {filters === "MATERIAL" &&
+                        materials?.object?.map((material, index) => (
+                          <MenuItem key={index} value={material.id}>
+                            {material.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </div>
+                <div>
+                  <TextField
+                    className="w-full"
+                    label="Giá trị gia tăng"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    }}
+                    required
+                    size="medium"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={prices}
+                    onChange={(e) =>
+                      setPrices(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <TextField
+                    className="w-full"
+                    label="Giảm giá"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                    }}
+                    required
+                    size="medium"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={discounts}
+                    onChange={(e) =>
+                      setDiscounts(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 100
+                          ? 100
+                          : e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Ngày áp dụng"
+                        slotProps={{
+                          textField: { size: "medium", required: true },
+                        }}
+                        onChange={(newValue) => setStartDates(newValue)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Ngày kết thúc"
+                        slotProps={{
+                          textField: {
+                            size: "medium",
+                            required: true,
+                          },
+                        }}
+                        onChange={(newValue) => setEndDates(newValue)}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="flex justify-end gap-8 col-span-2">
+                  <Button
+                    variant="outlined"
+                    color="red"
+                    onClick={handleResetAddImportedProducts}
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="green"
+                    className="h-full"
+                    onClick={handleAddImportedProducts}
+                  >
+                    Áp dụng
+                  </Button>
+                </div>
+              </div>
+              <div className="col-span-7">
+                <Typography
+                  variant="h4"
+                  color="blue-gray"
+                  className="font-bold text-center !mb-5"
+                >
+                  Danh sách sản phẩm
+                </Typography>
+                <table className="w-full text-center table-auto ">
+                  <TableHeader
+                    noDelete
+                    noUpdate
+                    TABLE_HEAD={changePricesList}
+                  />
+                  <tbody>
+                    {import_product &&
+                      import_product.length > 0 &&
+                      import_product
+                        .slice((subActive - 1) * 5, subActive * 5)
+                        .map((row, index) => (
+                          <tr
+                            key={index}
+                            className="text-center border-b border-gray-200"
+                          >
+                            {Object.values(row).map((value, index) => (
+                              <td className="p-2" key={index}>
+                                {value}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                  </tbody>
+                </table>
+                <div className="flex justify-between mt-3">
+                  <Typography variant="p">
+                    Total: {import_product?.length || 0} items
+                  </Typography>
+                  {Math.ceil((import_product?.length || 0) / 5) > 1 && (
+                    <Pagination
+                      count={Math.ceil(TABLE_ROWS.length / 5)}
+                      page={subActive}
+                      onChange={(e, value) => setSubActive(value)}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </Container>
+        </DialogContent>
       </Dialog>
     </>
   );

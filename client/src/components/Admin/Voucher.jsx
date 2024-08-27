@@ -28,6 +28,9 @@ import Pagination from "../shared/Pagination";
 import TableHeader from "../shared/TableHeader";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGetVouchersQuery } from "../../apis/VoucherApi";
+import Loading from "../shared/Loading";
+import Errorpage from "../../pages/Errorpage";
 const TABLE_ROWS = [
   {
     name: "001",
@@ -102,6 +105,14 @@ const Voucher = () => {
   const [opens, setOpens] = React.useState(false);
   const handleOpen = () => setOpen(!open);
   const handleOpens = () => setOpens(!opens);
+  const {
+    data: vouchers,
+    isLoading: vouchersLoading,
+    isError: vouchersError,
+  } = useGetVouchersQuery();
+  if (vouchersLoading) return <Loading />;
+  if (vouchersError) return <Errorpage />;
+  console.log(vouchers);
   return (
     <>
       <AdminLayout

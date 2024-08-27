@@ -58,24 +58,26 @@ const Table = ({
               .slice((active - 1) * 6, active * 6)
               .map((row, index) => (
                 <tr key={index} className="border-b border-gray-200">
-                  {Object.values(row).map((value, index1) => (
-                    <td
-                      key={index1}
-                      className="p-4"
-                      onClick={() => {
-                        handleDetailOpen(), dispatch(setSelectedId(row.id));
-                      }}
-                      colSpan={index1 == 0 ? 1 : TABLE_HEAD[index1 - 1].col}
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
+                  {Object.values(row)
+                    .slice(1)
+                    .map((value, index1) => (
+                      <td
+                        key={index1}
+                        className="p-4"
+                        onClick={() => {
+                          handleDetailOpen(), dispatch(setSelectedId(row.id));
+                        }}
+                        colSpan={TABLE_HEAD[index1].col}
                       >
-                        {value}
-                      </Typography>
-                    </td>
-                  ))}
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {value}
+                        </Typography>
+                      </td>
+                    ))}
                   {(!noDelete || !noUpdate) && (
                     <SettingButton
                       id={row.id}

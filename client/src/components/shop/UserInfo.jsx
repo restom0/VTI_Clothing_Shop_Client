@@ -2,21 +2,21 @@ import {
   Avatar,
   Button,
   Card,
-  CardBody,
-  CardFooter,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverHandler,
+  CardContent,
+  CardActions,
   Radio,
-  Select,
   Typography,
-  Option,
   Chip,
   Switch,
-} from "@material-tailwind/react";
-import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useCountries } from "use-react-countries";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -28,16 +28,148 @@ import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CountrySelect from "../CountrySelect";
+import dayjs from "dayjs";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { TextField } from "@mui/material";
+import {
+  useGetUserProfileQuery,
+  useUpdatePasswordMutation,
+  useUpdateUserProfileMutation,
+} from "../../apis/UserApi";
+import Loading from "../shared/Loading";
+import ImageUpload from "../ImageUpload";
+import { handleDelete } from "../../utils/deleteImage";
+import { Toast } from "../../configs/SweetAlert2";
 
 const UserInfo = () => {
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [birthday, setBirthday] = useState(null);
+  const [gender, setGender] = useState("");
+  const [confirmChange, setConfirmChange] = useState(false);
   const [date, setDate] = React.useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [avatar, setAvatar] = useState(null);
+  const [publicId, setPublicId] = useState("");
   const { countries } = useCountries();
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [reTypePassword, setReTypePassword] = useState("");
   const [isGoogleLinked, setIsGoogleLinked] = React.useState(false);
+  const { data: user, isLoading, isError } = useGetUserProfileQuery();
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenClick = () => {
+    setOpen(true);
+  };
+  const [openAdd, setOpenAdd] = useState(false);
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
+  };
+  const handleAddClick = () => {
+    setOpenAdd(true);
+  };
+  const [
+    updatePassword,
+    { isLoading: isUpdatePassword, isError: updatePassswordError },
+  ] = useUpdatePasswordMutation();
+
+  const [
+    updateProfile,
+    { isLoading: isUpdateProfile, isError: updateProfileError },
+  ] = useUpdateUserProfileMutation();
+
+  useEffect(() => {
+    if (user?.object) {
+      setName(user.object.name);
+      setBirthday(dayjs(user.object.birthday));
+
+      setGender(user.object.gender);
+      setEmail(user.object.email);
+      setPhone(user.object.phone_number);
+      setAddress(user.object.address);
+    }
+  }, [user]);
+  if (isLoading) return <Loading />;
+  else if (isError) return <div>Error</div>;
+  const handleConfirmChange = () => {
+    setEmail(user.object.email);
+    setPhone(user.object.phone_number);
+    setAddress(user.object.address);
+    setConfirmChange(!confirmChange);
+  };
+  const handleChangePassword = async () => {
+    if (newPassword !== reTypePassword) {
+      Toast.fire({
+        icon: "error",
+        title: "Mật khẩu không khớp",
+      });
+      return;
+    }
+    try {
+      const response = await updatePassword({
+        password,
+        newPassword,
+      }).unwrap();
+
+      if (response.statusCode === 200) {
+        Toast.fire({
+          icon: "success",
+          title: response.message || "Đổi mật khẩu thành công",
+        }).then(() => {
+          setPassword("");
+          setNewPassword("");
+          setReTypePassword("");
+          handleClose();
+        });
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error?.data?.message || "An error occurred",
+      });
+    }
+  };
+  const handleChangeProfile = async () => {
+    try {
+      const response = await updateProfile({
+        name,
+        email,
+        gender,
+        phone_number: phone,
+        address,
+        birthday: dayjs(birthday).format("YYYY-MM-DD"),
+        avatar_url: avatar ? avatar : user?.object.avatar_url,
+        public_id_avatar_url: publicId
+          ? publicId
+          : user?.object.public_id_avatar_url,
+      }).unwrap();
+      if (response.statusCode === 200) {
+        Toast.fire({
+          icon: "success",
+          title: response.message || "Cập nhật thông tin thành công",
+        });
+      }
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error?.data?.message || "An error occurred",
+      });
+    }
+  };
   return (
     <>
-      <Card className="mt-7 h-full w-full border-t-2">
-        <CardBody>
+      <Card className="h-full w-full border-t-2 p-2">
+        <CardContent>
           <div className="grid grid-cols-12 gap-8">
             <Typography
               variant="h5"
@@ -55,42 +187,75 @@ const UserInfo = () => {
             </Typography>
           </div>
           <div className="grid grid-cols-12 gap-8">
-            <div className="col-span-7 grid grid-cols-3 mt-5">
+            <div className="col-span-7 grid grid-cols-3 mt-5 gap-4">
               <Avatar
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
+                src={avatar ? avatar : user?.object.avatar_url}
                 alt="avatar"
-                size="xxl"
+                className="mx-auto my-auto"
+                sx={{ width: 100, height: 100 }}
+                onClick={handleAddClick}
               />
               <div className="col-span-2 grid grid-cols-6 my-auto gap-4">
-                <Typography variant="h6" className="col-span-2 my-auto">
+                <Typography
+                  variant="small"
+                  color="gray"
+                  className="col-span-2 !my-auto"
+                >
                   Họ và tên
                 </Typography>
-                <div className="col-span-4 ">
-                  <Input
-                    value={"Rạng Thái"}
-                    type="text"
-                    placeholder="Name"
-                    className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
-                    labelProps={{
-                      className: "hidden",
-                    }}
-                    // containerProps={{ className: "min-w-[100px]" }}
+                <div className="col-span-4">
+                  <TextField
+                    className="w-full"
+                    size="small"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
-                <Typography variant="h6" className="col-span-2 my-auto">
-                  Tài khoản
-                </Typography>
+                <div className="my-auto col-span-2">
+                  <Typography variant="small" color="gray">
+                    Ngày sinh
+                  </Typography>
+                </div>
                 <div className="col-span-4">
-                  <Input
-                    value={"restom0"}
-                    type="text"
-                    placeholder="Name"
-                    className=" !border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
-                    labelProps={{
-                      className: "hidden",
-                    }}
-                    // containerProps={{ className: "min-w-[100px]" }}
-                  />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        className="w-full"
+                        value={birthday}
+                        onChange={(e) => setBirthday(e)}
+                        format="DD/MM/YYYY"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </div>
+                <div className="my-auto col-span-2">
+                  <Typography variant="small" color="gray">
+                    Giới tính
+                  </Typography>
+                </div>
+                <div className="col-span-4">
+                  <FormControl>
+                    <RadioGroup
+                      aria-labelledby="demo-controlled-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      row
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <FormControlLabel
+                        value="FEMAlE"
+                        control={<Radio />}
+                        label="Nữ"
+                      />
+                      <FormControlLabel
+                        value="MALE"
+                        control={<Radio />}
+                        label="Nam"
+                      />
+                    </RadioGroup>
+                  </FormControl>
                 </div>
                 {/* <div className="flex items-center">
                   <Typography variant="h6" className="my-auto">
@@ -108,6 +273,90 @@ const UserInfo = () => {
                   />
                 </div> */}
               </div>
+
+              <div className="col-span-3 grid grid-cols-12 gap-4">
+                <Typography
+                  variant="h5"
+                  color="blue-gray"
+                  className="col-span-8"
+                >
+                  Địa chỉ liên lạc
+                </Typography>
+                <div className="col-span-4 my-auto">
+                  <Button
+                    size="sm"
+                    variant="outlined"
+                    className="w-full"
+                    color={confirmChange ? "error" : "primary"}
+                    onClick={handleConfirmChange}
+                  >
+                    {confirmChange === false ? "Thay đổi" : "Hủy"}
+                  </Button>
+                </div>
+                <Typography
+                  variant="small"
+                  className="col-span-4 !my-auto !mx-auto"
+                >
+                  <MailOutlineIcon />
+                </Typography>
+                <div className="col-span-8">
+                  <TextField
+                    className="w-full"
+                    size="small"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={email}
+                    disabled={confirmChange === false}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <Typography
+                  variant="small"
+                  className="col-span-4 !my-auto !mx-auto"
+                >
+                  <LocalPhoneOutlinedIcon />
+                </Typography>
+                <div className="col-span-8">
+                  <TextField
+                    className="w-full"
+                    size="small"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={phone}
+                    disabled={confirmChange === false}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+                <Typography
+                  variant="small"
+                  className="col-span-4 !my-auto !mx-auto"
+                >
+                  <FmdGoodOutlinedIcon />
+                </Typography>
+                <div className="col-span-8">
+                  <TextField
+                    className="w-full"
+                    size="small"
+                    id="outlined-basic"
+                    variant="outlined"
+                    value={address}
+                    disabled={!confirmChange}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                <div className="mx-auto col-span-12">
+                  <Button
+                    className="mx-auto"
+                    size="large"
+                    onClick={handleChangeProfile}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                  <Button className="mx-auto" color="error" size="large">
+                    Hủy
+                  </Button>
+                </div>
+              </div>
             </div>
             <div className="col-span-5">
               <div className="grid grid-cols-2 gap-8 my-auto mt-5">
@@ -119,7 +368,7 @@ const UserInfo = () => {
                   {isGoogleLinked ? (
                     <Chip color="green" value="Đã liên kết" />
                   ) : (
-                    <Button className="w-full" variant="outlined" color="blue">
+                    <Button className="w-full" variant="outlined">
                       Liên kết
                     </Button>
                   )}
@@ -132,291 +381,212 @@ const UserInfo = () => {
                   {isGoogleLinked ? (
                     <Chip color="green" value="Đã liên kết" />
                   ) : (
-                    <Button className="w-full" variant="outlined" color="blue">
+                    <Button className="w-full" variant="outlined">
                       Liên kết
                     </Button>
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-        </CardBody>
-        <CardFooter className="pt-0">
-          <div className="grid grid-cols-12 gap-8">
-            <div className="grid grid-cols-3 col-span-7 gap-4 mt-5">
-              <div className="mt-2 mx-auto">
-                <Typography variant="h6" className="my-auto">
-                  Ngày sinh
-                </Typography>
-              </div>
-              <div className="col-span-2">
-                <Popover placement="bottom">
-                  <PopoverHandler>
-                    <Input
-                      label="Select a Date"
-                      onChange={() => null}
-                      value={date ? format(date, "PPP") : ""}
-                    />
-                  </PopoverHandler>
-                  <PopoverContent>
-                    <DayPicker
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      showOutsideDays
-                      className="border-0"
-                      classNames={{
-                        caption:
-                          "flex justify-center py-2 mb-4 relative items-center",
-                        caption_label: "text-sm font-medium text-gray-900",
-                        nav: "flex items-center",
-                        nav_button:
-                          "h-6 w-6 bg-transparent hover:bg-blue-gray-50 p-1 rounded-md transition-colors duration-300",
-                        nav_button_previous: "absolute left-1.5",
-                        nav_button_next: "absolute right-1.5",
-                        table: "w-full border-collapse",
-                        head_row: "flex font-medium text-gray-900",
-                        head_cell: "m-0.5 w-9 font-normal text-sm",
-                        row: "flex w-full mt-2",
-                        cell: "text-gray-600 rounded-md h-9 w-9 text-center text-sm p-0 m-0.5 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-gray-900/20 [&:has([aria-selected].day-outside)]:text-white [&:has([aria-selected])]:bg-gray-900/50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-9 w-9 p-0 font-normal",
-                        day_range_end: "day-range-end",
-                        day_selected:
-                          "rounded-md bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
-                        day_today: "rounded-md bg-gray-200 text-gray-900",
-                        day_outside:
-                          "day-outside text-gray-500 opacity-50 aria-selected:bg-gray-500 aria-selected:text-gray-900 aria-selected:bg-opacity-10",
-                        day_disabled: "text-gray-500 opacity-50",
-                        day_hidden: "invisible",
-                      }}
-                      components={{
-                        IconLeft: ({ ...props }) => (
-                          <ChevronLeftIcon
-                            {...props}
-                            className="h-4 w-4 stroke-2"
-                          />
-                        ),
-                        IconRight: ({ ...props }) => (
-                          <ChevronRightIcon
-                            {...props}
-                            className="h-4 w-4 stroke-2"
-                          />
-                        ),
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="mt-2 mx-auto">
-                <Typography variant="h6" className="my-auto">
-                  Giới tính
-                </Typography>
-              </div>
-              <div className="col-span-2">
-                <Radio name="type" label="Nam" defaultChecked />
-                <Radio name="type" label="Nữ" />
-              </div>
-              <div className="mt-2 mx-auto">
-                <Typography variant="h6" className="my-auto">
-                  Quốc tịch
-                </Typography>
-              </div>
-              <div className="col-span-2">
-                <Select
-                  size="lg"
-                  label="Select Country"
-                  selected={(element) =>
-                    element &&
-                    React.cloneElement(element, {
-                      disabled: true,
-                      className:
-                        "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
-                    })
-                  }
-                >
-                  {countries.map(({ name, flags }) => (
-                    <Option
-                      key={name}
-                      value={name}
-                      className="flex items-center gap-2"
-                    >
-                      <img
-                        src={flags.svg}
-                        alt={name}
-                        className="h-5 w-5 rounded-full object-cover"
-                      />
-                      {name}
-                    </Option>
-                  ))}
-                </Select>
-                <div className="mt-10 mx-auto">
-                  <Button className="mx-auto" color="blue">
-                    Lưu thay đổi
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="col-span-5 mt-6">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="mb-2 col-span-5"
-              >
-                Địa chỉ liên lạc
-              </Typography>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <MailOutlineIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
-                    >
-                      nguyenvana@gmail.com
-                    </Typography>
-                  </div>
-                </div>
-                <div className="col-span-4 my-auto">
-                  <Button
-                    color="blue"
-                    size="sm"
-                    variant="outlined"
-                    className="w-full"
+                <div className="col-span-2">
+                  <Typography
+                    variant="h5"
+                    color="blue-gray"
+                    className="mb-2 col-span-5"
                   >
-                    Thay đổi
-                  </Button>
-                </div>
-              </div>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <LocalPhoneOutlinedIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
-                    >
-                      0912345678
-                    </Typography>
+                    Bảo mật
+                  </Typography>
+                  <div className="grid grid-cols-12 py-3">
+                    <div className="col-span-8 flex items-center gap-4 my-auto">
+                      <SecurityOutlinedIcon />
+                      <div>
+                        <Typography
+                          variant="small"
+                          color="gray"
+                          className="font-normal w-[160px] break-words"
+                        >
+                          Bảo mật 2 lớp
+                        </Typography>
+                      </div>
+                    </div>
+                    <div className="col-span-4 my-auto mx-auto">
+                      <Switch size={"lg"} />
+                    </div>
                   </div>
-                </div>
-                <div className="col-span-4 my-auto">
-                  <Button
-                    color="blue"
-                    size="sm"
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    Thay đổi
-                  </Button>
-                </div>
-              </div>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <FmdGoodOutlinedIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
+                  <div className="grid grid-cols-12 py-3">
+                    <div className="col-span-8 flex items-center gap-4 my-auto">
+                      <KeyOutlinedIcon />
+                      <div>
+                        <Typography
+                          variant="small"
+                          color="gray"
+                          className="font-normal w-[160px] break-words"
+                        >
+                          Đổi mật khẩu
+                        </Typography>
+                      </div>
+                    </div>
+                    <div
+                      className="col-span-4 my-auto"
+                      onClick={handleOpenClick}
                     >
-                      1 đường số 1, phường 1, quận 1, TP.HCM
-                    </Typography>
+                      <Button
+                        color="error"
+                        size="sm"
+                        variant="outlined"
+                        className="w-full"
+                      >
+                        Thay đổi
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <div className="col-span-4 my-auto">
-                  <Button
-                    color="blue"
-                    size="sm"
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    Thay đổi
-                  </Button>
+                  <div className="grid grid-cols-12 py-3">
+                    <div className="col-span-8 flex items-center gap-4 my-auto">
+                      <HighlightOffOutlinedIcon />
+                      <div>
+                        <Typography
+                          variant="small"
+                          color="gray"
+                          className="font-normal w-[160px] break-words"
+                        >
+                          Xóa tài khoản
+                        </Typography>
+                      </div>
+                    </div>
+                    <div className="col-span-4 my-auto">
+                      <Button
+                        color="error"
+                        size="sm"
+                        variant="outlined"
+                        className="w-full"
+                      >
+                        Xóa
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-12 gap-8">
-            <div className="grid grid-cols-3 col-span-7 gap-4 mt-5"></div>
-            <div className="col-span-5 mt-6">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="mb-2 col-span-5"
-              >
-                Bảo mật
-              </Typography>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <SecurityOutlinedIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
-                    >
-                      Bảo mật 2 lớp
-                    </Typography>
-                  </div>
-                </div>
-                <div className="col-span-4 my-auto mx-auto">
-                  <Switch color="blue" size={"lg"} />
-                </div>
-              </div>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <KeyOutlinedIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
-                    >
-                      Đổi mật khẩu
-                    </Typography>
-                  </div>
-                </div>
-                <div className="col-span-4 my-auto">
-                  <Button
-                    color="red"
-                    size="sm"
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    Thay đổi
-                  </Button>
-                </div>
-              </div>
-              <div className="grid grid-cols-12 py-3">
-                <div className="col-span-8 flex items-center gap-4 my-auto">
-                  <HighlightOffOutlinedIcon />
-                  <div>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="font-normal w-[160px] break-words"
-                    >
-                      Xóa tài khoản
-                    </Typography>
-                  </div>
-                </div>
-                <div className="col-span-4 my-auto">
-                  <Button
-                    color="red"
-                    size="sm"
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    Xóa
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardFooter>
+        </CardContent>
       </Card>
+
+      <Dialog onClose={handleCloseAdd} open={openAdd}>
+        <DialogTitle>Chỉnh sửa hình ảnh</DialogTitle>
+        <DialogContent>
+          {avatar ? (
+            <>
+              <Avatar
+                src={avatar}
+                alt="avatar"
+                className="mx-auto my-auto"
+                sx={{ width: 200, height: 200 }}
+                onClick={handleAddClick}
+              />
+              <Button
+                variant="contained"
+                className="w-full !mt-4"
+                color="error"
+                onClick={() => {
+                  handleDelete({ publicId }), setAvatar(null);
+                }}
+              >
+                Xóa ảnh
+              </Button>
+            </>
+          ) : (
+            <figure className="my-auto mx-auto h-full w-full">
+              <div className="flex items-center  justify-center h-full w-full my-auto">
+                <label
+                  htmlFor="dropzone-file"
+                  className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg
+                      className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 16"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                      />
+                    </svg>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                      <span className="font-semibold">Click to upload</span> or
+                      drag and drop
+                    </p>
+
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                    </p>
+                    <Typography
+                      as="caption"
+                      variant="small"
+                      className="mt-2 text-center font-normal"
+                    >
+                      Hình đại diện
+                    </Typography>
+                  </div>
+                  <ImageUpload
+                    setPublicId={setPublicId}
+                    setAvatar={setAvatar}
+                  />
+                </label>
+              </div>
+            </figure>
+          )}
+        </DialogContent>
+      </Dialog>
+      <Dialog maxWidth="xl" onClose={handleClose} open={open}>
+        <DialogTitle>Đổi mật khẩu</DialogTitle>
+        <DialogContent>
+          <div className="flex flex-col gap-4">
+            <TextField
+              type="password"
+              id="standard-basic1"
+              label="Mật khẩu"
+              variant="standard"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <TextField
+              type="password"
+              id="standard-basic2"
+              label="Mật khẩu mới"
+              variant="standard"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <TextField
+              type="password"
+              id="standard-basic3"
+              label="Nhập lại mật khẩu mới"
+              variant="standard"
+              value={reTypePassword}
+              onChange={(e) => setReTypePassword(e.target.value)}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleChangePassword}
+            disable={
+              password === "" ||
+              newPassword === "" ||
+              reTypePassword === "" ||
+              isUpdatePassword
+            }
+            loading={isUpdatePassword}
+            color="primary"
+          >
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

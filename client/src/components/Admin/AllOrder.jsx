@@ -16,7 +16,7 @@ import {
   Option,
   CardBody,
 } from "@material-tailwind/react";
-import { Container, Divider, Rating } from "@mui/material";
+import { Container, Divider, Rating, TextField } from "@mui/material";
 import { useState } from "react";
 import { allorder_tab } from "../../constants/tab";
 import { allorder } from "../../constants/table_head";
@@ -75,6 +75,7 @@ const AllOrder = () => {
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         noUpdate
+        noDelete
         size="xl"
         headerDetail="Chi tiết đơn hàng #001"
         overflow
@@ -273,11 +274,12 @@ const AllOrder = () => {
         }
       >
         <div className="flex items-center justify-between gap-4">
-          <Input
-            size="sm"
-            label="Tìm kiếm"
-            iconFamily="material-icons"
-            iconName="search"
+          <TextField
+            className="w-full"
+            size="small"
+            label="Tìm kiếm sản phẩm"
+            variant="outlined"
+            autoComplete="off"
             placeholder="Tìm kiếm sản phẩm"
           />
         </div>

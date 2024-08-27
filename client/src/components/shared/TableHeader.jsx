@@ -28,7 +28,7 @@ const TableHeader = ({ TABLE_HEAD, noUpdate, noDelete }) => {
     <>
       <thead>
         <tr className="text-gray-900  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <th
+          {/* <th
             className=" border-blue-gray-100 cursor-pointer bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
             onClick={() => handleHeaderClick(0)}
           >
@@ -36,7 +36,7 @@ const TableHeader = ({ TABLE_HEAD, noUpdate, noDelete }) => {
               Mã số
               <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
             </Typography>
-          </th>
+          </th> */}
           {TABLE_HEAD.map(({ label, col }, index) => (
             <th
               key={index}

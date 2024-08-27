@@ -20,11 +20,14 @@ export const importedProductApi = createApi({
       providesTags: ["ImportedProduct"],
     }),
     getImportedProduct: builder.query({
-      query: (filter, id) => `${filter}/${id}`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      query: ({ filter, id }) => ({
+        url: `${filter}/${id || 0}`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+
       providesTags: (result, error, id) => [{ type: "ImportedProduct", id }],
     }),
     addImportedProduct: builder.mutation({

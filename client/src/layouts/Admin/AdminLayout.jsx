@@ -1,12 +1,8 @@
 import {
   Button,
   Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   IconButton,
   Typography,
-  Dialog,
   Tooltip,
   Input,
   Tabs,
@@ -15,7 +11,14 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
-import { Container, Rating } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
+  Container,
+  Rating,
+} from "@mui/material";
 import React, { useState } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -61,13 +64,18 @@ const AdminLayout = ({
     handleDetailOpen,
     handleUpdateOpen,
     handleDeleteOpen,
+    handleDetailClose,
+    handleUpdateClose,
+    handleDeleteClose,
   } = useOpen();
   React.useEffect(() => {
     if (deleteOpen) {
       Swal.fire({
         title:
           "Bạn có chắc chắn muốn xóa?" +
-          (selectedId === -1 ? "" : TABLE_ROWS.find(row => row.id === selectedId)?.name || ""),
+          (selectedId === -1
+            ? ""
+            : TABLE_ROWS.find((row) => row.id === selectedId)?.name || ""),
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xác nhận",
@@ -78,15 +86,15 @@ const AdminLayout = ({
         if (result.isConfirmed) {
           handleDeleteSubmit();
         }
-        handleDeleteOpen();
+        handleDeleteClose();
       });
     }
   }, [
     deleteOpen,
-    handleDeleteOpen,
     TABLE_ROWS,
     selectedId,
     handleDeleteSubmit,
+    handleDeleteClose,
   ]);
   const handleUpdateSubmit = async () => {
     try {
@@ -96,7 +104,7 @@ const AdminLayout = ({
           icon: "success",
           title: "Cập nhật thành công",
         }).then(() => {
-          handleUpdateOpen();
+          handleUpdateClose();
         });
       }
     } catch (err) {
@@ -148,46 +156,50 @@ const AdminLayout = ({
       </Container>
       <Dialog
         open={detailOpen}
-        handler={handleDetailOpen}
-        size={size}
+        onClose={handleDetailClose}
+        maxWidth={size}
         className={overflow ? "h-[80vh] overflow-auto" : ""}
       >
-        <DialogHeader>{headerDetail}</DialogHeader>
-        <DialogBody>{bodyDetail}</DialogBody>
-        <div className="flex items-center justify-end">
+        <DialogTitle>
+          <Typography variant="h4">{headerDetail}</Typography>
+        </DialogTitle>
+        <DialogContent>{bodyDetail}</DialogContent>
+        <DialogActions className="flex items-center justify-end">
           {!noUpdate && (
-            <DialogFooter>
-              <Button
-                variant="gradient"
-                color="green"
-                onClick={() => {
-                  handleDetailOpen(), handleUpdateOpen();
-                }}
-              >
-                <span>Cập nhật</span>
-              </Button>
-            </DialogFooter>
+            <Button
+              variant="gradient"
+              color="green"
+              onClick={() => {
+                handleDetailClose(), handleUpdateOpen();
+              }}
+            >
+              <span>Cập nhật</span>
+            </Button>
           )}
           {!noDelete && (
-            <DialogFooter>
-              <Button
-                variant="gradient"
-                color="red"
-                loading={isDeleted}
-                onClick={() => {
-                  handleDetailOpen(), handleDeleteOpen();
-                }}
-              >
-                <span>Xóa</span>
-              </Button>
-            </DialogFooter>
+            <Button
+              variant="gradient"
+              color="red"
+              loading={isDeleted}
+              onClick={() => {
+                handleDetailClose(), handleDetailOpen();
+              }}
+            >
+              <span>Xóa</span>
+            </Button>
           )}
-        </div>
+        </DialogActions>
       </Dialog>
-      <Dialog open={updateOpen} handler={handleUpdateOpen} size={sizeUpdate}>
-        <DialogHeader>{headerUpdate}</DialogHeader>
-        <DialogBody>{bodyUpdate}</DialogBody>
-        <DialogFooter>
+      <Dialog
+        open={updateOpen}
+        onClose={handleUpdateClose}
+        maxWidth={sizeUpdate}
+      >
+        <DialogTitle>
+          <Typography variant="h4">{headerUpdate}</Typography>
+        </DialogTitle>
+        <DialogContent>{bodyUpdate}</DialogContent>
+        <DialogActions>
           <Button
             variant="gradient"
             color="green"
@@ -196,7 +208,7 @@ const AdminLayout = ({
           >
             {!isUpdated && <span>Xác nhận</span>}
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </>
   );

@@ -21,14 +21,28 @@ export const InputSaleApi = createApi({
       providesTags: (result, error, id) => [{ type: "InputSale", id }],
     }),
     createInputSale: builder.mutation({
-      query: ({ product_id, quantity }) => ({
+      query: ({
+        filter,
+        filter_id,
+        salePercentage,
+        discount,
+        available_date,
+        end_date,
+      }) => ({
         url: "",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "POST",
-        body: { product_id, quantity },
+        body: {
+          filter,
+          filter_id,
+          salePercentage,
+          discount,
+          available_date,
+          end_date,
+        },
       }),
       invalidatesTags: ["InputSale"],
     }),

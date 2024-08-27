@@ -25,7 +25,47 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    getUserProfile: builder.query({
+      query: () => ({
+        url: "profile",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+      providesTags: ["User-Profile"],
+    }),
+    updatePassword: builder.mutation({
+      query: (data) => ({
+        url: "password",
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+      invalidatesTags: ["User-Profile"],
+    }),
+    updateUserProfile: builder.mutation({
+      query: (data) => ({
+        url: "",
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+      invalidatesTags: ["User-Profile"],
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useDeleteUserMutation } = userApi;
+export const {
+  useGetUsersQuery,
+  useDeleteUserMutation,
+  useGetUserProfileQuery,
+  useUpdatePasswordMutation,
+  useUpdateUserProfileMutation,
+} = userApi;

@@ -15,26 +15,26 @@ export const ProductApi = createApi({
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
     createProduct: builder.mutation({
-      query: ({ name, price, brand_id, category_id }) => ({
+      query: ({ name, short_description, brand_id, category_id }) => ({
         url: "",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: { name, price, brand_id, category_id },
+        body: { name, short_description, brand_id, category_id },
       }),
       invalidatesTags: ["Product"],
     }),
     updateProduct: builder.mutation({
-      query: ({ id, name, price, description, image }) => ({
+      query: ({ id, name, short_description, brand_id, category_id }) => ({
         url: `${id}`,
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: { name, price, description, image },
+        body: { name, short_description, brand_id, category_id },
       }),
       invalidatesTags: ["Product"],
     }),

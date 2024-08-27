@@ -3,7 +3,7 @@ import { Button, Input } from "@material-tailwind/react";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Icon from "../assets/Icon";
-import { Container } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import { accountApi, useLoginMutation } from "../apis/AccountApi";
 import { Toast } from "../configs/SweetAlert2";
 import { useNavigate } from "react-router-dom";
@@ -46,14 +46,21 @@ function Loginpage() {
     }
   };
   const handleLogin = async () => {
-    const message = await login(data);
-    if (message.data.statusCode === 200) {
+    try {
+      const message = await login(data).unwrap();
       Toast.fire({
         icon: "success",
         title: "Đăng nhập thành công",
       }).then(() => {
-        localStorage.setItem("token", message.data.object);
-        navigate("/");
+        localStorage.setItem("avatar", message.object.avatar_url);
+        localStorage.setItem("name", message.object.name);
+        localStorage.setItem("token", message.object.token);
+        navigate(message.object.url);
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Đăng nhập thất bại",
       });
     }
   };
@@ -70,23 +77,28 @@ function Loginpage() {
               <h3 className="text-center text-xl">Đăng nhập</h3>
             </Divider>
             <form className="max-w-sm mx-auto">
-              <div className="mb-5 mt-20">
-                <Input
+              <div className="mb-5 mt-10">
+                <TextField
+                  className="w-full"
                   size="lg"
                   variant="outlined"
                   label="Tên đăng nhập, email hoặc số điện thoại"
                   placeholder="nguyenvana@gmail.com"
+                  autoComplete="off"
+                  required
                   onChange={handleInputChange}
                   value={input}
                 />
               </div>
               <div className="mb-5">
-                <Input
+                <TextField
                   size="lg"
+                  className="w-full"
                   variant="outlined"
                   label="Mật khẩu"
                   placeholder="Mật khẩu"
                   type="password"
+                  required
                   onChange={handlePasswordChange}
                   value={password}
                 />
@@ -117,9 +129,7 @@ function Loginpage() {
             </div>
             <div className="max-w-sm mx-auto mt-5">
               <Button
-                onClick={() => {
-                  window.location.href = "/register";
-                }}
+                onClick={() => navigate("/register")}
                 color="indigo"
                 className="w-full mb-5"
                 loading={isLoading}

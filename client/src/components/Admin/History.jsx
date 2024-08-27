@@ -10,7 +10,6 @@ import {
 import { Container } from "@mui/material";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { history } from "../../constants/table_head";
 import { useGetLogsQuery } from "../../apis/LogApi";
@@ -24,6 +23,7 @@ const History = () => {
     isLoading: isLogsLoading,
     error: logsError,
   } = useGetLogsQuery();
+  const [filter, setFilter] = useState("ALL");
   if (isLogsLoading) return <Loading />;
   if (logsError) return navigate("/error");
   return (
@@ -45,7 +45,14 @@ const History = () => {
                   variant="outlined"
                   className="flex items-center gap-1 !border-gray-300"
                 >
-                  last 24h
+                  {
+                    {
+                      ALL: "Tất cả",
+                      DAY: "Hôm nay",
+                      MONTH: "Tháng này",
+                      YEAR: "Năm nay",
+                    }[filter]
+                  }
                   <ChevronDownIcon
                     strokeWidth={4}
                     className="w-3 h-3 text-gray-900"
@@ -53,11 +60,30 @@ const History = () => {
                 </Button>
               </MenuHandler>
               <MenuList>
-                <MenuItem>last hour</MenuItem>
-                <MenuItem>last 24 hours</MenuItem>
-                <MenuItem>last week</MenuItem>
-                <MenuItem>last month</MenuItem>
-                <MenuItem>all time</MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="ALL"
+                >
+                  Tất cả
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="DAY"
+                >
+                  Hôm nay
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="MONTH"
+                >
+                  Tháng này
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="YEAR"
+                >
+                  Năm nay
+                </MenuItem>
               </MenuList>
             </Menu>
           </div>

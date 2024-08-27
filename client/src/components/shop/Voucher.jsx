@@ -19,9 +19,25 @@ import Pagination from "../shared/Pagination";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/Tablist";
 import { voucher } from "../../constants/tab";
+import {
+  useGetAvailableVouchersQuery,
+  useGetVouchersQuery,
+} from "../../apis/VoucherApi";
+import Loading from "../shared/Loading";
 const Voucher = () => {
   const [tab, setTab] = useState("ALL");
-
+  const {
+    data: vouchers,
+    isLoading: loadingVouchers,
+    isError: errorVouchers,
+  } = useGetVouchersQuery();
+  const {
+    data: availablevoucher,
+    isLoading: loadingAvailableVoucher,
+    isError: errorAvailableVoucher,
+  } = useGetAvailableVouchersQuery();
+  if (loadingVouchers || loadingAvailableVoucher) return <Loading />;
+  if (errorVouchers || errorAvailableVoucher) return <div>Error</div>;
   return (
     <>
       <Card className="rounded-b-none">

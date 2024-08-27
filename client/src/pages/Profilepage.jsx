@@ -1,6 +1,5 @@
 import React from "react";
 import ProfileSidebar from "../components/shared/ProfileSidebar";
-import { Container } from "postcss";
 import { profile_menu } from "../constants/menu_item";
 
 const Profilepage = () => {
@@ -11,9 +10,9 @@ const Profilepage = () => {
         <div>
           <ProfileSidebar tab={tab} setTab={setTab} />
         </div>
-        <Container className="p-5 col-span-3">
+        <div className="px-3 py-3 col-span-3">
           {profile_menu.map(({ link }, index) => tab === index && link)}
-        </Container>
+        </div>
       </div>
     </>
   );

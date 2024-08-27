@@ -1,21 +1,18 @@
+import { Button, Card, IconButton, Typography } from "@material-tailwind/react";
 import {
-  Button,
-  Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Typography,
-  Dialog,
-  Tooltip,
-  Input,
-  Textarea,
-  Radio,
   Select,
-  Option,
-} from "@material-tailwind/react";
-import { Container, Rating } from "@mui/material";
-import React, { useEffect } from "react";
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Rating,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -76,15 +73,20 @@ const ProductList = () => {
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(resetSelectedId());
-  }, [dispatch]);
   const [addOpen, setAddOpen] = React.useState(false);
   const selectedId = useSelector((state) => state.selectedId.value);
-  const name = useSelector((state) => state.name.value);
-  const description = useSelector((state) => state.description.value);
-  const brand = useSelector((state) => state.brand.value);
-  const category = useSelector((state) => state.category.value);
+  // const name = useSelector((state) => state.name.value);
+  // const description = useSelector((state) => state.description.value);
+  // const brand = useSelector((state) => state.brand.value);
+  // const category = useSelector((state) => state.category.value);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [brand, setBrand] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [updateName, setUpdateName] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+  const [updateBrand, setUpdateBrand] = useState(null);
+  const [updateCategory, setUpdateCategory] = useState(null);
 
   const {
     data: products,
@@ -107,14 +109,25 @@ const ProductList = () => {
     useUpdateProductMutation();
   const [deleteProduct, { isLoading: isDeleted, error: deleteError }] =
     useDeleteProductMutation();
-  const handleAddOpen = () => setAddOpen(!addOpen);
+
+  useEffect(() => {
+    if (selectedId !== -1) {
+      const selectedProduct = products?.object.find((p) => p.id === selectedId);
+      setUpdateName(selectedProduct.name);
+      setUpdateDescription(selectedProduct.short_description);
+      setUpdateBrand(selectedProduct.brand_id.id);
+      setUpdateCategory(selectedProduct.category_id.id);
+    }
+  }, [selectedId, products]);
+  const handleAddOpen = () => setAddOpen(true);
+  const handleClose = () => setAddOpen(false);
   const handleAddSubmit = async () => {
     try {
       await addProduct({
         name,
-        description,
-        brand_id: brand.id,
-        category_id: category.id,
+        short_description: description,
+        brand_id: brand,
+        category_id: category,
       })
         .unwrap()
         .then(() => {
@@ -122,11 +135,11 @@ const ProductList = () => {
             icon: "success",
             title: "Thêm sản phẩm thành công",
           }).then(() => {
-            handleAddOpen();
-            dispatch(resetName());
-            dispatch(resetDescription());
-            dispatch(resetBrand());
-            dispatch(resetCategory());
+            handleClose();
+            setName("");
+            setDescription("");
+            setBrand(null);
+            setCategory(null);
           });
         });
     } catch (err) {
@@ -144,22 +157,17 @@ const ProductList = () => {
 
   const updateSubmit = async () => {
     const message = await updateProduct({
-      id: products.object[selectedId].id,
-      name: name,
-      brand_id: brand.id,
-      category_id: category.id,
+      id: selectedId,
+      name: updateName,
+      brand_id: updateBrand,
+      category_id: updateCategory,
+      short_description: updateDescription,
     });
-    if (message.data.statusCode === 200) {
-      dispatch(resetName());
-      dispatch(resetDescription());
-      dispatch(resetBrand());
-      dispatch(resetCategory());
-    }
     return message;
   };
   const handleDeleteSubmit = async () => {
     try {
-      const message = await deleteProduct(products.object[selectedId].id);
+      const message = await deleteProduct(selectedId);
       if (message.data.statusCode === 200) {
         Toast.fire({
           icon: "success",
@@ -178,15 +186,15 @@ const ProductList = () => {
   if (isError_Brand || isError_Category || isError_Product)
     return navigate("/error");
   const ListProduct = [];
-  products &&
-    products.object.map((item, index) => {
-      ListProduct.push({
-        id: item.id,
-        name: item.name,
-        brand: item.brand_id.name,
-        category: item.category_id.name,
-      });
+  products && products.object.length > 0;
+  products.object.map((item, index) => {
+    ListProduct.push({
+      id: item.id,
+      name: item.name,
+      brand: item.brand_id.name,
+      category: item.category_id.name,
     });
+  });
   return (
     <>
       <AdminLayout
@@ -196,7 +204,7 @@ const ProductList = () => {
         deleteContent="Xóa sản phẩm"
         updateContent="Chỉnh sửa sản phẩm"
         size="xl"
-        headerDetail={"Chi tiết sản phẩm #" + "001"}
+        headerDetail={"Chi tiết sản phẩm"}
         bodyDetail={
           <section className="px-8 h-[65vh] overflow-auto">
             <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
@@ -323,29 +331,29 @@ const ProductList = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2">
-                  <Dialog open={open} handler={handleOpen}>
-                    <DialogHeader className="pb-0 flex justify-between">
+                  <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle className="pb-0 flex justify-between">
                       <Typography variant="h4">Nhập giá sản phẩm</Typography>
                       <IconButton
                         className="border-none"
                         variant="outlined"
-                        onClick={handleOpen}
+                        onClose={handleClose}
                       >
                         <CloseIcon />
                       </IconButton>
-                    </DialogHeader>
-                    <DialogBody>
+                    </DialogTitle>
+                    <DialogContent>
                       The key to more success is to have a lot of pillows. Put
                       it this way, it took me twenty five years to get these
                       plants, twenty five years of blood sweat and tears, and
                       I&apos;m never giving up, I&apos;m just getting started.
                       I&apos;m up to something. Fan luv.
-                    </DialogBody>
-                    <DialogFooter>
+                    </DialogContent>
+                    <DialogActions>
                       <Button
                         variant="text"
                         color="red"
-                        onClick={handleOpen}
+                        onClose={handleClose}
                         className="mr-1"
                       >
                         <span>Cancel</span>
@@ -353,18 +361,18 @@ const ProductList = () => {
                       <Button
                         variant="gradient"
                         color="green"
-                        onClick={handleOpen}
+                        onClose={handleClose}
                       >
                         <span>Confirm</span>
                       </Button>
-                    </DialogFooter>
+                    </DialogActions>
                   </Dialog>
                 </div>
               </div>
             </div>
           </section>
         }
-        headerUpdate={"Chỉnh sửa sản phẩm #" + "001"}
+        headerUpdate={"Chỉnh sửa sản phẩm"}
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -375,21 +383,13 @@ const ProductList = () => {
               >
                 Tên sản phẩm:
               </Typography>
-              <Input
-                value={
-                  selectedId === -1
-                    ? ""
-                    : name === ""
-                    ? products.object.find((item) => item.id === selectedId)
-                        ?.name || ""
-                    : name
-                }
+              <TextField
+                className="w-full"
+                variant="outlined"
+                autoComplete="off"
                 placeholder="Nike"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-                onChange={(e) => dispatch(setName(e.target.value))}
+                onChange={(e) => setUpdateName(e.target.value)}
+                value={updateName}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -400,29 +400,19 @@ const ProductList = () => {
               >
                 Tên thương hiệu:
               </Typography>
-              <Select
-                value={
-                  selectedId === -1
-                    ? ""
-                    : brand.id
-                    ? brand.id
-                    : products.object.find((item) => item.id === selectedId)
-                        ?.brand_id.id || ""
-                }
-                className=" !border-blue-gray-200 focus:!border-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-                onChange={(e) => dispatch(setBrand(e))}
-              >
-                {brands &&
-                  brands.object.length > 0 &&
-                  brands.object.map((item, index) => (
-                    <Option key={index} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
+              <FormControl fullWidth>
+                <Select
+                  value={updateBrand}
+                  onChange={(e) => setUpdateBrand(e.target.value)}
+                >
+                  {brands?.object?.length > 0 &&
+                    brands.object.map((item, index) => (
+                      <MenuItem key={index} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
               <Typography
@@ -432,48 +422,35 @@ const ProductList = () => {
               >
                 Tên danh mục:
               </Typography>
-              <Select
-                value={
-                  selectedId === -1
-                    ? ""
-                    : category.id
-                    ? category.id
-                    : products.object.find((item) => item.id === selectedId)
-                        ?.category_id.id || ""
-                }
-                className=" !border-blue-gray-200 focus:!border-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-                onChange={(e) => dispatch(setCategory(e))}
-              >
-                {categories &&
-                  categories.object.length > 0 &&
-                  categories.object.map((item, index) => (
-                    <Option key={index} value={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
+              <FormControl fullWidth>
+                <Select
+                  value={updateCategory}
+                  onChange={(e) => setUpdateCategory(e.target.value)}
+                >
+                  {categories &&
+                    categories.object.length > 0 &&
+                    categories.object.map((item, index) => (
+                      <MenuItem key={index} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
-            <Textarea
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              value={
-                selectedId === -1
-                  ? ""
-                  : description === ""
-                  ? products.object.find((item) => item.id === selectedId)
-                      ?.description || ""
-                  : description
-              }
-              placeholder="Thương hiệu thể thao hàng đầu thế giới"
-              onChange={(e) => setDescription(e.target.value)}
+            <TextField
+              className="w-full !mt-2"
+              size="lg"
+              rows={4}
+              maxRows={4}
+              multiline
+              variant="outlined"
+              placeholder="Mô tả không quá 255 kí tự"
+              autoComplete="off"
+              onChange={(e) => setUpdateDescription(e.target.value)}
+              value={updateDescription}
             />
           </Container>
         }
@@ -493,9 +470,9 @@ const ProductList = () => {
           </Button>
         </div>
       </AdminLayout>
-      <Dialog open={addOpen} handler={handleAddOpen} size="md">
-        <DialogHeader className="pb-0 flex justify-between">
-          <Typography variant="h4">Thêm thương hiệu</Typography>
+      <Dialog open={addOpen} onClose={handleClose}>
+        <DialogTitle className="pb-0 flex justify-between">
+          <Typography variant="h4">Thêm sản phẩm</Typography>
           <IconButton
             className="border-none"
             variant="outlined"
@@ -503,8 +480,8 @@ const ProductList = () => {
           >
             <CloseIcon />
           </IconButton>
-        </DialogHeader>
-        <DialogBody>
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
               <Typography
@@ -514,13 +491,13 @@ const ProductList = () => {
               >
                 Tên sản phẩm:
               </Typography>
-              <Input
-                placeholder="Nike"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
+              <TextField
+                className="w-full"
+                variant="outlined"
+                placeholder="Quần Tây học sinh"
+                autoComplete="off"
                 onChange={(e) => setName(e.target.value)}
+                value={name}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -531,24 +508,20 @@ const ProductList = () => {
               >
                 Tên thương hiệu:
               </Typography>
-              <Select
-                className=" !border-blue-gray-200 focus:!border-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-              >
-                {brands &&
-                  brands.object.length > 0 &&
-                  brands.object.map((item, index) => (
-                    <Option
-                      key={index}
-                      value={item.id}
-                      onClick={() => setBrand(item)}
-                    >
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
+              <FormControl fullWidth>
+                <Select
+                  className="!z-1100"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                >
+                  {brands?.object?.length > 0 &&
+                    brands.object.map((item, index) => (
+                      <MenuItem key={index} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
               <Typography
@@ -558,39 +531,39 @@ const ProductList = () => {
               >
                 Tên danh mục:
               </Typography>
-              <Select
-                className=" !border-blue-gray-200 focus:!border-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-              >
-                {categories &&
-                  categories.object.length > 0 &&
-                  categories.object.map((item, index) => (
-                    <Option
-                      key={index}
-                      value={item.id}
-                      onClick={() => setCategory(item)}
-                    >
-                      {item.name}
-                    </Option>
-                  ))}
-              </Select>
+              <FormControl fullWidth>
+                <Select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  {categories &&
+                    categories.object.length > 0 &&
+                    categories.object.map((item, index) => (
+                      <MenuItem key={index} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
-            <Textarea
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              placeholder="Thương hiệu thể thao hàng đầu thế giới"
+            <TextField
+              className="w-full !mt-2"
+              size="lg"
+              rows={4}
+              maxRows={4}
+              multiline
+              variant="outlined"
+              placeholder="Mô tả không quá 255 kí tự"
+              autoComplete="off"
               onChange={(e) => setDescription(e.target.value)}
+              value={description}
             />
           </Container>
-        </DialogBody>
-        <DialogFooter>
+        </DialogContent>
+        <DialogActions>
           <Button
             variant="gradient"
             color="green"
@@ -599,7 +572,7 @@ const ProductList = () => {
           >
             {!isAdded && <span>Thêm mới</span>}
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
       {/* <Container className="mt-5">
         <div className="flex items-center justify-between mb-5">
@@ -629,14 +602,14 @@ const ProductList = () => {
         />
       </Container>
       <Dialog open={detailOpen} handler={handleDetailOpen}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
-        <DialogBody>
+        <DialogTitle>Its a simple dialog.</DialogTitle>
+        <DialogContent>
           The key to more success is to have a lot of pillows. Put it this way,
           it took me twenty five years to get these plants, twenty five years of
           blood sweat and tears, and I&apos;m never giving up, I&apos;m just
           getting started. I&apos;m up to something. Fan luv.
-        </DialogBody>
-        <DialogFooter>
+        </DialogContent>
+        <DialogActions>
           <Button
             variant="text"
             color="red"
@@ -648,7 +621,7 @@ const ProductList = () => {
           <Button variant="gradient" color="green" onClick={handleDetailOpen}>
             <span>Confirm</span>
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog> */}
     </>
   );

@@ -43,6 +43,7 @@ const Analytic = () => {
       },
     },
   };
+  const [filter, setFilter] = React.useState("ALL");
   return (
     <>
       <Container className="mt-5">
@@ -58,7 +59,14 @@ const Analytic = () => {
                   variant="outlined"
                   className="flex items-center gap-1 !border-gray-300"
                 >
-                  last 24h
+                  {
+                    {
+                      ALL: "Tất cả",
+                      DAY: "Hôm nay",
+                      MONTH: "Tháng này",
+                      YEAR: "Năm nay",
+                    }[filter]
+                  }
                   <ChevronDownIcon
                     strokeWidth={4}
                     className="w-3 h-3 text-gray-900"
@@ -66,9 +74,30 @@ const Analytic = () => {
                 </Button>
               </MenuHandler>
               <MenuList>
-                <MenuItem>last 12h</MenuItem>
-                <MenuItem>last 10h</MenuItem>
-                <MenuItem>last 24h</MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="ALL"
+                >
+                  Tất cả
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="DAY"
+                >
+                  Hôm nay
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="MONTH"
+                >
+                  Tháng này
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => setFilter(e.target.value)}
+                  value="YEAR"
+                >
+                  Năm nay
+                </MenuItem>
               </MenuList>
             </Menu>
           </div>

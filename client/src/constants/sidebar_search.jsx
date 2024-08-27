@@ -42,10 +42,10 @@ const SIDEBAR_SEARCH = [
       { label: "Thương hiệu", elements: <Brand /> },
       { label: "Loại sản phẩm", elements: <Category /> },
       { label: "Danh sách sản phẩm", elements: <ProductList /> },
-      { label: "Lượt bình luận", elements: <Comment /> },
-      { label: "Kho hàng", elements: <Inventory /> },
       { label: "Nhập hàng", elements: <ImportProduct /> },
       { label: "Nhập giá", elements: <OnsaleProduct /> },
+      { label: "Kho hàng", elements: <Inventory /> },
+      { label: "Lượt bình luận", elements: <Comment /> },
     ],
   },
   {

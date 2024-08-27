@@ -16,8 +16,8 @@ import {
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
-import { Container } from "@mui/material";
-import React, { useEffect } from "react";
+import { Container, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
@@ -43,22 +43,20 @@ const Brand = () => {
   const navigate = useNavigate();
   const { data: brands, error, isLoading } = useGetBrandsQuery();
   const selectedId = useSelector((state) => state.selectedId.value);
-  const name = useSelector((state) => state.name.value);
-  const description = useSelector((state) => state.description.value);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [updateName, setUpdateName] = useState("");
+  const [updateDescription, setUpdateDescription] = useState("");
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(resetSelectedId());
-    dispatch(resetName());
-    dispatch(resetDescription());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (selectedId === -1) {
-      dispatch(resetName());
-      dispatch(resetDescription());
+    if (selectedId !== -1) {
+      setUpdateName(brands?.object.find((row) => row.id === selectedId)?.name);
+      setUpdateDescription(
+        brands?.object.find((row) => row.id === selectedId)?.description
+      );
     }
-  }, [selectedId, dispatch]);
-
+  }, [selectedId, brands]);
   const [addOpen, setAddOpen] = React.useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
 
@@ -76,8 +74,8 @@ const Brand = () => {
             title: "Thêm thương hiệu thành công",
           }).then(() => {
             handleAddOpen();
-            dispatch(resetName());
-            dispatch(resetDescription());
+            setName("");
+            setDescription("");
           });
         });
     } catch (err) {
@@ -94,12 +92,9 @@ const Brand = () => {
   };
   const updateSubmit = async () => {
     const message = await updateBrand({
-      id: brands.object[selectedId].id,
-      name: name === "" ? brands.object[selectedId].name : name,
-      description:
-        description === ""
-          ? brands.object[selectedId].description
-          : description,
+      id: brands.object.find((brand) => brand.id === selectedId).id,
+      name: updateName,
+      description: updateDescription,
     });
     return message;
   };
@@ -134,7 +129,7 @@ const Brand = () => {
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"
-        headerDetail={"Chi tiết thương hiệu  #" + selectedId}
+        headerDetail="Chi tiết thương hiệu"
         bodyDetail={
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
@@ -162,7 +157,7 @@ const Brand = () => {
         headerUpdate="Chỉnh sửa thương hiệu"
         bodyUpdate={
           <Container>
-            <div className="grid grid-cols-2 gap-4 mb-5">
+            <div className="grid grid-cols-2 gap-4">
               <Typography
                 variant="h5"
                 color="blue-gray"
@@ -170,7 +165,7 @@ const Brand = () => {
               >
                 Tên thương hiệu:
               </Typography>
-              <Input
+              {/* <Input
                 value={
                   selectedId === -1
                     ? ""
@@ -185,26 +180,30 @@ const Brand = () => {
                   className: "before:content-none after:content-none",
                 }}
                 onChange={(e) => dispatch(setName(e.target.value))}
+              /> */}
+              <TextField
+                className="w-full"
+                variant="outlined"
+                autoComplete="off"
+                placeholder="Nike"
+                onChange={(e) => setUpdateName(e.target.value)}
+                value={updateName}
               />
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
-            <Textarea
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              value={
-                selectedId === -1
-                  ? ""
-                  : description === ""
-                  ? brands.object.find((row) => row.id === selectedId)
-                      ?.description || ""
-                  : description
-              }
-              onChange={(e) => dispatch(setDescription(e.target.value))}
-              placeholder="Nhập văn bản dưới 255 kí tự"
+            <TextField
+              className="w-full !mt-2"
+              size="lg"
+              rows={4}
+              maxRows={4}
+              multiline
+              variant="outlined"
+              placeholder="Mô tả không quá 255 kí tự"
+              autoComplete="off"
+              onChange={(e) => setUpdateDescription(e.target.value)}
+              value={updateDescription}
             />
           </Container>
         }
@@ -244,25 +243,29 @@ const Brand = () => {
               >
                 Tên thương hiệu:
               </Typography>
-              <Input
+              <TextField
+                className="w-full"
+                variant="outlined"
                 placeholder="Nike"
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-                onChange={(e) => dispatch(setName(e.target.value))}
+                autoComplete="off"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
               />
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
               Mô tả:
             </Typography>
-            <Textarea
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              placeholder="Thương hiệu thể thao hàng đầu thế giới"
-              onChange={(e) => dispatch(setDescription(e.target.value))}
+            <TextField
+              className="w-full !mt-2"
+              size="lg"
+              rows={4}
+              maxRows={4}
+              multiline
+              placeholder="Mô tả không quá 255 kí tự"
+              variant="outlined"
+              autoComplete="off"
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
             />
           </Container>
         </DialogBody>

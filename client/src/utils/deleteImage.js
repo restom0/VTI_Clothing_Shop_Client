@@ -16,13 +16,13 @@ export const handleDelete = (avatar_url) => {
   const apiSecret = import.meta.env.VITE_REACT_APP_APISECRET;
   const timestamp = new Date().getTime();
   const signature = generateSHA1(
-    generateSignature(avatar_url.publicId, apiSecret)
+    generateSignature(avatar_url, apiSecret)
   );
   const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`;
 
   axios
     .post(url, {
-      public_id: avatar_url.publicId,
+      public_id: avatar_url,
       signature: signature,
       api_key: apiKey,
       timestamp: timestamp,

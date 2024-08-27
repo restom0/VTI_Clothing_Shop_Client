@@ -1,29 +1,36 @@
 import {
   Button,
   Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   IconButton,
   Typography,
-  Dialog,
   Tooltip,
   Input,
   Tabs,
   TabsHeader,
   Tab,
-  Select,
   Option,
   CardFooter,
   useSelect,
   slider,
   Radio,
 } from "@material-tailwind/react";
-import { Container, Rating } from "@mui/material";
+import {
+  Select,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
+  Container,
+  Rating,
+  TextField,
+  InputAdornment,
+  FormControl,
+  OutlinedInput,
+  MenuItem,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { importproduct } from "../../constants/table_head";
-import useOpen from "../../hooks/useOpen";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -63,155 +70,70 @@ import {
   resetSlider4,
   setSlider4,
 } from "../../features/slices/slider4Slice";
-import { setProduct } from "../../features/slices/productSlice";
-import {
-  resetImportedProduct,
-  setColorCode,
-  setColorName,
-  setGender,
-  setHeight,
-  setImportNumber,
-  setImportPrice,
-  setMaterial,
-  setProductId,
-  setSize,
-  setWeight,
-} from "../../features/slices/importedProductSlice";
 import Loading from "../shared/Loading";
 import { resetSelectedId } from "../../features/slices/selectIdSlice";
+import { handleDelete } from "../../utils/deleteImage";
 
 const ImportProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const avatar_url = useSelector((state) => state.avatar_url);
-  const slider1 = useSelector((state) => state.slider1);
-  const slider2 = useSelector((state) => state.slider2);
-  const slider3 = useSelector((state) => state.slider3);
-  const slider4 = useSelector((state) => state.slider4);
+  // const avatar_url = useSelector((state) => state.avatar_url);
+  // const slider1 = useSelector((state) => state.slider1);
+  // const slider2 = useSelector((state) => state.slider2);
+  // const slider3 = useSelector((state) => state.slider3);
+  // const slider4 = useSelector((state) => state.slider4);
+  const [avatar_url, setAvatar_Url] = useState("");
+  const [slider1, setSlider1] = useState("");
+  const [slider2, setSlider2] = useState("");
+  const [slider3, setSlider3] = useState("");
+  const [slider4, setSlider4] = useState("");
+  const [publicIdAvatar, setPublicIdAvatar] = useState("");
+  const [publicIdSlider1, setPublicIdSlider1] = useState("");
+  const [publicIdSlider2, setPublicIdSlider2] = useState("");
+  const [publicIdSlider3, setPublicIdSlider3] = useState("");
+  const [publicIdSlider4, setPublicIdSlider4] = useState("");
+
+  const [updateAvatar_Url, setUpdateAvatar_Url] = useState("");
+  const [updateSlider1, setUpdateSlider1] = useState("");
+  const [updateSlider2, setUpdateSlider2] = useState("");
+  const [updateSlider3, setUpdateSlider3] = useState("");
+  const [updateSlider4, setUpdateSlider4] = useState("");
+  const [updatePublicIdAvatar, setUpdatePublicIdAvatar] = useState("");
+  const [updatePublicIdSlider1, setUpdatePublicIdSlider1] = useState("");
+  const [updatePublicIdSlider2, setUpdatePublicIdSlider2] = useState("");
+  const [updatePublicIdSlider3, setUpdatePublicIdSlider3] = useState("");
+  const [updatePublicIdSlider4, setUpdatePublicIdSlider4] = useState("");
 
   const [newOpen, setNewOpen] = useState(false);
   const [oldOpen, setOldOpen] = useState(false);
-
-  const handleNewOpen = () => {
-    if (selectedId !== -1) {
-      if (
-        avatar_url.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.image_url ||
-        ""
-      ) {
-        dispatch(deleteAvatar());
-      } else {
-        dispatch(resetAvatar());
-      }
-      if (
-        slider1.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_1 ||
-        ""
-      ) {
-        dispatch(deleteSlider1());
-      } else {
-        dispatch(resetSlider1());
-      }
-      if (
-        slider2.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_2 ||
-        ""
-      ) {
-        dispatch(deleteSlider2());
-      } else {
-        dispatch(resetSlider2());
-      }
-      if (
-        slider3.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_3 ||
-        ""
-      ) {
-        dispatch(deleteSlider3());
-      } else {
-        dispatch(resetSlider3());
-      }
-      if (
-        slider4.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_4 ||
-        ""
-      ) {
-        dispatch(deleteSlider4());
-      } else {
-        dispatch(resetSlider4());
-      }
-      dispatch(resetSelectedId());
-      dispatch(resetImportedProduct());
-    }
-
-    setNewOpen(!newOpen);
-  };
-  const handleOldOpen = () => {
-    if (selectedId !== -1) {
-      dispatch(resetSelectedId());
-      if (
-        avatar_url.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.image_url ||
-        ""
-      ) {
-        dispatch(deleteAvatar());
-      } else {
-        dispatch(resetAvatar());
-      }
-      if (
-        slider1.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_1 ||
-        ""
-      ) {
-        dispatch(deleteSlider1());
-      } else {
-        dispatch(resetSlider1());
-      }
-      if (
-        slider2.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_2 ||
-        ""
-      ) {
-        dispatch(deleteSlider2());
-      } else {
-        dispatch(resetSlider2());
-      }
-      if (
-        slider3.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_3 ||
-        ""
-      ) {
-        dispatch(deleteSlider3());
-      } else {
-        dispatch(resetSlider3());
-      }
-      if (
-        slider4.value !==
-          importedProducts.object.find((row) => row.id === selectedId)
-            ?.slider_url_4 ||
-        ""
-      ) {
-        dispatch(deleteSlider4());
-      } else {
-        dispatch(resetSlider4());
-      }
-      dispatch(resetSelectedId());
-      dispatch(resetImportedProduct());
-    }
-    setOldOpen(!oldOpen);
-  };
-
   const selectedId = useSelector((state) => state.selectedId.value);
-  const check = useSelector((state) => state.selectedId.change);
-  const importedProduct = useSelector((state) => state.importedProduct);
+  const [product, setProduct] = useState(null);
+  const [color_code, setColorCode] = useState("");
+  const [color_name, setColorName] = useState("");
+  const [size, setSize] = useState("");
+  const [height, setHeight] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [material, setMaterial] = useState("");
+  const [gender, setGender] = useState("");
+  const [importPrice, setImportPrice] = useState(1000);
+  const [importNumber, setImportNumber] = useState(1);
+  const [updateColor_code, setUpdateColorCode] = useState("");
+  const [updateColor_name, setUpdateColorName] = useState("");
+  const [updateSize, setUpdateSize] = useState("");
+  const [updateHeight, setUpdateHeight] = useState(0);
+  const [updateWeight, setUpdateWeight] = useState(0);
+  const [updateMaterial, setUpdateMaterial] = useState("");
+  const [updateGender, setUpdateGender] = useState("");
+  const [updateImportPrice, setUpdateImportPrice] = useState(1000);
+  const [updateImportNumber, setUpdateImportNumber] = useState(1);
+  const handleNewOpen = () => setNewOpen(true);
+
+  const handleOldOpen = () => setOldOpen(true);
+
+  const handleNewClose = () => setNewOpen(false);
+
+  const handleOldClose = () => setOldOpen(false);
+
   const { data: products, error, isLoading } = useGetProductsQuery();
   const {
     data: importedProducts,
@@ -231,34 +153,27 @@ const ImportProduct = () => {
   const handleAddSubmit = async () => {
     try {
       if (oldOpen) {
-        const product = importedProducts.object?.find(
-          (item) =>
-            item.product_id.id === importedProduct.product &&
-            item.color_id.id === importedProduct.color_code &&
-            item.size_id.id === importedProduct.size &&
-            item.material_id.id === importedProduct.material
-        );
         await addImportedProduct({
-          product_id: product.product_id.id,
-          color_code: product.color_id.color_code,
-          color_name: product.color_id.color_name,
-          size: product.size_id.size,
-          height: product.size_id.height,
-          weight: product.size_id.weight,
-          material: product.material_id.name,
-          gender: product.gender,
-          importPrice: Number(importedProduct.importPrice),
-          image_url: product.image_url,
-          slider_url_1: product.slider_url_1,
-          slider_url_2: product.slider_url_2,
-          slider_url_3: product.slider_url_3,
-          slider_url_4: product.slider_url_4,
-          public_id_url: product.public_id_url,
-          public_id_slider_url_1: product.public_id_slider_url_1,
-          public_id_slider_url_2: product.public_id_slider_url_2,
-          public_id_slider_url_3: product.public_id_slider_url_3,
-          public_id_slider_url_4: product.public_id_slider_url_4,
-          importNumber: Number(importedProduct.importNumber),
+          product_id: product,
+          color_code: color_code,
+          color_name: color_name,
+          size: size,
+          height: height,
+          weight: weight,
+          material: material,
+          gender: gender,
+          importPrice: Number(importPrice),
+          image_url: avatar_url,
+          slider_url_1: slider1,
+          slider_url_2: slider2,
+          slider_url_3: slider3,
+          slider_url_4: slider4,
+          public_id_url: publicIdAvatar,
+          public_id_slider_url_1: publicIdSlider1,
+          public_id_slider_url_2: publicIdSlider2,
+          public_id_slider_url_3: publicIdSlider3,
+          public_id_slider_url_4: publicIdSlider4,
+          importNumber: Number(importNumber),
         })
           .unwrap()
           .then(() => {
@@ -271,26 +186,26 @@ const ImportProduct = () => {
           });
       } else if (newOpen) {
         await addImportedProduct({
-          product_id: importedProduct.product,
-          color_code: importedProduct.color_code,
-          color_name: importedProduct.color_name,
-          size: importedProduct.size,
-          height: importedProduct.height,
-          weight: importedProduct.weight,
-          material: importedProduct.material,
-          gender: importedProduct.gender,
-          importPrice: Number(importedProduct.importPrice),
-          image_url: avatar_url.value,
-          slider_url_1: slider1.value,
-          slider_url_2: slider2.value,
-          slider_url_3: slider3.value,
-          slider_url_4: slider4.value,
-          public_id_url: avatar_url.publicId,
-          public_id_slider_url_1: slider1.publicId,
-          public_id_slider_url_2: slider2.publicId,
-          public_id_slider_url_3: slider3.publicId,
-          public_id_slider_url_4: slider4.publicId,
-          importNumber: Number(importedProduct.importNumber),
+          product_id: product,
+          color_code: color_code,
+          color_name: color_name,
+          size: size,
+          height: height,
+          weight: weight,
+          material: material,
+          gender: gender,
+          importPrice: Number(importPrice),
+          image_url: avatar_url,
+          slider_url_1: slider1,
+          slider_url_2: slider2,
+          slider_url_3: slider3,
+          slider_url_4: slider4,
+          public_id_url: publicIdAvatar,
+          public_id_slider_url_1: publicIdSlider1,
+          public_id_slider_url_2: publicIdSlider2,
+          public_id_slider_url_3: publicIdSlider3,
+          public_id_slider_url_4: publicIdSlider4,
+          importNumber: Number(importNumber),
         })
           .unwrap()
           .then(() => {
@@ -298,15 +213,40 @@ const ImportProduct = () => {
               icon: "success",
               title: "Thêm thương hiệu thành công",
             }).then(() => {
-              handleNewOpen();
+              handleNewClose();
+              setAvatar_Url("");
+              setSlider1("");
+              setSlider2("");
+              setSlider3("");
+              setSlider4("");
+              setPublicIdAvatar("");
+              setPublicIdSlider1("");
+              setPublicIdSlider2("");
+              setPublicIdSlider3("");
+              setPublicIdSlider4("");
+              setProduct(null);
+              setColorCode("");
+              setColorName("");
+              setSize("");
+              setHeight(0);
+              setWeight(0);
+              setMaterial("");
+              setGender("");
+              setImportPrice(1000);
+              setImportNumber(1);
             });
           });
       }
     } catch (err) {
+      console.log(err);
       Toast.fire({
         icon: "error",
         title: "Thêm thương hiệu thất bại",
       }).then(() => {
+        if (err && err.status === 401) {
+          localStorage.clear();
+          navigate("/login");
+        }
         // if (err.originalStatus === 401) {
         //   localStorage.clear();
         //   navigate("/login");
@@ -315,68 +255,32 @@ const ImportProduct = () => {
     }
   };
   const updateSubmit = async () => {
+    const search = importedProducts.object.find((row) => row.id === selectedId);
     const message = await updateImportedProduct({
-      id: importedProducts.object.find((row) => row.id === selectedId)?.id,
-      product_id:
-        importedProducts.object.find((row) => row.id === selectedId)?.product_id
-          .id || "",
-      color_id:
-        importedProducts.object.find((row) => row.id === selectedId)?.color_id
-          .id || "",
-      size_id: importedProducts.object.find((row) => row.id === selectedId)
-        ?.size_id.id,
-      material_id: importedProducts.object.find((row) => row.id === selectedId)
-        ?.material_id.id,
-      color_code:
-        importedProduct.color_code ||
-        importedProducts.object.find((row) => row.id === selectedId)?.color_id
-          .color_code ||
-        "",
-      color_name:
-        importedProduct.color_name ||
-        importedProducts.object.find((row) => row.id === selectedId)?.color_id
-          .color_name ||
-        "",
-      size:
-        importedProduct.size ||
-        importedProducts.object.find((row) => row.id === selectedId)?.size_id
-          .size ||
-        "",
-      height:
-        importedProduct.height ||
-        importedProducts.object.find((row) => row.id === selectedId)?.size_id
-          .height ||
-        "",
-      weight:
-        importedProduct.weight ||
-        importedProducts.object.find((row) => row.id === selectedId)?.size_id
-          .weight ||
-        "",
-      material:
-        importedProduct.material ||
-        importedProducts.object.find((row) => row.id === selectedId)
-          ?.material_id.name ||
-        "",
-      gender:
-        importedProduct.gender ||
-        importedProducts.object.find((row) => row.id === selectedId)?.gender ||
-        "",
-      importPrice:
-        importedProduct.importPrice ||
-        importedProducts.object.find((row) => row.id === selectedId)
-          ?.importPrice ||
-        "",
-      image_url: avatar_url.value,
-      slider_url_1: slider1.value,
-      slider_url_2: slider2.value,
-      slider_url_3: slider3.value,
-      slider_url_4: slider4.value,
-      public_id_url: avatar_url.publicId,
-      public_id_slider_url_1: slider1.publicId,
-      public_id_slider_url_2: slider2.publicId,
-      public_id_slider_url_3: slider3.publicId,
-      public_id_slider_url_4: slider4.publicId,
-      importNumber: importedProduct.importNumber,
+      id: selectedId,
+      product_id: search?.product_id.id || "",
+      color_id: search?.color_id.id || "",
+      size_id: search?.size_id.id,
+      material_id: search?.material_id.id,
+      color_code: updateColor_code,
+      color_name: updateColor_name,
+      size: updateSize,
+      height: updateHeight,
+      weight: updateWeight,
+      material: updateMaterial,
+      gender: updateGender,
+      importPrice: updateImportPrice,
+      image_url: updateAvatar_Url,
+      slider_url_1: updateSlider1,
+      slider_url_2: updateSlider2,
+      slider_url_3: updateSlider3,
+      slider_url_4: updateSlider4,
+      public_id_url: updatePublicIdAvatar,
+      public_id_slider_url_1: updatePublicIdSlider1,
+      public_id_slider_url_2: updatePublicIdSlider2,
+      public_id_slider_url_3: updatePublicIdSlider3,
+      public_id_slider_url_4: updatePublicIdSlider4,
+      importNumber: updateImportNumber,
     });
 
     return message;
@@ -401,119 +305,75 @@ const ImportProduct = () => {
       });
     }
   };
-  const ListImportProducts = [];
-  importedProducts &&
-    importedProducts.object.length > 0 &&
-    importedProducts.object.map((product) => {
-      ListImportProducts.push({
-        id: product.id,
-        name: product.product_id.name,
-        color: product.color_id.color_name,
-        size: product.size_id.size,
-        material: product.material_id.name,
-        importPrice: product.importPrice.toLocaleString("en-US") + " đ",
-        import: product.importNumber,
-      });
-    });
-
   useEffect(() => {
     if (selectedId !== -1) {
-      dispatch(
-        setAvatar({
-          value:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.image_url || "",
-          publicId:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.public_id_url || "",
-        })
+      const search = importedProducts?.object.find(
+        (row) => row.id === selectedId
       );
-      dispatch(
-        setSlider1({
-          value:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.slider_url_1 || "",
-          publicId:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.public_id_slider_url_1 || "",
-        })
-      );
-      dispatch(
-        setSlider2({
-          value:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.slider_url_2 || "",
-          publicId:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.public_id_slider_url_2 || "",
-        })
-      );
-      dispatch(
-        setSlider3({
-          value:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.slider_url_3 || "",
-          publicId:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.public_id_slider_url_3 || "",
-        })
-      );
-      dispatch(
-        setSlider4({
-          value:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.slider_url_4 || "",
-          publicId:
-            importedProducts.object.find((row) => row.id === selectedId)
-              ?.public_id_slider_url_4 || "",
-        })
-      );
+      if (search) {
+        setUpdateSlider1(search.slider_url_1);
+        setUpdateSlider2(search.slider_url_2);
+        setUpdateSlider3(search.slider_url_3);
+        setUpdateSlider4(search.slider_url_4);
+        setUpdateAvatar_Url(search.image_url);
+        setUpdateColorCode(search.color_id.color_code);
+        setUpdateColorName(search.color_id.color_name);
+        setUpdateSize(search.size_id.size);
+        setUpdateHeight(search.size_id.height.replace("cm", "").trim());
+        setUpdateWeight(search.size_id.weight.replace("kg", "").trim());
+        setUpdateMaterial(search.material_id.name);
+        setUpdateGender(search.gender);
+        setUpdateImportPrice(search.importPrice);
+        setUpdateImportNumber(search.importNumber);
+        setUpdatePublicIdAvatar(search.public_id_url);
+        setUpdatePublicIdSlider1(search.public_id_slider_url_1);
+        setUpdatePublicIdSlider2(search.public_id_slider_url_2);
+        setUpdatePublicIdSlider3(search.public_id_slider_url_3);
+        setUpdatePublicIdSlider4(search.public_id_slider_url_4);
+      }
     }
-  }, [selectedId, importedProducts, dispatch, check]);
-  const findImportedProduct = (product, color, size, material) => {
-    if (importedProducts.object?.length === 0) return false;
-    if (!product || !color || !size || !material) return false;
-    if (
-      importedProducts.object?.find(
-        (item) =>
-          item.product_id.id === product &&
-          item.color_id.id === color &&
-          item.size_id.id === size &&
-          item.material_id.id === material
-      )
-    ) {
-      const imported_product = importedProducts.object?.find(
-        (item) =>
-          item.product_id.id === product &&
-          item.color_id.id === color &&
-          item.material_id.id === material &&
-          item.size_id.id === size
-      );
-      dispatch(setGender(imported_product.gender));
-      dispatch(setSlider1(imported_product.image_url));
-      dispatch(setSlider2(imported_product.slider_url_1));
-      dispatch(setSlider2(imported_product.slider_url_2));
-      dispatch(setSlider3(imported_product.slider_url_3));
-      dispatch(setSlider4(imported_product.slider_url_4));
-      dispatch(
-        setGender(
-          importedProducts.object?.find(
-            (item) =>
-              item.product_id.id === product &&
-              item.color_id.id === color &&
-              item.size_id.id === size &&
-              item.material_id.id === material
-          ).gender
-        )
-      );
-      return true;
-    }
-    return false;
-  };
+  }, [selectedId, importedProducts?.object]);
 
+  useEffect(() => {
+    const imported_product = importedProducts?.object.find(
+      (row) =>
+        row.product_id.id === product &&
+        row.color_id.id === color_code &&
+        row.size_id.size === size &&
+        row.material_id.id === material
+    );
+    if (imported_product) {
+      setAvatar_Url(imported_product.image_url);
+      setSlider1(imported_product.slider_url_1);
+      setSlider2(imported_product.slider_url_2);
+      setSlider3(imported_product.slider_url_3);
+      setSlider4(imported_product.slider_url_4);
+      setPublicIdAvatar(imported_product.public_id_url);
+      setPublicIdSlider1(imported_product.public_id_slider_url_1);
+      setPublicIdSlider2(imported_product.public_id_slider_url_2);
+      setPublicIdSlider3(imported_product.public_id_slider_url_3);
+      setPublicIdSlider4(imported_product.public_id_slider_url_4);
+      setColorName(imported_product.color_id.color_name);
+      setColorCode(imported_product.color_id.color_code);
+      setSize(imported_product.size_id.size);
+      setHeight(imported_product.size_id.height.replace("cm", "").trim());
+      setWeight(imported_product.size_id.weight.replace("kg", "").trim());
+      setGender(imported_product.gender);
+    }
+  }, [product, color_code, size, material, importedProducts?.object]);
   if (isLoading || isLoading_ImportProducts) return <Loading />;
   if (error || isError_ImportedProducts) return navigate("/error");
-
+  const ListImportProducts = importedProducts.object.map((product) => {
+    return {
+      id: product.id,
+      name: product.product_id.name,
+      color: product.color_id.color_name,
+      size: product.size_id.size,
+      material: product.material_id.name,
+      importPrice: product.importPrice.toLocaleString("en-US") + " đ",
+      import: product.importNumber,
+    };
+  });
   return (
     <>
       <AdminLayout
@@ -523,17 +383,7 @@ const ImportProduct = () => {
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
-        headerDetail={
-          "Chi tiết mã hàng #" +
-          (selectedId === -1
-            ? ""
-            : importedProducts
-            ? importedProducts.object.length > 0
-              ? importedProducts.object.find((row) => row.id === selectedId)
-                  ?.id || ""
-              : ""
-            : "")
-        }
+        headerDetail={"Chi tiết mã hàng"}
         bodyDetail={
           <Container>
             <div className="grid grid-cols-3 gap-4">
@@ -824,12 +674,12 @@ const ImportProduct = () => {
           </Container>
         }
         sizeUpdate="xl"
-        headerUpdate={"Chỉnh sửa mã hàng #" + selectedId}
+        headerUpdate={"Chỉnh sửa mã hàng"}
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid grid-cols-1 gap-4">
-                {avatar_url.value === "" ? (
+                {updateAvatar_Url === "" ? (
                   <figure className="my-auto mx-auto h-full w-full">
                     <div className="flex items-center  justify-center h-full w-full my-auto">
                       <label
@@ -870,29 +720,29 @@ const ImportProduct = () => {
                             Hình đại diện
                           </Typography>
                         </div>
-                        <ImageUpload image="avatar_url" />
+                        <ImageUpload
+                          image="avatar_url"
+                          setAvatar={setUpdateAvatar_Url}
+                          setPublicId={setUpdatePublicIdAvatar}
+                        />
                       </label>
                     </div>
                   </figure>
                 ) : (
                   <div className="grid grid-cols-4 justify-around mx-auto my-auto w-full">
                     <img
-                      src={
-                        selectedId === -1
-                          ? ""
-                          : avatar_url.value === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.image_url || ""
-                          : avatar_url.value
-                      }
+                      src={updateAvatar_Url}
                       alt="avatar"
                       className="h-[200px] w-full mx-auto col-span-3"
                     />
                     <Button
-                      onClick={() => dispatch(deleteAvatar())}
+                      onClick={() => {
+                        handleDelete(publicIdAvatar);
+                        setUpdateAvatar_Url("");
+                        setUpdatePublicIdAvatar("");
+                      }}
                       color="red"
-                      className="w-full h-[200px]"
+                      className="w-full rounded-l-none h-[200px]"
                     >
                       Xóa ảnh đại diện
                     </Button>
@@ -900,7 +750,7 @@ const ImportProduct = () => {
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
-                  {slider1.value === "" ? (
+                  {updateSlider1 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -937,36 +787,36 @@ const ImportProduct = () => {
                               Hình 1
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_1" />
+                          <ImageUpload
+                            image="slider_url_1"
+                            setAvatar={setUpdateSlider1}
+                            setPublicId={setUpdatePublicIdSlider1}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : slider1.value === ""
-                            ? importedProducts.object.find(
-                                (row) => row.id === selectedId
-                              )?.slider_url_1 || ""
-                            : slider1.value
-                        }
+                        src={updateSlider1}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider1())}
+                        onClick={() => {
+                          handleDelete(updatePublicIdSlider1);
+                          setUpdateSlider1("");
+                          setUpdatePublicIdSlider1("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 1
                       </Button>
                     </div>
                   )}
 
-                  {slider2.value === "" ? (
+                  {updateSlider2 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1003,36 +853,36 @@ const ImportProduct = () => {
                               Hình 2
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_2" />
+                          <ImageUpload
+                            image="slider_url_2"
+                            setAvatar={setUpdateSlider2}
+                            setPublicId={setUpdatePublicIdSlider2}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : slider2.value === ""
-                            ? importedProducts.object.find(
-                                (row) => row.id === selectedId
-                              )?.slider_url_2 || ""
-                            : slider2.value
-                        }
+                        src={updateSlider2}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider2())}
+                        onClick={() => {
+                          handleDelete(updatePublicIdSlider2);
+                          setUpdateSlider2("");
+                          setUpdatePublicIdSlider2("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 2
                       </Button>
                     </div>
                   )}
 
-                  {slider3.value === "" ? (
+                  {updateSlider3 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1069,36 +919,36 @@ const ImportProduct = () => {
                               Hình 3
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_3" />
+                          <ImageUpload
+                            image="slider_url_3"
+                            setAvatar={setUpdateSlider3}
+                            setPublicId={setUpdatePublicIdSlider3}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : slider3.value === ""
-                            ? importedProducts.object.find(
-                                (row) => row.id === selectedId
-                              )?.slider_url_3
-                            : slider3.value
-                        }
+                        src={updateSlider3}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider3())}
+                        onClick={() => {
+                          handleDelete(updatePublicIdSlider3);
+                          setUpdateSlider3("");
+                          setUpdatePublicIdSlider3("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 3
                       </Button>
                     </div>
                   )}
 
-                  {slider4.value === "" ? (
+                  {updateSlider4 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1135,29 +985,29 @@ const ImportProduct = () => {
                               Hình 4
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_4" />
+                          <ImageUpload
+                            image="slider_url_4"
+                            setAvatar={setUpdateSlider4}
+                            setPublicId={setUpdatePublicIdSlider4}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto h-full">
+                    <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : slider4.value === ""
-                            ? importedProducts.object.find(
-                                (row) => row.id === selectedId
-                              )?.slider_url_4
-                            : slider4.value
-                        }
+                        src={updateSlider4}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider4())}
+                        onClick={() => {
+                          handleDelete(updatePublicIdSlider4);
+                          setUpdateSlider4("");
+                          setUpdatePublicIdSlider4("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 4
                       </Button>
@@ -1168,274 +1018,161 @@ const ImportProduct = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Sản phẩm: </Typography>
-                  {/* <Typography variant="medium">Áo thun nam</Typography> */}
-                  <div className="w-[200px]">
+
+                  <FormControl fullWidth size="small">
                     <Select
-                      disabled
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
                       value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.product
-                          ? importedProduct.product
-                          : importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.product_id.id
+                        importedProducts.object.find(
+                          (row) => row.id === selectedId
+                        )?.product_id.id
                       }
-                      onChange={(e) => dispatch(setProductId(e))}
                     >
                       {products &&
                         products.object.length > 0 &&
                         products.object.map((item, index) => (
-                          <Option key={index} value={item.id}>
+                          <MenuItem key={index} value={item.id}>
                             {item.name}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Mã màu: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="color"
-                      value={importedProduct.color_code}
-                      pattern="#[a-fA-F0-9]{6}"
-                      placeholder="#000000"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setColorCode(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    type="color"
+                    value={updateColor_code}
+                    pattern="#[a-fA-F0-9]{6}"
+                    placeholder="#000000"
+                    onChange={(e) => setUpdateColorCode(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Màu sắc: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.color_name === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.color_id.color_name
-                          : importedProduct.color_name
-                      }
-                      placeholder="Trắng"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setColorName(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    value={updateColor_name}
+                    placeholder="Đen"
+                    onChange={(e) => setUpdateColorName(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Kích thước: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.size === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.size_id.size
-                          : importedProduct.size
-                      }
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setSize(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    value={updateSize}
+                    placeholder="Đen"
+                    onChange={(e) => setUpdateSize(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chiều cao </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.height === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.size_id.height
-                          : importedProduct.height
-                      }
-                      placeholder="170cm"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setHeight(e.target.value))}
-                    />
-                  </div>
+
+                  <OutlinedInput
+                    size="small"
+                    value={updateHeight}
+                    id="outlined-adornment-weight"
+                    endAdornment={
+                      <InputAdornment position="end">cm</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setUpdateHeight(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 300
+                          ? 300
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
-                  <Typography variant="h6">Cân nặng </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.weight === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.size_id.weight || ""
-                          : importedProduct.weight
-                      }
-                      placeholder="50 kg"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setWeight(e.target.value))}
-                    />
-                  </div>
+                  <Typography variant="h6">Cân nặng: </Typography>
+                  <OutlinedInput
+                    size="small"
+                    value={updateWeight}
+                    id="outlined-adornment-weight"
+                    endAdornment={
+                      <InputAdornment position="end">kg</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setUpdateWeight(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 150
+                          ? 150
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
 
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chất liệu: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.material === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.material_id.name
-                          : importedProduct.material
-                      }
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setMaterial(e.target.value))}
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    value={updateMaterial}
+                    id="outlined-adornment-weight"
+                    onChange={(e) => setUpdateMaterial(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
                       name="gender"
-                      checked={
-                        importedProduct.gender === "MALE" ||
-                        (selectedId === -1
-                          ? ""
-                          : importedProduct.gender === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.gender === "MALE"
-                          : importedProduct.gender === "MALE")
-                      }
+                      checked={updateGender === "MALE"}
                       value="MALE"
                       label="Nam"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setUpdateGender(e.target.defaultValue)}
                     />
                     <Radio
                       name="gender"
-                      checked={
-                        importedProduct.gender === "FEMALE" ||
-                        (selectedId === -1
-                          ? ""
-                          : importedProduct.gender === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.gender === "FEMALE"
-                          : importedProduct.gender === "FEMALE")
-                      }
+                      checked={updateGender === "FEMALE"}
                       value="FEMALE"
                       label="Nữ"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setUpdateGender(e.target.defaultValue)}
                     />
                     <Radio
                       name="gender"
-                      checked={
-                        importedProduct.gender === "UNISEX" ||
-                        (selectedId === -1
-                          ? ""
-                          : importedProduct.gender === ""
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.gender === "UNISEX"
-                          : importedProduct.gender === "UNISEX")
-                      }
+                      checked={updateGender === "UNISEX"}
                       value="UNISEX"
                       label="Unisex"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setUpdateGender(e.target.defaultValue)}
                     />
                   </div>
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Số lượng: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.importNumber === 1
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.importNumber || ""
-                          : importedProduct.importNumber
-                      }
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportNumber(
-                            e.target.value < 1 ? 1 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    value={updateImportNumber}
+                    onChange={(e) =>
+                      setUpdateImportNumber(
+                        isNaN(e.target.value) || e.target.value < 1
+                          ? 1
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Giá nhập: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={
-                        selectedId === -1
-                          ? ""
-                          : importedProduct.importPrice === 1000
-                          ? importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.importPrice || ""
-                          : importedProduct.importPrice
-                      }
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportPrice(
-                            e.target.value < 1000 ? 1000 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    value={updateImportPrice}
+                    endAdornment={
+                      <InputAdornment position="end">đ</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setUpdateImportPrice(
+                        isNaN(e.target.value) || e.target.value < 1000
+                          ? 1000
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
               </div>
             </div>
@@ -1484,22 +1221,22 @@ const ImportProduct = () => {
             </Select> */}
         </div>
       </AdminLayout>
-      <Dialog open={newOpen} handler={handleNewOpen} size="xl">
-        <DialogHeader className="pb-0 flex justify-between">
+      <Dialog open={newOpen} onClose={handleNewClose} maxWidth="xl">
+        <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h4">Nhập sản phẩm mới</Typography>
           <IconButton
             className="border-none"
             variant="outlined"
-            onClick={handleNewOpen}
+            onClick={handleNewClose}
           >
             <CloseIcon />
           </IconButton>
-        </DialogHeader>
-        <DialogBody>
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid grid-cols-1 gap-4">
-                {avatar_url.value === "" ? (
+                {avatar_url === "" ? (
                   <figure className="my-auto mx-auto h-full w-full">
                     <div className="flex items-center  justify-center h-full w-full my-auto">
                       <label
@@ -1540,21 +1277,29 @@ const ImportProduct = () => {
                             Hình đại diện
                           </Typography>
                         </div>
-                        <ImageUpload image="avatar_url" />
+                        <ImageUpload
+                          image="avatar_url"
+                          setAvatar={setAvatar_Url}
+                          setPublicId={setPublicIdAvatar}
+                        />
                       </label>
                     </div>
                   </figure>
                 ) : (
                   <div className="grid grid-cols-4 justify-around mx-auto my-auto w-full">
                     <img
-                      src={avatar_url.value}
+                      src={avatar_url}
                       alt="avatar"
                       className="h-[200px] w-full mx-auto col-span-3"
                     />
                     <Button
-                      onClick={() => dispatch(deleteAvatar())}
+                      onClick={() => {
+                        handleDelete(publicIdAvatar);
+                        setAvatar_Url("");
+                        setPublicIdAvatar("");
+                      }}
                       color="red"
-                      className="w-full h-[200px]"
+                      className="w-full rounded-l-none h-[200px]"
                     >
                       Xóa ảnh đại diện
                     </Button>
@@ -1562,7 +1307,7 @@ const ImportProduct = () => {
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
-                  {slider1.value === "" ? (
+                  {slider1 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1599,28 +1344,36 @@ const ImportProduct = () => {
                               Hình 1
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_1" />
+                          <ImageUpload
+                            image="slider_url_1"
+                            setAvatar={setSlider1}
+                            setPublicId={setPublicIdSlider1}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={slider1.value}
+                        src={slider1}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider1())}
+                        onClick={() => {
+                          handleDelete(publicIdSlider1);
+                          setSlider1("");
+                          setPublicIdSlider1("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 1
                       </Button>
                     </div>
                   )}
 
-                  {slider2.value === "" ? (
+                  {slider2 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1657,28 +1410,36 @@ const ImportProduct = () => {
                               Hình 2
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_2" />
+                          <ImageUpload
+                            image="slider_url_2"
+                            setAvatar={setSlider2}
+                            setPublicId={setPublicIdSlider2}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={slider2.value}
+                        src={slider2}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider2())}
+                        onClick={() => {
+                          handleDelete(publicIdSlider2);
+                          setSlider2("");
+                          setPublicIdSlider2("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 2
                       </Button>
                     </div>
                   )}
 
-                  {slider3.value === "" ? (
+                  {slider3 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1715,28 +1476,36 @@ const ImportProduct = () => {
                               Hình 3
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_3" />
+                          <ImageUpload
+                            image="slider_url_3"
+                            setAvatar={setSlider3}
+                            setPublicId={setPublicIdSlider3}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
                     <div className="flex justify-around mx-auto w-full my-auto">
                       <img
-                        src={slider3.value}
+                        src={slider3}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider3())}
+                        onClick={() => {
+                          handleDelete(publicIdSlider3);
+                          setSlider3("");
+                          setPublicIdSlider3("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 3
                       </Button>
                     </div>
                   )}
 
-                  {slider4.value === "" ? (
+                  {slider4 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -1773,21 +1542,29 @@ const ImportProduct = () => {
                               Hình 4
                             </Typography>
                           </div>
-                          <ImageUpload image="slider_url_4" />
+                          <ImageUpload
+                            image="slider_url_4"
+                            setAvatar={setSlider4}
+                            setPublicId={setPublicIdSlider4}
+                          />
                         </label>
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto h-full">
+                    <div className="flex justify-around mx-auto h-full w-full">
                       <img
-                        src={slider4.value}
+                        src={slider4}
                         alt="avatar"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] w-full mx-auto my-auto"
                       />
                       <Button
-                        onClick={() => dispatch(deleteSlider4())}
+                        onClick={() => {
+                          handleDelete(publicIdSlider4);
+                          setSlider4("");
+                          setPublicIdSlider4("");
+                        }}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className="h-[100px] rounded-l-none mx-auto my-auto"
                       >
                         Xóa ảnh 4
                       </Button>
@@ -1799,215 +1576,186 @@ const ImportProduct = () => {
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Sản phẩm: </Typography>
                   {/* <Typography variant="medium">Áo thun nam</Typography> */}
-                  <div className="w-[200px]">
+                  <FormControl fullWidth>
                     <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={importedProduct.product.id}
-                      onChange={(e) => dispatch(setProductId(e))}
+                      value={product}
+                      onChange={(e) => setProduct(e.target.value)}
+                      size="small"
                     >
                       {products &&
                         products.object.length > 0 &&
                         products.object.map((item, index) => (
-                          <Option key={index} value={item.id}>
+                          <MenuItem key={index} value={item.id}>
                             {item.name}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Mã màu: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="color"
-                      value={importedProduct.color_code}
-                      pattern="#[a-fA-F0-9]{6}"
-                      placeholder="#000000"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setColorCode(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    type="color"
+                    value={color_code}
+                    pattern="#[a-fA-F0-9]{6}"
+                    placeholder="#000000"
+                    onChange={(e) => setColorCode(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Màu sắc: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={importedProduct.color_name}
-                      placeholder="Trắng"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setColorName(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    type="text"
+                    size="small"
+                    value={color_name}
+                    placeholder="Đen"
+                    onChange={(e) => setColorName(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Kích thước: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={importedProduct.size}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setSize(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    type="text"
+                    value={size}
+                    placeholder="S,M,L,XL,..."
+                    onChange={(e) => setSize(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chiều cao </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={importedProduct.height}
-                      placeholder="170cm"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setHeight(e.target.value))}
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    type="text"
+                    value={height}
+                    placeholder="170"
+                    endAdornment={
+                      <InputAdornment position="end">cm</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setHeight(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 300
+                          ? 300
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Cân nặng </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={importedProduct.weight}
-                      placeholder="50 kg"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setWeight(e.target.value))}
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    type="text"
+                    value={weight}
+                    placeholder="80"
+                    endAdornment={
+                      <InputAdornment position="end">kg</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setWeight(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 150
+                          ? 150
+                          : e.target.value
+                      )
+                    }
+                  />
                 </div>
 
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chất liệu: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      value={importedProduct.material}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setMaterial(e.target.value))}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    value={material}
+                    placeholder="Cotton"
+                    onChange={(e) => setMaterial(e.target.value)}
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "MALE"}
+                      checked={gender === "MALE"}
                       value="MALE"
                       label="Nam"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setGender(e.target.value)}
                     />
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "FEMALE"}
+                      checked={gender === "FEMALE"}
                       value="FEMALE"
                       label="Nữ"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setGender(e.target.value)}
                     />
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "UNISEX"}
+                      checked={gender === "UNISEX"}
                       value="UNISEX"
                       label="Unisex"
-                      onChange={(e) =>
-                        dispatch(setGender(e.target.defaultValue))
-                      }
+                      onChange={(e) => setGender(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Số lượng: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={importedProduct.importNumber}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportNumber(
-                            e.target.value < 1 ? 1 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    value={importNumber}
+                    placeholder="Cotton"
+                    onChange={(e) =>
+                      setImportNumber(e.target.value < 1 ? 1 : e.target.value)
+                    }
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Giá nhập: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={importedProduct.importPrice}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportPrice(
-                            e.target.value < 1000 ? 1000 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    value={importPrice}
+                    placeholder="1000"
+                    endAdornment={
+                      <InputAdornment position="end">đ</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setImportPrice(
+                        e.target.value < 1000 ? 1000 : e.target.value
+                      )
+                    }
+                  />
                 </div>
               </div>
             </div>
           </Container>
-        </DialogBody>
-        <DialogFooter>
+        </DialogContent>
+        <DialogActions>
           <Button variant="gradient" color="green" onClick={handleAddSubmit}>
             <span>Xác nhận</span>
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
-      <Dialog open={oldOpen} handler={handleOldOpen} size="xl">
-        <DialogHeader className="pb-0 flex justify-between">
+      <Dialog open={oldOpen} onClose={handleOldClose} maxWidth="xl">
+        <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h4">Nhập sản phẩm có sẵn</Typography>
           <IconButton
             className="border-none"
             variant="outlined"
-            onClick={handleOldOpen}
+            onClick={handleOldClose}
           >
             <CloseIcon />
           </IconButton>
-        </DialogHeader>
-        <DialogBody>
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid grid-cols-1 gap-4">
-                {!findImportedProduct(
-                  importedProduct.product,
-                  importedProduct.color_code,
-                  importedProduct.size,
-                  importedProduct.material
-                ) ? (
+                {avatar_url === "" ? (
                   <figure className="my-auto mx-auto h-full w-full">
-                    <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <div className="flex items-center justify-center h-full w-full my-auto">
                       <label
                         htmlFor="avatar_url"
                         className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
@@ -2056,14 +1804,14 @@ const ImportProduct = () => {
                       src={
                         importedProducts.object?.find(
                           (item) =>
-                            item.product_id.id === importedProduct.product &&
-                            item.color_id.id === importedProduct.color_code &&
-                            item.size_id.id === importedProduct.size &&
-                            item.material_id.id === importedProduct.material
+                            item.product_id.id === product &&
+                            item.color_id.color_code === color_code &&
+                            item.size_id.size === size &&
+                            item.material_id.name === material
                         )?.image_url
                       }
                       alt="avatar"
-                      className="h-[200px] w-full mx-auto col-span-4"
+                      className="h-[250px] w-full mx-auto col-span-4"
                     />
                     {/* <Button
                       onClick={() => dispatch(deleteAvatar())}
@@ -2076,12 +1824,7 @@ const ImportProduct = () => {
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
-                  {!findImportedProduct(
-                    importedProduct.product,
-                    importedProduct.color_code,
-                    importedProduct.size,
-                    importedProduct.material
-                  ) ? (
+                  {slider1 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -2128,14 +1871,14 @@ const ImportProduct = () => {
                         src={
                           importedProducts.object?.find(
                             (item) =>
-                              item.product_id.id === importedProduct.product &&
-                              item.color_id.id === importedProduct.color_code &&
-                              item.size_id.id === importedProduct.size &&
-                              item.material_id.id === importedProduct.material
+                              item.product_id.id === product &&
+                              item.color_id.color_code === color_code &&
+                              item.size_id.size === size &&
+                              item.material_id.name === material
                           )?.slider_url_1
                         }
                         alt="avatar"
-                        className="h-[125px] mx-auto my-auto"
+                        className="h-[125px] w-full mx-auto my-auto"
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider1())}
@@ -2147,12 +1890,7 @@ const ImportProduct = () => {
                     </div>
                   )}
 
-                  {!findImportedProduct(
-                    importedProduct.product,
-                    importedProduct.color_code,
-                    importedProduct.size,
-                    importedProduct.material
-                  ) ? (
+                  {slider2 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -2199,14 +1937,14 @@ const ImportProduct = () => {
                         src={
                           importedProducts.object?.find(
                             (item) =>
-                              item.product_id.id === importedProduct.product &&
-                              item.color_id.id === importedProduct.color_code &&
-                              item.size_id.id === importedProduct.size &&
-                              item.material_id.id === importedProduct.material
+                              item.product_id.id === product &&
+                              item.color_id.color_code === color_code &&
+                              item.size_id.size === size &&
+                              item.material_id.name === material
                           )?.slider_url_2
                         }
                         alt="avatar"
-                        className="h-[125px] mx-auto my-auto"
+                        className="h-[125px] w-full mx-auto my-auto"
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider2())}
@@ -2217,12 +1955,7 @@ const ImportProduct = () => {
                       </Button> */}
                     </div>
                   )}
-                  {!findImportedProduct(
-                    importedProduct.product,
-                    importedProduct.color_code,
-                    importedProduct.size,
-                    importedProduct.material
-                  ) ? (
+                  {slider3 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -2269,14 +2002,14 @@ const ImportProduct = () => {
                         src={
                           importedProducts.object?.find(
                             (item) =>
-                              item.product_id.id === importedProduct.product &&
-                              item.color_id.id === importedProduct.color_code &&
-                              item.size_id.id === importedProduct.size &&
-                              item.material_id.id === importedProduct.material
+                              item.product_id.id === product &&
+                              item.color_id.color_code === color_code &&
+                              item.size_id.size === size &&
+                              item.material_id.name === material
                           )?.slider_url_3
                         }
                         alt="avatar"
-                        className="h-[125px] mx-auto my-auto"
+                        className="h-[125px] w-full mx-auto my-auto"
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider3())}
@@ -2287,12 +2020,7 @@ const ImportProduct = () => {
                       </Button> */}
                     </div>
                   )}
-                  {!findImportedProduct(
-                    importedProduct.product,
-                    importedProduct.color_code,
-                    importedProduct.size,
-                    importedProduct.material
-                  ) ? (
+                  {slider4 === "" ? (
                     <figure className="my-auto mx-auto h-full w-full">
                       <div className="flex items-center  justify-center h-full w-full my-auto">
                         <label
@@ -2334,19 +2062,19 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto h-full">
+                    <div className="flex justify-around mx-auto w-full my-auto">
                       <img
                         src={
                           importedProducts.object?.find(
                             (item) =>
-                              item.product_id.id === importedProduct.product &&
-                              item.color_id.id === importedProduct.color_code &&
-                              item.size_id.id === importedProduct.size &&
-                              item.material_id.id === importedProduct.material
+                              item.product_id.id === product &&
+                              item.color_id.color_code === color_code &&
+                              item.size_id.size === size &&
+                              item.material_id.name === material
                           )?.slider_url_4
                         }
                         alt="avatar"
-                        className="h-[125px] mx-auto my-auto"
+                        className="h-[125px] w-full mx-auto my-auto"
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider4())}
@@ -2362,232 +2090,210 @@ const ImportProduct = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Sản phẩm: </Typography>
-                  {/* <Typography variant="medium">Áo thun nam</Typography> */}
-                  <div className="w-[200px]">
+                  <FormControl fullWidth>
                     <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={importedProduct.product}
-                      onChange={(e) => dispatch(setProductId(e))}
+                      value={product}
+                      onChange={(e) => setProduct(e.target.value)}
+                      size="small"
                     >
                       {products &&
                         products.object.length > 0 &&
                         products.object.map((item, index) => (
-                          <Option key={index} value={item.id}>
+                          <MenuItem key={index} value={item.id}>
                             {item.name}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
                 <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Mã màu: </Typography>
-                  <div className="w-[200px]">
+                  <FormControl fullWidth>
                     <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={importedProduct.color_code}
-                      onChange={(e) => dispatch(setColorCode(e))}
+                      value={color_code}
+                      onChange={(e) => setColorCode(e.target.value)}
+                      size="small"
                     >
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
                         importedProducts.object.map((item, index) => (
-                          <Option key={index} value={item.color_id.id}>
+                          <MenuItem
+                            key={index}
+                            value={item.color_id.color_code}
+                          >
                             {item.color_id.color_code}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Màu sắc: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      disabled
-                      value={
-                        importedProducts.object?.find(
-                          (item) =>
-                            item.product_id.id === importedProduct.product &&
-                            item.color_id.id === importedProduct.color_code
-                        )?.color_id.color_name
-                      }
-                      placeholder="Trắng"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
+                  <TextField
+                    size="small"
+                    disabled
+                    value={
+                      importedProducts.object?.find(
+                        (item) =>
+                          item.product_id.id === product &&
+                          item.color_id.id === color_code
+                      )?.color_id.color_name
+                    }
+                    placeholder="Trắng"
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Kích thước: </Typography>
-                  <div className="w-[200px]">
-                    {/* <Input
-                      value={importedProduct.size}
+                  {/* <Input
+                      value={size}
                       className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                       labelProps={{
                         className: "before:content-none after:content-none",
                       }}
                       onChange={(e) => dispatch(setSize(e.target.value))}
                     /> */}
+                  <FormControl fullWidth>
                     <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={importedProduct.size}
-                      onChange={(e) => dispatch(setSize(e))}
+                      value={size}
+                      onChange={(e) => setSize(e.target.value)}
+                      size="small"
                     >
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
                         importedProducts.object.map((item, index) => (
-                          <Option key={index} value={item.size_id.id}>
+                          <MenuItem key={index} value={item.size_id.size}>
                             {item.size_id.size}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chiều cao </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      disabled
-                      value={
-                        importedProducts.object?.find(
-                          (item) =>
-                            item.product_id.id === importedProduct.product &&
-                            item.size_id.id === importedProduct.size
-                        )?.size_id.height
-                      }
-                      placeholder="170cm"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setHeight(e.target.value))}
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    disabled
+                    endAdornment={
+                      <InputAdornment position="end">cm</InputAdornment>
+                    }
+                    value={
+                      importedProducts.object?.find(
+                        (item) =>
+                          item.product_id.id === product &&
+                          item.size_id.size === size
+                      )?.size_id.height
+                    }
+                    placeholder="170cm"
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Cân nặng </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      disabled
-                      value={
-                        importedProducts.object?.find(
-                          (item) =>
-                            item.product_id.id === importedProduct.product &&
-                            item.size_id.id === importedProduct.size
-                        )?.size_id.weight
-                      }
-                      placeholder="50 kg"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) => dispatch(setWeight(e.target.value))}
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    disabled
+                    endAdornment={
+                      <InputAdornment position="end">kg</InputAdornment>
+                    }
+                    value={
+                      importedProducts.object?.find(
+                        (item) =>
+                          item.product_id.id === product &&
+                          item.size_id.id === size
+                      )?.size_id.weight
+                    }
+                    placeholder="170cm"
+                  />
                 </div>
 
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Chất liệu: </Typography>
-                  <div className="w-[200px]">
+                  <FormControl fullWidth>
                     <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      value={importedProduct.material}
-                      onChange={(e) => dispatch(setMaterial(e))}
+                      value={material}
+                      onChange={(e) => setMaterial(e.target.value)}
+                      size="small"
                     >
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
                         importedProducts.object.map((item, index) => (
-                          <Option key={index} value={item.material_id.id}>
+                          <MenuItem key={index} value={item.material_id.name}>
                             {item.material_id.name}
-                          </Option>
+                          </MenuItem>
                         ))}
                     </Select>
-                  </div>
+                  </FormControl>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className="flex flex-col justify-between gap-4">
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "MALE"}
+                      checked={gender === "MALE"}
                       value="MALE"
                       label="Nam"
+                      onChange={(e) => setGender(e.target.value)}
                     />
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "FEMALE"}
+                      checked={gender === "FEMALE"}
                       value="FEMALE"
                       label="Nữ"
+                      onChange={(e) => setGender(e.target.value)}
                     />
                     <Radio
                       name="gender"
-                      checked={importedProduct.gender === "UNISEX"}
+                      checked={gender === "UNISEX"}
                       value="UNISEX"
                       label="Unisex"
+                      onChange={(e) => setGender(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Số lượng: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={importedProduct.importNumber}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportNumber(
-                            e.target.value < 1 ? 1 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+
+                  <TextField
+                    size="small"
+                    value={importNumber}
+                    placeholder="1"
+                    onChange={(e) =>
+                      setImportNumber(
+                        isNaN(Number(e.target.value)) ||
+                          Number(e.target.value) < 1
+                          ? 1
+                          : Number(e.target.value)
+                      )
+                    }
+                  />
                 </div>
                 <div className="flex flex-col  justify-between gap-4">
                   <Typography variant="h6">Giá nhập: </Typography>
-                  <div className="w-[200px]">
-                    <Input
-                      type="number"
-                      value={importedProduct.importPrice}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                      onChange={(e) =>
-                        dispatch(
-                          setImportPrice(
-                            e.target.value < 1000 ? 1000 : e.target.value
-                          )
-                        )
-                      }
-                    />
-                  </div>
+                  <OutlinedInput
+                    size="small"
+                    value={importPrice}
+                    placeholder="1000"
+                    endAdornment={
+                      <InputAdornment position="end">đ</InputAdornment>
+                    }
+                    onChange={(e) =>
+                      setImportPrice(
+                        isNaN(Number(e.target.value)) ||
+                          Number(e.target.value) < 1000
+                          ? 1000
+                          : Number(e.target.value)
+                      )
+                    }
+                  />
                 </div>
               </div>
             </div>
           </Container>
-        </DialogBody>
-        <DialogFooter>
+        </DialogContent>
+        <DialogActions>
           <Button variant="gradient" color="green" onClick={handleAddSubmit}>
             <span>Xác nhận</span>
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </>
   );

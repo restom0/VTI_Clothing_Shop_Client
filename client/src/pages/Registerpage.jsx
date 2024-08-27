@@ -290,9 +290,7 @@ const Registerpage = () => {
         <div className="grid lg:grid-cols-2 sm:grid-cols-1">
           <div className="w-100 my-5 mx-5">
             <Button
-              onClick={() => {
-                window.location.href = "/";
-              }}
+              onClick={() => navigate("/login")}
               color="indigo"
               className="w-full"
               loading={isLoading}

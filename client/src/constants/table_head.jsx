@@ -123,11 +123,11 @@ const web = [
 ];
 
 const brand = [
-  { label: "Tên", col: 1 },
+  { label: "Tên", col: 3 },
   { label: "Mô tả", col: 4 },
 ];
 const category = [
-  { label: "Tên", col: 1 },
+  { label: "Tên", col: 3 },
   { label: "Mô tả", col: 4 },
 ];
 const history = [
@@ -143,8 +143,15 @@ const order = [
   { label: "Ngày tạo đơn", col: 1 },
 ];
 const changePriceList = [
-  { label: "Mã sản phẩm", col: 1 },
+  { label: "Mã SKU", col: 1 },
+  { label: "Giá nhập", col: 1 },
+  { label: "Giá bán", col: 1 },
+];
+const changePricesList = [
   { label: "Tên sản phẩm", col: 1 },
+  { label: "Màu", col: 1 },
+  { label: "Kích thước", col: 1 },
+  { label: "Vật liệu", col: 1 },
   { label: "Giá nhập", col: 1 },
   { label: "Giá bán", col: 1 },
 ];
@@ -169,6 +176,7 @@ export {
   history,
   order,
   changePriceList,
+  changePricesList,
   voucher,
   voucherDetail,
 };
