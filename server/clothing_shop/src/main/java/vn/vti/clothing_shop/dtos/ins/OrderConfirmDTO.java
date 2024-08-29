@@ -1,4 +1,4 @@
-package vn.vti.clothing_shop.requests;
+package vn.vti.clothing_shop.dtos.ins;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,9 +12,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderConfirmRequest {
-    @NotNull(message = "Order id is required")
-    @Min(value = 1, message = "Order id must be greater than 0")
-    @Max(value = Long.MAX_VALUE, message = "Invalid Order id")
+public class OrderConfirmDTO {
     private Long order_code;
+    private Long user_id;
+    private Boolean status;
 }

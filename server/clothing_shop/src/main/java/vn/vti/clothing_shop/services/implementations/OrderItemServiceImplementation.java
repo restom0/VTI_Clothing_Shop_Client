@@ -64,7 +64,6 @@ public class OrderItemServiceImplementation implements OrderItemService {
         Order order = orderRepository.findById(orderItemCreateDTO.getOrder_id()).orElseThrow(()-> new NotFoundException("Order not found"));
         OnSaleProduct onSaleProduct = onSaleProductRepository.findById(orderItemCreateDTO.getProduct_id()).orElseThrow(()-> new NotFoundException("OnSaleProduct not found"));
         List<ImportedProduct> importedProduct = importedProductRepository.findByProductIdWithPositiveStock(onSaleProduct.getProduct_id().getId());
-
         if(calcSumProducts(importedProduct) < orderItemCreateDTO.getQuantity()){
             throw new BadRequestException("Not enough stock");
         }
@@ -79,6 +78,12 @@ public class OrderItemServiceImplementation implements OrderItemService {
                 importedProductRepository.save(product);
             }
         });
+        if(orderItemRepository.findByIdAndOrderId(order.getId(),orderItemCreateDTO.getOrder_id()).isPresent()){
+            OrderItem orderItem = orderItemRepository.findByIdAndOrderId(order.getId(),orderItemCreateDTO.getOrder_id()).get();
+            orderItem.setQuantity(orderItem.getQuantity() + orderItemCreateDTO.getQuantity());
+            orderItemRepository.save(orderItem);
+            return true;
+        }
         OrderItem orderItem = orderItemMapper.CreateDTOToEntity(orderItemCreateDTO,order,onSaleProduct);
         orderItemRepository.save(orderItem);
         return true;

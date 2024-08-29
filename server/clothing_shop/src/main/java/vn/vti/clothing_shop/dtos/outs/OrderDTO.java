@@ -20,6 +20,7 @@ public class OrderDTO {
     private String receiver_name;
     private Boolean isPresent;
     private Long total_price;
+    private Long order_code;
     private PaymentStatus payment_status;
     private PaymentMethod payment_method;
     private VoucherDTO voucherId;

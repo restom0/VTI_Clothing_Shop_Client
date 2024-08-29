@@ -36,7 +36,6 @@ public class OrderItem implements Serializable {
     private Order order_id;
 
     @Column(name = "quantity")
-    @Pattern(regexp = NUMBER, message = "Invalid quantity")
     private Integer quantity;
 
     @CreationTimestamp

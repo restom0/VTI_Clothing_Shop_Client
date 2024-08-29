@@ -2,10 +2,15 @@ package vn.vti.clothing_shop.services.implementations;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import vn.payos.PayOS;
+import vn.vti.clothing_shop.constants.PaymentStatus;
+import vn.vti.clothing_shop.dtos.ins.OrderCheckoutDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderConfirmDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderUpdateDTO;
 import vn.vti.clothing_shop.dtos.outs.BrandDTO;
@@ -30,7 +35,7 @@ import java.util.List;
 
 @Service
 public class OrderServiceImplementation implements OrderService {
-
+    private final PayOS payOS;
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -38,7 +43,8 @@ public class OrderServiceImplementation implements OrderService {
     private final OrderMapper orderMapper;
 
     @Autowired
-    public OrderServiceImplementation(OrderItemRepository orderItemRepository, OrderRepository orderRepository, UserRepository userRepository, VoucherRepository voucherRepository, OrderMapper orderMapper) {
+    public OrderServiceImplementation(PayOS payOS, OrderItemRepository orderItemRepository, OrderRepository orderRepository, UserRepository userRepository, VoucherRepository voucherRepository, OrderMapper orderMapper) {
+        this.payOS = payOS;
         this.orderItemRepository = orderItemRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
@@ -73,9 +79,10 @@ public class OrderServiceImplementation implements OrderService {
     @Transactional
     public OrderDTO addOrder(OrderCreateDTO orderCreateDTO){
         User user = this.userRepository.findById(orderCreateDTO.getUser_id()).orElseThrow(()->new ForbiddenException("User not found"));
-        return orderMapper.EntityToDTO(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).orElseGet(()->{
-            return this.orderRepository.save(orderMapper.CreateDTOToEntity(orderCreateDTO,user));
-        }),new ArrayList<>());
+        if(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).isEmpty()){
+            return orderMapper.EntityToDTO(this.orderRepository.save(orderMapper.CreateDTOToEntity(orderCreateDTO,user)),new ArrayList<>());
+        }
+        return orderMapper.EntityToDTO(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).get(),this.orderItemRepository.findAllByOrderId(this.orderRepository.findByUserIdWithNOT_CONFIRMEDStatus(user.getId()).get().getId()));
     }
     private void subtractStock(Long id){
         Voucher voucher = voucherRepository.findById(id).orElseThrow(()->new NotFoundException("Voucher not found"));
@@ -124,5 +131,14 @@ public class OrderServiceImplementation implements OrderService {
     };
     public CategoryDTO getMaxCategory(){
         return null;
+    };
+    public OrderDTO getOrderByIdAndUserId(OrderCheckoutDTO orderCheckoutDTO){
+        return orderMapper.EntityToDTO(this.orderRepository.findOrderByIdAndUserId(orderCheckoutDTO.getOrder_id(),orderCheckoutDTO.getUser_id()).orElseThrow(()-> new NotFoundException("Order not found")),this.orderItemRepository.findAllByOrderId(orderCheckoutDTO.getOrder_id()));
+    };
+    public Boolean confirmOrder(OrderConfirmDTO orderConfirmDTO){
+        Order order = this.orderRepository.findOrderByOrderCodeAndUserId(orderConfirmDTO.getOrder_code(),orderConfirmDTO.getUser_id()).orElseThrow(()-> new NotFoundException("Order not found"));
+        order.setPayment_status(orderConfirmDTO.getStatus() ? PaymentStatus.CONFIRMED:PaymentStatus.CANCELLED);
+        this.orderRepository.save(order);
+        return orderConfirmDTO.getStatus();
     };
 }

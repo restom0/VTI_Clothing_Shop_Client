@@ -15,7 +15,10 @@ public class ParameterUtils {
         return true;
     }
     public static ResponseEntity<?> showBindingResult(BindingResult bindingResult){
-        StringBuilder errors = new StringBuilder();
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
         throw new BadRequestException(errors.toString());
     }
 }

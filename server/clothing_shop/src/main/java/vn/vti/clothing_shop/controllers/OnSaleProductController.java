@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.vti.clothing_shop.responses.ResponseHandler;
@@ -30,7 +31,7 @@ public class OnSaleProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOnSaleProductById(Long id) {
+    public ResponseEntity<?> getOnSaleProductById(@PathVariable Long id) {
         try{
             return ResponseHandler.responseBuilder(200,"Lấy sản phẩm giảm giá thành công",onSaleProductServiceImplementation.getOnSaleProductById(id), HttpStatus.OK);
         }

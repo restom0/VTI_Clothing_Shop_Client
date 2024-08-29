@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     @NotNull
     List<Order> findAll();
 
-    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.user_id = ?1")
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.user_id.id = ?1")
     List<Order> findAllByUserId(Long userId);
 
     @Override
@@ -27,10 +27,10 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 //    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.id = ?1")
 //    Order findOrderById(Long id);
 
-    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.id = ?1 AND o.user_id = ?2")
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.id = ?1 AND o.user_id.id = ?2")
     Optional<Order> findOrderByIdAndUserId(Long id,Long userId);
 
-    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.user_id = ?1 AND o.payment_status = NOT_CONFIRMED")
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.user_id.id = ?1 AND o.payment_status = NOT_CONFIRMED")
     Optional<Order>findByUserIdWithNOT_CONFIRMEDStatus(Long userId);
 
     @Override
@@ -48,4 +48,8 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
     List<Order> findAllCompletedOrder();
+
+    @Query("SELECT o FROM Order o WHERE o.order_code=?1 AND o.user_id.id=?2 AND o.deleted_at IS NULL AND o.payment_status = NOT_CONFIRMED")
+    Optional<Order> findOrderByOrderCodeAndUserId(Long orderCode, Long userId);
+
 }

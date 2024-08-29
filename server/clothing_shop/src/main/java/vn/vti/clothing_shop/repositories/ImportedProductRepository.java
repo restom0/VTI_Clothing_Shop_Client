@@ -26,7 +26,7 @@ public interface ImportedProductRepository extends JpaRepository<ImportedProduct
 
     @Query("SELECT ip " +
             "FROM ImportedProduct ip " +
-            "WHERE ip.product_id.id = ?1 " +
+            "WHERE ip.id = ?1 " +
                 "AND ip.deleted_at IS NULL " +
                 "AND ip.stock > 0" +
             "ORDER BY ip.created_at ASC")
@@ -34,7 +34,7 @@ public interface ImportedProductRepository extends JpaRepository<ImportedProduct
 
     @Query("SELECT ip " +
             "FROM ImportedProduct ip " +
-            "WHERE ip.product_id.id = ?1 " +
+            "WHERE ip.id = ?1 " +
             "AND ip.deleted_at IS NULL " +
             "AND ip.stock = 0" +
             "ORDER BY ip.created_at DESC")
@@ -59,14 +59,14 @@ public interface ImportedProductRepository extends JpaRepository<ImportedProduct
     @Query("SELECT ip " +
             "FROM ImportedProduct ip " +
             "WHERE ip.stock > 0 " +
-                "AND ip.product_id.brand_id = ?1 " +
+                "AND ip.product_id.brand_id.id = ?1 " +
                 "AND ip.deleted_at IS NULL")
     List<ImportedProduct> findAllWithPositiveStockByBrandId(Long id);
 
     @Query("SELECT ip " +
             "FROM ImportedProduct ip " +
             "WHERE ip.stock > 0 " +
-                "AND ip.product_id.category_id = ?1 " +
+                "AND ip.product_id.category_id.id = ?1 " +
                 "AND ip.deleted_at IS NULL")
     List<ImportedProduct> findAllWithPositiveStockByCategoryId(Long id);
 

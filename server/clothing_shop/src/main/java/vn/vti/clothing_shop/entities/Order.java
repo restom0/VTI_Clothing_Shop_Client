@@ -45,6 +45,9 @@ public class Order implements Serializable {
     @Column(name= "total_price", nullable = false)
     private Long total_price;
 
+    @Column(name = "order_code",nullable = false)
+    private Long order_code;
+
     @Column(name= "payment_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PaymentStatus payment_status;

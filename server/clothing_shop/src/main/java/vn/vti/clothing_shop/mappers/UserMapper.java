@@ -110,6 +110,12 @@ public class UserMapper {
     public UserLoginDTO EntityToLoginDTO(User user,String token){
         UserLoginDTO userLoginDTO = modelMapper.map(user, UserLoginDTO.class);
         userLoginDTO.setToken(token);
+        if(user.getRole().equals(UserRole.ADMIN)){
+            userLoginDTO.setUrl("/Dashboard");
+        }
+        else {
+            userLoginDTO.setUrl("/");
+        }
         return userLoginDTO;
     }
 }

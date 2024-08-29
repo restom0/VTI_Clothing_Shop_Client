@@ -9,6 +9,10 @@ import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.mappers.OnSaleProductMapper;
 import vn.vti.clothing_shop.repositories.OnSaleProductRepository;
 import vn.vti.clothing_shop.services.interfaces.OnSaleProductService;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -28,14 +32,12 @@ public class OnSaleProductServiceImplementation implements OnSaleProductService 
     public List<OnSaleProductDTO> getAllOnSaleProducts() {
         List<OnSaleProduct> NullEndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNullEnd();
         List<OnSaleProduct> EndDateOnSaleProducts = this.onSaleProductRepository.findAllAvailableByNotNullEnd();
-        EndDateOnSaleProducts.forEach(EndDateOnSaleProduct -> {
-            NullEndDateOnSaleProducts.forEach(NullEndDateOnSaleProduct->{
-                if(!EndDateOnSaleProduct.getId().equals(NullEndDateOnSaleProduct.getId())){
-                    NullEndDateOnSaleProducts.add(EndDateOnSaleProduct);
-                }
-            });
-        });
-        return this.onSaleProductMapper.EntityToDTO(NullEndDateOnSaleProducts);
+
+        Set<OnSaleProduct> mergedProducts = new HashSet<>(NullEndDateOnSaleProducts);
+        mergedProducts.addAll(EndDateOnSaleProducts);
+
+        List<OnSaleProduct> mergedProductList = new ArrayList<>(mergedProducts);
+        return this.onSaleProductMapper.EntityToDTO(mergedProductList);
     }
     public OnSaleProductDTO getOnSaleProductById(Long id) {
         OnSaleProduct onSaleProduct = this.onSaleProductRepository.findById(id).orElseThrow(()->new NotFoundException("OnSaleProduct not found"));

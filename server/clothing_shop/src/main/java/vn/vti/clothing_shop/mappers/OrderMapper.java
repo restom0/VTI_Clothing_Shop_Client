@@ -3,6 +3,10 @@ package vn.vti.clothing_shop.mappers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import vn.vti.clothing_shop.constants.PaymentMethod;
+import vn.vti.clothing_shop.constants.PaymentStatus;
+import vn.vti.clothing_shop.dtos.ins.OrderCheckoutDTO;
+import vn.vti.clothing_shop.dtos.ins.OrderConfirmDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderCreateDTO;
 import vn.vti.clothing_shop.dtos.ins.OrderUpdateDTO;
 import vn.vti.clothing_shop.dtos.outs.OrderDTO;
@@ -10,9 +14,12 @@ import vn.vti.clothing_shop.entities.Order;
 import vn.vti.clothing_shop.entities.OrderItem;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.entities.Voucher;
+import vn.vti.clothing_shop.requests.OrderCheckoutRequest;
+import vn.vti.clothing_shop.requests.OrderConfirmRequest;
 import vn.vti.clothing_shop.requests.OrderCreateRequest;
 import vn.vti.clothing_shop.requests.OrderUpdateRequest;
 
+import java.util.Date;
 import java.util.List;
 
 import static vn.vti.clothing_shop.constants.PaymentStatus.ON_HOLD;
@@ -48,6 +55,15 @@ public class OrderMapper {
 
     public Order CreateDTOToEntity(OrderCreateDTO orderCreateDTO, User user) {
         Order order = modelMapper.map(orderCreateDTO, Order.class);
+        String currentTimeString = String.valueOf(new Date().getTime());
+        order.setAddress(user.getAddress());
+        order.setPhone_number(user.getPhone_number());
+        order.setReceiver_name(user.getName());
+        order.setIsPresent(false);
+        order.setPayment_method(PaymentMethod.COD);
+        order.setPayment_status(PaymentStatus.NOT_CONFIRMED);
+        order.setTotal_price(0L);
+        order.setOrder_code(Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6)));
         order.setUser_id(user);
         return order;
     }
@@ -67,5 +83,17 @@ public class OrderMapper {
         order.setPayment_method(orderUpdateDTO.getPayment_method());
         order.setVoucherId(voucher);
         return order;
+    }
+
+    public OrderCheckoutDTO CheckoutRequestToCheckoutDTO(OrderCheckoutRequest orderCheckoutRequest, Long user_id) {
+        OrderCheckoutDTO orderCheckoutDTO = modelMapper.map(orderCheckoutRequest, OrderCheckoutDTO.class);
+        orderCheckoutDTO.setUser_id(user_id);
+        return orderCheckoutDTO;
+    }
+    public OrderConfirmDTO ConfirmRequestToConfirmDTO(OrderConfirmRequest orderConfirmRequest, Long user_id,Boolean status) {
+        OrderConfirmDTO orderConfirmDTO = modelMapper.map(orderConfirmRequest, OrderConfirmDTO.class);
+        orderConfirmDTO.setUser_id(user_id);
+        orderConfirmDTO.setStatus(status);
+        return orderConfirmDTO;
     }
 }

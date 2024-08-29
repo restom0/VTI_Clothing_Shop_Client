@@ -12,9 +12,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCheckoutRequest {
+public class OrderConfirmRequest {
     @NotNull(message = "Order id is required")
     @Min(value = 1, message = "Order id must be greater than 0")
     @Max(value = Long.MAX_VALUE, message = "Invalid Order id")
-    private Long order_id;
+    private Long order_code;
 }

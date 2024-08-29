@@ -13,4 +13,5 @@ public class UserLoginDTO {
     private String avatar_url;
     private String name;
     private String token;
+    private String url;
 }

@@ -51,14 +51,3 @@ public class Product implements Serializable {
     private LocalDateTime deleted_at;
 
 }
-//Table products {
-//id integer [pk]
-//name string
-//short_description string
-//image_url string
-//category_id integer [ref: < categories.id]
-//brand_id integer [ref: < brands.id]
-//created_at timestamp
-//updated_at timestamp
-//deleted_at timestamp
-//}

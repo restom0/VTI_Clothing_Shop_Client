@@ -136,8 +136,8 @@ public class InputSaleServiceImplementation implements InputSaleService {
         if(onSaleProducts.isEmpty()) return;
         onSaleProducts.forEach(onSaleProduct -> {
             if(!isValidToSave(onSaleProduct.getProduct_id(),inputSale)) return;
-            onSaleProduct.setSale_price(onSaleProduct.getSale_price()*inputSale.getSalePercentage());
-            onSaleProduct.setDiscount(onSaleProduct.getDiscount()*inputSale.getDiscount());
+            onSaleProduct.setSale_price(onSaleProduct.getSale_price()*inputSale.getSalePercentage()/100);
+            onSaleProduct.setDiscount(inputSale.getDiscount());
             this.onSaleProductRepository.save(onSaleProduct);
         });
     }

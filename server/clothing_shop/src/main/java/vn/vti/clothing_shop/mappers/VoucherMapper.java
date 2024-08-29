@@ -41,6 +41,10 @@ public class VoucherMapper {
 
     public Voucher updateDTOToEntity(Voucher voucher, VoucherUpdateDTO voucherUpdateDTO) {
         voucher.setStock(voucherUpdateDTO.getInput_stock());
+        voucher.setAvailable_date(voucherUpdateDTO.getAvailable_date());
+        voucher.setExpired_date(voucherUpdateDTO.getExpired_date());
+        voucher.setValue(voucherUpdateDTO.getValue());
+        voucher.setCode(voucherUpdateDTO.getCode());
         return voucher;
     }
 
