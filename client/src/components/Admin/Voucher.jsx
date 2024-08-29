@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
   IconButton,
   Typography,
-  Dialog,
   Tooltip,
   Input,
   Tabs,
   TabsHeader,
   Tab,
-  Select,
   Option,
 } from "@material-tailwind/react";
+import {
+  TextField,
+  Select,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  Menu,
+  FormControl,
+  OutlinedInput,
+  InputAdornment,
+} from "@mui/material";
 import { Container, Divider } from "@mui/material";
 import {
   changePriceList,
@@ -28,9 +35,20 @@ import Pagination from "../shared/Pagination";
 import TableHeader from "../shared/TableHeader";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import CloseIcon from "@mui/icons-material/Close";
-import { useGetVouchersQuery } from "../../apis/VoucherApi";
+import {
+  useAddVoucherMutation,
+  useDeleteVoucherMutation,
+  useGetVouchersQuery,
+  useUpdateVoucherMutation,
+} from "../../apis/VoucherApi";
 import Loading from "../shared/Loading";
 import Errorpage from "../../pages/Errorpage";
+import { useSelector } from "react-redux";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
+import { Toast } from "../../configs/SweetAlert2";
 const TABLE_ROWS = [
   {
     name: "001",
@@ -101,293 +119,352 @@ const TABLE_ROWS = [
 ];
 const Voucher = () => {
   const [subActive, setSubActive] = React.useState(1);
+  const [code, setCode] = React.useState(null);
+  const [inputStock, setInputStock] = React.useState(null);
+  const [value, setValue] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [updateCode, setUpdateCode] = React.useState(null);
+  const [updateInputStock, setUpdateInputStock] = React.useState(null);
+  const [updateValue, setUpdateValue] = React.useState(null);
+  const [updateStartDate, setUpdateStartDate] = React.useState(null);
+  const [updateEndDate, setUpdateEndDate] = React.useState(null);
+  const selectedId = useSelector((state) => state.selectedId.value);
+
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
-  const handleOpen = () => setOpen(!open);
-  const handleOpens = () => setOpens(!opens);
+  const handleOpen = () => setOpen(true);
+  const handleOpens = () => setOpens(true);
+  const handleClose = () => setOpen(false);
+  const handleCloses = () => setOpen(false);
   const {
     data: vouchers,
     isLoading: vouchersLoading,
     isError: vouchersError,
   } = useGetVouchersQuery();
+  const [addVoucher, { isLoading: isAdded, isError: addError }] =
+    useAddVoucherMutation();
+  const [updateVoucher, { isLoading: isUpdated, isError: updateError }] =
+    useUpdateVoucherMutation();
+  const [deleteVoucher, { isLoading: isDeleted, isError: deleteError }] =
+    useDeleteVoucherMutation();
+  useEffect(() => {
+    if (selectedId !== 1) {
+      setUpdateCode(
+        vouchers?.object.find((voucher) => voucher.id === selectedId)?.code
+      );
+      setUpdateValue(
+        vouchers?.object.find((voucher) => voucher.id === selectedId)?.value
+      );
+      setUpdateInputStock(
+        vouchers?.object.find((voucher) => voucher.id === selectedId)?.stock
+      );
+      setUpdateStartDate(
+        new Date(
+          vouchers?.object.find(
+            (voucher) => voucher.id === selectedId
+          )?.available_date
+        )
+      );
+      setUpdateEndDate(
+        new Date(
+          vouchers?.object.find(
+            (voucher) => voucher.id === selectedId
+          )?.expired_date
+        )
+      );
+    }
+  }, [selectedId, vouchers?.object]);
   if (vouchersLoading) return <Loading />;
   if (vouchersError) return <Errorpage />;
-  console.log(vouchers);
+
+  const handleAddSubmit = async () => {
+    try {
+      const message = await addVoucher({
+        code,
+        input_stock: inputStock,
+        value,
+        available_date: startDate,
+        expired_date: endDate,
+      }).unwrap();
+      Toast.fire({
+        icon: "success",
+        title: "Thêm thành công",
+      }).then(() => {
+        setCode(null);
+        setInputStock(null);
+        setValue(null);
+        setStartDate(null);
+        setEndDate(null);
+        handleClose();
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error.data.message,
+      });
+    }
+  };
+  const handleUpdateSubmit = async () => {
+    try {
+      const message = await updateVoucher({
+        id: selectedId,
+        code: updateCode,
+        input_stock: updateInputStock,
+        value: updateValue,
+        available_date: updateStartDate,
+        expired_date: updateEndDate,
+      });
+      return message;
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error.data.message,
+      });
+    }
+  };
+  const listVouchers = vouchers.object.map((item, index) => {
+    return {
+      id: item.id,
+      code: item.code,
+      value: item.value + " %",
+      input_stock: item.stock,
+      available_date: new Date(item.available_date).toLocaleDateString("en-GB"),
+      expired_date: new Date(item.expired_date).toLocaleDateString("en-GB"),
+    };
+  });
   return (
     <>
       <AdminLayout
         name="Khuyến mãi"
+        updateSubmit={handleUpdateSubmit}
         TABLE_HEAD={voucher}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={listVouchers ? listVouchers : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
         headerDetail={"Chi tiết Voucher #" + "001"}
         bodyDetail={
           <Container>
-            <div className="grid grid-cols-3 mb-5">
+            <div>
               <Typography
-                variant="h3"
+                variant="h4"
                 color="blue-gray"
-                className="font-bold col-span-3 text-center mb-5"
+                className="font-bold col-span-2 text-center mb-5"
               >
                 Thông tin nhập
               </Typography>
               <div className="mx-auto">
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Loại nhập:
+                <div className="grid grid-cols-3 gap-4 mb-5">
+                  <Typography
+                    variant="h6"
+                    className="my-auto"
+                    color="blue-gray"
+                  >
+                    Mã nhập:
                   </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    Thương hiệu
+                  <Typography className="my-auto col-span-2" color="blue-gray">
+                    {
+                      vouchers?.object.find(
+                        (voucher) => voucher.id === selectedId
+                      )?.code
+                    }
                   </Typography>
-                </div>
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Tên:
-                  </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    Adidas
-                  </Typography>
-                </div>
-              </div>
-              <div className="mx-auto">
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Mã nhập
-                  </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    MX2000
-                  </Typography>
-                </div>
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
+
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
                     Giảm giá:
                   </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    15%
+                  <Typography className="my-auto col-span-2" color="blue-gray">
+                    {vouchers?.object.find(
+                      (voucher) => voucher.id === selectedId
+                    )?.value + " %"}
                   </Typography>
-                </div>
-              </div>
-              <div className="mx-auto">
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày áp dụng
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Số lượng:
                   </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    23/04/18
+                  <Typography className="my-auto col-span-2" color="blue-gray">
+                    {
+                      vouchers?.object.find(
+                        (voucher) => voucher.id === selectedId
+                      )?.stock
+                    }
                   </Typography>
-                </div>
-                <div className="text-center flex items-center gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày kết thúc
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày áp dụng:
                   </Typography>
-                  <Typography variant="body" className="" color="blue-gray">
-                    23/04/18
+                  <Typography className="my-auto col-span-2" color="blue-gray">
+                    {new Date(
+                      vouchers?.object.find(
+                        (voucher) => voucher.id === selectedId
+                      )?.available_date
+                    ).toLocaleDateString("en-GB")}
                   </Typography>
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày kết thúc:
+                  </Typography>
+                  {new Date(
+                    vouchers?.object.find(
+                      (voucher) => voucher.id === selectedId
+                    )?.expired_date
+                  ).toLocaleDateString("en-GB")}
                 </div>
               </div>
             </div>
-            <Divider />
-            <table className="w-full min-w-max table-auto text-left">
-              <TableHeader noDelete noUpdate TABLE_HEAD={voucherDetail} />
-              <tbody>
-                {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(
-                  (row, index) => (
-                    <tr
-                      key={index}
-                      className="text-center border-b border-gray-200"
-                    >
-                      {Object.values(row).map((value, index) => (
-                        <td key={index}>{value}</td>
-                      ))}
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-            <Pagination
-              page={Math.ceil(TABLE_ROWS.length / 6)}
-              active={subActive}
-              setActive={setSubActive}
-            />
           </Container>
         }
         sizeUpdate="xl"
         headerUpdate={"Chỉnh sửa lần nhập giá #" + "001"}
         bodyUpdate={
           <Container>
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-5">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold col-span-3 text-center mb-5"
-                >
-                  Thông tin nhập
-                </Typography>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Loại nhập:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Tên:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Mã nhập:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Giảm giá:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Số lượng:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={1}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày áp dụng
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày kết thúc
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-7">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold text-center mb-5"
-                >
-                  Danh sách sản phẩm
-                </Typography>
-                <table className="w-full min-w-max table-auto text-left">
-                  <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
-                  <tbody>
-                    {TABLE_ROWS.slice((subActive - 1) * 7, subActive * 7).map(
-                      (row, index) => (
-                        <tr
-                          key={index}
-                          className="text-center border-b border-gray-200"
-                        >
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
-                              {value}
-                            </td>
-                          ))}
-                        </tr>
+            <div>
+              <Typography
+                variant="h4"
+                color="blue-gray"
+                className="font-bold col-span-2 text-center mb-5"
+              >
+                Thông tin nhập
+              </Typography>
+              <div className="mx-auto">
+                <div className="grid grid-cols-3 gap-4 mb-5">
+                  <Typography
+                    variant="h6"
+                    className="my-auto"
+                    color="blue-gray"
+                  >
+                    Mã nhập:
+                  </Typography>
+                  <TextField
+                    className="col-span-2"
+                    size="small"
+                    value={updateCode}
+                    onChange={(e) => setUpdateCode(e.target.value)}
+                  />
+
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Giảm giá:
+                  </Typography>
+                  <OutlinedInput
+                    className="col-span-2"
+                    size="small"
+                    value={updateValue}
+                    onChange={(e) =>
+                      setUpdateValue(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 100
+                          ? 100
+                          : e.target.value
                       )
-                    )}
-                  </tbody>
-                </table>
-                <Pagination
-                  page={Math.ceil(TABLE_ROWS.length / 7)}
-                  active={subActive}
-                  setActive={setSubActive}
-                />
+                    }
+                    endAdornment={
+                      <InputAdornment position="end">%</InputAdornment>
+                    }
+                  />
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Số lượng:
+                  </Typography>
+                  <OutlinedInput
+                    endAdornment={
+                      <InputAdornment position="end">đơn vị</InputAdornment>
+                    }
+                    className="col-span-2"
+                    size="small"
+                    value={updateInputStock}
+                    onChange={(e) =>
+                      setUpdateInputStock(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value
+                      )
+                    }
+                  />
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày áp dụng:
+                  </Typography>
+                  <div className="col-span-2">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                          //label="Ngày áp dụng"
+                          slotProps={{
+                            textField: {
+                              size: "medium",
+                              required: true,
+                              className: "w-full",
+                            },
+                          }}
+                          value={dayjs(updateStartDate)}
+                          onChange={(newValue) => setUpdateStartDate(newValue)}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày kết thúc:
+                  </Typography>
+                  <div className="col-span-2">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                          slotProps={{
+                            textField: {
+                              size: "medium",
+                              required: true,
+                              className: "w-full",
+                            },
+                          }}
+                          value={dayjs(updateEndDate)}
+                          onChange={(newValue) => setUpdateEndDate(newValue)}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                </div>
               </div>
             </div>
           </Container>
         }
       >
-        <div className="w-8/12 flex items-center justify-between gap-8">
-          <Button
-            className=" !border-gray-300 w-full"
-            color="gray"
-            variant="outlined"
-            onClick={handleOpens}
-          >
-            Nhập giá hàng loạt
-          </Button>
+        <div className="w-5/12 flex items-center justify-between gap-8">
           <Button
             className=" !border-gray-300 w-full"
             color="gray"
             variant="outlined"
             onClick={handleOpen}
           >
-            Nhập giá sản phẩm
+            Thêm mới
           </Button>
           <Input
             size="sm"
@@ -409,329 +486,151 @@ const Voucher = () => {
       </AdminLayout>
       <Dialog
         open={open}
-        handler={handleOpen}
-        size="lg"
+        onClose={handleClose}
+        maxWidth="lg"
         className="overflow-y-auto"
       >
-        <DialogHeader className="pb-0 flex justify-between">
-          <Typography variant="h4">Nhập giá sản phẩm</Typography>
+        <DialogTitle className="pb-0 flex justify-between">
+          <Typography variant="h4">Thêm mã giảm giá</Typography>
           <IconButton
             className="border-none"
             variant="outlined"
-            onClick={handleOpen}
+            onClick={handleClose}
           >
             <CloseIcon />
           </IconButton>
-        </DialogHeader>
-        <DialogBody>
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div>
               <Typography
                 variant="h4"
                 color="blue-gray"
-                className="font-bold text-center mb-5"
+                className="font-bold col-span-2 text-center mb-5"
               >
                 Thông tin nhập
               </Typography>
-              <div className="mx-auto grid grid-cols-2 gap-8 mb-5">
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Loại nhập:
+              <div className="mx-auto">
+                <div className="grid grid-cols-3 gap-4 mb-5">
+                  <Typography
+                    variant="h6"
+                    className="my-auto"
+                    color="blue-gray"
+                  >
+                    Mã nhập:
                   </Typography>
-                  <div>
-                    <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    >
-                      <Option value="Áo thun nam">Áo thun nam</Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Tên:
-                  </Typography>
-                  <div>
-                    <Select
-                      className=" !border-blue-gray-200 focus:!border-black"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    >
-                      <Option value="Áo thun nam">Áo thun nam</Option>
-                    </Select>
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Mã nhập
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
+                  <TextField
+                    className="col-span-2"
+                    size="small"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                  />
+
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
                     Giảm giá:
                   </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
+                  <OutlinedInput
+                    className="col-span-2"
+                    size="small"
+                    value={value}
+                    onChange={(e) =>
+                      setValue(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value > 100
+                          ? 100
+                          : e.target.value
+                      )
+                    }
+                    endAdornment={
+                      <InputAdornment position="end">%</InputAdornment>
+                    }
+                  />
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
                     Số lượng:
                   </Typography>
-                  <div>
-                    <Input
-                      value={1}
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div></div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày áp dụng
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      type="date"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="text-center flex items-center justify-between gap-4">
-                  <Typography variant="h6" color="blue-gray">
-                    Ngày kết thúc
-                  </Typography>
-                  <div>
-                    <Input
-                      value={"Kem"}
-                      type="date"
-                      className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                      labelProps={{
-                        className: "before:content-none after:content-none",
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <Divider />
-            <div>
-              <Typography
-                variant="h4"
-                color="blue-gray"
-                className="font-bold text-center mt-5 mb-5"
-              >
-                Xem trước
-              </Typography>
-              <table className="w-full min-w-max table-auto text-left">
-                <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
-                <tbody>
-                  {TABLE_ROWS.slice(0, 1).map((row, index) => (
-                    <tr
-                      key={index}
-                      className="text-center border-b border-gray-200"
-                    >
-                      {Object.values(row).map((value, index) => (
-                        <td className="p-2" key={index}>
-                          {value}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Container>
-        </DialogBody>
-        <DialogFooter>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>Xác nhận</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
-      <Dialog open={opens} handler={handleOpens} size="xl">
-        <DialogHeader className="pb-0 flex justify-between">
-          <Typography variant="h4">Nhập giá hàng loạt</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleOpen}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogHeader>
-        <DialogBody>
-          <Container>
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-5">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold col-span-3 text-center mb-5"
-                >
-                  Thông tin nhập
-                </Typography>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Loại nhập:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Tên:
-                    </Typography>
-                    <div>
-                      <Select
-                        className=" !border-blue-gray-200 focus:!border-black"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      >
-                        <Option value="Áo thun nam">Áo thun nam</Option>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Mã nhập:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Giảm giá:
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="mx-auto">
-                  <div className="text-center flex items-center justify-between gap-4 mb-5">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày áp dụng
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center flex items-center justify-between gap-4">
-                    <Typography variant="h6" color="blue-gray">
-                      Ngày kết thúc
-                    </Typography>
-                    <div>
-                      <Input
-                        value={"Kem"}
-                        type="date"
-                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                        labelProps={{
-                          className: "before:content-none after:content-none",
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-7">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold text-center mb-5"
-                >
-                  Danh sách sản phẩm
-                </Typography>
-                <table className="w-full min-w-max table-auto text-left">
-                  <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
-                  <tbody>
-                    {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(
-                      (row, index) => (
-                        <tr
-                          key={index}
-                          className="text-center border-b border-gray-200"
-                        >
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
-                              {value}
-                            </td>
-                          ))}
-                        </tr>
+                  <OutlinedInput
+                    endAdornment={
+                      <InputAdornment position="end">đơn vị</InputAdornment>
+                    }
+                    className="col-span-2"
+                    size="small"
+                    value={inputStock}
+                    onChange={(e) =>
+                      setInputStock(
+                        isNaN(e.target.value) || e.target.value < 0
+                          ? 0
+                          : e.target.value
                       )
-                    )}
-                  </tbody>
-                </table>
-                <Pagination
-                  page={Math.ceil(TABLE_ROWS.length / 6)}
-                  active={subActive}
-                  setActive={setSubActive}
-                />
+                    }
+                  />
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày áp dụng:
+                  </Typography>
+                  <div className="col-span-2">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                          //label="Ngày áp dụng"
+                          slotProps={{
+                            textField: {
+                              size: "medium",
+                              required: true,
+                              className: "w-full",
+                            },
+                          }}
+                          value={dayjs(startDate)}
+                          onChange={(newValue) => setStartDate(newValue)}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                  <Typography
+                    variant="h6"
+                    color="blue-gray"
+                    className="my-auto"
+                  >
+                    Ngày kết thúc:
+                  </Typography>
+                  <div className="col-span-2">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                          slotProps={{
+                            textField: {
+                              size: "medium",
+                              required: true,
+                              className: "w-full",
+                            },
+                          }}
+                          value={dayjs(endDate)}
+                          onChange={(newValue) => setEndDate(newValue)}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                </div>
               </div>
             </div>
           </Container>
-        </DialogBody>
-        <DialogFooter>
-          <Button variant="gradient" color="green" onClick={handleOpens}>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="gradient" color="green" onClick={handleAddSubmit}>
             <span>Xác nhận</span>
           </Button>
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </>
   );

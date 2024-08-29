@@ -47,7 +47,10 @@ const ProfileMenu = () => {
             size="sm"
             alt="tania andrew"
             className="border border-gray-900 p-0.5"
-            src={localStorage.getItem("avatar")}
+            src={
+              localStorage.getItem("avatar") ||
+              "https://cdn.fakercloud.com/avatars/brunodesign1206_128.jpg"
+            }
           />
           <ChevronDownIcon
             strokeWidth={2.5}

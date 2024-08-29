@@ -16,7 +16,7 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { Container, Rating } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { inventory_tab } from "../../constants/tab";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -28,19 +28,16 @@ import "../../configs/swiper.css";
 import { inventory } from "../../constants/table_head";
 import useOpen from "../../hooks/useOpen";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGetImportedProductsQuery } from "../../apis/ImportedProductApi";
+import Loading from "../shared/Loading";
 const Inventory = () => {
+  const [tab1, setTab1] = useState("ALL");
   const [open, setOpen] = React.useState(false);
   const [tab, setTab] = React.useState(inventory_tab[0].value);
+  const [importProducts, setImportProducts] = React.useState(null);
   const [active, setActive] = React.useState(1);
   const handleOpen = () => setOpen(!open);
-  const {
-    detailOpen,
-    handleDetailOpen,
-    updateOpen,
-    handleUpdateOpen,
-    deleteOpen,
-    handleDeleteOpen,
-  } = useOpen();
+
   const TABLE_ROWS = [
     {
       name: "001",
@@ -71,13 +68,56 @@ const Inventory = () => {
     description: `The key to more success is to have a lot of pillows. Put it this way, it took me twenty five years to get these plants, twenty five years of blood sweat and tears, and I'm never giving up, I'm just getting started. I'm up to something. Fan luv.`,
     short_description: `As we live, our hearts turn colder.`,
   };
+  const {
+    data: importProduct,
+    isLoading: importProductLoading,
+    error: importProductError,
+  } = useGetImportedProductsQuery();
+  useEffect(() => {
+    if (tab1 === "AVAILABLE") {
+      setImportProducts(
+        importProduct?.object.filter((product) => product.stock > 0)
+      );
+    }
+    if (tab1 === "OUT_OF_STOCK") {
+      console.log("Product");
+      setImportProducts(
+        importProduct?.object.filter((product) => product.stock === 0)
+      );
+    }
+    if (tab1 === "ALL") {
+      setImportProducts(importProduct?.object);
+    }
+  }, [tab1, importProduct]);
+  if (importProductLoading) return <Loading />;
+  if (importProductError) return <div>{importProductError}</div>;
+  const listImportedProducts =
+    importProducts &&
+    importProducts.map((item, index) => {
+      return {
+        id: item.id,
+        avatar: (
+          <img
+            className="h-auto w-16 mx-auto"
+            src={item.image_url}
+            alt={item.product_id.name}
+          />
+        ),
+        name: item.product_id.name,
+        sku: item.sku,
+        price: item.importPrice.toLocaleString("en-US") + " đ",
+        stock: item.stock,
+      };
+    });
   return (
     <>
       <AdminLayout
         name="Kho hàng"
+        tab={tab1}
+        setTab={setTab1}
         tablist={inventory_tab}
         TABLE_HEAD={inventory}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={listImportedProducts ? listImportedProducts : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -252,14 +292,14 @@ const Inventory = () => {
         noUpdate
       >
         <div className="flex items-center justify-between gap-4">
-          <Select label="Phân loại theo">
+          {/* <Select label="Phân loại theo">
             <Option value="">Không có</Option>
             <Option value="Color">Thương hiệu</Option>
             <Option value="Color">Loại sản phẩm</Option>
             <Option value="Size">Kích thước</Option>
             <Option value="Material">Chất liệu</Option>
             <Option value="Type">Loại sản phẩm</Option>
-          </Select>
+          </Select> */}
           <Input
             size="sm"
             label="Tìm kiếm"

@@ -12,6 +12,7 @@ import { homepage_slides } from "../constants/slide";
 import HomeProductList from "../components/shared/shop/HomeProductList";
 import { useGetProductsQuery } from "../apis/ProductApi";
 import Loading from "../components/shared/Loading";
+import { useGetOnSaleProductsQuery } from "../apis/OnSaleProductApi";
 const new_products = [
   {
     id: 0,
@@ -213,7 +214,7 @@ const collection_products = [
   },
 ];
 const Homepage = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data: products, isLoading, error } = useGetOnSaleProductsQuery();
   console.log(products);
   if (isLoading)
     return (
@@ -248,11 +249,11 @@ const Homepage = () => {
         </Swiper>
       </div>
       <div>
-        <HomeProductList products={new_products} title="Sản phẩm mới" />
-        <HomeProductList
+        <HomeProductList products={products} title="Sản phẩm mới" />
+        {/* <HomeProductList
           products={collection_products}
           title="Sản phẩm bán chạy"
-        />
+        /> */}
         <div className="text-center mt-10 mb-20">
           <Typography
             variant="h2"

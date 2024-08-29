@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./NavbarWithSublist.css";
 import {
   Navbar,
@@ -39,6 +39,10 @@ import { Divider } from "@mui/material";
 import { useGetBrandsQuery } from "../../../apis/BrandApi";
 import { useGetCategoriesQuery } from "../../../apis/CategoryApi";
 import Loading from "../Loading";
+import {
+  useGetCartQuery,
+  useGetOrdersByUserQuery,
+} from "../../../apis/OrderApi";
 
 // const brands = [
 //   "Adidas",
@@ -268,7 +272,16 @@ const NavbarWithSublist = () => {
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
-
+  const {
+    data: cart,
+    isLoading,
+    error,
+  } = useGetCartQuery({ skip: !localStorage.getItem("token") });
+  useEffect(() => {
+    if (cart) {
+      localStorage.setItem("order_id", cart.object.id);
+    }
+  }, [cart]);
   return (
     <Navbar className="mx-auto max-w-screen-3xl rounded-none px-4 py-2 sticky top-0 z-50">
       <div className="flex items-center justify-between text-blue-gray-900">
@@ -369,36 +382,48 @@ const NavbarWithSublist = () => {
                   <div className="flex items-center justify-between gap-2 w-[500px]">
                     <Typography variant="h6">Giỏ hàng</Typography>
                     <Typography variant="small">
-                      {cart_items.length} sản phẩm
+                      {cart ? cart.object.orderItems.length : 0} sản phẩm
                     </Typography>
                   </div>
                   <div className="my-4">
                     <Divider />
                   </div>
                   <div className="grid grid-cols-1 gap-4 w-[500px]">
-                    {cart_items.map((item) => (
-                      <div key={item.id} className="grid grid-cols-5 gap-4">
-                        <img
-                          src={item.imageUrl}
-                          width={48}
-                          height={48}
-                          className="mx-auto my-auto"
-                        />
-                        <Typography variant="h6" className="my-auto mx-auto">
-                          {item.title}
-                        </Typography>
-                        <Typography variant="small" className="my-auto mx-auto">
-                          {item.quantity} x
-                        </Typography>
-                        <Typography variant="small" className="my-auto mx-auto">
-                          {item.price.toLocaleString("en-US")}đ
-                        </Typography>
-                        <Typography variant="small" className="my-auto mx-auto">
-                          {(item.price * item.quantity).toLocaleString("en-US")}
-                          đ
-                        </Typography>
-                      </div>
-                    ))}
+                    {cart &&
+                      cart.object.orderItems.map((item) => (
+                        <div key={item.id} className="grid grid-cols-5 gap-4">
+                          <img
+                            src={item.imageUrl}
+                            width={48}
+                            height={48}
+                            className="mx-auto my-auto"
+                          />
+                          <Typography variant="h6" className="my-auto mx-auto">
+                            {item.title}
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            className="my-auto mx-auto"
+                          >
+                            {item.quantity} x
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            className="my-auto mx-auto"
+                          >
+                            {item.price.toLocaleString("en-US")}đ
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            className="my-auto mx-auto"
+                          >
+                            {(item.price * item.quantity).toLocaleString(
+                              "en-US"
+                            )}
+                            đ
+                          </Typography>
+                        </div>
+                      ))}
                   </div>
                   <div className="my-4">
                     <Divider />
@@ -406,13 +431,7 @@ const NavbarWithSublist = () => {
                   <div className="flex items-center justify-between gap-2">
                     <Typography variant="h6">Tổng cộng</Typography>
                     <Typography variant="h6">
-                      {cart_items
-                        .reduce(
-                          (total, { quantity, price }) =>
-                            total + quantity * price,
-                          0
-                        )
-                        .toLocaleString("en-US")}
+                      {cart && cart?.object.total_price.toLocaleString("en-US")}{" "}
                       đ
                     </Typography>
                   </div>
@@ -423,7 +442,11 @@ const NavbarWithSublist = () => {
                 size="sm"
                 color="white"
                 className="rounded-lg w-full"
-                onClick={() => navigate("/cart")}
+                onClick={() =>
+                  !localStorage.getItem("token")
+                    ? navigate("/login")
+                    : navigate("/cart")
+                }
               >
                 <ShoppingCartIcon className="w-full" />
               </Button>

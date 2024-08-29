@@ -17,15 +17,19 @@ import {
   CardBody,
 } from "@material-tailwind/react";
 import { Container, Divider, Rating, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { allorder_tab } from "../../constants/tab";
 import { allorder } from "../../constants/table_head";
 import AdminLayout from "../../layouts/Admin/AdminLayout";
 import Pagination from "../shared/Pagination";
+import { useGetOrdersQuery } from "../../apis/OrderApi";
+import Loading from "../shared/Loading";
 const AllOrder = () => {
   const [tab, setTab] = useState("ALL");
   const [active, setActive] = useState(1);
   const [subactive, setSubactive] = useState(1);
+  const [filterOrders, setFilterOrders] = useState(null);
+  const { data: orders, isLoading, error } = useGetOrdersQuery();
   const TABLE_ROWS = [
     {
       name: "001",
@@ -65,13 +69,33 @@ const AllOrder = () => {
     },
   ];
   const TABLE_HEAD = ["STT", "Tên sản phẩm", "Số lượng", "Giá", "Tổng tiền"];
+  useEffect(() => {
+    if (tab === "ALL") setFilterOrders(orders?.object);
+    else
+      setFilterOrders(
+        orders?.object.filter((order) => order.payment_status === tab)
+      );
+  }, [tab, orders]);
+  if (isLoading) return <Loading />;
+  if (error) return <div>error</div>;
+  const listOrders = filterOrders?.map((order, index) => {
+    return {
+      id: order.id,
+      name: order.name,
+      role: order.role,
+      action: order.action,
+      date: order.date,
+    };
+  });
   return (
     <>
       <AdminLayout
+        tab={tab}
+        setTab={setTab}
         name="Danh sách đơn hàng"
         tablist={allorder_tab}
         TABLE_HEAD={allorder}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={listOrders ? listOrders : []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         noUpdate
@@ -274,7 +298,7 @@ const AllOrder = () => {
         }
       >
         <div className="flex items-center justify-between gap-4">
-          <TextField
+          <Input
             className="w-full"
             size="small"
             label="Tìm kiếm sản phẩm"

@@ -1290,7 +1290,7 @@ const ImportProduct = () => {
                     <img
                       src={avatar_url}
                       alt="avatar"
-                      className="h-[200px] w-full mx-auto col-span-3"
+                      className="h-[200px] w-full mx-auto col-span-3 object-fit"
                     />
                     <Button
                       onClick={() => {
@@ -1733,8 +1733,13 @@ const ImportProduct = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button variant="gradient" color="green" onClick={handleAddSubmit}>
-            <span>Xác nhận</span>
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={handleAddSubmit}
+            loading={isAdded}
+          >
+            {!isAdded && <span>Xác nhận</span>}
           </Button>
         </DialogActions>
       </Dialog>
@@ -2290,8 +2295,13 @@ const ImportProduct = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button variant="gradient" color="green" onClick={handleAddSubmit}>
-            <span>Xác nhận</span>
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={handleAddSubmit}
+            loading={isAdded}
+          >
+            {!isAdded && <span>Xác nhận</span>}
           </Button>
         </DialogActions>
       </Dialog>

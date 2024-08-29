@@ -7,11 +7,13 @@ export const OrderApi = createApi({
   tagTypes: ["Order"],
   endpoints: (builder) => ({
     getOrders: builder.query({
-      query: () => "",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      query: () => ({
+        url: "",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
       providesTags: ["Order"],
     }),
     getOrdersByUser: builder.query({
@@ -23,12 +25,14 @@ export const OrderApi = createApi({
       providesTags: ["Order"],
     }),
     getCart: builder.query({
-      query: () => `cart`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      providesTags: ["Order"],
+      query: () => ({
+        url: `cart`,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+      providesTags: ["Cart"],
     }),
     updateOrder: builder.mutation({
       query: ({ id, product_id, quantity }) => ({

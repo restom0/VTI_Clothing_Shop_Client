@@ -5,7 +5,7 @@ const allorder_tab = [
   },
   {
     label: "Chờ thanh toán",
-    value: "ONHOLD",
+    value: "ON_HOLD",
   },
   {
     label: "Đang xử lý",

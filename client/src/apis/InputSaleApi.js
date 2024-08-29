@@ -47,14 +47,14 @@ export const InputSaleApi = createApi({
       invalidatesTags: ["InputSale"],
     }),
     updateInputSale: builder.mutation({
-      query: ({ id, product_id, quantity }) => ({
+      query: ({ id, salePercentage, discount, available_date, end_date }) => ({
         url: `${id}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "PUT",
-        body: { product_id, quantity },
+        body: { salePercentage, discount, available_date, end_date },
       }),
       invalidatesTags: ["InputSale"],
     }),

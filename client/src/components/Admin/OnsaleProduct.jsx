@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { input, Input, Option } from "@material-tailwind/react";
 import dayjs from "dayjs";
 
@@ -54,6 +54,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useGetProductsQuery } from "../../apis/ProductApi";
 import { set } from "date-fns";
 import { useSelector } from "react-redux";
+import { Toast } from "../../configs/SweetAlert2";
 
 const TABLE_ROWS = [
   {
@@ -136,6 +137,7 @@ const OnsaleProduct = () => {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
   const [import_product, setImport_Product] = React.useState(null);
+  const [updateImport_Product, setUpdateImport_Product] = React.useState(null);
   const [updateSalePercentage, setUpdateSalePercentage] = React.useState(100);
   const [updateDiscount, setUpdateDiscount] = React.useState(0);
   const [updateStartDate, setUpdateStartDate] = React.useState(null);
@@ -196,6 +198,17 @@ const OnsaleProduct = () => {
     }
   );
 
+  const {
+    data: updatePreviews,
+    error: updatePreviewsError,
+    isLoading: updatePreviewsLoading,
+  } = useGetImportedProductQuery(
+    { filter: updateFilter, id: updateFilterId },
+    {
+      skip: !updateFilterId && updateFilter !== "ALL",
+    }
+  );
+
   useEffect(() => {
     if (values || (!values && filters === "ALL")) {
       setImport_Product(
@@ -215,6 +228,29 @@ const OnsaleProduct = () => {
       );
     }
   }, [values, previews, filters, prices, discounts]);
+  useEffect(() => {
+    if (setUpdateFilter || (!setUpdateFilter && updateFilter === "ALL")) {
+      setUpdateImport_Product(
+        updatePreviews?.object.map((preview) => {
+          return {
+            sku: preview.product_id.name,
+            importPrice: preview.importPrice.toLocaleString("en-US"),
+            salePrice: (
+              ((preview.importPrice * updateSalePercentage) / 100) *
+              (1 - updateDiscount / 100)
+            ).toLocaleString("en-US"),
+          };
+        }) || []
+      );
+    }
+  }, [
+    updateFilter,
+    updatePreviews,
+    updateSalePercentage,
+    updateDiscount,
+    discounts,
+    prices,
+  ]);
   useEffect(() => {
     if (selectedId !== -1) {
       const search = inputSale?.object.find((item) => item.id === selectedId);
@@ -261,24 +297,46 @@ const OnsaleProduct = () => {
     setOpen(false);
   };
   const handleAddImportedProduct = async () => {
-    const message = await createInputSale({
-      filter: "ALL",
-      filter_id: value,
-      salePercentage: Number(price),
-      discount: Number(discount),
-      available_date: startDate,
-      end_date: endDate,
-    }).unwrap();
+    try {
+      const message = await createInputSale({
+        filter: "ALL",
+        filter_id: value,
+        salePercentage: Number(price),
+        discount: Number(discount),
+        available_date: startDate,
+        end_date: endDate,
+      }).unwrap();
+      Toast.fire({
+        icon: "success",
+        title: "Thêm sản phẩm thành công",
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error.data.message,
+      });
+    }
   };
   const handleAddImportedProducts = async () => {
-    const message = await createInputSale({
-      filter: filters,
-      filter_id: values || 1,
-      salePercentage: Number(prices),
-      discount: Number(discounts),
-      available_date: startDates,
-      end_date: endDates,
-    }).unwrap();
+    try {
+      const message = await createInputSale({
+        filter: filters,
+        filter_id: values || 1,
+        salePercentage: Number(prices),
+        discount: Number(discounts),
+        available_date: startDates,
+        end_date: endDates,
+      }).unwrap();
+      Toast.fire({
+        icon: "success",
+        title: "Thêm sản phẩm thành công",
+      });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error.data.message,
+      });
+    }
   };
   const handleResetAddImportedProduct = async () => {
     setPrice(100);
@@ -306,9 +364,27 @@ const OnsaleProduct = () => {
       end_date: new Date(item.end_date).toLocaleDateString("en-GB"),
     };
   });
+  const handleUpdateInputSales = async () => {
+    try {
+      const message = await updateInputSale({
+        id: selectedId,
+        salePercentage: Number(updateSalePercentage),
+        discount: Number(updateDiscount),
+        available_date: updateStartDate,
+        end_date: updateEndDate,
+      });
+      return message;
+    } catch (error) {
+      Toast.fire({
+        icon: "success",
+        title: error,
+      });
+    }
+  };
   return (
     <>
       <AdminLayout
+        updateSubmit={handleUpdateInputSales}
         name="Lên giá sản phẩm"
         TABLE_HEAD={onsaleproduct}
         TABLE_ROWS={ListInputSales ? ListInputSales : []}
@@ -382,32 +458,52 @@ const OnsaleProduct = () => {
               </div>
             </div>
             <Divider />
-            <table className="w-full min-w-max table-auto text-left">
-              <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
-              <tbody>
-                {TABLE_ROWS.slice((subActive - 1) * 6, subActive * 6).map(
-                  (row, index) => (
-                    <tr
-                      key={index}
-                      className="text-center border-b border-gray-200"
-                    >
-                      {Object.values(row).map((value, index) => (
-                        <td key={index}>{value}</td>
+            <div className="col-span-7">
+              <Typography
+                variant="h5"
+                color="blue-gray"
+                className="font-bold text-center mb-5"
+              >
+                Danh sách sản phẩm
+              </Typography>
+              <table className="w-full min-w-max table-auto text-left">
+                <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
+                <tbody>
+                  {updateImport_Product &&
+                    updateImport_Product.length > 0 &&
+                    updateImport_Product
+                      .slice((subActive - 1) * 5, subActive * 5)
+                      .map((row, index) => (
+                        <tr
+                          key={index}
+                          className="text-center border-b border-gray-200"
+                        >
+                          {Object.values(row).map((value, index) => (
+                            <td className="p-2" key={index}>
+                              {value}
+                            </td>
+                          ))}
+                        </tr>
                       ))}
-                    </tr>
-                  )
+                </tbody>
+              </table>
+              <div className="flex justify-between mt-3">
+                <Typography variant="p">
+                  Total: {updateImport_Product?.length || 0} items
+                </Typography>
+                {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
+                  <Pagination
+                    count={Math.ceil(updateImport_Product.length / 5)}
+                    page={subActive}
+                    onChange={(e, value) => setSubActive(value)}
+                  />
                 )}
-              </tbody>
-            </table>
-            <Pagination
-              count={Math.ceil(TABLE_ROWS.length / 6)}
-              page={subActive}
-              onChange={setSubActive}
-            />
+              </div>
+            </div>
           </Container>
         }
         sizeUpdate="xl"
-        headerUpdate={"Chỉnh sửa lần nhập giá #" + "001"}
+        headerUpdate="Chỉnh sửa lần nhập giá"
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-12 gap-8">
@@ -482,7 +578,13 @@ const OnsaleProduct = () => {
                       className="col-span-2"
                       size="small"
                       value={updateSalePercentage}
-                      onChange={(e) => setUpdateSalePercentage(e.target.value)}
+                      onChange={(e) =>
+                        setUpdateSalePercentage(
+                          isNaN(e.target.value) || e.target.value < 0
+                            ? 0
+                            : e.target.value
+                        )
+                      }
                     />
                     <Typography
                       variant="h6"
@@ -495,7 +597,15 @@ const OnsaleProduct = () => {
                       className="col-span-2"
                       size="small"
                       value={updateDiscount}
-                      onChange={(e) => setUpdateDiscount(e.target.value)}
+                      onChange={(e) =>
+                        setUpdateDiscount(
+                          isNaN(e.target.value) || e.target.value < 0
+                            ? 0
+                            : e.target.value > 100
+                            ? 100
+                            : e.target.value
+                        )
+                      }
                       endAdornment={
                         <InputAdornment position="end">%</InputAdornment>
                       }
@@ -505,13 +615,13 @@ const OnsaleProduct = () => {
                       color="blue-gray"
                       className="my-auto"
                     >
-                      Ngày áp dụng
+                      Ngày áp dụng:
                     </Typography>
                     <div className="col-span-2">
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={["DatePicker"]}>
                           <DatePicker
-                            label="Ngày áp dụng"
+                            //label="Ngày áp dụng"
                             slotProps={{
                               textField: { size: "medium", required: true },
                             }}
@@ -528,13 +638,12 @@ const OnsaleProduct = () => {
                       color="blue-gray"
                       className="my-auto"
                     >
-                      Ngày kết thúc
+                      Ngày kết thúc:
                     </Typography>
                     <div className="col-span-2">
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={["DatePicker"]}>
                           <DatePicker
-                            label="Ngày kết thúc"
                             slotProps={{
                               textField: { size: "medium", required: true },
                             }}
@@ -558,44 +667,36 @@ const OnsaleProduct = () => {
                 <table className="w-full min-w-max table-auto text-left">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                   <tbody>
-                    {import_products?.object
-                      ?.filter(
-                        (product) => product.product_id.id === updateFilterId
-                      )
-                      .map((product, index) => (
-                        <tr
-                          key={index}
-                          className="text-center border-b border-gray-200"
-                        >
-                          {/* <td className="p-2">{product.id}</td> */}
-                          <td className="p-2">{product.sku}</td>
-                          {/* <td className="p-2">{product.color_id.color_name}</td>
-                          <td className="p-2">{product.size_id.size}</td>
-                          <td className="p-2">{product.material_id.name}</td> */}
-                          <td className="p-2">
-                            {product.importPrice.toLocaleString("en-US")} đ
-                          </td>
-                          <td className="p-2">
-                            {(
-                              ((product.importPrice * updateSalePercentage) /
-                                100) *
-                              (1 - updateDiscount / 100)
-                            ).toLocaleString("en-US")}{" "}
-                            đ
-                          </td>
-                        </tr>
-                      ))}
+                    {updateImport_Product &&
+                      updateImport_Product.length > 0 &&
+                      updateImport_Product
+                        .slice((subActive - 1) * 5, subActive * 5)
+                        .map((row, index) => (
+                          <tr
+                            key={index}
+                            className="text-center border-b border-gray-200"
+                          >
+                            {Object.values(row).map((value, index) => (
+                              <td className="p-2" key={index}>
+                                {value}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
                   </tbody>
                 </table>
-                <Pagination
-                  count={Math.ceil(
-                    import_products?.object?.filter(
-                      (product) => product.product_id.id === updateFilterId
-                    ).length / 6
+                <div className="flex justify-between mt-3">
+                  <Typography variant="p">
+                    Total: {updateImport_Product?.length || 0} items
+                  </Typography>
+                  {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
+                    <Pagination
+                      count={Math.ceil(updateImport_Product.length / 5)}
+                      page={subActive}
+                      onChange={(e, value) => setSubActive(value)}
+                    />
                   )}
-                  active={subActive}
-                  setActive={setSubActive}
-                />
+                </div>
               </div>
             </div>
           </Container>
@@ -616,7 +717,7 @@ const OnsaleProduct = () => {
           >
             Nhập đơn
           </Button>
-          <TextField
+          <Input
             size="small"
             className="w-full"
             label="Tìm kiếm"

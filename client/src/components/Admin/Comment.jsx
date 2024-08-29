@@ -30,6 +30,7 @@ import {
   useGetCommentsQuery,
   useUpdateCommentMutation,
 } from "../../apis/CommentApi";
+import Loading from "../shared/Loading";
 
 const Comment = () => {
   const TABLE_ROWS = [
@@ -45,16 +46,27 @@ const Comment = () => {
   const { data: comments, error, isLoading } = useGetCommentsQuery();
   const [deleteComment, { isLoading: isDeleted, error: deleteError }] =
     useDeleteCommentMutation();
-  const [updateComment, { isLoading: isUpdated, error: updateError }] =
-    useUpdateCommentMutation();
-  const [createComment, { isLoading: isAdded, error: addError }] =
-    useAddCommentMutation();
+  // const [updateComment, { isLoading: isUpdated, error: updateError }] =
+  //   useUpdateCommentMutation();
+  // const [createComment, { isLoading: isAdded, error: addError }] =
+  //   useAddCommentMutation();
+  if (isLoading) return <Loading />;
+  if (error) return <div>error</div>;
+  const handleDeleteComment = async (id) => {
+    try {
+      const message = await deleteComment(id);
+      return message;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <AdminLayout
+        handleDeleteSubmit={handleDeleteComment}
         name="Lượt bình luận"
         TABLE_HEAD={comment}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={comments ? comments : []}
         deleteContent="Khóa bình luận"
         noUpdate
         size="lg"
@@ -92,16 +104,7 @@ const Comment = () => {
             </div>
           </Container>
         }
-      >
-        <div className="flex items-center justify-between gap-4">
-          <Select label="Phân loại theo">
-            <Option value="new" defaultChecked>
-              Mới nhất
-            </Option>
-            <Option value="old">Cũ nhất</Option>
-          </Select>
-        </div>
-      </AdminLayout>
+      ></AdminLayout>
     </>
   );
 };

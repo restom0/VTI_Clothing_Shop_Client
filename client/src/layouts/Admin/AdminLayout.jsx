@@ -53,8 +53,10 @@ const AdminLayout = ({
   handleDeleteSubmit,
   isUpdated,
   isDeleted,
+  tab,
+  setTab,
 }) => {
-  const [tab, setTab] = useState("ALL");
+  
   const selectedId = useSelector((state) => state.selectedId.value);
 
   const {

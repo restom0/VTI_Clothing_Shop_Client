@@ -12,7 +12,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Rating } from "@mui/material";
-const ProductCard = ({ id, colors, price, rating, imageUrl, title }) => {
+const ProductCard = ({
+  id,
+  colors,
+  sale_price,
+  rating,
+  product_id,
+  discount,
+}) => {
   const navigate = useNavigate();
   return (
     <Card
@@ -20,11 +27,11 @@ const ProductCard = ({ id, colors, price, rating, imageUrl, title }) => {
       onClick={() => navigate("/product/" + id)}
     >
       <CardHeader color="blue-gray" className="relative h-56">
-        <img src={imageUrl} alt="product-image" />
+        <img src={product_id.image_url} alt="product-image" />
       </CardHeader>
       <CardBody className="mx-auto">
-        <div className="grid grid-cols-4 gap-4 mb-5">
-          {colors.map(({ color, label }, index) => (
+        {/* <div className="grid grid-cols-4 gap-4 mb-5">
+          {product_id.color_id.map(({ color, label }, index) => (
             <Tooltip key={index} content={label}>
               <Button
                 size="sm"
@@ -41,18 +48,18 @@ const ProductCard = ({ id, colors, price, rating, imageUrl, title }) => {
         </Typography>
         <div className="mx-auto text-center">
           <Rating value={rating} readOnly />
-        </div>
+        </div> */}
         <div className="flex items-center gap-4">
           <Typography variant="h6" color="blue-gray" className=" text-center">
-            {price.toLocaleString("en-US")}đ
+            {(sale_price * (1 - discount / 100)).toLocaleString("en-US")}đ
           </Typography>
-          <Chip color="blue-gray" value={"-" + 15 + "%"} />
+          <Chip color="blue-gray" value={"-" + discount + "%"} />
           <Typography
             variant="small"
             color="gray"
             className="line-through text-center opacity-50"
           >
-            {price.toLocaleString("en-US")}đ
+            {sale_price.toLocaleString("en-US")}đ
           </Typography>
         </div>
       </CardBody>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionBody,
@@ -28,8 +28,11 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import "../configs/swiper.css";
 import { Container, Rating } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/shared/Pagination";
+import { useGetOnSaleProductQuery } from "../apis/OnSaleProductApi";
+import { useCreateOrderItemMutation } from "../apis/OrderItemApi";
+import { Toast } from "../configs/SweetAlert2";
 const product = {
   id: 0,
   colors: [
@@ -104,11 +107,73 @@ const reviews = [
 const ProductDetailpage = () => {
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(1);
+  const [color, setColor] = useState(null);
+  const [size, setSize] = useState(null);
+  const [material, setMaterial] = useState(null);
+  const [amount, setAmount] = useState(1);
+
   const handleOpen = () => setOpen(!open);
   const [description, setDescription] = React.useState(false);
   const [star, setStar] = React.useState(false);
-  const { id } = useLocation();
+  const { id } = useParams();
+  const { data: product, isLoading, error } = useGetOnSaleProductQuery(id);
+  const navigate = useNavigate();
+  const [createOrderItem, { isLoading: isAdded, error: isAddError }] =
+    useCreateOrderItemMutation();
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
+  const image = [
+    product.object.product_id.image_url,
+    product.object.product_id.slider_url_1,
+    product.object.product_id.slider_url_2,
+    product.object.product_id.slider_url_3,
+    product.object.product_id.slider_url_4,
+  ];
+  const handleAddCart = async () => {
+    try {
+      if (!localStorage.getItem("token")) return navigate("/login");
+      const message = await createOrderItem({
+        order_id: Number(localStorage.getItem("order_id")),
+        product_id: product.object.product_id.id,
+        quantity: 1,
+      })
+        .unwrap()
+        .then(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Thêm giỏ hàng thành công",
+          });
+        });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Thêm giỏ hàng thất bại",
+      });
+    }
+  };
+  const handleAddCarts = async () => {
+    try {
+      if (!localStorage.getItem("token")) return navigate("/login");
+      const message = await createOrderItem({
+        order_id: Number(localStorage.getItem("order_id")),
+        product_id: product.object.product_id.id,
+        quantity: amount,
+      })
+        .unwrap()
+        .then(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Thêm giỏ hàng thành công",
+          });
+        });
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Thêm giỏ hàng thất bại",
+      });
+    }
+  };
   return (
     <>
       <section className="py-8 px-8">
@@ -127,7 +192,7 @@ const ProductDetailpage = () => {
                 loop={true}
                 className="mySwiper1 h-[300px] w-[500px]"
               >
-                {product.imageUrl.map((url, index) => (
+                {image.map((url, index) => (
                   <SwiperSlide key={index}>
                     <img src={url} />
                   </SwiperSlide>
@@ -151,7 +216,7 @@ const ProductDetailpage = () => {
                 loop={true}
                 className="mySwiper mt-10"
               >
-                {product.imageUrl.map((url, index) => (
+                {image.map((url, index) => (
                   <SwiperSlide key={index}>
                     <img src={url} />
                   </SwiperSlide>
@@ -161,13 +226,15 @@ const ProductDetailpage = () => {
           </div>
           <div>
             <Typography className="mb-4" variant="h3">
-              {product.title}
+              {product.object.product_id.product_id.name}
             </Typography>
-            <Typography variant="h5">$1,490</Typography>
+            <Typography variant="h5">
+              {product.object.sale_price.toLocaleString("en-US") + " đ"}
+            </Typography>
             <Typography className="!mt-4 text-base font-normal leading-[27px] !text-gray-500">
-              {product.short_description}
+              {product.object.product_id.product_id.short_description}
             </Typography>
-            <div className="my-8 flex items-center gap-2">
+            {/* <div className="my-8 flex items-center gap-2">
               <Rating
                 readOnly
                 value={product.rating}
@@ -176,7 +243,7 @@ const ProductDetailpage = () => {
               <Typography className="!text-sm font-bold !text-gray-700">
                 {product.rating.toPrecision(2)}/5 (100 reviews)
               </Typography>
-            </div>
+            </div> */}
             <Typography color="blue-gray" variant="h6">
               Màu sắc
             </Typography>
@@ -184,7 +251,21 @@ const ProductDetailpage = () => {
               {/* <div className="h-8 w-8 rounded-full border border-gray-900 bg-blue-gray-600 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 bg-gray-900 "></div> */}
-              {product.colors.map((color, index) => (
+              <Tooltip content={product.object.product_id.color_id.color_name}>
+                <Button
+                  size="lg"
+                  variant="gradient"
+                  color="white"
+                  className="rounded-full"
+                  style={{
+                    backgroundColor:
+                      product.object.product_id.color_id.color_code,
+                  }}
+                >
+                  {" "}
+                </Button>
+              </Tooltip>
+              {/* {product.colors.map((color, index) => (
                 <Tooltip content={color.label} key={index}>
                   <Button
                     key={index}
@@ -197,13 +278,13 @@ const ProductDetailpage = () => {
                     {" "}
                   </Button>
                 </Tooltip>
-              ))}
+              ))} */}
             </div>
             <div className="grid grid-cols-2">
               <Typography color="blue-gray" variant="h6">
                 Kích cỡ
               </Typography>
-              <Button
+              {/* <Button
                 onClick={handleOpen}
                 size="sm"
                 variant="gradient"
@@ -211,7 +292,7 @@ const ProductDetailpage = () => {
                 className="shadow-none"
               >
                 Hướng dẫn chi tiết
-              </Button>
+              </Button> */}
               <Dialog open={open} handler={handleOpen}>
                 <DialogHeader>Its a simple dialog.</DialogHeader>
                 <DialogBody>
@@ -237,7 +318,24 @@ const ProductDetailpage = () => {
               </Dialog>
             </div>
             <div className="my-8 mt-3 flex items-center gap-2">
-              {product.sizes.map((size, index) => (
+              <Tooltip
+                content={
+                  product.object.product_id.size_id.height +
+                  " cm - " +
+                  product.object.product_id.size_id.weight +
+                  " kg"
+                }
+              >
+                <Button
+                  size="md"
+                  variant="gradient"
+                  color="white"
+                  className="rounded-full"
+                >
+                  {product.object.product_id.size_id.size}
+                </Button>
+              </Tooltip>
+              {/* {product.sizes.map((size, index) => (
                 <Button
                   key={index}
                   size="md"
@@ -247,23 +345,58 @@ const ProductDetailpage = () => {
                 >
                   {size}
                 </Button>
-              ))}
+              ))} */}
             </div>
             <Typography color="blue-gray" variant="h6">
               Chất liệu
             </Typography>
             <div className="my-8 mt-3 flex items-center gap-2">
               <div className="flex gap-10">
-                {product.materials.map((material, index) => (
+                <Radio
+                  name="type"
+                  label={product.object.product_id.material_id.name}
+                />
+                {/* {product.materials.map((material, index) => (
                   <Radio key={index} name="type" label={material} />
-                ))}
+                ))} */}
               </div>
             </div>
+            <div className="my-8 mt-3 flex items-center gap-2">
+              <Typography variant="h6">Số lượng</Typography>
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() =>
+                    setAmount(amount - 1 < 1 ? amount : amount - 1)
+                  }
+                  variant="gradient"
+                  color="white"
+                  className="rounded-full"
+                >
+                  -
+                </Button>
+                <Typography>{amount}</Typography>
+                <Button
+                  onClick={() =>
+                    setAmount(
+                      amount + 1 > product.object.product_id.stock
+                        ? amount
+                        : amount + 1
+                    )
+                  }
+                  variant="gradient"
+                  color="white"
+                  className="rounded-full"
+                >
+                  +
+                </Button>
+              </div>
+            </div>
+
             <div className="mb-4 flex w-full items-center gap-3">
-              <Button color="blue" className="w-52">
+              <Button color="blue" className="w-52" onClick={handleAddCarts}>
                 Thêm vào giỏ hàng
               </Button>
-              <Button color="green" className="w-64">
+              <Button color="green" className="w-64" onClick={handleAddCart}>
                 Thêm vào giỏ hàng nhanh
               </Button>
               <IconButton color="red" variant="text" className="shrink-0">
@@ -281,8 +414,9 @@ const ProductDetailpage = () => {
             </AccordionHeader>
             <AccordionBody>
               <div className="grid grid-cols-2 gap-8">
-                <Typography>{product.description}</Typography>
-                <Typography>{product.description}</Typography>
+                <Typography>
+                  {product.object.product_id.product_id.short_description}
+                </Typography>
               </div>
             </AccordionBody>
           </Accordion>
@@ -332,13 +466,13 @@ const ProductDetailpage = () => {
                   </Typography>
                   <div className="flex items-center gap-8 mx-5">
                     <Typography variant="h1" className="text-center">
-                      {product.rating.toPrecision(2)}
+                      {product.rating}
                     </Typography>
                     <div>
                       <Rating
                         readOnly
                         size="large"
-                        value={product.rating.toPrecision(2)}
+                        value={product.rating}
                         precision={0.1}
                         className="disabled text-amber-500"
                       />

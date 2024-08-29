@@ -113,10 +113,10 @@ const ProductList = () => {
   useEffect(() => {
     if (selectedId !== -1) {
       const selectedProduct = products?.object.find((p) => p.id === selectedId);
-      setUpdateName(selectedProduct.name);
-      setUpdateDescription(selectedProduct.short_description);
-      setUpdateBrand(selectedProduct.brand_id.id);
-      setUpdateCategory(selectedProduct.category_id.id);
+      setUpdateName(selectedProduct?.name);
+      setUpdateDescription(selectedProduct?.short_description);
+      setUpdateBrand(selectedProduct?.brand_id.id);
+      setUpdateCategory(selectedProduct?.category_id.id);
     }
   }, [selectedId, products]);
   const handleAddOpen = () => setAddOpen(true);

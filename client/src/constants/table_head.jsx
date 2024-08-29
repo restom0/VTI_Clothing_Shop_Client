@@ -78,33 +78,33 @@ const onsaleproduct = [
   { label: "Ngày kết thúc", col: 1 },
 ];
 const voucher = [
-  {
-    label: (
-      <>
-        <Menu>
-          <MenuHandler>
-            <div className="flex items-center gap-4">
-              Tất cả
-              <FilterListIcon className="h-5 w-5" />
-            </div>
-          </MenuHandler>
-          <MenuList>
-            <MenuItem>Tất cả</MenuItem>
-            <MenuItem>Sản phẩm</MenuItem>
-            <MenuItem>Thương hiệu</MenuItem>
-            <MenuItem>Danh mục</MenuItem>
-          </MenuList>
-        </Menu>
-      </>
-    ),
-    col: 1,
-  },
-  { label: "Tên", col: 1 },
+  // {
+  //   label: (
+  //     <>
+  //       <Menu>
+  //         <MenuHandler>
+  //           <div className="flex items-center gap-4">
+  //             Tất cả
+  //             <FilterListIcon className="h-5 w-5" />
+  //           </div>
+  //         </MenuHandler>
+  //         <MenuList>
+  //           <MenuItem>Tất cả</MenuItem>
+  //           <MenuItem>Sản phẩm</MenuItem>
+  //           <MenuItem>Thương hiệu</MenuItem>
+  //           <MenuItem>Danh mục</MenuItem>
+  //         </MenuList>
+  //       </Menu>
+  //     </>
+  //   ),
+  //   col: 1,
+  // },
+  //{ label: "Tên", col: 1 },
   { label: "Mã nhập", col: 1 },
   { label: "Giảm giá", col: 1 },
+  { label: "Số lượng", col: 1 },
   { label: "Ngày áp dụng", col: 1 },
   { label: "Ngày kết thúc", col: 1 },
-  { label: "Số lượng", col: 1 },
 ];
 const productdetail = [
   { label: "Tên", col: 1 },

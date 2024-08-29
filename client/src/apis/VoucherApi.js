@@ -31,26 +31,33 @@ export const voucherApi = createApi({
       providesTags: ["Voucher"],
     }),
     addVoucher: builder.mutation({
-      query: ({ code, discount, description }) => ({
+      query: ({ code, input_stock, value, available_date, expired_date }) => ({
         url: ``,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "POST",
-        body: { code, discount, description },
+        body: { code, input_stock, value, available_date, expired_date },
       }),
       invalidatesTags: ["Voucher"],
     }),
     updateVoucher: builder.mutation({
-      query: ({ id, code, discount, description }) => ({
+      query: ({
+        id,
+        code,
+        input_stock,
+        value,
+        available_date,
+        expired_date,
+      }) => ({
         url: `${id}`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         method: "PUT",
-        body: { code, discount, description },
+        body: { code, input_stock, value, available_date, expired_date },
       }),
       invalidatesTags: ["Voucher"],
     }),
