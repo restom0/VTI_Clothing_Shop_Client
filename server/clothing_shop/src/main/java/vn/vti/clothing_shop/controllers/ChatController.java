@@ -36,6 +36,18 @@ public class ChatController {
         this.chatServiceImplementation = chatServiceImplementation;
         this.chatMapper = chatMapper;
     }
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllChats(){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = (User) authentication.getPrincipal();
+            Long userId = user.getId();
+            return ResponseHandler.responseBuilder(200, "Lấy tin nhắn thành công", chatServiceImplementation.getAllChat(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return ResponseHandler.exceptionBuilder(e);
+        }
+    }
     @GetMapping("/")
     public ResponseEntity<?> getChat(){
         try {

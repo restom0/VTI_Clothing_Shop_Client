@@ -4,7 +4,7 @@ import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/Api";
 export const OrderApi = createApi({
   reducerPath: "OrderApi",
   baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.orders }),
-  tagTypes: ["Order"],
+  tagTypes: ["Order", "OrderItem"],
   endpoints: (builder) => ({
     getOrders: builder.query({
       query: () => ({
@@ -32,7 +32,7 @@ export const OrderApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }),
-      providesTags: ["Cart"],
+      providesTags: ["OrderItem"],
     }),
     updateOrder: builder.mutation({
       query: ({ id, product_id, quantity }) => ({

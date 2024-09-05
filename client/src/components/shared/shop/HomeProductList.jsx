@@ -62,7 +62,7 @@ const HomeProductList = ({ title, products }) => {
         loop={true}
         className="mySwiper mt-10"
       >
-        {products.object.map((product, index) => (
+        {products.map((product, index) => (
           <SwiperSlide key={index} className="mb-5">
             <ProductCard {...product} />
           </SwiperSlide>

@@ -42,14 +42,14 @@ const ProductCard = ({
               </Button>
             </Tooltip>
           ))}
-        </div>
+        </div> */}
         <Typography variant="h6" color="blue-gray">
-          {title}
+          {product_id.product_id.name}
         </Typography>
-        <div className="mx-auto text-center">
+        {/* <div className="mx-auto text-center">
           <Rating value={rating} readOnly />
         </div> */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mt-5">
           <Typography variant="h6" color="blue-gray" className=" text-center">
             {(sale_price * (1 - discount / 100)).toLocaleString("en-US")}đ
           </Typography>

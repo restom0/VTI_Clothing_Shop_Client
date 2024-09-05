@@ -81,11 +81,23 @@ public class OrderItemServiceImplementation implements OrderItemService {
         if(orderItemRepository.findByIdAndOrderId(order.getId(),orderItemCreateDTO.getOrder_id()).isPresent()){
             OrderItem orderItem = orderItemRepository.findByIdAndOrderId(order.getId(),orderItemCreateDTO.getOrder_id()).get();
             orderItem.setQuantity(orderItem.getQuantity() + orderItemCreateDTO.getQuantity());
+            order.setTotal_price((long) (
+                    order.getTotal_price() +
+                            orderItemCreateDTO.getQuantity() *
+                                    orderItem.getProduct_id().getSale_price()*
+                                    (1-orderItem.getProduct_id().getDiscount()/100)));
+            orderRepository.save(order);
             orderItemRepository.save(orderItem);
             return true;
         }
         OrderItem orderItem = orderItemMapper.CreateDTOToEntity(orderItemCreateDTO,order,onSaleProduct);
         orderItemRepository.save(orderItem);
+        order.setTotal_price((long) (
+                order.getTotal_price() +
+                        orderItemCreateDTO.getQuantity() *
+                                orderItem.getProduct_id().getSale_price()*
+                                (1-orderItem.getProduct_id().getDiscount()/100)));
+        orderRepository.save(order);
         return true;
     };
 
@@ -133,6 +145,7 @@ public class OrderItemServiceImplementation implements OrderItemService {
                 }else{
                     refundQuantity.updateAndGet(v -> v - product.getStock());
                     product.setStock(0);
+
                     importedProductRepository.save(product);
                 }
             });
@@ -145,7 +158,7 @@ public class OrderItemServiceImplementation implements OrderItemService {
 //
 //            }
 //        });
-
+        order.setTotal_price((long) (order.getTotal_price() + (orderItemUpdateDTO.getQuantity() - orderItem.getQuantity()) * orderItem.getProduct_id().getSale_price()));
         this.orderItemRepository.save(orderItemMapper.UpdateDTOToEntity(orderItemUpdateDTO,orderItem));
         return true;
     };
@@ -165,13 +178,15 @@ public class OrderItemServiceImplementation implements OrderItemService {
     }
 
     //@CacheEvict(value = "orderItems", allEntries = true)
-    public Boolean deleteOrderItem(Long id){
+    public Boolean deleteOrderItem(Long id,Long orderId){
         List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(id);
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new NotFoundException("Order not found"));
         orderItems.forEach((orderItem)->{
             orderItem.setDeleted_at(LocalDateTime.now());
             this.refundStock(orderItem);
             this.orderItemRepository.save(orderItem);
         });
+        order.setTotal_price(order.getTotal_price() - orderItems.stream().mapToLong(orderItem -> (long) (orderItem.getQuantity() * orderItem.getProduct_id().getSale_price())).sum());
         return true;
     };
 }

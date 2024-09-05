@@ -97,7 +97,8 @@ public class InputSaleServiceImplementation implements InputSaleService {
         if(importedProducts.isEmpty())  return;
         importedProducts.forEach(importedProduct -> {
             if(!isValidToSave(importedProduct,inputSale)) return;
-            this.onSaleProductRepository.save(onSaleProductMapper.ImportProductToOnSaleProduct(importedProduct,inputSale));
+            OnSaleProduct onSaleProduct = onSaleProductMapper.ImportProductToOnSaleProduct(importedProduct, inputSale);
+            onSaleProductRepository.save(onSaleProduct);
         });
     }
 
@@ -105,6 +106,7 @@ public class InputSaleServiceImplementation implements InputSaleService {
     @Transactional
     public  Boolean createInputSale(InputSaleCreateDTO inputSaleCreateDTO){
         InputSale inputSale = inputSaleMapper.CreateDTOToEntity(inputSaleCreateDTO);
+        this.inputSaleRepository.save(inputSale);
         switch (inputSaleCreateDTO.getFilter()){
             case ALL:
                 saveListOnSaleProduct(importedProductRepository.findAllWithPositiveStock(),inputSale);
@@ -128,7 +130,6 @@ public class InputSaleServiceImplementation implements InputSaleService {
                 saveListOnSaleProduct(importedProductRepository.findAllWithPositiveStockByMaterialId(inputSaleCreateDTO.getFilter_id()),inputSale);
                 break;
         }
-        this.inputSaleRepository.save(inputSale);
         return true;
     };
 
@@ -157,6 +158,7 @@ public class InputSaleServiceImplementation implements InputSaleService {
     public Boolean deleteInputSale(Long id){
         InputSale inputSale = inputSaleRepository.findById(id).orElseThrow(()->new RuntimeException("InputSale not found"));
         List<OnSaleProduct> onSaleProducts = onSaleProductRepository.findByInputSaleId(inputSale.getId());
+        System.out.println(onSaleProducts.size());
         onSaleProducts.forEach(onSaleProduct -> {
             onSaleProduct.setDeleted_at(LocalDateTime.now());
             onSaleProductRepository.save(onSaleProduct);

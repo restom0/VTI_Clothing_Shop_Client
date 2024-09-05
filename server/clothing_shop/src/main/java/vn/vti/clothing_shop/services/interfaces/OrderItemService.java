@@ -14,5 +14,5 @@ public interface OrderItemService {
     OrderItemDTO getOrderItemByIdAndOrderId(Long id,Long orderId);
     Boolean addOrderItem(OrderItemCreateDTO orderItemCreateDTO);
     Boolean updateOrderItem(OrderItemUpdateDTO orderItemUpdateDTO);
-    Boolean deleteOrderItem(Long id);
+    Boolean deleteOrderItem(Long id,Long orderId);
 }

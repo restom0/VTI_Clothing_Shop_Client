@@ -32,7 +32,7 @@ public class InputSaleCreateRequest {
     @DecimalMax(value = "100.00", message = "Discount must be less than or equal to 100")
     private Float discount;
 
-    @Future(message = "Available date must be in the future")
+    //@Future(message = "Available date must be in the future")
     private LocalDateTime available_date;
 
     private LocalDateTime end_date;

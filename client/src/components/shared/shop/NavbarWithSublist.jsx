@@ -393,7 +393,7 @@ const NavbarWithSublist = () => {
                       cart.object.orderItems.map((item) => (
                         <div key={item.id} className="grid grid-cols-5 gap-4">
                           <img
-                            src={item.imageUrl}
+                            src={item.product_id.product_id.image_url}
                             width={48}
                             height={48}
                             className="mx-auto my-auto"
@@ -411,15 +411,20 @@ const NavbarWithSublist = () => {
                             variant="small"
                             className="my-auto mx-auto"
                           >
-                            {item.price.toLocaleString("en-US")}đ
+                            {(
+                              item.product_id.sale_price *
+                              (1 - item.product_id.discount / 100)
+                            ).toLocaleString("en-US")}
+                            đ
                           </Typography>
                           <Typography
                             variant="small"
                             className="my-auto mx-auto"
                           >
-                            {(item.price * item.quantity).toLocaleString(
-                              "en-US"
-                            )}
+                            {(
+                              item.product_id.sale_price *
+                              (1 - item.product_id.discount / 100) * item.quantity
+                            ).toLocaleString("en-US")}
                             đ
                           </Typography>
                         </div>

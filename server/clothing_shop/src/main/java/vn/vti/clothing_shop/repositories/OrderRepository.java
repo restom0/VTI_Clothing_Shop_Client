@@ -11,6 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
+
+    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = 'COMPLETED' AND month(o.created_at) = ?1 AND year(o.created_at) = ?2")
+    Long sumTotalPriceByMonthAndYear(Integer month, Integer year);
     @Override
     @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL ORDER BY o.id DESC")
     @NotNull
@@ -37,19 +40,19 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     @Query("SELECT COUNT(o) FROM Order o WHERE o.deleted_at IS NULL")
     long count();
 
-    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
-    long sumTotalPrice();
+    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = 'COMPLETED'")
+    Long sumTotalPrice();
 
-    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED GROUP BY year(o.created_at), month(o.created_at)")
+    @Query("SELECT SUM(o.total_price) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = 'COMPLETED' GROUP BY year(o.created_at), month(o.created_at)")
     List<Long> countCompletedOrderByMonth();
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
-    long countCompletedOrder();
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = 'COMPLETED'")
+    Long countCompletedOrder();
 
-    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = COMPLETED")
+    @Query("SELECT o FROM Order o WHERE o.deleted_at IS NULL AND o.payment_status = 'COMPLETED'")
     List<Order> findAllCompletedOrder();
 
-    @Query("SELECT o FROM Order o WHERE o.order_code=?1 AND o.user_id.id=?2 AND o.deleted_at IS NULL AND o.payment_status = NOT_CONFIRMED")
+    @Query("SELECT o FROM Order o WHERE o.order_code=?1 AND o.user_id.id=?2 AND o.deleted_at IS NULL AND o.payment_status = 'NOT_CONFIRMED'")
     Optional<Order> findOrderByOrderCodeAndUserId(Long orderCode, Long userId);
 
 }

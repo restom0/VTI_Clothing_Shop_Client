@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionBody,
@@ -33,6 +33,7 @@ import Pagination from "../components/shared/Pagination";
 import { useGetOnSaleProductQuery } from "../apis/OnSaleProductApi";
 import { useCreateOrderItemMutation } from "../apis/OrderItemApi";
 import { Toast } from "../configs/SweetAlert2";
+import Loading from "../components/shared/Loading";
 const product = {
   id: 0,
   colors: [
@@ -107,11 +108,13 @@ const reviews = [
 const ProductDetailpage = () => {
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(1);
+  const [image, setImage] = React.useState([]);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
   const [material, setMaterial] = useState(null);
+  const [stock, setStock] = useState(0);
   const [amount, setAmount] = useState(1);
-
+  const [select, setSelect] = useState(-1);
   const handleOpen = () => setOpen(!open);
   const [description, setDescription] = React.useState(false);
   const [star, setStar] = React.useState(false);
@@ -120,22 +123,65 @@ const ProductDetailpage = () => {
   const navigate = useNavigate();
   const [createOrderItem, { isLoading: isAdded, error: isAddError }] =
     useCreateOrderItemMutation();
+  useEffect(() => {
+    if (
+      !color ||
+      !size ||
+      !material ||
+      !product?.object ||
+      !product?.object.find(
+        (item) =>
+          item.product_id.color_id.id === color &&
+          item.product_id.size_id.id === size &&
+          item.product_id.material_id.id === material
+      )
+    ) {
+      setImage([
+        product?.object[0].product_id.image_url,
+        product?.object[0].product_id.slider_url_1,
+        product?.object[0].product_id.slider_url_2,
+        product?.object[0].product_id.slider_url_3,
+        product?.object[0].product_id.slider_url_4,
+      ]);
+      setStock(0);
+    } else {
+      const search = product?.object.find(
+        (item) =>
+          item.product_id.color_id.id === color &&
+          item.product_id.size_id.id === size &&
+          item.product_id.material_id.id === material
+      );
+      setImage([
+        search.product_id.image_url,
+        search.product_id.slider_url_1,
+        search.product_id.slider_url_2,
+        search.product_id.slider_url_3,
+        search.product_id.slider_url_4,
+      ]);
+      setStock(search.product_id.stock);
+    }
+  }, [select, product?.object, size, material, color]);
+  if (isLoading)
+    return (
+      <div className="h-96">
+        <Loading />
+      </div>
+    );
+  if (error) return navigate("/error");
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error...</div>;
-  const image = [
-    product.object.product_id.image_url,
-    product.object.product_id.slider_url_1,
-    product.object.product_id.slider_url_2,
-    product.object.product_id.slider_url_3,
-    product.object.product_id.slider_url_4,
-  ];
+  // const image = [
+  //   product.object.product_id.image_url,
+  //   product.object.product_id.slider_url_1,
+  //   product.object.product_id.slider_url_2,
+  //   product.object.product_id.slider_url_3,
+  //   product.object.product_id.slider_url_4,
+  // ];
   const handleAddCart = async () => {
     try {
       if (!localStorage.getItem("token")) return navigate("/login");
       const message = await createOrderItem({
         order_id: Number(localStorage.getItem("order_id")),
-        product_id: product.object.product_id.id,
+        product_id: product.object[0].id,
         quantity: 1,
       })
         .unwrap()
@@ -157,7 +203,7 @@ const ProductDetailpage = () => {
       if (!localStorage.getItem("token")) return navigate("/login");
       const message = await createOrderItem({
         order_id: Number(localStorage.getItem("order_id")),
-        product_id: product.object.product_id.id,
+        product_id: product.object[0].id,
         quantity: amount,
       })
         .unwrap()
@@ -168,6 +214,7 @@ const ProductDetailpage = () => {
           });
         });
     } catch (error) {
+      console.log(error);
       Toast.fire({
         icon: "error",
         title: "Thêm giỏ hàng thất bại",
@@ -226,13 +273,13 @@ const ProductDetailpage = () => {
           </div>
           <div>
             <Typography className="mb-4" variant="h3">
-              {product.object.product_id.product_id.name}
+              {product.object[0].product_id.product_id.name}
             </Typography>
             <Typography variant="h5">
-              {product.object.sale_price.toLocaleString("en-US") + " đ"}
+              {product.object[0].sale_price.toLocaleString("en-US") + " đ"}
             </Typography>
             <Typography className="!mt-4 text-base font-normal leading-[27px] !text-gray-500">
-              {product.object.product_id.product_id.short_description}
+              {product.object[0].product_id.product_id.short_description}
             </Typography>
             {/* <div className="my-8 flex items-center gap-2">
               <Rating
@@ -251,20 +298,25 @@ const ProductDetailpage = () => {
               {/* <div className="h-8 w-8 rounded-full border border-gray-900 bg-blue-gray-600 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 bg-gray-900 "></div> */}
-              <Tooltip content={product.object.product_id.color_id.color_name}>
-                <Button
-                  size="lg"
-                  variant="gradient"
-                  color="white"
-                  className="rounded-full"
-                  style={{
-                    backgroundColor:
-                      product.object.product_id.color_id.color_code,
-                  }}
+              {product.object.map((color, index) => (
+                <Tooltip
+                  content={color.product_id.color_id.color_name}
+                  key={index}
                 >
-                  {" "}
-                </Button>
-              </Tooltip>
+                  <Button
+                    size="lg"
+                    variant="gradient"
+                    color="white"
+                    className="rounded-full"
+                    style={{
+                      backgroundColor: color.product_id.color_id.color_code,
+                    }}
+                    onClick={() => setColor(color.product_id.color_id.id)}
+                  >
+                    {" "}
+                  </Button>
+                </Tooltip>
+              ))}
               {/* {product.colors.map((color, index) => (
                 <Tooltip content={color.label} key={index}>
                   <Button
@@ -302,39 +354,39 @@ const ProductDetailpage = () => {
                   giving up, I&apos;m just getting started. I&apos;m up to
                   something. Fan luv.
                 </DialogBody>
-                <DialogFooter>
-                  <Button
-                    variant="text"
-                    color="red"
-                    onClick={handleOpen}
-                    className="mr-1"
-                  >
-                    <span>Cancel</span>
-                  </Button>
-                  <Button variant="gradient" color="green" onClick={handleOpen}>
-                    <span>Confirm</span>
-                  </Button>
-                </DialogFooter>
               </Dialog>
             </div>
             <div className="my-8 mt-3 flex items-center gap-2">
-              <Tooltip
-                content={
-                  product.object.product_id.size_id.height +
-                  " cm - " +
-                  product.object.product_id.size_id.weight +
-                  " kg"
-                }
-              >
-                <Button
-                  size="md"
-                  variant="gradient"
-                  color="white"
-                  className="rounded-full"
-                >
-                  {product.object.product_id.size_id.size}
-                </Button>
-              </Tooltip>
+              {product.object
+                .filter(
+                  (value, index, self) =>
+                    index ===
+                    self.findIndex(
+                      (t) =>
+                        t.product_id.size_id.id === value.product_id.size_id.id
+                    )
+                )
+                .map((size, index) => (
+                  <Tooltip
+                    content={
+                      size.product_id.size_id.height +
+                      " cm - " +
+                      size.product_id.size_id.weight +
+                      " kg"
+                    }
+                    key={index}
+                  >
+                    <Button
+                      size="md"
+                      variant="gradient"
+                      color="white"
+                      className="rounded-full"
+                      onClick={() => setSize(size.product_id.size_id.id)}
+                    >
+                      {size.product_id.size_id.size}
+                    </Button>
+                  </Tooltip>
+                ))}
               {/* {product.sizes.map((size, index) => (
                 <Button
                   key={index}
@@ -352,14 +404,35 @@ const ProductDetailpage = () => {
             </Typography>
             <div className="my-8 mt-3 flex items-center gap-2">
               <div className="flex gap-10">
-                <Radio
-                  name="type"
-                  label={product.object.product_id.material_id.name}
-                />
+                {product.object
+                  .filter(
+                    (value, index, self) =>
+                      index ===
+                      self.findIndex(
+                        (t) =>
+                          t.product_id.material_id.id ===
+                          value.product_id.material_id.id
+                      )
+                  )
+                  .map((material, index) => (
+                    <Radio
+                      name="type"
+                      label={material.product_id.material_id.name}
+                      key={index}
+                      onClick={() =>
+                        setMaterial(material.product_id.material_id.id)
+                      }
+                    />
+                  ))}
                 {/* {product.materials.map((material, index) => (
                   <Radio key={index} name="type" label={material} />
                 ))} */}
               </div>
+            </div>
+            <div className="my-8 mt-3 flex items-center gap-2">
+              <Typography variant="h6">Còn:</Typography>
+              <Typography>{stock}</Typography>
+              <Typography>sản phẩm</Typography>
             </div>
             <div className="my-8 mt-3 flex items-center gap-2">
               <Typography variant="h6">Số lượng</Typography>
@@ -377,11 +450,7 @@ const ProductDetailpage = () => {
                 <Typography>{amount}</Typography>
                 <Button
                   onClick={() =>
-                    setAmount(
-                      amount + 1 > product.object.product_id.stock
-                        ? amount
-                        : amount + 1
-                    )
+                    setAmount(amount + 1 > stock ? amount : amount + 1)
                   }
                   variant="gradient"
                   color="white"
@@ -415,7 +484,7 @@ const ProductDetailpage = () => {
             <AccordionBody>
               <div className="grid grid-cols-2 gap-8">
                 <Typography>
-                  {product.object.product_id.product_id.short_description}
+                  {product.object[0].product_id.product_id.short_description}
                 </Typography>
               </div>
             </AccordionBody>

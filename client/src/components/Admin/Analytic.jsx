@@ -16,25 +16,40 @@ import {
 
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { Container } from "@mui/material";
+import { useGetStatQuery } from "../../apis/StatApi";
+import Loading from "../shared/Loading";
 const Analytic = () => {
+  const [filter, setFilter] = React.useState("ALL");
+  const { data: datas, isLoading, error } = useGetStatQuery();
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error: {error}</div>;
+  const monthlyIncome = datas.object.monthlyIncome;
+  const color = ["#FF6633", "#FFB399", "#FF33FF", "#FFFF99", "#00B3E6"];
+  const border = ["#FF6633", "#FFB399", "#FF33FF", "#FFFF99", "#00B3E6"];
+  const datasets = Object.keys(monthlyIncome).map((year, index) => ({
+    label: year,
+    data: monthlyIncome[year],
+    fill: false,
+    backgroundColor: color[index],
+    borderColor: border[index],
+  }));
+
   const data = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        label: "2022",
-        data: [10, 20, 30, 40, 50, 60],
-        fill: false,
-        backgroundColor: "rgb(50, 100, 100)",
-        borderColor: "rgba(50, 100, 100, 1)",
-      },
-      {
-        label: "2023",
-        data: [65, 59, 80, 81, 56, 55],
-        fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
-      },
+    labels: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ],
+    datasets: datasets,
   };
   const options = {
     scales: {
@@ -43,7 +58,7 @@ const Analytic = () => {
       },
     },
   };
-  const [filter, setFilter] = React.useState("ALL");
+
   return (
     <>
       <Container className="mt-5">
@@ -51,7 +66,7 @@ const Analytic = () => {
           <Typography variant="h3" className="font-bold ">
             Thống kê
           </Typography>
-          <div className="shrink-0">
+          {/* <div className="shrink-0">
             <Menu>
               <MenuHandler>
                 <Button
@@ -100,14 +115,14 @@ const Analytic = () => {
                 </MenuItem>
               </MenuList>
             </Menu>
-          </div>
+          </div> */}
         </div>
       </Container>
       <div className="grid grid-cols-4">
         <section className="ms-8 me-8 mt-8 col-span-3">
           <Card>
             <CardBody className="!p-2">
-              <div className="flex gap-2 flex-wrap justify-between px-4 !mt-4 ">
+              {/* <div className="flex gap-2 flex-wrap justify-between px-4 !mt-4 ">
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-1">
                     <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
@@ -128,7 +143,7 @@ const Analytic = () => {
                     </Typography>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <Line data={data} options={options} />
             </CardBody>
             <CardFooter className="flex gap-6 flex-wrap items-center justify-between">
@@ -147,7 +162,7 @@ const Analytic = () => {
             </CardFooter>
           </Card>
         </section>
-        <Kpi />
+        <Kpi stat={datas.object.generalStats} />
       </div>
     </>
   );

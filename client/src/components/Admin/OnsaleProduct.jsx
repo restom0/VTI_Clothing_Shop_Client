@@ -148,7 +148,10 @@ const OnsaleProduct = () => {
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setFilters("PRODUCT");
+    setOpen(true);
+  };
   const handleOpens = () => setOpens(true);
   const selectedId = useSelector((state) => state.selectedId.value);
   const { data: inputSale, error, isLoading } = useGetInputSalesQuery();
@@ -299,7 +302,7 @@ const OnsaleProduct = () => {
   const handleAddImportedProduct = async () => {
     try {
       const message = await createInputSale({
-        filter: "ALL",
+        filter: filters,
         filter_id: value,
         salePercentage: Number(price),
         discount: Number(discount),
@@ -330,6 +333,9 @@ const OnsaleProduct = () => {
       Toast.fire({
         icon: "success",
         title: "Thêm sản phẩm thành công",
+      }).then(() => {
+        handleCloseOpen();
+        handleCloseOpens();
       });
     } catch (error) {
       Toast.fire({
@@ -361,7 +367,9 @@ const OnsaleProduct = () => {
       salePercentage: item.salePercentage + "%",
       discount: item.discount + "%",
       available_date: new Date(item.available_date).toLocaleDateString("en-GB"),
-      end_date: new Date(item.end_date).toLocaleDateString("en-GB"),
+      end_date: item.end_date
+        ? new Date(item.end_date).toLocaleDateString("en-GB")
+        : "Không có",
     };
   });
   const handleUpdateInputSales = async () => {
@@ -376,7 +384,18 @@ const OnsaleProduct = () => {
       return message;
     } catch (error) {
       Toast.fire({
-        icon: "success",
+        icon: "error",
+        title: error,
+      });
+    }
+  };
+  const handleDeleteSubmit = async () => {
+    try {
+      const message = await deleteInputSale(selectedId);
+      return message;
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
         title: error,
       });
     }
@@ -391,6 +410,7 @@ const OnsaleProduct = () => {
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
+        handleDeleteSubmit={handleDeleteSubmit}
         headerDetail={"Chi tiết lần nhập giá"}
         bodyDetail={
           <Container>
@@ -408,7 +428,10 @@ const OnsaleProduct = () => {
                     Loại nhập:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    Thương hiệu
+                    {
+                      inputSale.object.find((item) => item.id === selectedId)
+                        ?.filter
+                    }
                   </Typography>
                 </div>
                 <div className="text-center flex items-center gap-4">
@@ -416,7 +439,10 @@ const OnsaleProduct = () => {
                     Tên:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    Adidas
+                    {
+                      inputSale.object.find((item) => item.id === selectedId)
+                        ?.filter_id
+                    }
                   </Typography>
                 </div>
               </div>
@@ -426,7 +452,8 @@ const OnsaleProduct = () => {
                     Giá trị gia tăng:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    30%
+                    {inputSale.object.find((item) => item.id === selectedId)
+                      ?.salePercentage + "%"}
                   </Typography>
                 </div>
                 <div className="text-center flex items-center gap-4">
@@ -434,7 +461,8 @@ const OnsaleProduct = () => {
                     Giảm giá:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    15%
+                    {inputSale.object.find((item) => item.id === selectedId)
+                      ?.discount + "%"}
                   </Typography>
                 </div>
               </div>
@@ -444,7 +472,15 @@ const OnsaleProduct = () => {
                     Ngày áp dụng
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    23/04/18
+                    {
+                      new Date(
+                        inputSale.object.find(
+                          (item) => item.id === selectedId
+                        )?.available_date
+                      )
+                        .toLocaleString("en-GB")
+                        .split(",")[0]
+                    }
                   </Typography>
                 </div>
                 <div className="text-center flex items-center gap-4">
@@ -452,7 +488,16 @@ const OnsaleProduct = () => {
                     Ngày kết thúc
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    23/04/18
+                    {inputSale.object.find((item) => item.id === selectedId)
+                      ?.end_date
+                      ? new Date(
+                          inputSale.object.find(
+                            (item) => item.id === selectedId
+                          ).end_date
+                        )
+                          .toLocaleString("en-GB")
+                          .split(",")[0]
+                      : "Không có"}
                   </Typography>
                 </div>
               </div>
@@ -462,7 +507,7 @@ const OnsaleProduct = () => {
               <Typography
                 variant="h5"
                 color="blue-gray"
-                className="font-bold text-center mb-5"
+                className="font-bold text-center mb-5 mt-2"
               >
                 Danh sách sản phẩm
               </Typography>
@@ -489,7 +534,7 @@ const OnsaleProduct = () => {
               </table>
               <div className="flex justify-between mt-3">
                 <Typography variant="p">
-                  Total: {updateImport_Product?.length || 0} items
+                  Tất cả: {updateImport_Product?.length || 0} sản phẩm
                 </Typography>
                 {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
                   <Pagination
@@ -687,7 +732,7 @@ const OnsaleProduct = () => {
                 </table>
                 <div className="flex justify-between mt-3">
                   <Typography variant="p">
-                    Total: {updateImport_Product?.length || 0} items
+                    Tất cả: {updateImport_Product?.length || 0} sản phẩm
                   </Typography>
                   {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
                     <Pagination
@@ -1164,7 +1209,7 @@ const OnsaleProduct = () => {
                 </table>
                 <div className="flex justify-between mt-3">
                   <Typography variant="p">
-                    Total: {import_product?.length || 0} items
+                    Tất cả: {import_product?.length || 0} sản phẩm
                   </Typography>
                   {Math.ceil((import_product?.length || 0) / 5) > 1 && (
                     <Pagination

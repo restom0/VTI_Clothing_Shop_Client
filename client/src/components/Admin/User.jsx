@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Dialog,
   DialogBody,
   DialogFooter,
   DialogHeader,
@@ -14,13 +13,20 @@ import {
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
-import { Container } from "@mui/material";
+import {
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { useState } from "react";
 import useOpen from "../../hooks/useOpen";
 import Table from "../shared/Table";
 import { user } from "../../constants/table_head";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetUsersQuery } from "../../apis/UserApi";
+import Loading from "../shared/Loading";
 
 const TABLE_ROWS = [
   {
@@ -39,9 +45,14 @@ const User = () => {
     handleDetailOpen,
     handleUpdateOpen,
     handleDeleteOpen,
+    handleDetailClose,
+    handleUpdateClose,
+    handleDeleteClose,
   } = useOpen();
 
   const { data: users, error, isLoading } = useGetUsersQuery();
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error: {error}</div>;
   return (
     <Container className="mt-5">
       <div className="flex items-center justify-between mb-5">
@@ -67,7 +78,7 @@ const User = () => {
       </div>
       <Table
         TABLE_HEAD={user}
-        TABLE_ROWS={TABLE_ROWS}
+        TABLE_ROWS={users.object.length > 0 ? users.object : []}
         active={active}
         setActive={setActive}
         deleteOpen={detailOpen}
@@ -75,18 +86,18 @@ const User = () => {
         noDelete
         noUpdate
       />
-      <Dialog open={detailOpen} handler={handleDetailOpen} size="xs">
-        <DialogHeader className="pb-0 flex justify-between">
+      <Dialog open={detailOpen} onClose={handleDetailClose} maxWidth="md">
+        <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h4">Thông tin người dùng</Typography>
-          <IconButton
+          {/* <IconButton
             className="border-none"
             variant="outlined"
             onClick={handleDetailOpen}
           >
             <CloseIcon />
-          </IconButton>
-        </DialogHeader>
-        <DialogBody>
+          </IconButton> */}
+        </DialogTitle>
+        <DialogContent>
           <Container>
             <div className="grid grid-cols-2 text-center">
               <Typography variant="h6" color="blue-gray" className="font-bold">
@@ -109,9 +120,9 @@ const User = () => {
               </Typography>
             </div>
           </Container>
-        </DialogBody>
-        <DialogFooter>
-          {TABLE_ROWS[0].status === "BLOCKED" ? (
+        </DialogContent>
+        <DialogActions>
+          {users?.object.status === "BLOCKED" ? (
             <Button variant="gradient" color="green">
               <span>Khôi phục</span>
             </Button>
@@ -120,7 +131,7 @@ const User = () => {
               <span>Khóa tài khoản</span>
             </Button>
           )}
-        </DialogFooter>
+        </DialogActions>
       </Dialog>
     </Container>
   );

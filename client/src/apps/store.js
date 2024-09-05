@@ -32,6 +32,7 @@ import { OrderApi } from "../apis/OrderApi";
 import { OrderItemApi } from "../apis/OrderItemApi";
 import { ProductApi } from "../apis/ProductApi";
 import { logApi } from "../apis/LogApi";
+import { StatApi } from "../apis/StatApi";
 
 export const store = configureStore({
   reducer: {
@@ -67,6 +68,7 @@ export const store = configureStore({
     [OrderItemApi.reducerPath]: OrderItemApi.reducer,
     [ProductApi.reducerPath]: ProductApi.reducer,
     [logApi.reducerPath]: logApi.reducer,
+    [StatApi.reducerPath]: StatApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -83,5 +85,6 @@ export const store = configureStore({
       .concat(OrderApi.middleware)
       .concat(OrderItemApi.middleware)
       .concat(ProductApi.middleware)
-      .concat(logApi.middleware),
+      .concat(logApi.middleware)
+      .concat(StatApi.middleware),
 });

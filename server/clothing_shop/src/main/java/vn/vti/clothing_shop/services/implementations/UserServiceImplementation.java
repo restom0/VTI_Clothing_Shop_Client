@@ -43,7 +43,7 @@ public class UserServiceImplementation implements UserService {
 
     //@Cacheable(value = "users")
     public List<UserDTO> getAllUsers(){
-        return userMapper.EntityToDTO(userRepository.findAll());
+        return userMapper.EntityToDTO(userRepository.findAllUser());
     };
 
     //@CachePut(value = "users")

@@ -44,7 +44,7 @@ public class InputSale implements Serializable {
     @Column(name = "discount", columnDefinition = "NUMERIC(10,2)", nullable = false)
     private Float discount;
 
-    @Future(message = "Available date must be in the future")
+    //@Future(message = "Available date must be in the future")
     @NotNull(message = "Available date is required")
     @Column(name = "available_date", nullable = false)
     private LocalDateTime available_date;

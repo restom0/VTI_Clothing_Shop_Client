@@ -36,6 +36,7 @@ const account_menu = [
   {
     label: "Đăng xuất",
     icon: PowerIcon,
+    link: "/login",
   },
 ];
 

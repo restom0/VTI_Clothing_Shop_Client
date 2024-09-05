@@ -47,7 +47,7 @@ public class OnSaleProductMapper {
     public OnSaleProduct ImportProductToOnSaleProduct(ImportedProduct importedProduct, InputSale inputSale) {
         OnSaleProduct onSaleProduct = new OnSaleProduct();
         onSaleProduct.setProduct_id(importedProduct);
-        onSaleProduct.setSale_price(importedProduct.getImportPrice() * inputSale.getSalePercentage());
+        onSaleProduct.setSale_price(importedProduct.getImportPrice() * inputSale.getSalePercentage()/100);
         onSaleProduct.setDiscount(inputSale.getDiscount());
         onSaleProduct.setInput_sale_id(inputSale);
         return onSaleProduct;

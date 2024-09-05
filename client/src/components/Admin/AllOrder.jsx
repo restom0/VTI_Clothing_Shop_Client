@@ -24,8 +24,10 @@ import AdminLayout from "../../layouts/Admin/AdminLayout";
 import Pagination from "../shared/Pagination";
 import { useGetOrdersQuery } from "../../apis/OrderApi";
 import Loading from "../shared/Loading";
+import { useSelector } from "react-redux";
 const AllOrder = () => {
   const [tab, setTab] = useState("ALL");
+  const selectedId = useSelector((state) => state.selectedId.value);
   const [active, setActive] = useState(1);
   const [subactive, setSubactive] = useState(1);
   const [filterOrders, setFilterOrders] = useState(null);
@@ -81,10 +83,12 @@ const AllOrder = () => {
   const listOrders = filterOrders?.map((order, index) => {
     return {
       id: order.id,
-      name: order.name,
-      role: order.role,
-      action: order.action,
-      date: order.date,
+      order_code: order.order_code,
+      name: order.receiver_name,
+      phone_number: order.phone_number,
+      price: Number(order.total_price).toLocaleString("en-US") + " đ",
+      payment_method: order.payment_method,
+      payment_status: order.payment_status,
     };
   });
   return (
@@ -101,7 +105,7 @@ const AllOrder = () => {
         noUpdate
         noDelete
         size="xl"
-        headerDetail="Chi tiết đơn hàng #001"
+        headerDetail="Chi tiết đơn hàng"
         overflow
         bodyDetail={
           <Card>
@@ -114,7 +118,7 @@ const AllOrder = () => {
                 >
                   Thông tin liên hệ
                 </Typography>
-                <div className="col-span-2 grid grid-cols-3">
+                <div className="col-span-2 grid grid-cols-3 gap-2">
                   <Typography variant="h6" color="blue-gray">
                     Tên người nhận:
                   </Typography>
@@ -123,7 +127,10 @@ const AllOrder = () => {
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    Nguyễn Văn A
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.receiver_name
+                    }
                   </Typography>
                   <Typography variant="h6" color="blue-gray">
                     Địa chỉ nhận hàng:
@@ -133,7 +140,10 @@ const AllOrder = () => {
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    123, Đường ABC, Quận XYZ, TP. HCM
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.address
+                    }
                   </Typography>
                   <Typography variant="h6" color="blue-gray">
                     Số điện thoại người nhận:
@@ -143,7 +153,10 @@ const AllOrder = () => {
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    0123456789
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.phone_number
+                    }
                   </Typography>
                 </div>
               </div>
@@ -156,26 +169,32 @@ const AllOrder = () => {
                 >
                   Phương thức thanh toán
                 </Typography>
-                <div className="col-span-2 grid grid-cols-3">
+                <div className="col-span-2 grid grid-cols-3 gap-2">
                   <Typography variant="h6" color="blue-gray">
-                    Hình thức thanh toán
+                    Hình thức thanh toán:
                   </Typography>
                   <Typography
                     variant="body"
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    Thanh toán khi nhận hàng
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.payment_method
+                    }
                   </Typography>
                   <Typography variant="h6" color="blue-gray">
-                    Trạng thái
+                    Trạng thái:
                   </Typography>
                   <Typography
                     variant="body"
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    Đã thanh toán
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.payment_status
+                    }
                   </Typography>
                 </div>
               </div>
@@ -188,9 +207,9 @@ const AllOrder = () => {
                 >
                   Phương thức vận chuyển
                 </Typography>
-                <div className="col-span-2 grid grid-cols-3">
+                <div className="col-span-2 grid grid-cols-3 gap-2">
                   <Typography variant="h6" color="blue-gray">
-                    Hình thức vận chuyển
+                    Hình thức vận chuyển:
                   </Typography>
                   <Typography
                     variant="body"
@@ -200,14 +219,17 @@ const AllOrder = () => {
                     Giao hàng tiêu chuẩn
                   </Typography>
                   <Typography variant="h6" color="blue-gray">
-                    Trạng thái
+                    Trạng thái:
                   </Typography>
                   <Typography
                     variant="body"
                     className="col-span-2"
                     color="blue-gray"
                   >
-                    Đang vận chuyển
+                    {
+                      orders?.object.find((order) => order.id === selectedId)
+                        ?.payment_status
+                    }
                   </Typography>
                 </div>
               </div>
@@ -239,22 +261,28 @@ const AllOrder = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {TABLE_ROWS.slice((subactive - 1) * 5, subactive * 5).map(
-                    ({ name, job, date }, index) => {
-                      const isLast = index === TABLE_ROWS.length - 1;
+                  {orders?.object
+                    .find((order) => order.id === selectedId)
+                    ?.orderItems.slice((subactive - 1) * 5, subactive * 5)
+                    .map((item, index) => {
+                      const isLast =
+                        index ===
+                        orders?.object.find((order) => order.id === selectedId)
+                          ?.orderItems.length -
+                          1;
                       const classes = isLast
                         ? "p-4"
                         : "p-4 border-b border-blue-gray-50";
 
                       return (
-                        <tr key={name}>
+                        <tr key={index}>
                           <td className={classes}>
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {index + 1}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -263,7 +291,7 @@ const AllOrder = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {job}
+                              {item.product_id.product_id.product_id.name}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -272,24 +300,58 @@ const AllOrder = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {date}
+                              {item.quantity.toLocaleString("en-US")}
+                            </Typography>
+                          </td>
+                          <td className={classes}>
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {(
+                                item.product_id.sale_price *
+                                (1 - item.product_id.discount / 100)
+                              ).toLocaleString("en-US")}{" "}
+                              đ
+                            </Typography>
+                          </td>
+                          <td className={classes}>
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {(
+                                item.product_id.sale_price *
+                                (1 - item.product_id.discount / 100) *
+                                item.quantity
+                              ).toLocaleString("en-US")}{" "}
+                              đ
                             </Typography>
                           </td>
                         </tr>
                       );
-                    }
-                  )}
+                    })}
                   <tr className="bg-blue-gray-50/50">
                     <td className="p-4">Tổng cộng</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td className="p-4">1000000</td>
+                    <td className="p-4">
+                      {orders?.object
+                        .find((order) => order.id === selectedId)
+                        ?.total_price.toLocaleString("en-US")}{" "}
+                      đ
+                    </td>
                   </tr>
                 </tbody>
               </table>
               <Pagination
-                page={Math.ceil(TABLE_ROWS.length / 5)}
+                page={Math.ceil(
+                  orders?.object.find((order) => order.id === selectedId)
+                    ?.orderItems.length / 5
+                )}
                 active={subactive}
                 setActive={setSubactive}
               />

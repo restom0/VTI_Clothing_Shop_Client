@@ -13,6 +13,17 @@ import java.util.Optional;
 
 @Repository
 public interface OnSaleProductRepository extends JpaRepository<OnSaleProduct,Long> {
+
+    @Query("SELECT onSaleProduct " +
+            "FROM OnSaleProduct onSaleProduct " +
+            "JOIN onSaleProduct.input_sale_id is " +
+            "JOIN onSaleProduct.product_id.product_id product " +
+            "WHERE product.id = ?1 " +
+            "AND product.deleted_at IS NULL " +
+            "AND onSaleProduct.deleted_at IS NULL " +
+            "AND is.available_date <= CURRENT_TIMESTAMP " +
+            "AND (is.end_date IS NULL OR is.end_date >= CURRENT_TIMESTAMP)")
+    List<OnSaleProduct> findAllByProductId(Long id);
     @Query("SELECT onSaleProduct " +
             "FROM OnSaleProduct onSaleProduct " +
             "JOIN onSaleProduct.input_sale_id inputSale " +

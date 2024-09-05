@@ -30,7 +30,7 @@ export const OrderItemApi = createApi({
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }),
-      invalidatesTags: ["Cart"],
+      invalidatesTags: ["OrderItem"],
     }),
     updateOrderItem: builder.mutation({
       query: ({ id, product_id, quantity }) => ({

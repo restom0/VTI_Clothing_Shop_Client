@@ -12,9 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
-import vn.vti.clothing_shop.dtos.ins.OrderCheckoutDTO;
 import vn.vti.clothing_shop.dtos.outs.OrderDTO;
-import vn.vti.clothing_shop.dtos.outs.OrderItemDTO;
 import vn.vti.clothing_shop.entities.User;
 import vn.vti.clothing_shop.exceptions.InternalServerErrorException;
 import vn.vti.clothing_shop.mappers.OrderMapper;
@@ -96,10 +94,13 @@ public class OrderController {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable @NotNull(message = "Vui lòng chọn giỏ hàng") Long id) {
+    @DeleteMapping("/{orderId}/{id}")
+    public ResponseEntity<?> deleteOrder(
+            @PathVariable @NotNull(message = "Vui lòng chọn đơn hàng") Long orderId,
+            @PathVariable @NotNull(message = "Vui lòng chọn giỏ hàng") Long id) {
         try {
-            if(orderServiceImplementation.deleteOrder(id) && orderItemServiceImplementation.deleteOrderItem(id))
+            if(orderServiceImplementation.deleteOrder(id) &&
+                    orderItemServiceImplementation.deleteOrderItem(id,orderId))
                 return ResponseHandler.responseBuilder(200,"Xóa đơn hàng thành công",null, HttpStatus.OK);
             throw new InternalServerErrorException("Xóa đơn hàng thất bại");
         }

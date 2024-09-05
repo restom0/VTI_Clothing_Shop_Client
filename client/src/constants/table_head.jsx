@@ -11,9 +11,9 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 const allorder = [
   { label: "Mã vận đơn", col: 1 },
   { label: "Người nhận", col: 1 },
-  { label: "Địa chỉ", col: 1 },
   { label: "Số điện thoại", col: 1 },
   { label: "Tổng tiền", col: 1 },
+  { label: "Phương thức", col: 1 },
   { label: "Trạng thái", col: 1 },
 ];
 const comment = [
@@ -114,6 +114,7 @@ const productdetail = [
 const user = [
   { label: "Tên", col: 1 },
   { label: "Username", col: 1 },
+  
   { label: "Vai trò", col: 1 },
   { label: "Trạng thái", col: 1 },
 ];

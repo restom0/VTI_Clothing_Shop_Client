@@ -56,7 +56,6 @@ const AdminLayout = ({
   tab,
   setTab,
 }) => {
-  
   const selectedId = useSelector((state) => state.selectedId.value);
 
   const {
@@ -160,7 +159,7 @@ const AdminLayout = ({
         open={detailOpen}
         onClose={handleDetailClose}
         maxWidth={size}
-        className={overflow ? "h-[80vh] overflow-auto" : ""}
+        className={overflow ? "h-[100vh] overflow-auto" : ""}
       >
         <DialogTitle>
           <Typography variant="h4">{headerDetail}</Typography>

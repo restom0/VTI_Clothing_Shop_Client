@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface OnSaleProductService {
     List<OnSaleProductDTO> getAllOnSaleProducts();
-    OnSaleProductDTO getOnSaleProductById(Long id);
+    List<OnSaleProductDTO> getOnSaleProductById(Long id);
 }

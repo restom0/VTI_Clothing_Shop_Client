@@ -5,7 +5,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import vn.vti.clothing_shop.dtos.outs.OnSaleProductDTO;
 import vn.vti.clothing_shop.entities.OnSaleProduct;
-import vn.vti.clothing_shop.exceptions.NotFoundException;
 import vn.vti.clothing_shop.mappers.OnSaleProductMapper;
 import vn.vti.clothing_shop.repositories.OnSaleProductRepository;
 import vn.vti.clothing_shop.services.interfaces.OnSaleProductService;
@@ -39,9 +38,11 @@ public class OnSaleProductServiceImplementation implements OnSaleProductService 
         List<OnSaleProduct> mergedProductList = new ArrayList<>(mergedProducts);
         return this.onSaleProductMapper.EntityToDTO(mergedProductList);
     }
-    public OnSaleProductDTO getOnSaleProductById(Long id) {
-        OnSaleProduct onSaleProduct = this.onSaleProductRepository.findById(id).orElseThrow(()->new NotFoundException("OnSaleProduct not found"));
-        return this.onSaleProductMapper.EntityToDTO(onSaleProduct);
+    public List<OnSaleProductDTO> getOnSaleProductById(Long id) {
+        return this.onSaleProductRepository.findAllByProductId(id)
+                .stream()
+                .map(this.onSaleProductMapper::EntityToDTO)
+                .toList();
     }
 }
 

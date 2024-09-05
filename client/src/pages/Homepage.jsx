@@ -223,6 +223,15 @@ const Homepage = () => {
       </div>
     );
   if (error) return <div>An error occurred: {error.message}</div>;
+  console.log(products.object[0].product_id.product_id);
+  const new_products = products.object.filter(
+    (product, index, self) =>
+      index ===
+      self.findIndex(
+        (t) => t.product_id.product_id.id === product.product_id.product_id.id
+      )
+  );
+
   return (
     <>
       <div className="w-full h-[500px] mb-5">
@@ -249,7 +258,7 @@ const Homepage = () => {
         </Swiper>
       </div>
       <div>
-        <HomeProductList products={products} title="Sản phẩm mới" />
+        <HomeProductList products={new_products} title="Sản phẩm mới" />
         {/* <HomeProductList
           products={collection_products}
           title="Sản phẩm bán chạy"

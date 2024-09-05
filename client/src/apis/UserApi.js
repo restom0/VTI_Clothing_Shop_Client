@@ -12,7 +12,7 @@ export const userApi = createApi({
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      providesTags: ["User"],
+      providesTags: ["Users"],
     }),
     deleteUser: builder.mutation({
       query: (id) => ({

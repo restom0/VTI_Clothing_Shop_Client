@@ -94,10 +94,12 @@ public class OrderItemController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrderItem(@PathVariable @NotNull(message = "Vui lòng chọn id") Long id) {
+    @DeleteMapping("/{orderId}/{id}")
+    public ResponseEntity<?> deleteOrderItem(
+            @PathVariable @NotNull(message = "Vui lòng chọn đơn hàng") Long orderId,
+            @PathVariable @NotNull(message = "Vui lòng chọn id") Long id) {
         try{
-            if(orderItemService.deleteOrderItem(id))
+            if(orderItemService.deleteOrderItem(id,orderId))
                 return ResponseHandler.responseBuilder(200, "Xóa order item thành công", null, HttpStatus.OK);
             throw new InternalServerErrorException("Xóa order item thất bại");
         }

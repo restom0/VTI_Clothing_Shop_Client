@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.vti.clothing_shop.responses.ResponseHandler;
 import vn.vti.clothing_shop.services.implementations.StatServiceImplementation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/stat")
 public class StatController {
@@ -20,11 +23,12 @@ public class StatController {
     }
     @GetMapping("/analysis")
     public ResponseEntity<?> getStatisticalAnalysis() {
-
-        try{
-            return ResponseHandler.responseBuilder(200, "Lấy dữ liệu thống kê thành công", statServiceImplementation.getStat(), HttpStatus.OK);
-        }
-        catch (Exception e){
+        try {
+            Map<String, Object> response = new HashMap<>();
+            response.put("generalStats", statServiceImplementation.getStat());
+            response.put("monthlyIncome", statServiceImplementation.getMonthlyIncomeForLast5Years());
+            return ResponseHandler.responseBuilder(200, "Lấy dữ liệu thống kê thành công", response, HttpStatus.OK);
+        } catch (Exception e) {
             return ResponseHandler.exceptionBuilder(e);
         }
     }
