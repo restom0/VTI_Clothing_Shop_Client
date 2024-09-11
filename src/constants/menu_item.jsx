@@ -11,12 +11,12 @@ import {
   RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
-import UserInfo from "../components/Shop/UserInfo";
-import Order from "../components/Shop/Order";
-import ProductSeen from "../components/Shop/ProductSeen";
-import ProductLove from "../components/Shop/ProductLove";
-import ProductRating from "../components/Shop/ProductRating";
-import Voucher from "../components/Shop/Voucher";
+import UserInfo from "../components/shop/UserInfo";
+import Order from "../components/shop/Order";
+import ProductSeen from "../components/shop/ProductSeen";
+import ProductLove from "../components/shop/ProductLove";
+import ProductRating from "../components/shop/ProductRating";
+import Voucher from "../components/shop/Voucher";
 const account_menu = [
   {
     label: "Trang cá nhân",
