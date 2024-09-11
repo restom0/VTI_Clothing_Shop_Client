@@ -4,9 +4,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Container } from "@mui/material";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import Step1Checkout from "../components/Shop/Step1Checkout";
-import Step2Checkout from "../components/Shop/Step2Checkout";
-import Step3Checkout from "../components/Shop/Step3Checkout";
+import Step1Checkout from "../components/shop/Step1Checkout";
+import Step2Checkout from "../components/shop/Step2Checkout";
+import Step3Checkout from "../components/shop/Step3Checkout";
 const Checkoutpage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
