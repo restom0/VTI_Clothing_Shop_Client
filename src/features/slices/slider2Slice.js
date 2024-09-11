@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { handleDelete } from "../../utils/deleteImage";
+import { handleDelete } from "../../utils/delete_image.util";
 
 const initialState = {
   value: "",
@@ -26,6 +26,6 @@ export const slider2Slice = createSlice({
   },
 });
 
-export const { setSlider2, resetSlider2,deleteSlider2 } = slider2Slice.actions;
+export const { setSlider2, resetSlider2, deleteSlider2 } = slider2Slice.actions;
 
 export default slider2Slice.reducer;

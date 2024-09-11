@@ -18,21 +18,21 @@ import slider4Reducer from "../features/slices/slider4Slice";
 import productReducer from "../features/slices/productSlice";
 import importedProductReducer from "../features/slices/importedProductSlice";
 
-import { brandApi } from "../apis/BrandApi";
-import { categoryApi } from "../apis/CategoryApi";
-import { userApi } from "../apis/UserApi";
-import { importedProductApi } from "../apis/ImportedProductApi";
-import { accountApi } from "../apis/AccountApi";
-import { voucherApi } from "../apis/VoucherApi";
-import { chatApi } from "../apis/ChatApi";
-import { commentApi } from "../apis/CommentApi";
-import { InputSaleApi } from "../apis/InputSaleApi";
-import { onSaleProductApi } from "../apis/OnSaleProductApi";
-import { OrderApi } from "../apis/OrderApi";
-import { OrderItemApi } from "../apis/OrderItemApi";
-import { ProductApi } from "../apis/ProductApi";
-import { logApi } from "../apis/LogApi";
-import { StatApi } from "../apis/StatApi";
+import { brandApi } from "../apis/brand.api";
+import { categoryApi } from "../apis/category.api";
+import { userApi } from "../apis/user.api";
+import { importedProductApi } from "../apis/import_product.api";
+import { accountApi } from "../apis/account.api";
+import { voucherApi } from "../apis/voucher.api";
+import { chatApi } from "../apis/chat.api";
+import { commentApi } from "../apis/comment.api";
+import { InputSaleApi } from "../apis/input_on_sale.api";
+import { onSaleProductApi } from "../apis/on_sale_product.api";
+import { OrderApi } from "../apis/order.api";
+import { OrderItemApi } from "../apis/order_item.api";
+import { ProductApi } from "../apis/product.api";
+import { logApi } from "../apis/log.api";
+import { StatApi } from "../apis/statistic.api";
 
 export const store = configureStore({
   reducer: {

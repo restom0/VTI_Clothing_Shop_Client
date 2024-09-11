@@ -1,7 +1,7 @@
 import { Typography } from "@material-tailwind/react";
 import { footer_menu } from "../../../constants/menu_item";
 import { Divider } from "@mui/material";
-import Pagination from "../Pagination";
+import Pagination from "../pagination.component";
 
 const currentYear = new Date().getFullYear();
 

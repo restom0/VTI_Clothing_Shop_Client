@@ -36,13 +36,13 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
-import { useGetBrandsQuery } from "../../../apis/BrandApi";
-import { useGetCategoriesQuery } from "../../../apis/CategoryApi";
-import Loading from "../Loading";
+import { useGetBrandsQuery } from "../../../apis/brand.api";
+import { useGetCategoriesQuery } from "../../../apis/category.api";
+import Loading from "../loading.component";
 import {
   useGetCartQuery,
   useGetOrdersByUserQuery,
-} from "../../../apis/OrderApi";
+} from "../../../apis/order.api";
 
 // const brands = [
 //   "Adidas",
@@ -423,7 +423,8 @@ const NavbarWithSublist = () => {
                           >
                             {(
                               item.product_id.sale_price *
-                              (1 - item.product_id.discount / 100) * item.quantity
+                              (1 - item.product_id.discount / 100) *
+                              item.quantity
                             ).toLocaleString("en-US")}
                             đ
                           </Typography>

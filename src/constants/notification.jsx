@@ -2,7 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { FlagIcon } from "@heroicons/react/24/solid";
 import SecurityIcon from "@mui/icons-material/Security";
-import IconError from "../assets/IconError";
+import IconError from "../assets/error_icon.asset";
 const success_checkout = {
   icon: (
     <svg

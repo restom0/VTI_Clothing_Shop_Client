@@ -22,7 +22,7 @@ import {
 } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 import ProductCard from "./ProductCard";
-import Pagination from "../Pagination";
+import Pagination from "../pagination.component";
 const ShopList = ({ products }) => {
   const [filter, setFilter] = useState("new");
   const handleFilter = (e) => setFilter(e);

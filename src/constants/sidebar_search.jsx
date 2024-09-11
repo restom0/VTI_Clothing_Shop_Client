@@ -5,22 +5,22 @@ import {
 } from "@heroicons/react/24/solid";
 
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import Analytic from "../components/Admin/Analytic";
-import Report from "../components/Admin/Report";
-import History from "../components/Admin/History";
-import Brand from "../components/Admin/Brand";
-import Category from "../components/Admin/Category";
-import ProductList from "../components/Admin/ProductList";
-import Comment from "../components/Admin/Comment";
-import Inventory from "../components/Admin/Inventory";
-import ImportProduct from "../components/Admin/ImportProduct";
-import OnsaleProduct from "../components/Admin/OnsaleProduct";
-import AllOrder from "../components/Admin/AllOrder";
-import ConfirmOrder from "../components/Admin/ConfirmOrder";
-import Voucher from "../components/Admin/Voucher";
-import User from "../components/Admin/User";
-import Inbox from "../components/Admin/Inbox";
-import Web from "../components/Admin/Web";
+import Analytic from "../components/admin/analytic.component";
+import Report from "../components/admin/report.component";
+import History from "../components/admin/log.component";
+import Brand from "../components/admin/brand.component";
+import Category from "../components/admin/category.component";
+import ProductList from "../components/admin/product.component";
+import Comment from "../components/admin/comment.component";
+import Inventory from "../components/admin/inventory.component";
+import ImportProduct from "../components/admin/import_product.component";
+import OnsaleProduct from "../components/admin/on_sale_product.component";
+import AllOrder from "../components/admin/order.component";
+import ConfirmOrder from "../components/admin/payment_channel.component";
+import Voucher from "../components/admin/voucher.component";
+import User from "../components/admin/user.component";
+import Inbox from "../components/admin/inbox.component";
+import Web from "../components/admin/web.component";
 const SIDEBAR_SEARCH = [
   {
     title: {

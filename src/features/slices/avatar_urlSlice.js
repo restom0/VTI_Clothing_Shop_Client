@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import CryptoJS from "crypto-js";
-import { handleDelete } from "../../utils/deleteImage";
+import { handleDelete } from "../../utils/delete_image.util";
 
 const initialState = {
   value: "",

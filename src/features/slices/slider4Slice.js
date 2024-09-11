@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { handleDelete } from "../../utils/deleteImage";
+import { handleDelete } from "../../utils/delete_image.util";
 
 const initialState = {
   value: "",
