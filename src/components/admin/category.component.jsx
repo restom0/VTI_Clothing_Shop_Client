@@ -18,7 +18,7 @@ import {
 import { Container, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { category } from "../../constants/table_head";
+import { category } from "../../constants/head_table";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useAddCategoryMutation,
@@ -27,15 +27,15 @@ import {
   useUpdateCategoryMutation,
 } from "../../apis/category.api";
 import { useDispatch, useSelector } from "react-redux";
-import { resetSelectedId } from "../../features/slices/selectIdSlice";
+import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
 import { useUpdateBrandMutation } from "../../apis/brand.api";
 import { Toast } from "../../configs/sweetalert2.config";
-import { resetName, setName } from "../../features/slices/nameSlice";
+import { resetName, setName } from "../../features/slices/name.slice";
 import {
   resetDescription,
   setDescription,
-} from "../../features/slices/descriptionSlice";
+} from "../../features/slices/description.slice";
 
 const Category = () => {
   const [addOpen, setAddOpen] = useState(false);

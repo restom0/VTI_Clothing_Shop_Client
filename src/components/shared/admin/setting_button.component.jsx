@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { setSelectedId } from "../../../features/slices/selectIdSlice";
+import { setSelectedId } from "../../../features/slices/select_id.slice";
 
 const SettingButton = ({
   handleUpdateOpen,

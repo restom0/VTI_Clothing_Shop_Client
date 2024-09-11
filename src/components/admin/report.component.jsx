@@ -18,7 +18,7 @@ import { Container } from "@mui/material";
 import { set } from "date-fns";
 import KpiReport from "./kpi_report.component";
 import { plugins } from "chart.js/auto";
-import { report_items } from "../../constants/menu_item";
+import { report_items } from "../../constants/menu_item.constant";
 import Table from "../shared/table.component";
 import Pagination from "../shared/pagination.component";
 

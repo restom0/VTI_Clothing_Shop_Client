@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { setProduct } from "./productSlice";
+import { setProduct } from "./product.slice";
 
 const initialState = {
   product: {},

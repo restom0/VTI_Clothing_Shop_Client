@@ -1,6 +1,6 @@
 import React from "react";
 import ProfileSidebar from "../components/shared/profile_sidebar.component";
-import { profile_menu } from "../constants/menu_item";
+import { profile_menu } from "../constants/menu_item.constant";
 
 const Profilepage = () => {
   const [tab, setTab] = React.useState(0);

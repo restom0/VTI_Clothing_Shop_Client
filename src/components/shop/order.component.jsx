@@ -28,9 +28,9 @@ import {
 } from "@material-tailwind/react";
 import Pagination from "../shared/pagination.component";
 import Tablist from "../shared/list_tab.component";
-import { allorder_tab } from "../../constants/tab";
+import { allorder_tab } from "../../constants/tab.constant";
 import TableHeader from "../shared/header_table";
-import { order } from "../../constants/table_head";
+import { order } from "../../constants/head_table";
 import SettingButton from "../shared/admin/setting_button.component";
 import useOpen from "../../hooks/useOpen.hook";
 

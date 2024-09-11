@@ -10,7 +10,7 @@ import axios from "axios";
 import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAvatar, resetAvatar } from "../features/slices/avatar_urlSlice";
+import { deleteAvatar, resetAvatar } from "../features/slices/avatar_url.slice";
 
 const Registerpage = () => {
   const [username, setUsername] = useState("");

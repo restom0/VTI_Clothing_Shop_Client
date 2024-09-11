@@ -29,7 +29,7 @@ import {
   onsaleproduct,
   voucher,
   voucherDetail,
-} from "../../constants/table_head";
+} from "../../constants/head_table";
 import useOpen from "../../hooks/useOpen.hook";
 import Pagination from "../shared/pagination.component";
 import TableHeader from "../shared/header_table";

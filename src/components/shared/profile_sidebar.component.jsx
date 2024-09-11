@@ -31,7 +31,7 @@ import AdminNavbar from "./admin/admin_navbar.component";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { profile_menu } from "../../constants/menu_item";
+import { profile_menu } from "../../constants/menu_item.constant";
 import { Avatar } from "@mui/material";
 const ProfileSidebar = ({ tab, setTab }) => {
   const [open, setOpen] = React.useState(1);

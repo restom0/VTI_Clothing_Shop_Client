@@ -1,7 +1,7 @@
 import React from "react";
 import AdminNavbar from "../components/shared/admin/admin_navbar.component";
 import SidebarWithSearch from "../components/shared/search_sidebar.component";
-import { SIDEBAR_SEARCH } from "../constants/sidebar_search";
+import { SIDEBAR_SEARCH } from "../constants/sidebar_search.constant";
 import { useSelector } from "react-redux";
 
 const Adminpage = () => {

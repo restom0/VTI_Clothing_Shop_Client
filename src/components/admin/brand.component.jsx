@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { brand } from "../../constants/table_head";
+import { brand } from "../../constants/head_table";
 import useFetch from "../../hooks/useFetch.hook";
 import {
   useAddBrandMutation,
@@ -32,13 +32,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "../../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
-import { resetSelectedId } from "../../features/slices/selectIdSlice";
+import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
 import {
   resetDescription,
   setDescription,
-} from "../../features/slices/descriptionSlice";
-import { resetName, setName } from "../../features/slices/nameSlice";
+} from "../../features/slices/description.slice";
+import { resetName, setName } from "../../features/slices/name.slice";
 const Brand = () => {
   const navigate = useNavigate();
   const { data: brands, error, isLoading } = useGetBrandsQuery();

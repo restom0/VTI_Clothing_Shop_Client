@@ -18,7 +18,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import Pagination from "../shared/pagination.component";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/list_tab.component";
-import { voucher } from "../../constants/tab";
+import { voucher } from "../../constants/tab.constant";
 import {
   useGetAvailableVouchersQuery,
   useGetVouchersQuery,

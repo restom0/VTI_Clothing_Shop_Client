@@ -17,7 +17,7 @@ import {
 } from "@material-tailwind/react";
 import { Container, Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { inventory_tab } from "../../constants/tab";
+import { inventory_tab } from "../../constants/tab.constant";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -25,7 +25,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../../configs/swiper.css";
-import { inventory } from "../../constants/table_head";
+import { inventory } from "../../constants/head_table";
 import useOpen from "../../hooks/useOpen.hook";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetImportedProductsQuery } from "../../apis/import_product.api";

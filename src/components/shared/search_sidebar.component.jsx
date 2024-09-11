@@ -30,11 +30,11 @@ import {
 import AdminNavbar from "./admin/admin_navbar.component";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import PublicIcon from "@mui/icons-material/Public";
-import { SIDEBAR_SEARCH } from "../../constants/sidebar_search";
+import { SIDEBAR_SEARCH } from "../../constants/sidebar_search.constant";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { setSidebarItem } from "../../features/slices/sidebar_itemSlice";
-import { setOpenAccordion } from "../../features/slices/openAccordion";
+import { setSidebarItem } from "../../features/slices/sidebar_item.slice";
+import { setOpenAccordion } from "../../features/slices/open_accordion.slice";
 const SidebarWithSearch = () => {
   const sidebar_item = useSelector((state) => state.sidebar_item.value);
   const openAccordion = useSelector((state) => state.openAccordion.value);

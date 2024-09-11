@@ -20,7 +20,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../../configs/swiper.css";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { productdetail } from "../../constants/table_head";
+import { productdetail } from "../../constants/head_table";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useCreateProductMutation,
@@ -34,17 +34,17 @@ import { useGetCategoriesQuery } from "../../apis/category.api";
 import { useGetBrandsQuery } from "../../apis/brand.api";
 import { Toast } from "../../configs/sweetalert2.config";
 import { useDispatch, useSelector } from "react-redux";
-import { resetSelectedId } from "../../features/slices/selectIdSlice";
-import { resetName, setName } from "../../features/slices/nameSlice";
+import { resetSelectedId } from "../../features/slices/select_id.slice";
+import { resetName, setName } from "../../features/slices/name.slice";
 import {
   resetDescription,
   setDescription,
-} from "../../features/slices/descriptionSlice";
+} from "../../features/slices/description.slice";
 import {
   resetCategory,
   setCategory,
-} from "../../features/slices/categorySlice";
-import { resetBrand, setBrand } from "../../features/slices/brandSlice";
+} from "../../features/slices/category.slice";
+import { resetBrand, setBrand } from "../../features/slices/brand.slice";
 const ProductList = () => {
   const [open, setOpen] = React.useState(false);
 

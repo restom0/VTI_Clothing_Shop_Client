@@ -18,8 +18,8 @@ import {
 } from "@material-tailwind/react";
 import { Container, Divider, Rating, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { allorder_tab } from "../../constants/tab";
-import { allorder } from "../../constants/table_head";
+import { allorder_tab } from "../../constants/tab.constant";
+import { allorder } from "../../constants/head_table";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import Pagination from "../shared/pagination.component";
 import { useGetOrdersQuery } from "../../apis/order.api";

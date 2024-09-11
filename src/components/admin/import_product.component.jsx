@@ -30,7 +30,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { importproduct } from "../../constants/table_head";
+import { importproduct } from "../../constants/head_table";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -47,31 +47,31 @@ import {
   deleteAvatar,
   resetAvatar,
   setAvatar,
-} from "../../features/slices/avatar_urlSlice";
+} from "../../features/slices/avatar_url.slice";
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import {
   deleteSlider1,
   resetSlider1,
   setSlider1,
-} from "../../features/slices/slider1Slice";
+} from "../../features/slices/slider_1.slice";
 import {
   deleteSlider2,
   resetSlider2,
   setSlider2,
-} from "../../features/slices/slider2Slice";
+} from "../../features/slices/slider_2.slice";
 import {
   deleteSlider3,
   resetSlider3,
   setSlider3,
-} from "../../features/slices/slider3Slice";
+} from "../../features/slices/slider_3.slice";
 import {
   deleteSlider4,
   resetSlider4,
   setSlider4,
-} from "../../features/slices/slider4Slice";
+} from "../../features/slices/slider_4.slice";
 import Loading from "../shared/loading.component";
-import { resetSelectedId } from "../../features/slices/selectIdSlice";
+import { resetSelectedId } from "../../features/slices/select_id.slice";
 import { handleDelete } from "../../utils/delete_image.util";
 
 const ImportProduct = () => {

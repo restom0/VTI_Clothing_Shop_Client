@@ -18,7 +18,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import Pagination from "../shared/pagination.component";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/list_tab.component";
-import { rating } from "../../constants/tab";
+import { rating } from "../../constants/tab.constant";
 const ProductRating = () => {
   const [tab, setTab] = useState("unrate");
   const data = [

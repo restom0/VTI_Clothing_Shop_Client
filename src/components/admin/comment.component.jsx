@@ -21,7 +21,7 @@ import { Container, Rating, TableHead } from "@mui/material";
 import React from "react";
 import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { comment } from "../../constants/table_head";
+import { comment } from "../../constants/head_table";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {

@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../configs/swiper.css";
 import { Autoplay, EffectFade, Pagination, Navigation } from "swiper/modules";
-import { homepage_slides } from "../constants/slide";
+import { homepage_slides } from "../constants/slide.constant";
 import HomeProductList from "../components/shared/shop/HomeProductList";
 import { useGetProductsQuery } from "../apis/product.api";
 import Loading from "../components/shared/loading.component";

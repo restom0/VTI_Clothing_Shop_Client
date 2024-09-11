@@ -13,8 +13,8 @@ import TableHeader from "./header_table";
 import AdminPagination from "./admin/admin_pagination.component";
 import SettingButton from "./admin/setting_button.component";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedId } from "../../features/slices/selectIdSlice";
-import { setSort } from "../../features/slices/sortSlice";
+import { setSelectedId } from "../../features/slices/select_id.slice";
+import { setSort } from "../../features/slices/sort.slice";
 const Table = ({
   TABLE_HEAD,
   TABLE_ROWS,

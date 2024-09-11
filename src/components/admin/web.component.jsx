@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 import useOpen from "../../hooks/useOpen.hook";
 import { Toast } from "../../configs/sweetalert2.config";
 import Table from "../shared/table.component";
-import { web } from "../../constants/table_head";
+import { web } from "../../constants/head_table";
 const Web = () => {
   const [open, setOpen] = React.useState(false);
 

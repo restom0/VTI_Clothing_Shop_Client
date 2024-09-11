@@ -23,7 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import TableHeader from "../shared/header_table";
-import { inbox } from "../../constants/table_head";
+import { inbox } from "../../constants/head_table";
 import Table from "../shared/table.component";
 import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";

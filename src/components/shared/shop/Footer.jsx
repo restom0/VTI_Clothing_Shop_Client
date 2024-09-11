@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import { footer_menu } from "../../../constants/menu_item";
+import { footer_menu } from "../../../constants/menu_item.constant";
 import { Divider } from "@mui/material";
 import Pagination from "../pagination.component";
 

@@ -7,7 +7,7 @@ import {
   decrement,
   increment,
   setActive,
-} from "../../features/slices/activeSlice";
+} from "../../features/slices/active.slice";
 const Pagination = ({ page }) => {
   const active = useSelector((state) => state.active.value);
   const dispatch = useDispatch();

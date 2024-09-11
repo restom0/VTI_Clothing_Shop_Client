@@ -26,7 +26,7 @@ import {
   changePriceList,
   changePricesList,
   onsaleproduct,
-} from "../../constants/table_head";
+} from "../../constants/head_table";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import TableHeader from "../shared/header_table";
 import CloseIcon from "@mui/icons-material/Close";
@@ -37,7 +37,7 @@ import {
   useUpdateInputSaleMutation,
 } from "../../apis/input_on_sale.api";
 import Loading from "../shared/loading.component";
-import { filter_items } from "../../constants/menu_item";
+import { filter_items } from "../../constants/menu_item.constant";
 import { useGetBrandsQuery } from "../../apis/brand.api";
 import { useGetCategoriesQuery } from "../../apis/category.api";
 import {
