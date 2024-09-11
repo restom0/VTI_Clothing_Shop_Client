@@ -11,7 +11,7 @@ import { Container } from "@mui/material";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { history } from "../../constants/head_table";
+import { history } from "../../constants/head_table.constant";
 import { useGetLogsQuery } from "../../apis/log.api";
 import Loading from "../shared/loading.component";
 import { useNavigate } from "react-router-dom";

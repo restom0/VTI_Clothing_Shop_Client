@@ -30,7 +30,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { importproduct } from "../../constants/head_table";
+import { importproduct } from "../../constants/head_table.constant";
 import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

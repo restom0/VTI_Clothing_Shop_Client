@@ -26,7 +26,7 @@ import {
   changePriceList,
   changePricesList,
   onsaleproduct,
-} from "../../constants/head_table";
+} from "../../constants/head_table.constant";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import TableHeader from "../shared/header_table";
 import CloseIcon from "@mui/icons-material/Close";

@@ -18,7 +18,7 @@ import {
 import { Container, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { category } from "../../constants/head_table";
+import { category } from "../../constants/head_table.constant";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useAddCategoryMutation,

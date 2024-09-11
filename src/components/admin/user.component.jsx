@@ -23,7 +23,7 @@ import {
 import { useState } from "react";
 import useOpen from "../../hooks/useOpen.hook";
 import Table from "../shared/table.component";
-import { user } from "../../constants/head_table";
+import { user } from "../../constants/head_table.constant";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetUsersQuery } from "../../apis/user.api";
 import Loading from "../shared/loading.component";

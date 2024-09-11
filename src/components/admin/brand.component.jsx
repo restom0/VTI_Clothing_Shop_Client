@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { brand } from "../../constants/head_table";
+import { brand } from "../../constants/head_table.constant";
 import useFetch from "../../hooks/useFetch.hook";
 import {
   useAddBrandMutation,

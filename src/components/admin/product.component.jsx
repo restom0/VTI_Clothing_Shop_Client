@@ -20,7 +20,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../../configs/swiper.css";
 import AdminLayout from "../../layouts/admin/admin.layout";
-import { productdetail } from "../../constants/head_table";
+import { productdetail } from "../../constants/head_table.constant";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useCreateProductMutation,

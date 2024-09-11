@@ -25,7 +25,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../../configs/swiper.css";
-import { inventory } from "../../constants/head_table";
+import { inventory } from "../../constants/head_table.constant";
 import useOpen from "../../hooks/useOpen.hook";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetImportedProductsQuery } from "../../apis/import_product.api";
