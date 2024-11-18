@@ -11,7 +11,7 @@
     "test": "vite run test"
   },
   "dependencies": {
-    "@cloudinary/react": "^1.13.0",
+    "@cloudinary/react": "^1.13.1",
     "@cloudinary/url-gen": "^1.19.0",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
