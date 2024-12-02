@@ -1799,7 +1799,7 @@ classnames@2.5.1:
     react-router-dom "^6.28.0"
     sweetalert2 "^11.14.5"
     sweetalert2-react-content "^5.0.7"
-    swiper "^11.1.4"
+    swiper "^11.1.15"
     use-react-countries "^2.0.1"
     yup "^1.4.0"
 
@@ -4334,10 +4334,10 @@ sweetalert2@^11.14.5:
   resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.14.5.tgz#a3adf9d8c6c8eb8eacfd57e2261503f2181abb8d"
   integrity sha512-8MWk5uc/r6bWhiJWkUXyEuApfXAhSCZT8FFX7pZXL7YwaPxq+9Ynhi2dUzWkOFn9jvLjKj22CXuccZ+IHcnjvQ==
 
-swiper@^11.1.4:
-  version "11.1.12"
-  resolved "https://registry.npmjs.org/swiper/-/swiper-11.1.12.tgz"
-  integrity sha512-PUkCToYAZMB4kP7z+YfPnkMHOMwMO71g8vUhz2o5INGIgIMb6Sb0XiP6cEJFsiFTd7FRDn5XCbg+KVKPDZqXLw==
+swiper@^11.1.15:
+  version "11.1.15"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.1.15.tgz#e2258c8d38282e2f115ca463d6e8c5b84cdcf1ca"
+  integrity sha512-IzWeU34WwC7gbhjKsjkImTuCRf+lRbO6cnxMGs88iVNKDwV+xQpBCJxZ4bNH6gSrIbbyVJ1kuGzo3JTtz//CBw==
 
 tabbable@^6.0.0, tabbable@^6.0.1:
   version "6.2.0"
