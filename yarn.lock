@@ -1032,10 +1032,10 @@
   resolved "https://registry.npmjs.org/@react-oauth/google/-/google-0.12.1.tgz"
   integrity sha512-qagsy22t+7UdkYAiT5ZhfM4StXi9PPNvw0zuwNmabrWyMKddczMtBIOARflbaIj+wHiQjnMAsZmzsUYuXeyoSg==
 
-"@reduxjs/toolkit@^2.2.6":
-  version "2.2.7"
-  resolved "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.2.7.tgz"
-  integrity sha512-faI3cZbSdFb8yv9dhDTmGwclW0vk0z5o1cia+kf7gCbaCwHI5e+7tP57mJUv22pNcNbeA62GSrPpfrUfdXcQ6g==
+"@reduxjs/toolkit@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.5.0.tgz#4679b09b4da211cb9a821803aabf86a13c96fbfa"
+  integrity sha512-awNe2oTodsZ6LmRqmkFhtb/KH03hUhxOamEQy411m3Njj3BbFvoBovxo4Q1cBWnV1ErprVj9MlF0UPXkng0eyg==
   dependencies:
     immer "^10.0.3"
     redux "^5.0.1"
@@ -1723,7 +1723,7 @@ classnames@2.5.1:
     "@mui/material" "^5.16.7"
     "@mui/x-date-pickers" "^7.22.2"
     "@react-oauth/google" "^0.12.1"
-    "@reduxjs/toolkit" "^2.2.6"
+    "@reduxjs/toolkit" "^2.5.0"
     "@vercel/speed-insights" "^1.1.0"
     axios "^1.7.2"
     chart.js "^4.4.7"
