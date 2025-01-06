@@ -43,7 +43,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.0",
     "sweetalert2": "^11.15.3",
-    "sweetalert2-react-content": "^5.0.7",
+    "sweetalert2-react-content": "^5.1.0",
     "swiper": "^11.1.15",
     "use-react-countries": "^2.0.1",
     "yup": "^1.6.1"
