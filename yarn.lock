@@ -879,10 +879,10 @@
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.16.13.tgz#ac17c0d9ca9cdce6002168373b53e76af2606b35"
   integrity sha512-xe5RwI0Q2O709Bd2Y7l1W1NIwNmln0y+xaGk5VgX3vDJbkQEqzdfTFZ73e0CkEZgJwyiWgk5HY0l8R4nysOxjw==
 
-"@mui/icons-material@^5.15.20":
-  version "5.16.7"
-  resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.16.7.tgz"
-  integrity sha512-UrGwDJCXEszbDI7yV047BYU5A28eGJ79keTCP4cc74WyncuVrnurlmIRxaHL8YK+LI1Kzq+/JM52IAkNnv4u+Q==
+"@mui/icons-material@^5.16.14":
+  version "5.16.14"
+  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.16.14.tgz#4fdecb05c15b1696f6f668fc29d549875544c892"
+  integrity sha512-heL4S+EawrP61xMXBm59QH6HODsu0gxtZi5JtnXF2r+rghzyU/3Uftlt1ij8rmJh+cFdKTQug1L9KkZB5JgpMQ==
   dependencies:
     "@babel/runtime" "^7.23.9"
 
@@ -1723,7 +1723,7 @@ classnames@2.5.1:
     "@emotion/styled" "^11.13.5"
     "@heroicons/react" "^2.2.0"
     "@material-tailwind/react" "^2.1.9"
-    "@mui/icons-material" "^5.15.20"
+    "@mui/icons-material" "^5.16.14"
     "@mui/joy" "^5.0.0-beta.51"
     "@mui/material" "^5.16.13"
     "@mui/x-date-pickers" "^7.23.3"
