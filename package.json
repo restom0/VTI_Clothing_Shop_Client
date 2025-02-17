@@ -44,7 +44,7 @@
     "react-router-dom": "^7.1.0",
     "sweetalert2": "^11.15.10",
     "sweetalert2-react-content": "^5.1.0",
-    "swiper": "^11.1.15",
+    "swiper": "^11.2.4",
     "use-react-countries": "^2.0.1",
     "yup": "^1.6.1"
   },
