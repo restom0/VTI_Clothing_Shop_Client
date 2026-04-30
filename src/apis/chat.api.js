@@ -1,18 +1,20 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const chatApi = createApi({
   reducerPath: "chatApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.chats }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SHOP_URL + api_routes.chat,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["Chat"],
   endpoints: (builder) => ({
     getChats: builder.query({
       query: () => "",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
       providesTags: ["Chat"],
     }),
     getChat: builder.query({
@@ -22,10 +24,6 @@ export const chatApi = createApi({
     createChat: builder.mutation({
       query: ({ receiver_id, message }) => ({
         url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
         body: { receiver_id, message },
       }),
@@ -34,10 +32,6 @@ export const chatApi = createApi({
     updateChat: builder.mutation({
       query: ({ id, receiver_id, message }) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "PUT",
         body: { receiver_id, message },
       }),
@@ -46,10 +40,6 @@ export const chatApi = createApi({
     replyChat: builder.mutation({
       query: ({ id, message }) => ({
         url: `reply/${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
         body: { message },
       }),
@@ -58,10 +48,6 @@ export const chatApi = createApi({
     deleteChat: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["Chat"],

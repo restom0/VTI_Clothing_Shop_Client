@@ -6,11 +6,11 @@ const Profilepage = () => {
   const [tab, setTab] = React.useState(0);
   return (
     <>
-      <div className="grid grid-cols-4">
+      <div className="page-container profile-page">
         <div>
           <ProfileSidebar tab={tab} setTab={setTab} />
         </div>
-        <div className="px-3 py-3 col-span-3">
+        <div className="profile-content">
           {profile_menu.map(({ link }, index) => tab === index && link)}
         </div>
       </div>

@@ -1,33 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const importedProductApi = createApi({
   reducerPath: "importedProductApi",
   baseQuery: fetchBaseQuery({
     baseUrl: SHOP_URL + api_routes.imported_products,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
   }),
   tagTypes: ["ImportedProduct"],
   endpoints: (builder) => ({
     getImportedProducts: builder.query({
-      query: () => ({
-        url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
-
+      query: () => "",
       providesTags: ["ImportedProduct"],
     }),
     getImportedProduct: builder.query({
-      query: ({ filter, id }) => ({
-        url: `${filter}/${id || 0}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
-
+      query: ({ filter, id }) => `${filter}/${id || 0}`,
       providesTags: (result, error, id) => [{ type: "ImportedProduct", id }],
     }),
     addImportedProduct: builder.mutation({
@@ -54,10 +45,6 @@ export const importedProductApi = createApi({
         importNumber,
       }) => ({
         url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
         body: {
           product_id,
@@ -112,10 +99,6 @@ export const importedProductApi = createApi({
         material_id,
       }) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "PUT",
         body: {
           product_id,
@@ -148,40 +131,18 @@ export const importedProductApi = createApi({
     deleteImportedProduct: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["ImportedProduct"],
     }),
     getColors: builder.query({
-      query: () => ({
-        url: "/colors",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "/colors",
     }),
     getSizes: builder.query({
-      query: () => ({
-        url: "/sizes",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "/sizes",
     }),
     getMaterials: builder.query({
-      query: () => ({
-        url: "/materials",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "/materials",
     }),
   }),
 });

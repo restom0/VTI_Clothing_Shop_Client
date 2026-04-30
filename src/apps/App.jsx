@@ -16,6 +16,13 @@ import Adminpage from "../pages/admin.page";
 import CareerLayout from "../layouts/career/career.layout";
 import HelpCenterLayout from "../layouts/helpcenter/help_center.layout";
 import Errorpage from "../pages/error.page";
+import {
+  AboutUsPage,
+  ContactPage,
+  FaqPage,
+  PolicyPage,
+  TermsPage,
+} from "../pages/static_content.page";
 const App = () => {
   return (
     <BrowserRouter>
@@ -33,13 +40,19 @@ const App = () => {
           <Route path="cart" element={<Cartpage />} />
           <Route path="profile" element={<Profilepage />} />
           <Route path="checkout" element={<Checkoutpage />} />
+          <Route path="about-us" element={<AboutUsPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="terms" element={<TermsPage />} />
+          <Route path="policy" element={<PolicyPage />} />
+          <Route path="faqs" element={<FaqPage />} />
+          <Route path="help-center" element={<HelpCenterLayout />} />
+          <Route path="career" element={<CareerLayout />} />
+          <Route path="careers" element={<CareerLayout />} />
           <Route path="forbidden" element={<Forbiddenpage />} />
           <Route path="*" element={<NotFoundpage />} />
         </Route>
         <Route path="/error" element={<Errorpage />} />
         <Route path="/dashboard" element={<Adminpage />} />
-        <Route path="/careers/" element={<CareerLayout />}></Route>
-        <Route path="/help-center/" element={<HelpCenterLayout />}></Route>
       </Routes>
     </BrowserRouter>
   );

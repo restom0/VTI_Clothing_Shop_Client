@@ -34,6 +34,7 @@ import { useGetOnSaleProductQuery } from "../apis/on_sale_product.api";
 import { useCreateOrderItemMutation } from "../apis/order_item.api";
 import { Toast } from "../configs/sweetalert2.config";
 import Loading from "../components/shared/loading.component";
+import { useCurrency } from "../currency";
 const product = {
   id: 0,
   colors: [
@@ -121,6 +122,7 @@ const ProductDetailpage = () => {
   const { id } = useParams();
   const { data: product, isLoading, error } = useGetOnSaleProductQuery(id);
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const [createOrderItem, { isLoading: isAdded, error: isAddError }] =
     useCreateOrderItemMutation();
   useEffect(() => {
@@ -223,10 +225,10 @@ const ProductDetailpage = () => {
   };
   return (
     <>
-      <section className="py-8 px-8">
-        <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
-          <div className="grid-cols-1 ">
-            <div className="h-[300px] w-96 mx-auto">
+      <section className="product-detail-page">
+        <div className="product-detail-layout">
+          <div className="product-media-column">
+            <div className="product-main-media">
               <Swiper
                 slidesPerView={1}
                 spaceBetween={30}
@@ -237,7 +239,7 @@ const ProductDetailpage = () => {
                 }}
                 modules={[EffectFade, Navigation, Autoplay]}
                 loop={true}
-                className="mySwiper1 h-[300px] w-[500px]"
+                className="mySwiper1 product-main-swiper"
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
@@ -251,7 +253,7 @@ const ProductDetailpage = () => {
               alt="pink blazer"
               className=""
             /> */}
-            <div className="h-[100px] w-[500px]">
+            <div className="product-thumb-media">
               <Swiper
                 slidesPerView={4}
                 spaceBetween={30}
@@ -261,7 +263,7 @@ const ProductDetailpage = () => {
                 }}
                 modules={[Navigation, Autoplay]}
                 loop={true}
-                className="mySwiper mt-10"
+                className="mySwiper product-thumb-swiper"
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
@@ -271,12 +273,12 @@ const ProductDetailpage = () => {
               </Swiper>
             </div>
           </div>
-          <div>
+          <div className="product-info-column">
             <Typography className="mb-4" variant="h3">
               {product.object[0].product_id.product_id.name}
             </Typography>
             <Typography variant="h5">
-              {product.object[0].sale_price.toLocaleString("en-US") + " đ"}
+              {formatPrice(product.object[0].sale_price)}
             </Typography>
             <Typography className="!mt-4 text-base font-normal leading-[27px] !text-gray-500">
               {product.object[0].product_id.product_id.short_description}
@@ -461,7 +463,7 @@ const ProductDetailpage = () => {
               </div>
             </div>
 
-            <div className="mb-4 flex w-full items-center gap-3">
+            <div className="product-detail-actions">
               <Button color="blue" className="w-52" onClick={handleAddCarts}>
                 Thêm vào giỏ hàng
               </Button>
@@ -482,7 +484,7 @@ const ProductDetailpage = () => {
               </Typography>
             </AccordionHeader>
             <AccordionBody>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="responsive-grid-2">
                 <Typography>
                   {product.object[0].product_id.product_id.short_description}
                 </Typography>
@@ -498,7 +500,7 @@ const ProductDetailpage = () => {
               </Typography>
             </AccordionHeader>
             <AccordionBody>
-              <div className="grid grid-cols-3 gap-20">
+              <div className="responsive-grid-3">
                 <div>
                   <Typography className="mt-5" variant="h6">
                     Tổng quan
@@ -583,7 +585,7 @@ const ProductDetailpage = () => {
             <Typography variant="h3">Chi tiết đánh giá</Typography>
             {reviews.slice(active * 4 - 4, active * 4).map((review, index) => (
               <Card key={index} className="mt-5">
-                <CardBody className="grid grid-cols-12 gap-20">
+                <CardBody className="product-review-card grid grid-cols-12 gap-20">
                   <div className="col-span-4">
                     <div className="flex justify-around">
                       <Avatar

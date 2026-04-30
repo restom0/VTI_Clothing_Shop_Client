@@ -1,157 +1,158 @@
 import React from "react";
 import {
   Navbar,
-  MobileNav,
-  Typography,
-  Button,
   Menu,
   MenuHandler,
   MenuList,
   MenuItem,
   Avatar,
-  Card,
-  IconButton,
-  Collapse,
+  Button,
 } from "@material-tailwind/react";
-import {
-  CubeTransparentIcon,
-  UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
-  ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-  RocketLaunchIcon,
-  Bars2Icon,
-} from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
-import {
-  account_menu,
-  profile_menu,
-} from "../../../constants/menu_item.constant";
+import PropTypes from "prop-types";
+import { account_menu } from "../../../constants/menu_item.constant";
+import { useI18n } from "../../../i18n";
+import { getAccountMenuItems, getBannerLabels } from "./banner.helpers";
+
+const hasAuthToken = () => Boolean(localStorage.getItem("token"));
+
+export const ProfileMenuView = ({
+  accountItems,
+  avatarUrl,
+  isMenuOpen,
+  onMenuOpenChange,
+}) => (
+  <Menu open={isMenuOpen} handler={onMenuOpenChange} placement="bottom-end">
+    <MenuHandler>
+      <Button
+        variant="text"
+        color="blue-gray"
+        className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+      >
+        <Avatar
+          variant="circular"
+          size="sm"
+          alt="avatar"
+          className="border border-gray-900 p-0.5"
+          src={avatarUrl}
+        />
+        <ChevronDownIcon
+          strokeWidth={2.5}
+          className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
+        />
+      </Button>
+    </MenuHandler>
+    <MenuList className="p-1">
+      {accountItems.map(({ href, icon, isDanger, label, labelKey, text }) => (
+        <MenuItem
+          key={labelKey ?? label}
+          className={`flex items-center gap-2 rounded ${
+            isDanger ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" : ""
+          }`}
+        >
+          {React.createElement(icon, {
+            className: `h-4 w-4 ${isDanger ? "text-red-500" : ""}`,
+            strokeWidth: 2,
+          })}
+          <a
+            href={href}
+            className={`text-sm font-normal ${isDanger ? "text-red-500" : ""}`}
+          >
+            {text}
+          </a>
+        </MenuItem>
+      ))}
+    </MenuList>
+  </Menu>
+);
+
+ProfileMenuView.propTypes = {
+  accountItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      href: PropTypes.string.isRequired,
+      icon: PropTypes.elementType.isRequired,
+      isDanger: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      labelKey: PropTypes.string,
+      text: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  avatarUrl: PropTypes.string,
+  isMenuOpen: PropTypes.bool.isRequired,
+  onMenuOpenChange: PropTypes.func.isRequired,
+};
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const closeMenu = () => setIsMenuOpen(false);
+  const { t } = useI18n();
 
   return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler>
-        <Button
-          variant="text"
-          color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
-        >
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="tania andrew"
-            className="border border-gray-900 p-0.5"
-            src={localStorage.getItem("avatar")}
-          />
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
-          />
-        </Button>
-      </MenuHandler>
-      <MenuList className="p-1">
-        {account_menu.map(({ label, icon, link }, key) => {
-          const isLastItem = key === account_menu.length - 1;
-          return (
-            <MenuItem
-              key={label}
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="a"
-                href={label === "Đăng xuất" ? "#" : link}
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
-              >
-                {label}
-              </Typography>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
+    <ProfileMenuView
+      accountItems={getAccountMenuItems(account_menu, t)}
+      avatarUrl={localStorage.getItem("avatar")}
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    />
   );
+};
+
+export const BannerView = ({
+  isAuthenticated,
+  labels,
+  onLoginClick,
+  onRegisterClick,
+}) => (
+  <Navbar className="mx-auto max-w-screen-3xl rounded-none p-0">
+    <div className="shop-banner-bar text-blue-gray-900">
+      <span className="text-sm font-semibold">{labels.freeShipping}</span>
+
+      {!isAuthenticated ? (
+        <div className="flex items-center gap-1">
+          <button className="btn-ghost px-3 py-1 text-sm" onClick={onLoginClick}>
+            {labels.login}
+          </button>
+          <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/</span>
+          <button className="btn-ghost px-3 py-1 text-sm" onClick={onRegisterClick}>
+            {labels.register}
+          </button>
+        </div>
+      ) : (
+        <ProfileMenu />
+      )}
+    </div>
+  </Navbar>
+);
+
+BannerView.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  labels: PropTypes.shape({
+    freeShipping: PropTypes.string.isRequired,
+    login: PropTypes.string.isRequired,
+    register: PropTypes.string.isRequired,
+  }).isRequired,
+  onLoginClick: PropTypes.func.isRequired,
+  onRegisterClick: PropTypes.func.isRequired,
 };
 
 const Banner = () => {
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
-
-  const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
   const navigate = useNavigate();
+  const { t } = useI18n();
+
   React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false)
-    );
+    const close = () => window.innerWidth >= 960;
+    window.addEventListener("resize", close);
+    return () => window.removeEventListener("resize", close);
   }, []);
 
   return (
-    <Navbar className="mx-auto max-w-screen-3xl rounded-none p-0">
-      <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="#"
-          variant="h6"
-          className="mr-4 ml-2 cursor-pointer py-1.5"
-        >
-          Free Shipping On Orders Over $75
-        </Typography>
-        {/* <div className="hidden lg:block">
-          <NavList />
-        </div> */}
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
-
-        {!localStorage.getItem("token") ? (
-          <div>
-            <Button size="sm" variant="text" onClick={() => navigate("/login")}>
-              <span>Đăng nhập</span>
-            </Button>
-            <span>/</span>
-            <Button
-              size="sm"
-              variant="text"
-              onClick={() => navigate("/register")}
-            >
-              <span>Đăng ký</span>
-            </Button>
-          </div>
-        ) : (
-          <ProfileMenu />
-        )}
-      </div>
-      {/* <Collapse open={isNavOpen} className="overflow-scroll">
-        <NavList />
-      </Collapse> */}
-    </Navbar>
+    <BannerView
+      isAuthenticated={hasAuthToken()}
+      labels={getBannerLabels(t)}
+      onLoginClick={() => navigate("/login")}
+      onRegisterClick={() => navigate("/register")}
+    />
   );
 };
+
 export default Banner;

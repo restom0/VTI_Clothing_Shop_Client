@@ -1,78 +1,111 @@
-import { Button, Radio, Tooltip, Typography } from "@material-tailwind/react";
-import React from "react";
+import { Radio } from "@material-tailwind/react";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useI18n } from "../../../i18n";
+import {
+  SIZES,
+  getColorOptions,
+  getMaterialOptions,
+  getProductFilterLabels,
+  toggleSelection,
+} from "./productFilter.config";
+
+export const ProductFilterView = ({
+  colorOptions,
+  labels,
+  materialOptions,
+  onColorSelect,
+  onSizeSelect,
+  selectedColor,
+  selectedSize,
+  sizes,
+}) => (
+  <>
+    <p className="filter-section-title">{labels.material}</p>
+    <div className="flex flex-col gap-1">
+      {materialOptions.map(({ value, label }) => (
+        <Radio
+          key={value}
+          name="material"
+          label={<span className="filter-radio-label">{label}</span>}
+        />
+      ))}
+    </div>
+
+    <p className="filter-section-title">{labels.size}</p>
+    <div className="grid grid-cols-3 gap-2">
+      {sizes.map((size) => (
+        <button
+          key={size}
+          className={`btn-size ${selectedSize === size ? "active" : ""}`}
+          onClick={() => onSizeSelect(size)}
+        >
+          {size}
+        </button>
+      ))}
+    </div>
+
+    <p className="filter-section-title">{labels.color}</p>
+    <div className="flex flex-wrap gap-3">
+      {colorOptions.map(({ color, label }) => (
+        <button
+          key={color}
+          title={label}
+          aria-label={label}
+          className={`btn-color-swatch ${selectedColor === color ? "active" : ""}`}
+          style={{ backgroundColor: color }}
+          onClick={() => onColorSelect(color)}
+        />
+      ))}
+    </div>
+  </>
+);
+
+ProductFilterView.propTypes = {
+  colorOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  labels: PropTypes.shape({
+    material: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+  }).isRequired,
+  materialOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onColorSelect: PropTypes.func.isRequired,
+  onSizeSelect: PropTypes.func.isRequired,
+  selectedColor: PropTypes.string,
+  selectedSize: PropTypes.string,
+  sizes: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 const ProductFilter = () => {
-  const materials = ["Cotton", "Polyester", "Wool", "Silk", "Linen", "Denim"];
-  const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
-  const colors = [
-    {
-      color: "#aaaaaa",
-      label: "Màu xám",
-    },
-    {
-      color: "#ffffaa",
-      label: "Màu vàng",
-    },
-    {
-      color: "#012345",
-      label: "Màu xanh",
-    },
-    {
-      color: "#777777",
-      label: "Màu xám đen",
-    },
-  ];
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const { t } = useI18n();
+
   return (
-    <>
-      <Typography variant="h6">Chất liệu</Typography>
-      <div className="flex flex-col">
-        {materials.map((material) => (
-          <Radio
-            key={material}
-            name="material"
-            label={
-              <div>
-                <Typography color="blue-gray" className="font-medium">
-                  {material}
-                </Typography>
-              </div>
-            }
-          />
-        ))}
-      </div>
-      <Typography variant="h6" className="mt-5 mb-5">
-        Size
-      </Typography>
-      <div className="grid grid-cols-3 gap-4">
-        {sizes.map((size) => (
-          <Button
-            key={size}
-            size="sm"
-            variant="gradient"
-            color="white"
-            className="rounded-full"
-          >
-            {size}
-          </Button>
-        ))}
-      </div>
-      <Typography variant="h6" className="mt-5 mb-5">
-        Màu sắc
-      </Typography>
-      <div className="grid grid-cols-4 gap-4">
-        {colors.map(({ color, label }, index) => (
-          <Tooltip key={index} content={label}>
-            <Button
-              size="sm"
-              className="rounded-full"
-              style={{ backgroundColor: color }}
-            >
-              {""}
-            </Button>
-          </Tooltip>
-        ))}
-      </div>
-    </>
+    <ProductFilterView
+      colorOptions={getColorOptions(t)}
+      labels={getProductFilterLabels(t)}
+      materialOptions={getMaterialOptions(t)}
+      onColorSelect={(color) =>
+        setSelectedColor((currentColor) => toggleSelection(currentColor, color))
+      }
+      onSizeSelect={(size) =>
+        setSelectedSize((currentSize) => toggleSelection(currentSize, size))
+      }
+      selectedColor={selectedColor}
+      selectedSize={selectedSize}
+      sizes={SIZES}
+    />
   );
 };
 

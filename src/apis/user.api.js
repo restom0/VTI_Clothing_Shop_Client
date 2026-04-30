@@ -1,38 +1,31 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.users }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SHOP_URL + api_routes.users,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => "",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
       providesTags: ["Users"],
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["User"],
     }),
     getUserProfile: builder.query({
-      query: () => ({
-        url: "profile",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "profile",
       providesTags: ["User-Profile"],
     }),
     updatePassword: builder.mutation({
@@ -40,10 +33,6 @@ export const userApi = createApi({
         url: "password",
         method: "PUT",
         body: data,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
       }),
       invalidatesTags: ["User-Profile"],
     }),
@@ -52,10 +41,6 @@ export const userApi = createApi({
         url: "",
         method: "PUT",
         body: data,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
       }),
       invalidatesTags: ["User-Profile"],
     }),

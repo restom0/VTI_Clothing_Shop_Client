@@ -1,83 +1,63 @@
-import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-  Button,
-  Tooltip,
-  Chip,
-} from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Rating } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useCurrency } from "../../../currency";
+
 const ProductCard = ({
+  discount = 0,
   id,
-  colors,
-  sale_price,
-  rating,
+  imageUrl,
+  price,
   product_id,
-  discount,
+  sale_price,
+  title,
 }) => {
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
+  const productInfo = product_id?.product_id ?? product_id ?? {};
+  const productName = productInfo.name ?? title ?? "";
+  const productImage = product_id?.image_url ?? imageUrl ?? "";
+  const originalPrice = sale_price ?? price ?? 0;
+  const finalPrice = originalPrice * (1 - discount / 100);
+  const hasDiscount = discount > 0;
+
   return (
-    <Card
-      className="mb-10 hover:shadow-xl duration-500 cursor-pointer"
-      onClick={() => navigate("/product/" + id)}
-    >
-      <CardHeader color="blue-gray" className="relative h-56">
-        <img src={product_id.image_url} alt="product-image" />
-      </CardHeader>
-      <CardBody className="mx-auto">
-        {/* <div className="grid grid-cols-4 gap-4 mb-5">
-          {product_id.color_id.map(({ color, label }, index) => (
-            <Tooltip key={index} content={label}>
-              <Button
-                size="sm"
-                className="rounded-full"
-                style={{ backgroundColor: color }}
-              >
-                {""}
-              </Button>
-            </Tooltip>
-          ))}
-        </div> */}
-        <Typography variant="h6" color="blue-gray">
-          {product_id.product_id.name}
-        </Typography>
-        {/* <div className="mx-auto text-center">
-          <Rating value={rating} readOnly />
-        </div> */}
-        <div className="flex items-center gap-4 mt-5">
-          <Typography variant="h6" color="blue-gray" className=" text-center">
-            {(sale_price * (1 - discount / 100)).toLocaleString("en-US")}đ
-          </Typography>
-          <Chip color="blue-gray" value={"-" + discount + "%"} />
-          <Typography
-            variant="small"
-            color="gray"
-            className="line-through text-center opacity-50"
-          >
-            {sale_price.toLocaleString("en-US")}đ
-          </Typography>
+    <div className="card-product" onClick={() => navigate(`/product/${id}`)}>
+      <div className="card-product__image">
+        <img src={productImage} alt={productName} />
+      </div>
+
+      <div className="card-product__body">
+        <p className="card-product__name">{productName}</p>
+
+        <div className="card-product__price-row">
+          <span className="card-product__price-sale">
+            {formatPrice(finalPrice)}
+          </span>
+          {hasDiscount && <span className="badge-discount">-{discount}%</span>}
+          {hasDiscount && (
+            <span className="card-product__price-original">
+              {formatPrice(originalPrice)}
+            </span>
+          )}
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   );
 };
 
 ProductCard.propTypes = {
+  discount: PropTypes.number,
   id: PropTypes.number.isRequired,
-  colors: PropTypes.arrayOf(
-    PropTypes.shape({
-      color: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
-  price: PropTypes.number.isRequired,
-  rating: PropTypes.number.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
+  price: PropTypes.number,
+  product_id: PropTypes.shape({
+    image_url: PropTypes.string,
+    product_id: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  }),
+  sale_price: PropTypes.number,
+  title: PropTypes.string,
 };
+
 export default ProductCard;

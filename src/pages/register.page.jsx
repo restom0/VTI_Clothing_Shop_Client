@@ -58,7 +58,7 @@ const Registerpage = () => {
   };
   return (
     <div
-      className="py-10 h-full"
+      className="auth-page py-10 h-full"
       style={{
         backgroundImage:
           "url('https://giaiphapzalo.com/wp-content/uploads/2021/09/pagebg-1-1920x705.jpg')",
@@ -66,15 +66,15 @@ const Registerpage = () => {
     >
       <Container
         maxWidth="md"
-        className=" bg-white rounded-xl border p-5 border-gray-300 shadow-lg"
+        className="auth-card"
       >
-        <h1 className="text-center text-6xl mb-5">
+        <h1 className="auth-title">
           <span className="text-[#006edc]">VTI</span> Shop
         </h1>
         <Divider>
           <h3 className="text-center text-xl">Đăng ký</h3>
         </Divider>
-        <div className="grid lg:grid-cols-2 sm:grid-cols-1 mt-5">
+        <div className="auth-form-grid">
           <div className="w-100 mx-5 my-5">
             <div className="grid grid-cols-2">
               <Input
@@ -196,7 +196,7 @@ const Registerpage = () => {
                 <Button
                   onClick={() => dispatch(deleteAvatar())}
                   color="red"
-                  className="w-1/3"
+                  className="w-full sm:w-1/3"
                 >
                   Xóa ảnh
                 </Button>
@@ -287,7 +287,7 @@ const Registerpage = () => {
         <Divider className="mt-5 ">
           <Chip label="OR" size="small" />
         </Divider>
-        <div className="grid lg:grid-cols-2 sm:grid-cols-1">
+        <div className="auth-form-grid">
           <div className="w-100 my-5 mx-5">
             <Button
               onClick={() => navigate("/login")}

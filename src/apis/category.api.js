@@ -1,10 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
   baseQuery: fetchBaseQuery({
     baseUrl: SHOP_URL + api_routes.categories,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
   }),
   tagTypes: ["Category"],
   endpoints: (builder) => ({
@@ -19,10 +24,6 @@ export const categoryApi = createApi({
     addCategory: builder.mutation({
       query: ({ name, description }) => ({
         url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
         body: { name, description },
       }),
@@ -31,10 +32,6 @@ export const categoryApi = createApi({
     updateCategory: builder.mutation({
       query: ({ id, name, description }) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "PUT",
         body: { name, description },
       }),
@@ -43,10 +40,6 @@ export const categoryApi = createApi({
     deleteCategory: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["Category"],

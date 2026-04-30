@@ -13,6 +13,7 @@ import {
 
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";
+import { useCurrency } from "../../currency";
 
 const KpiCard = ({ title, percentage, price, color, icon }) => {
   return (
@@ -37,9 +38,7 @@ const KpiCard = ({ title, percentage, price, color, icon }) => {
   );
 };
 const formatMoney = (money) => {
-  let countNumber = String(money).split("").length;
-  if (countNumber <= 9) return money.toLocaleString() + " đ";
-  return `${(money / 1000000000).toFixed(1)} Tỷ VNĐ`;
+  return { currencyAmount: money };
 };
 const income = [
   {
@@ -150,17 +149,35 @@ const product = [
   },
 ];
 const KpiReport = ({ tab }) => {
+  const { formatPrice } = useCurrency();
+  const getDisplayCards = (cards) =>
+    cards.map((card) => ({
+      ...card,
+      price:
+        card.price?.currencyAmount == null
+          ? card.price
+          : formatPrice(card.price.currencyAmount),
+    }));
+
   return (
     <section className="container mx-auto py-5 px-8">
       <div className="mt-6 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-center md:gap-2.5 gap-4">
         {tab === "doanh thu" &&
-          income.map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(income).map((props, key) => (
+            <KpiCard key={key} {...props} />
+          ))}
         {tab === "thương hiệu" &&
-          brand.map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(brand).map((props, key) => (
+            <KpiCard key={key} {...props} />
+          ))}
         {tab === "danh mục" &&
-          category.map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(category).map((props, key) => (
+            <KpiCard key={key} {...props} />
+          ))}
         {tab === "sản phẩm" &&
-          product.map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(product).map((props, key) => (
+            <KpiCard key={key} {...props} />
+          ))}
       </div>
     </section>
   );

@@ -25,9 +25,12 @@ import Pagination from "../shared/pagination.component";
 import { useGetOrdersQuery } from "../../apis/order.api";
 import Loading from "../shared/loading.component";
 import { useSelector } from "react-redux";
+import { useCurrency } from "../../currency";
 const AllOrder = () => {
   const [tab, setTab] = useState("ALL");
   const selectedId = useSelector((state) => state.selectedId.value);
+  const { formatPrice, locale } = useCurrency();
+  const quantityFormatter = new Intl.NumberFormat(locale);
   const [active, setActive] = useState(1);
   const [subactive, setSubactive] = useState(1);
   const [filterOrders, setFilterOrders] = useState(null);
@@ -86,7 +89,7 @@ const AllOrder = () => {
       order_code: order.order_code,
       name: order.receiver_name,
       phone_number: order.phone_number,
-      price: Number(order.total_price).toLocaleString("en-US") + " đ",
+      price: formatPrice(Number(order.total_price)),
       payment_method: order.payment_method,
       payment_status: order.payment_status,
     };
@@ -300,7 +303,7 @@ const AllOrder = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {item.quantity.toLocaleString("en-US")}
+                              {quantityFormatter.format(item.quantity)}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -309,11 +312,10 @@ const AllOrder = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {(
+                              {formatPrice(
                                 item.product_id.sale_price *
-                                (1 - item.product_id.discount / 100)
-                              ).toLocaleString("en-US")}{" "}
-                              đ
+                                  (1 - item.product_id.discount / 100)
+                              )}
                             </Typography>
                           </td>
                           <td className={classes}>
@@ -322,12 +324,11 @@ const AllOrder = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {(
+                              {formatPrice(
                                 item.product_id.sale_price *
-                                (1 - item.product_id.discount / 100) *
-                                item.quantity
-                              ).toLocaleString("en-US")}{" "}
-                              đ
+                                  (1 - item.product_id.discount / 100) *
+                                  item.quantity
+                              )}
                             </Typography>
                           </td>
                         </tr>
@@ -339,10 +340,10 @@ const AllOrder = () => {
                     <td></td>
                     <td></td>
                     <td className="p-4">
-                      {orders?.object
-                        .find((order) => order.id === selectedId)
-                        ?.total_price.toLocaleString("en-US")}{" "}
-                      đ
+                      {formatPrice(
+                        orders?.object.find((order) => order.id === selectedId)
+                          ?.total_price
+                      )}
                     </td>
                   </tr>
                 </tbody>

@@ -5,10 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "i18n:generate": "node scripts/generate-i18n-labels.mjs",
+    "prebuild": "npm run i18n:generate",
+    "predev": "npm run i18n:generate",
+    "pretest": "npm run i18n:generate",
+    "pretest:coverage": "npm run i18n:generate",
+    "pretest:watch": "npm run i18n:generate",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vite run test"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@cloudinary/react": "^1.13.1",
@@ -52,6 +60,7 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^3.0.5",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.16.0",
     "eslint-plugin-react": "^7.37.2",
@@ -60,7 +69,8 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.7",
-    "vite-plugin-vercel": "^9.0.3"
+    "vite-plugin-vercel": "^9.0.3",
+    "vitest": "^3.0.5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

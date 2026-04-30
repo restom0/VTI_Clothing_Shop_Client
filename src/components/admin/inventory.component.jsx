@@ -30,8 +30,10 @@ import useOpen from "../../hooks/useOpen.hook";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetImportedProductsQuery } from "../../apis/import_product.api";
 import Loading from "../shared/loading.component";
+import { useCurrency } from "../../currency";
 const Inventory = () => {
   const [tab1, setTab1] = useState("ALL");
+  const { formatPrice } = useCurrency();
   const [open, setOpen] = React.useState(false);
   const [tab, setTab] = React.useState(inventory_tab[0].value);
   const [importProducts, setImportProducts] = React.useState(null);
@@ -105,7 +107,7 @@ const Inventory = () => {
         ),
         name: item.product_id.name,
         sku: item.sku,
-        price: item.importPrice.toLocaleString("en-US") + " đ",
+        price: formatPrice(item.importPrice),
         stock: item.stock,
       };
     });

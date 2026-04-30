@@ -13,6 +13,7 @@ import {
 
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";
+import { useCurrency } from "../../currency";
 
 const KpiCard = ({ title, percentage, price, color, icon }) => {
   return (
@@ -35,11 +36,6 @@ const KpiCard = ({ title, percentage, price, color, icon }) => {
       </CardBody>
     </Card>
   );
-};
-const formatMoney = (money) => {
-  let countNumber = String(money).split("").length;
-  if (countNumber <= 9) return money.toLocaleString() + " đ";
-  return `${(money / 1000000000).toFixed(1)} Tỷ VNĐ`;
 };
 const data = [
   {
@@ -80,16 +76,26 @@ const data = [
 ];
 
 const Kpi = ({ stat }) => {
-  console.log(stat);
-  data[0].price = stat.income.toLocaleString("en-US") + " đ";
-  data[1].price = stat.order.toLocaleString("en-US") + " đơn";
-  data[2].price = stat.completed.toLocaleString("en-US") + " đơn";
-  data[3].price = stat.user.toLocaleString("en-US");
+  const { formatPrice, locale } = useCurrency();
+  const numberFormatter = new Intl.NumberFormat(locale);
+  const orderUnit = `${String.fromCharCode(273)}${String.fromCharCode(417)}n`;
+  const rows = data.map((item, index) => {
+    const values = [
+      formatPrice(stat.income),
+      `${numberFormatter.format(stat.order)} ${orderUnit}`,
+      `${numberFormatter.format(stat.completed)} ${orderUnit}`,
+      numberFormatter.format(stat.user),
+      numberFormatter.format(stat.product ?? stat.soldProduct ?? 0),
+    ];
+
+    return { ...item, price: values[index] };
+  });
+
   return (
     <section className="container mx-auto py-5 pe-6">
       <div className="flex justify-between md:items-center"></div>
       <div className="flex flex-col">
-        {data.map((props, key) => (
+        {rows.map((props, key) => (
           <KpiCard key={key} {...props} />
         ))}
       </div>

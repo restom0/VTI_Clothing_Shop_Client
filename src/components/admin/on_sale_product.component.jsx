@@ -54,6 +54,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useGetProductsQuery } from "../../apis/product.api";
 import { useSelector } from "react-redux";
 import { Toast } from "../../configs/sweetalert2.config";
+import { useCurrency } from "../../currency";
 
 const TABLE_ROWS = [
   {
@@ -153,6 +154,7 @@ const OnsaleProduct = () => {
   };
   const handleOpens = () => setOpens(true);
   const selectedId = useSelector((state) => state.selectedId.value);
+  const { formatPrice } = useCurrency();
   const { data: inputSale, error, isLoading } = useGetInputSalesQuery();
   const {
     data: products,
@@ -220,27 +222,27 @@ const OnsaleProduct = () => {
             color: preview.color_id.color_name,
             size: preview.size_id.size,
             material: preview.material_id.name,
-            importPrice: preview.importPrice.toLocaleString("en-US"),
-            salePrice: (
+            importPrice: formatPrice(preview.importPrice),
+            salePrice: formatPrice(
               ((preview.importPrice * prices) / 100) *
-              (1 - discounts / 100)
-            ).toLocaleString("en-US"),
+                (1 - discounts / 100)
+            ),
           };
         }) || []
       );
     }
-  }, [values, previews, filters, prices, discounts]);
+  }, [values, previews, filters, prices, discounts, formatPrice]);
   useEffect(() => {
     if (setUpdateFilter || (!setUpdateFilter && updateFilter === "ALL")) {
       setUpdateImport_Product(
         updatePreviews?.object.map((preview) => {
           return {
             sku: preview.product_id.name,
-            importPrice: preview.importPrice.toLocaleString("en-US"),
-            salePrice: (
+            importPrice: formatPrice(preview.importPrice),
+            salePrice: formatPrice(
               ((preview.importPrice * updateSalePercentage) / 100) *
-              (1 - updateDiscount / 100)
-            ).toLocaleString("en-US"),
+                (1 - updateDiscount / 100)
+            ),
           };
         }) || []
       );
@@ -252,6 +254,7 @@ const OnsaleProduct = () => {
     updateDiscount,
     discounts,
     prices,
+    formatPrice,
   ]);
   useEffect(() => {
     if (selectedId !== -1) {
@@ -942,14 +945,13 @@ const OnsaleProduct = () => {
                           <td className="p-2">{product.size_id.size}</td>
                           <td className="p-2">{product.material_id.name}</td> */}
                           <td className="p-2">
-                            {product.importPrice.toLocaleString("en-US")} đ
+                            {formatPrice(product.importPrice)}
                           </td>
                           <td className="p-2">
-                            {(
+                            {formatPrice(
                               ((product.importPrice * price) / 100) *
-                              (1 - discount / 100)
-                            ).toLocaleString("en-US")}{" "}
-                            đ
+                                (1 - discount / 100)
+                            )}
                           </td>
                         </tr>
                       ))}

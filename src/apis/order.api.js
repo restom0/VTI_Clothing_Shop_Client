@@ -1,46 +1,33 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const OrderApi = createApi({
   reducerPath: "OrderApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.orders }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SHOP_URL + api_routes.orders,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["Order", "OrderItem"],
   endpoints: (builder) => ({
     getOrders: builder.query({
-      query: () => ({
-        url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "",
       providesTags: ["Order"],
     }),
     getOrdersByUser: builder.query({
-      query: () => `user`,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      query: () => "user",
       providesTags: ["Order"],
     }),
     getCart: builder.query({
-      query: () => ({
-        url: `cart`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "cart",
       providesTags: ["OrderItem"],
     }),
     updateOrder: builder.mutation({
       query: ({ id, product_id, quantity }) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "PUT",
         body: { product_id, quantity },
       }),
@@ -49,10 +36,6 @@ export const OrderApi = createApi({
     deleteOrder: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["Order"],

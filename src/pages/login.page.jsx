@@ -67,10 +67,10 @@ function Loginpage() {
   const [login, { isLoading, error }] = useLoginMutation();
   return (
     <>
-      <div className="grid lg:grid-cols-3 sm:grid-cols-1 lg:border-r-4">
+      <div className="auth-page grid lg:grid-cols-3 sm:grid-cols-1 lg:border-r-4">
         <Container>
           <div className="mt-10">
-            <h1 className="text-center text-6xl mb-5">
+            <h1 className="auth-title">
               <span className="text-[#006edc]">VTI</span> Shop
             </h1>
             <Divider>

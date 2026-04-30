@@ -1,9 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api_routes, SHOP_LOCAL_URL, SHOP_URL } from "../configs/api.config";
+import { api_routes, SHOP_URL } from "../configs/api.config";
 
 export const brandApi = createApi({
   reducerPath: "brandApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.brands }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SHOP_URL + api_routes.brands,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["Brand"],
   endpoints: (builder) => ({
     getBrands: builder.query({
@@ -17,10 +24,6 @@ export const brandApi = createApi({
     addBrand: builder.mutation({
       query: ({ name, description }) => ({
         url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "POST",
         body: { name, description },
       }),
@@ -29,10 +32,6 @@ export const brandApi = createApi({
     updateBrand: builder.mutation({
       query: ({ id, name, description }) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "PUT",
         body: { name, description },
       }),
@@ -41,10 +40,6 @@ export const brandApi = createApi({
     deleteBrand: builder.mutation({
       query: (id) => ({
         url: `${id}`,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["Brand"],

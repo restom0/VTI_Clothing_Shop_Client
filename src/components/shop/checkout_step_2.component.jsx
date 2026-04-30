@@ -19,6 +19,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Container, Divider, Icon } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useCurrency } from "../../currency";
+
 const Step2Checkout = ({ handleNext, handlePrev }) => {
   const [check, setCheck] = React.useState(
     localStorage.getItem("token") ? true : false
@@ -27,6 +29,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
   const [check1, setCheck1] = React.useState(false);
   const [check2, setCheck2] = React.useState(false);
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   return (
     <div className="grid grid-cols-3 mb-1">
       <Card className="mt-6 col-span-2">
@@ -98,10 +101,10 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">
-                58000đ
+                {formatPrice(58000)}
               </Typography>
               <Typography className="line-through text-gray-400" variant="body">
-                58000đ
+                {formatPrice(58000)}
               </Typography>
             </div>
           </div>
@@ -110,7 +113,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               Tạm tính
             </Typography>
             <Typography variant="body" color="blue-gray">
-              2,000,000 đ
+              {formatPrice(2000000)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -118,7 +121,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               Giảm giá
             </Typography>
             <Typography variant="body" color="blue-gray">
-              0 đ
+              {formatPrice(0)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -126,7 +129,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               Phí vận chuyển
             </Typography>
             <Typography variant="body" color="blue-gray">
-              27,000 đ
+              {formatPrice(27000)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -134,7 +137,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               Phí gói quà
             </Typography>
             <Typography variant="body" color="blue-gray">
-              10,000 đ
+              {formatPrice(10000)}
             </Typography>
           </div>
           <div className="mt-5 mb-5">
@@ -145,7 +148,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               Tổng cộng
             </Typography>
             <Typography variant="h6" color="blue-gray">
-              2,000,000 đ
+              {formatPrice(2000000)}
             </Typography>
           </div>
           <div className="flex items-center justify-between mt-10">

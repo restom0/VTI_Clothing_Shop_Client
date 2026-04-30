@@ -51,32 +51,21 @@ import {
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import {
-  deleteSlider1,
-  resetSlider1,
-  setSlider1,
-} from "../../features/slices/slider_1.slice";
-import {
-  deleteSlider2,
-  resetSlider2,
-  setSlider2,
-} from "../../features/slices/slider_2.slice";
-import {
-  deleteSlider3,
-  resetSlider3,
-  setSlider3,
-} from "../../features/slices/slider_3.slice";
-import {
-  deleteSlider4,
-  resetSlider4,
-  setSlider4,
-} from "../../features/slices/slider_4.slice";
+  deleteSlider,
+  resetSlider,
+  setSlider,
+} from "../../features/slices/sliders.slice";
 import Loading from "../shared/loading.component";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import { handleDelete } from "../../utils/delete_image.util";
+import { useCurrency } from "../../currency";
 
 const ImportProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { formatPrice } = useCurrency();
+  const formatOptionalPrice = (price) =>
+    price == null ? "" : formatPrice(price);
   // const avatar_url = useSelector((state) => state.avatar_url);
   // const slider1 = useSelector((state) => state.slider1);
   // const slider2 = useSelector((state) => state.slider2);
@@ -370,7 +359,7 @@ const ImportProduct = () => {
       color: product.color_id.color_name,
       size: product.size_id.size,
       material: product.material_id.name,
-      importPrice: product.importPrice.toLocaleString("en-US") + " đ",
+      importPrice: formatOptionalPrice(product.importPrice),
       import: product.importNumber,
     };
   });
@@ -661,12 +650,13 @@ const ImportProduct = () => {
                       ? ""
                       : importedProducts
                       ? importedProducts.object.length > 0
-                        ? importedProducts.object
-                            .find((row) => row.id === selectedId)
-                            ?.importPrice.toLocaleString("en-US")
+                        ? formatOptionalPrice(
+                            importedProducts.object.find(
+                              (row) => row.id === selectedId
+                            )?.importPrice
+                          )
                         : ""
-                      : ""}{" "}
-                    đ
+                      : ""}
                   </Typography>
                 </div>
               </div>

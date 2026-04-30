@@ -107,19 +107,19 @@ const Catepage = () => {
     },
   ];
   return (
-    <>
+    <main className="page-container shop-browse-page">
       <div className="mb-5">
         <BreadcrumbsWithIcon name={id ? id : null} />
       </div>
-      <div className="grid grid-cols-4 gap-8 mt-4">
-        <div className="ms-10">
+      <div className="shop-browse-layout">
+        <aside className="shop-filter-panel">
           {!id && <CategoryFilter />}
           <BrandFilter />
           <ProductFilter />
-        </div>
+        </aside>
         <ShopList products={products} />
       </div>
-    </>
+    </main>
   );
 };
 

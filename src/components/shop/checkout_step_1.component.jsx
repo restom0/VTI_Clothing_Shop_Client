@@ -17,6 +17,8 @@ import {
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Container, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useCurrency } from "../../currency";
+
 const Step1Checkout = ({ handleNext }) => {
   const [check, setCheck] = React.useState(
     localStorage.getItem("token") ? true : false
@@ -25,6 +27,7 @@ const Step1Checkout = ({ handleNext }) => {
   const [check1, setCheck1] = React.useState(false);
   const [check2, setCheck2] = React.useState(false);
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   return (
     <div className="grid grid-cols-3 mb-1">
       <Card className="mt-6">
@@ -143,7 +146,7 @@ const Step1Checkout = ({ handleNext }) => {
                         <Typography>Giao hàng tiết kiệm</Typography>
                         <Typography>
                           Dự kiến giao từ 5-7 ngày |{" "}
-                          <span className="text-cyan-300">20000đ</span>
+                          <span className="text-cyan-300">{formatPrice(20000)}</span>
                         </Typography>
                       </>
                     }
@@ -160,7 +163,7 @@ const Step1Checkout = ({ handleNext }) => {
                         <Typography>Giao hàng tiêu chuẩn</Typography>
                         <Typography>
                           Dự kiến giao từ 2-5 ngày |{" "}
-                          <span className="text-cyan-300">25000đ</span>
+                          <span className="text-cyan-300">{formatPrice(25000)}</span>
                         </Typography>
                       </>
                     }
@@ -177,7 +180,7 @@ const Step1Checkout = ({ handleNext }) => {
                         <Typography>Giao hàng nhanh</Typography>
                         <Typography>
                           Dự kiến giao từ 1-2 ngày |{" "}
-                          <span className="text-cyan-300">30000đ</span>
+                          <span className="text-cyan-300">{formatPrice(30000)}</span>
                         </Typography>
                       </>
                     }
@@ -248,10 +251,10 @@ const Step1Checkout = ({ handleNext }) => {
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">
-                58000đ
+                {formatPrice(58000)}
               </Typography>
               <Typography className="line-through text-gray-400" variant="body">
-                58000đ
+                {formatPrice(58000)}
               </Typography>
             </div>
           </div>
@@ -287,7 +290,7 @@ const Step1Checkout = ({ handleNext }) => {
               Tạm tính
             </Typography>
             <Typography variant="body" color="blue-gray">
-              2,000,000 đ
+              {formatPrice(2000000)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -295,7 +298,7 @@ const Step1Checkout = ({ handleNext }) => {
               Giảm giá
             </Typography>
             <Typography variant="body" color="blue-gray">
-              0 đ
+              {formatPrice(0)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -303,7 +306,7 @@ const Step1Checkout = ({ handleNext }) => {
               Phí vận chuyển
             </Typography>
             <Typography variant="body" color="blue-gray">
-              27,000 đ
+              {formatPrice(27000)}
             </Typography>
           </div>
           <div className="flex justify-between items-center mt-2">
@@ -311,7 +314,7 @@ const Step1Checkout = ({ handleNext }) => {
               Phí gói quà
             </Typography>
             <Typography variant="body" color="blue-gray">
-              10,000 đ
+              {formatPrice(10000)}
             </Typography>
           </div>
           <div className="mt-5 mb-5">
@@ -322,7 +325,7 @@ const Step1Checkout = ({ handleNext }) => {
               Tổng cộng
             </Typography>
             <Typography variant="h6" color="blue-gray">
-              2,000,000 đ
+              {formatPrice(2000000)}
             </Typography>
           </div>
         </CardBody>

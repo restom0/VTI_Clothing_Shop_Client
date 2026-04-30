@@ -1,9 +1,5 @@
-import React from 'react'
+import { CareerPage } from "../../pages/static_content.page";
 
-const CareerLayout = () => {
-  return (
-    <div>CareerLayout</div>
-  )
-}
+const CareerLayout = () => <CareerPage />;
 
-export default CareerLayout
+export default CareerLayout;

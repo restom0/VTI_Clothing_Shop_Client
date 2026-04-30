@@ -43,7 +43,7 @@ const ProfileSidebar = ({ tab, setTab }) => {
   const navigate = useNavigate();
   return (
     <div>
-      <Card className="relative h-[84vh] overflow-y-auto w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 z-10">
+      <Card className="profile-sidebar-card relative overflow-y-auto p-4 shadow-xl shadow-blue-gray-900/5 z-10">
         {/* <div className="mb-2 flex items-center gap-4 p-4">
           <img
           src="https://d1.awsstatic.com/partner-network/partner_marketing_web_team/600x400_VTI.d8eba650f439bfec6d3eef0034c2e59a323353c1.png"

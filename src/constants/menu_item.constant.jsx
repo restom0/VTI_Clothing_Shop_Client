@@ -20,21 +20,25 @@ import Voucher from "../components/shop/voucer.component";
 const account_menu = [
   {
     label: "Trang cá nhân",
+    labelKey: "account.profile",
     icon: UserCircleIcon,
     link: "/profile",
   },
   {
     label: "Tin nhắn",
+    labelKey: "account.messages",
     icon: InboxArrowDownIcon,
     link: "/inbox",
   },
   {
     label: "FAQs",
+    labelKey: "account.faqs",
     icon: LifebuoyIcon,
     link: "/help-center",
   },
   {
     label: "Đăng xuất",
+    labelKey: "common.logout",
     icon: PowerIcon,
     link: "/login",
   },
@@ -83,7 +87,7 @@ const footer_menu = [
       },
       {
         label: "Tuyển dụng",
-        link: "/career",
+        link: "/careers",
       },
       {
         label: "Điều khoản",

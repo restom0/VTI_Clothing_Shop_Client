@@ -1,9 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { SHOP_LOCAL_URL, SHOP_URL, api_routes } from "../configs/api.config";
+import { SHOP_URL, api_routes } from "../configs/api.config";
 
 export const accountApi = createApi({
   reducerPath: "AccountApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.users }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: SHOP_URL + api_routes.users,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
   tagTypes: ["Account"],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -45,11 +52,7 @@ export const accountApi = createApi({
       invalidatesTags: ["Account"],
     }),
     getAccount: builder.query({
-      query: () => api_routes.users + " profile",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      query: () => "profile",
       providesTags: ["Account"],
     }),
     updateAccount: builder.mutation({
@@ -58,10 +61,6 @@ export const accountApi = createApi({
         method: "PUT",
         body: { email, username, phoneNumber, password },
       }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
       invalidatesTags: ["Account"],
     }),
     updatePassword: builder.mutation({
@@ -70,19 +69,11 @@ export const accountApi = createApi({
         method: "PUT",
         body: { oldPassword, newPassword },
       }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
       invalidatesTags: ["Account"],
     }),
     deleteAccount: builder.mutation({
       query: () => ({
         url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
         method: "DELETE",
       }),
       invalidatesTags: ["Account"],

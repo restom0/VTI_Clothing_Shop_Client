@@ -5,17 +5,16 @@ export const logApi = createApi({
   reducerPath: "logApi",
   baseQuery: fetchBaseQuery({
     baseUrl: SHOP_URL + api_routes.log,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("token");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      return headers;
+    },
   }),
-  tagTypes: ["log"],
+  tagTypes: ["Log"],
   endpoints: (builder) => ({
     getLogs: builder.query({
-      query: () => ({
-        url: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }),
+      query: () => "",
       providesTags: ["Log"],
     }),
   }),

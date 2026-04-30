@@ -1,7 +1,5 @@
-import React from "react";
+import { HelpCenterPage } from "../../pages/static_content.page";
 
-const HelpCenterLayout = () => {
-  return <div>HelpCenterLayout</div>;
-};
+const HelpCenterLayout = () => <HelpCenterPage />;
 
 export default HelpCenterLayout;

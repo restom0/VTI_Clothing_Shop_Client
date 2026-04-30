@@ -1,16 +1,26 @@
 import { useState, useEffect } from "react";
-import { SHOP_LOCAL_URL } from "../configs/api.config";
+import { SHOP_URL } from "../configs/api.config";
 
 const useFetch = (resources) => {
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(SHOP_LOCAL_URL + resources)
-      .then((res) => res.json())
-      .then((data) => setData(data));
+    if (!resources) return;
+    setIsLoading(true);
+    setError(null);
+    fetch(SHOP_URL + resources)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => setData(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setIsLoading(false));
   }, [resources]);
 
-  return [data];
+  return [data, isLoading, error];
 };
 
 export default useFetch;

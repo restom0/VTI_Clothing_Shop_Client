@@ -1,25 +1,5 @@
-import React, { useState } from "react";
-import {
-  Navbar,
-  Collapse,
-  Typography,
-  Button,
-  IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Radio,
-  Input,
-  Option,
-  Select,
-} from "@material-tailwind/react";
+import { useState } from "react";
+import { Option, Select } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 import ProductCard from "./ProductCard";
 import Pagination from "../pagination.component";
@@ -29,10 +9,10 @@ const ShopList = ({ products }) => {
 
   const [active, setActive] = useState(1);
   return (
-    <div className="col-span-3">
-      <div className="w-full flex items-center gap-4 justify-between mb-20">
+    <section className="shop-results">
+      <div className="shop-list-toolbar">
         <div>{products.length} kết quả</div>
-        <div className="flex items-center gap-5">
+        <div className="cluster-sm">
           <span>Phân loại:</span>
           <span>
             <Select value={filter} onChange={handleFilter} className="rounded">
@@ -48,7 +28,7 @@ const ShopList = ({ products }) => {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-8">
+      <div className="shop-grid">
         {products.slice(active * 6 - 6, active * 6).map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}
@@ -58,24 +38,10 @@ const ShopList = ({ products }) => {
         active={active}
         setActive={setActive}
       />
-    </div>
+    </section>
   );
 };
 ShopList.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      colors: PropTypes.arrayOf(
-        PropTypes.shape({
-          color: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
-        }).isRequired
-      ).isRequired,
-      price: PropTypes.number.isRequired,
-      rating: PropTypes.number.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
+  products: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 export default ShopList;

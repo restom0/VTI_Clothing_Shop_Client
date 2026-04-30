@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { setProduct } from "./product.slice";
 
 const initialState = {
   product: {},
@@ -34,7 +33,6 @@ export const importedProductSlice = createSlice({
       state.product = action.payload;
     },
     setColorCode: (state, action) => {
-      console.log(action.payload);
       state.color_code = action.payload;
     },
     setColorName: (state, action) => {
