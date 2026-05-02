@@ -65,6 +65,7 @@ $color-skeleton-highlight: rgba(255, 255, 255, 0.72);
 // 6. TEXT
 // -------------------------------------------------------
 $color-text-base:   $blue-gray-900;  // #263238
+$color-text-strong: $gray-700;       // #616161
 $color-text-muted:  $blue-gray-500;  // #607d8b
 $color-text-invert: #ffffff;
 
@@ -85,6 +86,7 @@ $font-weight-semibold: 600;
 $font-weight-bold:     700;
 $line-height-tight:  1.25;
 $line-height-normal: 1.5;
+$line-height-relaxed: 1.6875; // 27px at 16px base font size
 
 $space-2xs: 0.25rem;
 $space-xs:  0.5rem;
@@ -112,9 +114,38 @@ $spacing-cluster-sm: $space-xs;
 $spacing-cluster-md: $space-md;
 $spacing-card-padding: $space-md;
 $spacing-panel-padding: $space-lg;
+$spacing-content-top: 1.25rem;
+$spacing-copy-top: $space-md;
+$spacing-option-row-y: $space-xl;
+$spacing-option-row-top: $space-sm;
+$spacing-option-indent: $spacing-content-top;
+$spacing-review-card-gap: 5rem;
+$size-import-detail-main-image: 16rem;
+$size-import-detail-thumb-image: 8rem;
+$size-import-avatar-preview-height: 12.5rem;
+$size-import-existing-avatar-preview-height: 15.625rem;
+$size-import-slider-preview-height: 6.25rem;
+$size-import-existing-slider-preview-height: 7.8125rem;
+$size-navbar-tooltip-width: 31.25rem;
+$size-virtual-product-row: 24rem;
+$size-virtual-scroll-max-height: 72rem;
+$size-admin-table-max-height: 42rem;
 
 // -------------------------------------------------------
-// 9. BORDER RADIUS
+// 9. DATA VISUALIZATION / PRODUCT SWATCHES
+// -------------------------------------------------------
+$chart-series-1: #326464;
+$chart-series-2: #4bc0c0;
+$chart-series-3: #006edc;
+$chart-series-4: #ff9800;
+$chart-series-5: #7e57c2;
+$product-swatch-gray: #aaaaaa;
+$product-swatch-yellow: #ffffaa;
+$product-swatch-blue: #012345;
+$product-swatch-dark-gray: #777777;
+
+// -------------------------------------------------------
+// 10. BORDER RADIUS
 // -------------------------------------------------------
 $border-width-base: 1px;
 $border-width-strong: 2px;
@@ -126,21 +157,21 @@ $radius-xl:   1rem;      // 16px
 $radius-full: 9999px;
 
 // -------------------------------------------------------
-// 10. SHADOW
+// 11. SHADOW
 // -------------------------------------------------------
 $shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 $shadow-card-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 $shadow-panel:      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 // -------------------------------------------------------
-// 11. TRANSITION
+// 12. TRANSITION
 // -------------------------------------------------------
 $transition-fast:    150ms ease;
 $transition-default: 300ms ease;
 $transition-slow:    500ms ease;
 
 // -------------------------------------------------------
-// 12. Z-INDEX
+// 13. Z-INDEX
 // -------------------------------------------------------
 $z-navbar:   50;
 $z-dropdown: 100;
@@ -182,6 +213,7 @@ $z-toast:    300;
 
   // Text
   --color-text-base:   #{$color-text-base};
+  --color-text-strong: #{$color-text-strong};
   --color-text-muted:  #{$color-text-muted};
   --color-text-invert: #{$color-text-invert};
 
@@ -206,6 +238,38 @@ $z-toast:    300;
   --spacing-cluster-md: #{$spacing-cluster-md};
   --spacing-card-padding: #{$spacing-card-padding};
   --spacing-panel-padding: #{$spacing-panel-padding};
+  --spacing-content-top: #{$spacing-content-top};
+  --spacing-copy-top: #{$spacing-copy-top};
+  --spacing-option-row-y: #{$spacing-option-row-y};
+  --spacing-option-row-top: #{$spacing-option-row-top};
+  --spacing-option-indent: #{$spacing-option-indent};
+  --spacing-review-card-gap: #{$spacing-review-card-gap};
+  --size-import-detail-main-image: #{$size-import-detail-main-image};
+  --size-import-detail-thumb-image: #{$size-import-detail-thumb-image};
+  --size-import-avatar-preview-height: #{$size-import-avatar-preview-height};
+  --size-import-existing-avatar-preview-height: #{$size-import-existing-avatar-preview-height};
+  --size-import-slider-preview-height: #{$size-import-slider-preview-height};
+  --size-import-existing-slider-preview-height: #{$size-import-existing-slider-preview-height};
+  --size-navbar-tooltip-width: #{$size-navbar-tooltip-width};
+  --size-virtual-product-row: #{$size-virtual-product-row};
+  --size-virtual-scroll-max-height: #{$size-virtual-scroll-max-height};
+  --size-admin-table-max-height: #{$size-admin-table-max-height};
+
+  // Typography
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-base: #{$font-size-base};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --font-size-2xl: #{$font-size-2xl};
+  --font-size-3xl: #{$font-size-3xl};
+  --font-weight-normal: #{$font-weight-normal};
+  --font-weight-medium: #{$font-weight-medium};
+  --font-weight-semibold: #{$font-weight-semibold};
+  --font-weight-bold: #{$font-weight-bold};
+  --line-height-tight: #{$line-height-tight};
+  --line-height-normal: #{$line-height-normal};
+  --line-height-relaxed: #{$line-height-relaxed};
 
   // Border
   --border-width-base: #{$border-width-base};
@@ -224,6 +288,17 @@ $z-toast:    300;
   --shadow-card:       #{$shadow-card};
   --shadow-card-hover: #{$shadow-card-hover};
   --shadow-panel:      #{$shadow-panel};
+
+  // Data visualization / product swatches
+  --chart-series-1: #{$chart-series-1};
+  --chart-series-2: #{$chart-series-2};
+  --chart-series-3: #{$chart-series-3};
+  --chart-series-4: #{$chart-series-4};
+  --chart-series-5: #{$chart-series-5};
+  --product-swatch-gray: #{$product-swatch-gray};
+  --product-swatch-yellow: #{$product-swatch-yellow};
+  --product-swatch-blue: #{$product-swatch-blue};
+  --product-swatch-dark-gray: #{$product-swatch-dark-gray};
 }
 
 @media (max-width: 767px) {
@@ -263,6 +338,7 @@ $z-toast:    300;
   --color-skeleton-highlight: rgba(255, 255, 255, 0.12);
 
   --color-text-base:   #f3f4f6;
+  --color-text-strong: #e5e7eb;
   --color-text-muted:  #9ca3af;
   --color-text-invert: #111827;
 
