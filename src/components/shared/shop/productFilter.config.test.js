@@ -42,7 +42,7 @@ describe("product filter config", () => {
       label: "translated:material.cotton",
     });
     expect(getColorOptions(t)[0]).toEqual({
-      color: "#aaaaaa",
+      color: "var(--product-swatch-gray)",
       label: "translated:color.gray",
     });
   });

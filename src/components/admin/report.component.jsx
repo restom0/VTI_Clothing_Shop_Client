@@ -21,6 +21,10 @@ import { plugins } from "chart.js/auto";
 import { report_items } from "../../constants/menu_item.constant";
 import Table from "../shared/table.component";
 import Pagination from "../shared/pagination.component";
+import {
+  CHART_TITLE_FONT_SIZE,
+  getChartDatasetTheme,
+} from "../../constants/chart_theme.constant";
 
 const Report = () => {
   const [tab, setTab] = React.useState("doanh thu");
@@ -44,36 +48,31 @@ const Report = () => {
         label: "2022",
         data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         fill: false,
-        backgroundColor: "rgb(50, 100, 100)",
-        borderColor: "rgba(50, 100, 100, 1)",
+        ...getChartDatasetTheme(0),
       },
       {
         label: "2023",
         data: [65, 59, 80, 81, 56, 55, 40, 30, 20, 10, 5, 1],
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        ...getChartDatasetTheme(1),
       },
       {
         label: "2024",
         data: [65, 59, 80, 81, 56, 55, 40, 30, 20, 10, 5, 1],
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        ...getChartDatasetTheme(2),
       },
       {
         label: "2025",
         data: [65, 59, 80, 81, 56, 55, 40, 30, 20, 10, 5, 1],
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        ...getChartDatasetTheme(3),
       },
       {
         label: "2026",
         data: [65, 59, 80, 81, 56, 55, 40, 30, 20, 10, 5, 1],
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        ...getChartDatasetTheme(4),
       },
     ],
   };
@@ -97,8 +96,7 @@ const Report = () => {
         label: "2024",
         data: [65, 59, 80, 81, 56, 55, 40, 30, 20, 10, 5, 1],
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        ...getChartDatasetTheme(0),
       },
     ],
   };
@@ -114,7 +112,7 @@ const Report = () => {
         text:
           `Biểu đồ Top 5 ` + tab + ` các tháng năm ` + new Date().getFullYear(),
         font: {
-          size: 20,
+          size: CHART_TITLE_FONT_SIZE,
         },
       },
     },
@@ -130,7 +128,7 @@ const Report = () => {
         display: true,
         text: `Biểu đồ ` + tab + ` 2024`,
         font: {
-          size: 20,
+          size: CHART_TITLE_FONT_SIZE,
         },
       },
     },

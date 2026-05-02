@@ -18,10 +18,9 @@ import {
   DialogActions,
 } from "@mui/material";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { useCountries } from "use-react-countries";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import MailOutlineIcon from "@mui/icons-material/MailOutlined";
 import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
@@ -58,7 +57,6 @@ const UserInfo = () => {
   const [open, setOpen] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [publicId, setPublicId] = useState("");
-  const { countries } = useCountries();
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reTypePassword, setReTypePassword] = useState("");

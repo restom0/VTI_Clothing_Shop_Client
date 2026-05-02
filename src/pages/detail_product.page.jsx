@@ -35,14 +35,29 @@ import { useCreateOrderItemMutation } from "../apis/order_item.api";
 import { Toast } from "../configs/sweetalert2.config";
 import Loading from "../components/shared/loading.component";
 import { useCurrency } from "../currency";
+import {
+  PRODUCT_DESCRIPTION_TEXT_CLASSNAME,
+  PRODUCT_DETAIL_ACTIONS_CLASSNAME,
+  PRODUCT_DETAIL_LAYOUT_CLASSNAME,
+  PRODUCT_DETAIL_PAGE_CLASSNAME,
+  PRODUCT_INFO_COLUMN_CLASSNAME,
+  PRODUCT_MAIN_MEDIA_CLASSNAME,
+  PRODUCT_MAIN_SWIPER_CLASSNAME,
+  PRODUCT_MATERIAL_GROUP_CLASSNAME,
+  PRODUCT_MEDIA_COLUMN_CLASSNAME,
+  PRODUCT_OPTION_HEADER_CLASSNAME,
+  PRODUCT_OPTION_ROW_CLASSNAME,
+  PRODUCT_REVIEW_CARD_CLASSNAME,
+  PRODUCT_THUMB_MEDIA_CLASSNAME,
+  PRODUCT_THUMB_SWIPER_CLASSNAME,
+  PRODUCT_TITLE_CLASSNAME,
+  RESPONSIVE_GRID_2_CLASSNAME,
+  RESPONSIVE_GRID_3_CLASSNAME,
+} from "../styles/classNames";
+import { SHOP_PRODUCT_COLORS } from "../mocks/shop_products.mock";
 const product = {
   id: 0,
-  colors: [
-    { color: "#aaaaaa", label: "Màu xám" },
-    { color: "#ffffaa", label: "Màu vàng" },
-    { color: "#012345", label: "Màu xanh" },
-    { color: "#777777", label: "Màu xám đen" },
-  ],
+  colors: SHOP_PRODUCT_COLORS,
   sizes: ["XS", "S", "M", "L", "XL"],
   materials: ["Cotton", "Vải len"],
   price: 155000,
@@ -225,10 +240,10 @@ const ProductDetailpage = () => {
   };
   return (
     <>
-      <section className="product-detail-page">
-        <div className="product-detail-layout">
-          <div className="product-media-column">
-            <div className="product-main-media">
+      <section className={PRODUCT_DETAIL_PAGE_CLASSNAME}>
+        <div className={PRODUCT_DETAIL_LAYOUT_CLASSNAME}>
+          <div className={PRODUCT_MEDIA_COLUMN_CLASSNAME}>
+            <div className={PRODUCT_MAIN_MEDIA_CLASSNAME}>
               <Swiper
                 slidesPerView={1}
                 spaceBetween={30}
@@ -239,7 +254,7 @@ const ProductDetailpage = () => {
                 }}
                 modules={[EffectFade, Navigation, Autoplay]}
                 loop={true}
-                className="mySwiper1 product-main-swiper"
+                className={PRODUCT_MAIN_SWIPER_CLASSNAME}
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
@@ -253,7 +268,7 @@ const ProductDetailpage = () => {
               alt="pink blazer"
               className=""
             /> */}
-            <div className="product-thumb-media">
+            <div className={PRODUCT_THUMB_MEDIA_CLASSNAME}>
               <Swiper
                 slidesPerView={4}
                 spaceBetween={30}
@@ -263,7 +278,7 @@ const ProductDetailpage = () => {
                 }}
                 modules={[Navigation, Autoplay]}
                 loop={true}
-                className="mySwiper product-thumb-swiper"
+                className={PRODUCT_THUMB_SWIPER_CLASSNAME}
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
@@ -273,30 +288,20 @@ const ProductDetailpage = () => {
               </Swiper>
             </div>
           </div>
-          <div className="product-info-column">
-            <Typography className="mb-4" variant="h3">
+          <div className={PRODUCT_INFO_COLUMN_CLASSNAME}>
+            <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
               {product.object[0].product_id.product_id.name}
             </Typography>
             <Typography variant="h5">
               {formatPrice(product.object[0].sale_price)}
             </Typography>
-            <Typography className="!mt-4 text-base font-normal leading-[27px] !text-gray-500">
+            <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
               {product.object[0].product_id.product_id.short_description}
             </Typography>
-            {/* <div className="my-8 flex items-center gap-2">
-              <Rating
-                readOnly
-                value={product.rating}
-                className="disabled text-amber-500"
-              />
-              <Typography className="!text-sm font-bold !text-gray-700">
-                {product.rating.toPrecision(2)}/5 (100 reviews)
-              </Typography>
-            </div> */}
             <Typography color="blue-gray" variant="h6">
               Màu sắc
             </Typography>
-            <div className="my-8 mt-3 flex items-center gap-2">
+            <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               {/* <div className="h-8 w-8 rounded-full border border-gray-900 bg-blue-gray-600 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 "></div>
               <div className="h-8 w-8 rounded-full border border-blue-gray-100 bg-gray-900 "></div> */}
@@ -334,7 +339,7 @@ const ProductDetailpage = () => {
                 </Tooltip>
               ))} */}
             </div>
-            <div className="grid grid-cols-2">
+            <div className={PRODUCT_OPTION_HEADER_CLASSNAME}>
               <Typography color="blue-gray" variant="h6">
                 Kích cỡ
               </Typography>
@@ -358,7 +363,7 @@ const ProductDetailpage = () => {
                 </DialogBody>
               </Dialog>
             </div>
-            <div className="my-8 mt-3 flex items-center gap-2">
+            <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               {product.object
                 .filter(
                   (value, index, self) =>
@@ -404,8 +409,8 @@ const ProductDetailpage = () => {
             <Typography color="blue-gray" variant="h6">
               Chất liệu
             </Typography>
-            <div className="my-8 mt-3 flex items-center gap-2">
-              <div className="flex gap-10">
+            <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
+              <div className={PRODUCT_MATERIAL_GROUP_CLASSNAME}>
                 {product.object
                   .filter(
                     (value, index, self) =>
@@ -431,12 +436,12 @@ const ProductDetailpage = () => {
                 ))} */}
               </div>
             </div>
-            <div className="my-8 mt-3 flex items-center gap-2">
+            <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               <Typography variant="h6">Còn:</Typography>
               <Typography>{stock}</Typography>
               <Typography>sản phẩm</Typography>
             </div>
-            <div className="my-8 mt-3 flex items-center gap-2">
+            <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               <Typography variant="h6">Số lượng</Typography>
               <div className="flex items-center gap-3">
                 <Button
@@ -463,7 +468,7 @@ const ProductDetailpage = () => {
               </div>
             </div>
 
-            <div className="product-detail-actions">
+            <div className={PRODUCT_DETAIL_ACTIONS_CLASSNAME}>
               <Button color="blue" className="w-52" onClick={handleAddCarts}>
                 Thêm vào giỏ hàng
               </Button>
@@ -484,7 +489,7 @@ const ProductDetailpage = () => {
               </Typography>
             </AccordionHeader>
             <AccordionBody>
-              <div className="responsive-grid-2">
+              <div className={RESPONSIVE_GRID_2_CLASSNAME}>
                 <Typography>
                   {product.object[0].product_id.product_id.short_description}
                 </Typography>
@@ -500,7 +505,7 @@ const ProductDetailpage = () => {
               </Typography>
             </AccordionHeader>
             <AccordionBody>
-              <div className="responsive-grid-3">
+              <div className={RESPONSIVE_GRID_3_CLASSNAME}>
                 <div>
                   <Typography className="mt-5" variant="h6">
                     Tổng quan
@@ -585,7 +590,7 @@ const ProductDetailpage = () => {
             <Typography variant="h3">Chi tiết đánh giá</Typography>
             {reviews.slice(active * 4 - 4, active * 4).map((review, index) => (
               <Card key={index} className="mt-5">
-                <CardBody className="product-review-card grid grid-cols-12 gap-20">
+                <CardBody className={PRODUCT_REVIEW_CARD_CLASSNAME}>
                   <div className="col-span-4">
                     <div className="flex justify-around">
                       <Avatar

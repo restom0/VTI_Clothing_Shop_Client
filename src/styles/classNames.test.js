@@ -1,8 +1,37 @@
 import { describe, expect, it } from "vitest";
 import {
   ACTION_ROW_CLASSNAME,
+  ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME,
+  ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME,
   CLUSTER_MD_CLASSNAME,
   CLUSTER_SM_CLASSNAME,
+  IMPORT_ACTIONS_CLASSNAME,
+  IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME,
+  IMPORT_FORM_GRID_CLASSNAME,
+  IMPORT_UPLOAD_DROPZONE_CLASSNAME,
+  PRODUCT_COLOR_COLUMN_CLASSNAME,
+  PRODUCT_COLOR_ROW_CLASSNAME,
+  PRODUCT_DESCRIPTION_LABEL_CLASSNAME,
+  PRODUCT_DESCRIPTION_TEXT_CLASSNAME,
+  PRODUCT_DETAIL_ACTIONS_CLASSNAME,
+  PRODUCT_DETAIL_LAYOUT_CLASSNAME,
+  PRODUCT_DETAIL_PAGE_CLASSNAME,
+  PRODUCT_INFO_COLUMN_CLASSNAME,
+  PRODUCT_MAIN_MEDIA_CLASSNAME,
+  PRODUCT_MAIN_SWIPER_CLASSNAME,
+  PRODUCT_MATERIAL_GROUP_CLASSNAME,
+  PRODUCT_MEDIA_COLUMN_CLASSNAME,
+  PRODUCT_META_GRID_CLASSNAME,
+  PRODUCT_OPTION_HEADER_CLASSNAME,
+  PRODUCT_OPTION_ROW_CLASSNAME,
+  PRODUCT_RATING_ROW_CLASSNAME,
+  PRODUCT_REVIEW_CARD_CLASSNAME,
+  PRODUCT_THUMB_MEDIA_CLASSNAME,
+  PRODUCT_THUMB_SWIPER_CLASSNAME,
+  PRODUCT_TITLE_CLASSNAME,
+  PRODUCT_VARIANT_GRID_CLASSNAME,
+  RESPONSIVE_GRID_2_CLASSNAME,
+  RESPONSIVE_GRID_3_CLASSNAME,
   STACK_LG_CLASSNAME,
   STACK_MD_CLASSNAME,
   STACK_SM_CLASSNAME,
@@ -16,8 +45,45 @@ import {
 describe("style class names", () => {
   it("exposes reusable layout class names", () => {
     expect(ACTION_ROW_CLASSNAME).toBe("action-row");
+    expect(ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME).toBe(
+      "admin-product-thumb-media"
+    );
+    expect(ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME).toBe(
+      "mySwiper admin-product-thumb-swiper"
+    );
     expect(CLUSTER_MD_CLASSNAME).toBe("cluster-md");
     expect(CLUSTER_SM_CLASSNAME).toBe("cluster-sm");
+    expect(IMPORT_ACTIONS_CLASSNAME).toBe("import-actions");
+    expect(IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME).toBe(
+      "import-avatar-preview-image"
+    );
+    expect(IMPORT_FORM_GRID_CLASSNAME).toBe("import-form-grid");
+    expect(IMPORT_UPLOAD_DROPZONE_CLASSNAME).toBe("import-upload-dropzone");
+    expect(PRODUCT_COLOR_COLUMN_CLASSNAME).toBe("product-color-column");
+    expect(PRODUCT_COLOR_ROW_CLASSNAME).toBe("product-color-row");
+    expect(PRODUCT_DESCRIPTION_LABEL_CLASSNAME).toBe(
+      "product-description-label"
+    );
+    expect(PRODUCT_DESCRIPTION_TEXT_CLASSNAME).toBe("product-description-text");
+    expect(PRODUCT_DETAIL_ACTIONS_CLASSNAME).toBe("product-detail-actions");
+    expect(PRODUCT_DETAIL_LAYOUT_CLASSNAME).toBe("product-detail-layout");
+    expect(PRODUCT_DETAIL_PAGE_CLASSNAME).toBe("product-detail-page");
+    expect(PRODUCT_INFO_COLUMN_CLASSNAME).toBe("product-info-column");
+    expect(PRODUCT_MAIN_MEDIA_CLASSNAME).toBe("product-main-media");
+    expect(PRODUCT_MAIN_SWIPER_CLASSNAME).toBe("mySwiper1 product-main-swiper");
+    expect(PRODUCT_MATERIAL_GROUP_CLASSNAME).toBe("product-material-group");
+    expect(PRODUCT_MEDIA_COLUMN_CLASSNAME).toBe("product-media-column");
+    expect(PRODUCT_META_GRID_CLASSNAME).toBe("product-meta-grid");
+    expect(PRODUCT_OPTION_HEADER_CLASSNAME).toBe("product-option-header");
+    expect(PRODUCT_OPTION_ROW_CLASSNAME).toBe("product-option-row");
+    expect(PRODUCT_RATING_ROW_CLASSNAME).toBe("product-rating-row");
+    expect(PRODUCT_REVIEW_CARD_CLASSNAME).toBe("product-review-card");
+    expect(PRODUCT_THUMB_MEDIA_CLASSNAME).toBe("product-thumb-media");
+    expect(PRODUCT_THUMB_SWIPER_CLASSNAME).toBe("mySwiper product-thumb-swiper");
+    expect(PRODUCT_TITLE_CLASSNAME).toBe("product-title");
+    expect(PRODUCT_VARIANT_GRID_CLASSNAME).toBe("product-variant-grid");
+    expect(RESPONSIVE_GRID_2_CLASSNAME).toBe("responsive-grid-2");
+    expect(RESPONSIVE_GRID_3_CLASSNAME).toBe("responsive-grid-3");
     expect(STACK_LG_CLASSNAME).toBe("stack-lg");
     expect(STACK_MD_CLASSNAME).toBe("stack-md");
     expect(STACK_SM_CLASSNAME).toBe("stack-sm");
@@ -26,5 +92,13 @@ describe("style class names", () => {
     expect(SURFACE_CARD_CLASSNAME).toBe("surface-card");
     expect(SURFACE_PANEL_CLASSNAME).toBe("surface-panel");
     expect(STYLE_CLASS_NAMES.actionRow).toBe(ACTION_ROW_CLASSNAME);
+    expect(STYLE_CLASS_NAMES.importActions).toBe(IMPORT_ACTIONS_CLASSNAME);
+    expect(STYLE_CLASS_NAMES.importFormGrid).toBe(IMPORT_FORM_GRID_CLASSNAME);
+    expect(STYLE_CLASS_NAMES.productDescriptionLabel).toBe(
+      PRODUCT_DESCRIPTION_LABEL_CLASSNAME
+    );
+    expect(STYLE_CLASS_NAMES.productDescriptionText).toBe(
+      PRODUCT_DESCRIPTION_TEXT_CLASSNAME
+    );
   });
 });

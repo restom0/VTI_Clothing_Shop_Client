@@ -5,10 +5,10 @@ import { FOOTER_MENU, SOCIAL_LINKS } from "./footer.config";
 const currentYear = new Date().getFullYear();
 
 export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
-  <footer className="relative w-full pt-10 border-t" style={{ borderColor: "var(--color-border)" }}>
+  <footer className="footer-root">
     <div className="page-container mt-5">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mb-10">
-        <p className="text-xl font-bold" style={{ color: "var(--color-text-base)" }}>
+        <p className="footer-brand">
           VTI Shop
         </p>
         <div className="footer-links-grid grid grid-cols-2 gap-4 sm:grid-cols-3">
@@ -26,12 +26,11 @@ export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
       </div>
 
       <div
-        className="flex-between flex-col md:flex-row border-t py-4 gap-4"
-        style={{ borderColor: "var(--color-border)" }}
+        className="footer-bottom"
       >
-        <p className="text-sm text-center" style={{ color: "var(--color-text-muted)" }}>
+        <p className="footer-copyright">
           &copy; {year}{" "}
-          <a href="/" className="hover:underline" style={{ color: "var(--color-primary)" }}>
+          <a href="/" className="footer-home-link">
             VTI Corporation
           </a>
           . {t("common.all_rights_reserved")}

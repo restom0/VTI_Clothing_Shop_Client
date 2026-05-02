@@ -1,3 +1,5 @@
+import { PRODUCT_COLOR_SWATCHES } from "../../../constants/product_color.constant";
+
 export const MATERIALS = [
   { value: "cotton", labelKey: "material.cotton" },
   { value: "polyester", labelKey: "material.polyester" },
@@ -9,12 +11,10 @@ export const MATERIALS = [
 
 export const SIZES = ["S", "M", "L", "XL", "XXL", "XXXL"];
 
-export const COLORS = [
-  { color: "#aaaaaa", labelKey: "color.gray" },
-  { color: "#ffffaa", labelKey: "color.yellow" },
-  { color: "#012345", labelKey: "color.blue" },
-  { color: "#777777", labelKey: "color.dark_gray" },
-];
+export const COLORS = PRODUCT_COLOR_SWATCHES.map(({ color, labelKey }) => ({
+  color,
+  labelKey,
+}));
 
 export const toggleSelection = (currentValue, nextValue) =>
   currentValue === nextValue ? null : nextValue;

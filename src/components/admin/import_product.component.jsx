@@ -59,6 +59,41 @@ import Loading from "../shared/loading.component";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import { handleDelete } from "../../utils/delete_image.util";
 import { useCurrency } from "../../currency";
+import {
+  IMPORT_ACTION_BUTTON_CLASSNAME,
+  IMPORT_ACTIONS_CLASSNAME,
+  IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME,
+  IMPORT_AVATAR_PREVIEW_CLASSNAME,
+  IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME,
+  IMPORT_AVATAR_PREVIEW_IMAGE_FULL_CLASSNAME,
+  IMPORT_DETAIL_FIELD_CLASSNAME,
+  IMPORT_DETAIL_LAYOUT_CLASSNAME,
+  IMPORT_DETAIL_MAIN_IMAGE_CLASSNAME,
+  IMPORT_DETAIL_MEDIA_GRID_CLASSNAME,
+  IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME,
+  IMPORT_DETAIL_THUMB_GRID_CLASSNAME,
+  IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME,
+  IMPORT_DIALOG_HEADER_CLASSNAME,
+  IMPORT_FORM_FIELD_CLASSNAME,
+  IMPORT_FORM_GRID_CLASSNAME,
+  IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME,
+  IMPORT_SLIDER_PREVIEW_CLASSNAME,
+  IMPORT_SLIDER_PREVIEW_FULL_CLASSNAME,
+  IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME,
+  IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME,
+  IMPORT_UPLOAD_BODY_CLASSNAME,
+  IMPORT_UPLOAD_BODY_PADDED_CLASSNAME,
+  IMPORT_UPLOAD_CAPTION_CLASSNAME,
+  IMPORT_UPLOAD_CENTER_CLASSNAME,
+  IMPORT_UPLOAD_DROPZONE_CLASSNAME,
+  IMPORT_UPLOAD_FIGURE_CLASSNAME,
+  IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME,
+  IMPORT_UPLOAD_HINT_CLASSNAME,
+  IMPORT_UPLOAD_ICON_CLASSNAME,
+  IMPORT_UPLOAD_ICON_SPACED_CLASSNAME,
+  IMPORT_UPLOAD_STACK_CLASSNAME,
+  IMPORT_UPLOAD_TEXT_CLASSNAME,
+} from "../../styles/classNames";
 
 const ImportProduct = () => {
   const navigate = useNavigate();
@@ -375,9 +410,9 @@ const ImportProduct = () => {
         headerDetail={"Chi tiết mã hàng"}
         bodyDetail={
           <Container>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="grid grid-cols-1 col-span-2 gap-4">
-                <div className=" my-auto mx-auto">
+            <div className={IMPORT_DETAIL_LAYOUT_CLASSNAME}>
+              <div className={IMPORT_DETAIL_MEDIA_GRID_CLASSNAME}>
+                <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                   <figure>
                     <img
                       src={
@@ -392,19 +427,19 @@ const ImportProduct = () => {
                           : ""
                       }
                       alt=""
-                      className="w-64 h-64 object-cover"
+                      className={IMPORT_DETAIL_MAIN_IMAGE_CLASSNAME}
                     />
                     <Typography
                       as="caption"
                       variant="small"
-                      className="mt-2 text-center font-normal"
+                      className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                     >
                       Hình đại diện
                     </Typography>
                   </figure>
                 </div>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className=" my-auto mx-auto">
+                <div className={IMPORT_DETAIL_THUMB_GRID_CLASSNAME}>
+                  <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
                         src={
@@ -419,18 +454,18 @@ const ImportProduct = () => {
                             : ""
                         }
                         alt=""
-                        className="w-32 h-32 object-cover"
+                        className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
                       <Typography
                         as="caption"
                         variant="small"
-                        className="mt-2 text-center font-normal"
+                        className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                       >
                         Hình 1
                       </Typography>
                     </figure>
                   </div>
-                  <div className=" my-auto mx-auto">
+                  <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
                         src={
@@ -445,18 +480,18 @@ const ImportProduct = () => {
                             : ""
                         }
                         alt=""
-                        className="w-32 h-32 object-cover"
+                        className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
                       <Typography
                         as="caption"
                         variant="small"
-                        className="mt-2 text-center font-normal"
+                        className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                       >
                         Hình 2
                       </Typography>
                     </figure>
                   </div>
-                  <div className=" my-auto mx-auto">
+                  <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
                         src={
@@ -471,18 +506,18 @@ const ImportProduct = () => {
                             : ""
                         }
                         alt=""
-                        className="w-32 h-32 object-cover"
+                        className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
                       <Typography
                         as="caption"
                         variant="small"
-                        className="mt-2 text-center font-normal"
+                        className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                       >
                         Hình 3
                       </Typography>
                     </figure>
                   </div>
-                  <div className=" my-auto mx-auto">
+                  <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
                         src={
@@ -497,12 +532,12 @@ const ImportProduct = () => {
                             : ""
                         }
                         alt=""
-                        className="w-32 h-32 object-cover"
+                        className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
                       <Typography
                         as="caption"
                         variant="small"
-                        className="mt-2 text-center font-normal"
+                        className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                       >
                         Hình 4
                       </Typography>
@@ -510,8 +545,8 @@ const ImportProduct = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-4 mb-3">
+              <div className={IMPORT_FORM_GRID_CLASSNAME}>
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h5">Sản phẩm: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -525,7 +560,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Mã màu: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -539,7 +574,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Màu sắc: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -553,7 +588,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Kích thước: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -567,7 +602,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chiều cao: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -581,7 +616,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Cân nặng: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -595,7 +630,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Vật liệu: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -609,7 +644,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giới tính </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -629,7 +664,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Số lượng: </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -643,7 +678,7 @@ const ImportProduct = () => {
                       : ""}
                   </Typography>
                 </div>
-                <div className="flex flex-col gap-4 mb-3">
+                <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giá nhập </Typography>
                   <Typography variant="medium">
                     {selectedId === -1
@@ -667,18 +702,18 @@ const ImportProduct = () => {
         headerUpdate={"Chỉnh sửa mã hàng"}
         bodyUpdate={
           <Container>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid grid-cols-1 gap-4">
+            <div className={IMPORT_FORM_GRID_CLASSNAME}>
+              <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 {updateAvatar_Url === "" ? (
-                  <figure className="my-auto mx-auto h-full w-full">
-                    <div className="flex items-center  justify-center h-full w-full my-auto">
+                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                       <label
                         htmlFor="avatar_url"
-                        className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                       >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
-                            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -692,20 +727,18 @@ const ImportProduct = () => {
                               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                             />
                           </svg>
-                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">
-                              Click to upload
-                            </span>{" "}
+                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
+                            <strong>Click to upload</strong>{" "}
                             or drag and drop
                           </p>
 
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
                             SVG, PNG, JPG or GIF (MAX. 800x400px)
                           </p>
                           <Typography
                             as="caption"
                             variant="small"
-                            className="mt-2 text-center font-normal"
+                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                           >
                             Hình đại diện
                           </Typography>
@@ -719,11 +752,11 @@ const ImportProduct = () => {
                     </div>
                   </figure>
                 ) : (
-                  <div className="grid grid-cols-4 justify-around mx-auto my-auto w-full">
+                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
                     <img
                       src={updateAvatar_Url}
                       alt="avatar"
-                      className="h-[200px] w-full mx-auto col-span-3"
+                      className={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
                     />
                     <Button
                       onClick={() => {
@@ -732,24 +765,24 @@ const ImportProduct = () => {
                         setUpdatePublicIdAvatar("");
                       }}
                       color="red"
-                      className="w-full rounded-l-none h-[200px]"
+                      className={IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME}
                     >
                       Xóa ảnh đại diện
                     </Button>
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={IMPORT_FORM_GRID_CLASSNAME}>
                   {updateSlider1 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_1"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -763,16 +796,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 1
                             </Typography>
@@ -786,11 +817,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={updateSlider1}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -799,7 +830,7 @@ const ImportProduct = () => {
                           setUpdatePublicIdSlider1("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 1
                       </Button>
@@ -807,15 +838,15 @@ const ImportProduct = () => {
                   )}
 
                   {updateSlider2 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_2"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -829,16 +860,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 2
                             </Typography>
@@ -852,11 +881,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={updateSlider2}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -865,7 +894,7 @@ const ImportProduct = () => {
                           setUpdatePublicIdSlider2("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 2
                       </Button>
@@ -873,15 +902,15 @@ const ImportProduct = () => {
                   )}
 
                   {updateSlider3 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_3"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -895,16 +924,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 3
                             </Typography>
@@ -918,11 +945,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={updateSlider3}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -931,7 +958,7 @@ const ImportProduct = () => {
                           setUpdatePublicIdSlider3("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 3
                       </Button>
@@ -939,15 +966,15 @@ const ImportProduct = () => {
                   )}
 
                   {updateSlider4 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_4"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -961,16 +988,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 4
                             </Typography>
@@ -984,11 +1009,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={updateSlider4}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -997,7 +1022,7 @@ const ImportProduct = () => {
                           setUpdatePublicIdSlider4("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 4
                       </Button>
@@ -1005,8 +1030,8 @@ const ImportProduct = () => {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col justify-between gap-4">
+              <div className={IMPORT_FORM_GRID_CLASSNAME}>
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Sản phẩm: </Typography>
 
                   <FormControl fullWidth size="small">
@@ -1027,7 +1052,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Mã màu: </Typography>
                   <TextField
                     size="small"
@@ -1038,7 +1063,7 @@ const ImportProduct = () => {
                     onChange={(e) => setUpdateColorCode(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Màu sắc: </Typography>
                   <TextField
                     size="small"
@@ -1047,7 +1072,7 @@ const ImportProduct = () => {
                     onChange={(e) => setUpdateColorName(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Kích thước: </Typography>
                   <TextField
                     size="small"
@@ -1056,7 +1081,7 @@ const ImportProduct = () => {
                     onChange={(e) => setUpdateSize(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chiều cao </Typography>
 
                   <OutlinedInput
@@ -1077,7 +1102,7 @@ const ImportProduct = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Cân nặng: </Typography>
                   <OutlinedInput
                     size="small"
@@ -1098,7 +1123,7 @@ const ImportProduct = () => {
                   />
                 </div>
 
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chất liệu: </Typography>
                   <OutlinedInput
                     size="small"
@@ -1107,7 +1132,7 @@ const ImportProduct = () => {
                     onChange={(e) => setUpdateMaterial(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
@@ -1133,7 +1158,7 @@ const ImportProduct = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Số lượng: </Typography>
                   <OutlinedInput
                     size="small"
@@ -1147,7 +1172,7 @@ const ImportProduct = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giá nhập: </Typography>
                   <OutlinedInput
                     size="small"
@@ -1173,9 +1198,9 @@ const ImportProduct = () => {
         isUpdated={isUpdated}
         isDeleted={isDeleted}
       >
-        <div className="flex items-center justify-between w-1/2 gap-4">
+        <div className={IMPORT_ACTIONS_CLASSNAME}>
           <Button
-            className=" !border-gray-300 w-full"
+            className={IMPORT_ACTION_BUTTON_CLASSNAME}
             color="gray"
             variant="outlined"
             onClick={handleNewOpen}
@@ -1183,7 +1208,7 @@ const ImportProduct = () => {
             Nhập mới
           </Button>
           <Button
-            className=" !border-gray-300 w-full"
+            className={IMPORT_ACTION_BUTTON_CLASSNAME}
             color="gray"
             variant="outlined"
             onClick={handleOldOpen}
@@ -1212,7 +1237,7 @@ const ImportProduct = () => {
         </div>
       </AdminLayout>
       <Dialog open={newOpen} onClose={handleNewClose} maxWidth="xl">
-        <DialogTitle className="pb-0 flex justify-between">
+        <DialogTitle className={IMPORT_DIALOG_HEADER_CLASSNAME}>
           <Typography variant="h4">Nhập sản phẩm mới</Typography>
           <IconButton
             className="border-none"
@@ -1224,18 +1249,18 @@ const ImportProduct = () => {
         </DialogTitle>
         <DialogContent>
           <Container>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid grid-cols-1 gap-4">
+            <div className={IMPORT_FORM_GRID_CLASSNAME}>
+              <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 {avatar_url === "" ? (
-                  <figure className="my-auto mx-auto h-full w-full">
-                    <div className="flex items-center  justify-center h-full w-full my-auto">
+                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                       <label
                         htmlFor="avatar_url"
-                        className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                       >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
-                            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -1249,20 +1274,18 @@ const ImportProduct = () => {
                               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                             />
                           </svg>
-                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">
-                              Click to upload
-                            </span>{" "}
+                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
+                            <strong>Click to upload</strong>{" "}
                             or drag and drop
                           </p>
 
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
                             SVG, PNG, JPG or GIF (MAX. 800x400px)
                           </p>
                           <Typography
                             as="caption"
                             variant="small"
-                            className="mt-2 text-center font-normal"
+                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                           >
                             Hình đại diện
                           </Typography>
@@ -1276,11 +1299,11 @@ const ImportProduct = () => {
                     </div>
                   </figure>
                 ) : (
-                  <div className="grid grid-cols-4 justify-around mx-auto my-auto w-full">
+                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
                     <img
                       src={avatar_url}
                       alt="avatar"
-                      className="h-[200px] w-full mx-auto col-span-3 object-fit"
+                      className={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
                     />
                     <Button
                       onClick={() => {
@@ -1289,24 +1312,24 @@ const ImportProduct = () => {
                         setPublicIdAvatar("");
                       }}
                       color="red"
-                      className="w-full rounded-l-none h-[200px]"
+                      className={IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME}
                     >
                       Xóa ảnh đại diện
                     </Button>
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={IMPORT_FORM_GRID_CLASSNAME}>
                   {slider1 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_1"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1320,16 +1343,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 1
                             </Typography>
@@ -1343,11 +1364,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={slider1}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -1356,7 +1377,7 @@ const ImportProduct = () => {
                           setPublicIdSlider1("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 1
                       </Button>
@@ -1364,15 +1385,15 @@ const ImportProduct = () => {
                   )}
 
                   {slider2 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_2"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1386,16 +1407,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 2
                             </Typography>
@@ -1409,11 +1428,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={slider2}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -1422,7 +1441,7 @@ const ImportProduct = () => {
                           setPublicIdSlider2("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 2
                       </Button>
@@ -1430,15 +1449,15 @@ const ImportProduct = () => {
                   )}
 
                   {slider3 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_3"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1452,16 +1471,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 3
                             </Typography>
@@ -1475,11 +1492,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={slider3}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -1488,7 +1505,7 @@ const ImportProduct = () => {
                           setPublicIdSlider3("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 3
                       </Button>
@@ -1496,15 +1513,15 @@ const ImportProduct = () => {
                   )}
 
                   {slider4 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_4"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1518,16 +1535,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 4
                             </Typography>
@@ -1541,11 +1556,11 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto h-full w-full">
+                    <div className={IMPORT_SLIDER_PREVIEW_FULL_CLASSNAME}>
                       <img
                         src={slider4}
                         alt="avatar"
-                        className="h-[100px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
                       />
                       <Button
                         onClick={() => {
@@ -1554,7 +1569,7 @@ const ImportProduct = () => {
                           setPublicIdSlider4("");
                         }}
                         color="red"
-                        className="h-[100px] rounded-l-none mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 4
                       </Button>
@@ -1562,8 +1577,8 @@ const ImportProduct = () => {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col justify-between gap-4">
+              <div className={IMPORT_FORM_GRID_CLASSNAME}>
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Sản phẩm: </Typography>
                   {/* <Typography variant="medium">Áo thun nam</Typography> */}
                   <FormControl fullWidth>
@@ -1582,7 +1597,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Mã màu: </Typography>
                   <TextField
                     size="small"
@@ -1593,7 +1608,7 @@ const ImportProduct = () => {
                     onChange={(e) => setColorCode(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Màu sắc: </Typography>
                   <TextField
                     type="text"
@@ -1603,7 +1618,7 @@ const ImportProduct = () => {
                     onChange={(e) => setColorName(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Kích thước: </Typography>
                   <TextField
                     size="small"
@@ -1613,7 +1628,7 @@ const ImportProduct = () => {
                     onChange={(e) => setSize(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chiều cao </Typography>
                   <OutlinedInput
                     size="small"
@@ -1634,7 +1649,7 @@ const ImportProduct = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Cân nặng </Typography>
                   <OutlinedInput
                     size="small"
@@ -1656,7 +1671,7 @@ const ImportProduct = () => {
                   />
                 </div>
 
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chất liệu: </Typography>
                   <TextField
                     size="small"
@@ -1665,7 +1680,7 @@ const ImportProduct = () => {
                     onChange={(e) => setMaterial(e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
@@ -1691,7 +1706,7 @@ const ImportProduct = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Số lượng: </Typography>
                   <TextField
                     size="small"
@@ -1702,7 +1717,7 @@ const ImportProduct = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giá nhập: </Typography>
                   <OutlinedInput
                     size="small"
@@ -1734,7 +1749,7 @@ const ImportProduct = () => {
         </DialogActions>
       </Dialog>
       <Dialog open={oldOpen} onClose={handleOldClose} maxWidth="xl">
-        <DialogTitle className="pb-0 flex justify-between">
+        <DialogTitle className={IMPORT_DIALOG_HEADER_CLASSNAME}>
           <Typography variant="h4">Nhập sản phẩm có sẵn</Typography>
           <IconButton
             className="border-none"
@@ -1746,18 +1761,18 @@ const ImportProduct = () => {
         </DialogTitle>
         <DialogContent>
           <Container>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid grid-cols-1 gap-4">
+            <div className={IMPORT_FORM_GRID_CLASSNAME}>
+              <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 {avatar_url === "" ? (
-                  <figure className="my-auto mx-auto h-full w-full">
-                    <div className="flex items-center justify-center h-full w-full my-auto">
+                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                       <label
                         htmlFor="avatar_url"
-                        className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                       >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
-                            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -1771,20 +1786,18 @@ const ImportProduct = () => {
                               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                             />
                           </svg>
-                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">
-                              Click to upload
-                            </span>{" "}
+                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
+                            <strong>Click to upload</strong>{" "}
                             or drag and drop
                           </p>
 
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
                             SVG, PNG, JPG or GIF (MAX. 800x400px)
                           </p>
                           <Typography
                             as="caption"
                             variant="small"
-                            className="mt-2 text-center font-normal"
+                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                           >
                             Hình đại diện
                           </Typography>
@@ -1794,7 +1807,7 @@ const ImportProduct = () => {
                     </div>
                   </figure>
                 ) : (
-                  <div className="grid grid-cols-4 justify-around mx-auto my-auto w-full">
+                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
                     <img
                       src={
                         importedProducts.object?.find(
@@ -1806,29 +1819,29 @@ const ImportProduct = () => {
                         )?.image_url
                       }
                       alt="avatar"
-                      className="h-[250px] w-full mx-auto col-span-4"
+                      className={IMPORT_AVATAR_PREVIEW_IMAGE_FULL_CLASSNAME}
                     />
                     {/* <Button
                       onClick={() => dispatch(deleteAvatar())}
                       color="red"
-                      className="w-full h-[200px]"
+                      className={IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME}
                     >
                       Xóa ảnh đại diện
                     </Button> */}
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className={IMPORT_FORM_GRID_CLASSNAME}>
                   {slider1 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_1"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1842,16 +1855,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 1
                             </Typography>
@@ -1861,7 +1872,7 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={
                           importedProducts.object?.find(
@@ -1873,12 +1884,12 @@ const ImportProduct = () => {
                           )?.slider_url_1
                         }
                         alt="avatar"
-                        className="h-[125px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider1())}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 1
                       </Button> */}
@@ -1886,15 +1897,15 @@ const ImportProduct = () => {
                   )}
 
                   {slider2 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_2"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1908,16 +1919,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 2
                             </Typography>
@@ -1927,7 +1936,7 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={
                           importedProducts.object?.find(
@@ -1939,27 +1948,27 @@ const ImportProduct = () => {
                           )?.slider_url_2
                         }
                         alt="avatar"
-                        className="h-[125px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider2())}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 2
                       </Button> */}
                     </div>
                   )}
                   {slider3 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_3"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -1973,16 +1982,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 3
                             </Typography>
@@ -1992,7 +1999,7 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={
                           importedProducts.object?.find(
@@ -2004,27 +2011,27 @@ const ImportProduct = () => {
                           )?.slider_url_3
                         }
                         alt="avatar"
-                        className="h-[125px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider3())}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 3
                       </Button> */}
                     </div>
                   )}
                   {slider4 === "" ? (
-                    <figure className="my-auto mx-auto h-full w-full">
-                      <div className="flex items-center  justify-center h-full w-full my-auto">
+                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
                         <label
                           htmlFor="slider_url_4"
-                          className="flex flex-col items-center justify-center h-full w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 "
+                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
                         >
-                          <div className="flex flex-col items-center justify-center my-auto">
+                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
-                              className="w-8 h-8 text-gray-500 dark:text-gray-400"
+                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
                               aria-hidden="true"
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -2038,16 +2045,14 @@ const ImportProduct = () => {
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                               />
                             </svg>
-                            <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">
-                                Click to upload
-                              </span>{" "}
+                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
+                              <strong>Click to upload</strong>{" "}
                               or drag and drop
                             </p>
                             <Typography
                               as="caption"
                               variant="small"
-                              className="mt-2 text-center font-normal"
+                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
                             >
                               Hình 4
                             </Typography>
@@ -2057,7 +2062,7 @@ const ImportProduct = () => {
                       </div>
                     </figure>
                   ) : (
-                    <div className="flex justify-around mx-auto w-full my-auto">
+                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
                       <img
                         src={
                           importedProducts.object?.find(
@@ -2069,12 +2074,12 @@ const ImportProduct = () => {
                           )?.slider_url_4
                         }
                         alt="avatar"
-                        className="h-[125px] w-full mx-auto my-auto"
+                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
                       />
                       {/* <Button
                         onClick={() => dispatch(deleteSlider4())}
                         color="red"
-                        className="h-[100px] mx-auto my-auto"
+                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
                       >
                         Xóa ảnh 4
                       </Button> */}
@@ -2082,8 +2087,8 @@ const ImportProduct = () => {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col justify-between gap-4">
+              <div className={IMPORT_FORM_GRID_CLASSNAME}>
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Sản phẩm: </Typography>
                   <FormControl fullWidth>
                     <Select
@@ -2101,7 +2106,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Mã màu: </Typography>
                   <FormControl fullWidth>
                     <Select
@@ -2122,7 +2127,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Màu sắc: </Typography>
                   <TextField
                     size="small"
@@ -2137,7 +2142,7 @@ const ImportProduct = () => {
                     placeholder="Trắng"
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Kích thước: </Typography>
                   {/* <Input
                       value={size}
@@ -2163,7 +2168,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chiều cao </Typography>
                   <OutlinedInput
                     size="small"
@@ -2181,7 +2186,7 @@ const ImportProduct = () => {
                     placeholder="170cm"
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Cân nặng </Typography>
                   <OutlinedInput
                     size="small"
@@ -2200,7 +2205,7 @@ const ImportProduct = () => {
                   />
                 </div>
 
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chất liệu: </Typography>
                   <FormControl fullWidth>
                     <Select
@@ -2218,7 +2223,7 @@ const ImportProduct = () => {
                     </Select>
                   </FormControl>
                 </div>
-                <div className="flex flex-col justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giới tính: </Typography>
                   <div className="flex">
                     <Radio
@@ -2244,7 +2249,7 @@ const ImportProduct = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Số lượng: </Typography>
 
                   <TextField
@@ -2261,7 +2266,7 @@ const ImportProduct = () => {
                     }
                   />
                 </div>
-                <div className="flex flex-col  justify-between gap-4">
+                <div className={IMPORT_FORM_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giá nhập: </Typography>
                   <OutlinedInput
                     size="small"

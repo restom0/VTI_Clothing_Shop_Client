@@ -3,11 +3,25 @@ import { Option, Select } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 import ProductCard from "./ProductCard";
 import Pagination from "../pagination.component";
+import VirtualizedGrid from "../VirtualizedGrid";
+import usePaginatedItems from "../../../hooks/usePaginatedItems.hook";
+import useResponsiveColumns from "../../../hooks/useResponsiveColumns.hook";
+
+const PRODUCT_PAGE_SIZE = 24;
+const VIRTUAL_PRODUCT_ROW_ESTIMATE = 384;
+
 const ShopList = ({ products }) => {
   const [filter, setFilter] = useState("new");
   const handleFilter = (e) => setFilter(e);
 
   const [active, setActive] = useState(1);
+  const columns = useResponsiveColumns();
+  const { pageCount, pageItems } = usePaginatedItems(
+    products,
+    active,
+    PRODUCT_PAGE_SIZE
+  );
+
   return (
     <section className="shop-results">
       <div className="shop-list-toolbar">
@@ -28,13 +42,16 @@ const ShopList = ({ products }) => {
           </span>
         </div>
       </div>
-      <div className="shop-grid">
-        {products.slice(active * 6 - 6, active * 6).map((product) => (
-          <ProductCard key={product.id} {...product} />
-        ))}
-      </div>
+      <VirtualizedGrid
+        className="virtual-shop-grid"
+        columns={columns}
+        estimateRowHeight={VIRTUAL_PRODUCT_ROW_ESTIMATE}
+        getKey={(product) => product.id}
+        items={pageItems}
+        renderItem={(product) => <ProductCard {...product} />}
+      />
       <Pagination
-        page={Math.ceil(products.length / 6)}
+        page={pageCount}
         active={active}
         setActive={setActive}
       />

@@ -80,7 +80,7 @@ const NavMenuItems = ({ items, type }) =>
   items.map(({ name: itemName, id }) => (
     <a href={`/${type}/${id}`} key={id}>
       <MenuItem className="flex items-center gap-3 rounded-lg">
-        <span className="text-sm font-semibold" style={{ color: "var(--color-text-base)" }}>
+        <span className="nav-menu-link-label">
           {itemName}
         </span>
       </MenuItem>
@@ -218,10 +218,10 @@ const NavList = () => {
 };
 
 export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
-  <div style={{ width: 500 }}>
+  <div className="nav-tooltip-panel">
     <div className="flex-between mb-3">
       <span className="font-semibold">{labels.cart}</span>
-      <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+      <span className="nav-tooltip-muted">
         {labels.itemCount}
       </span>
     </div>
@@ -237,7 +237,7 @@ export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
           <span className="text-xs font-medium col-span-1 text-center">{title}</span>
           <span className="text-xs text-center">{quantity}x</span>
           <span className="text-xs text-center">{formatPrice(unitPrice)}</span>
-          <span className="text-xs font-semibold text-center" style={{ color: "var(--color-primary)" }}>
+          <span className="nav-tooltip-line-total">
             {formatPrice(lineTotal)}
           </span>
         </div>
@@ -246,7 +246,7 @@ export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
     <Divider />
     <div className="flex-between mt-3">
       <span className="font-semibold">{labels.total}</span>
-      <span className="font-bold" style={{ color: "var(--color-primary)" }}>
+      <span className="nav-tooltip-total-value">
         {formatPrice(total)}
       </span>
     </div>

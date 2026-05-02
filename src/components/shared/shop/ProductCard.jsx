@@ -23,7 +23,12 @@ const ProductCard = ({
   return (
     <div className="card-product" onClick={() => navigate(`/product/${id}`)}>
       <div className="card-product__image">
-        <img src={productImage} alt={productName} />
+        <img
+          src={productImage}
+          alt={productName}
+          decoding="async"
+          loading="lazy"
+        />
       </div>
 
       <div className="card-product__body">

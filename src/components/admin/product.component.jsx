@@ -45,18 +45,26 @@ import {
   setCategory,
 } from "../../features/slices/category.slice";
 import { resetBrand, setBrand } from "../../features/slices/brand.slice";
+import {
+  ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME,
+  ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME,
+  PRODUCT_COLOR_COLUMN_CLASSNAME,
+  PRODUCT_COLOR_ROW_CLASSNAME,
+  PRODUCT_DESCRIPTION_LABEL_CLASSNAME,
+  PRODUCT_DESCRIPTION_TEXT_CLASSNAME,
+  PRODUCT_META_GRID_CLASSNAME,
+  PRODUCT_RATING_ROW_CLASSNAME,
+  PRODUCT_TITLE_CLASSNAME,
+  PRODUCT_VARIANT_GRID_CLASSNAME,
+} from "../../styles/classNames";
+import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
 const ProductList = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(!open);
   const product = {
     id: 0,
-    colors: [
-      { color: "#aaaaaa", label: "Màu xám" },
-      { color: "#ffffaa", label: "Màu vàng" },
-      { color: "#012345", label: "Màu xanh" },
-      { color: "#777777", label: "Màu xám đen" },
-    ],
+    colors: SHOP_PRODUCT_COLORS,
     sizes: ["XS", "S", "M", "L", "XL"],
     materials: ["Cotton", "Vải len"],
     price: 155000,
@@ -228,13 +236,13 @@ const ProductList = () => {
               alt="pink blazer"
               className=""
             /> */}
-                <div className="h-[100px] w-[400px]">
+                <div className={ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME}>
                   <Swiper
                     slidesPerView={4}
                     spaceBetween={30}
                     modules={[Navigation]}
                     loop={true}
-                    className="mySwiper mt-10"
+                    className={ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME}
                   >
                     {product.imageUrl.map((url, index) => (
                       <SwiperSlide key={index}>
@@ -243,7 +251,7 @@ const ProductList = () => {
                     ))}
                   </Swiper>
                 </div>
-                <div className="grid grid-cols-2 text-center mt-5">
+                <div className={PRODUCT_META_GRID_CLASSNAME}>
                   <Typography variant="h6">Giá nhập:</Typography>
                   <Typography variant="small">$1,490</Typography>
                   <Typography variant="h6">Giá bán:</Typography>
@@ -253,22 +261,22 @@ const ProductList = () => {
                 </div>
               </div>
               <div>
-                <Typography className="mb-4" variant="h3">
+                <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
                   {product.title}
                 </Typography>
-                <div className="grid grid-cols-2 text-center mt-5">
+                <div className={PRODUCT_META_GRID_CLASSNAME}>
                   <Typography variant="h6">Thương hiệu:</Typography>
                   <Typography variant="small">Nike</Typography>
                   <Typography variant="h6">Danh mục:</Typography>
                   <Typography variant="small">Quần áo</Typography>
                 </div>
-                <Typography className="!mt-4 text-base font-bold leading-[27px] !text-gray-700">
+                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>
                   Mô tả
                 </Typography>
-                <Typography className="!mt-4 text-base font-normal leading-[27px] !text-gray-500">
+                <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
                   {product.short_description}
                 </Typography>
-                <div className="my-8 flex items-center gap-2">
+                <div className={PRODUCT_RATING_ROW_CLASSNAME}>
                   <Rating
                     readOnly
                     value={product.rating}
@@ -278,7 +286,7 @@ const ProductList = () => {
                     {product.rating.toPrecision(2)}/5 (100 reviews)
                   </Typography>
                 </div>
-                <div className="grid grid-cols-4  text-center">
+                <div className={PRODUCT_VARIANT_GRID_CLASSNAME}>
                   <Typography
                     color="blue-gray"
                     variant="h6"
@@ -292,9 +300,12 @@ const ProductList = () => {
                   <Typography color="blue-gray" variant="h6">
                     Chất liệu
                   </Typography>
-                  <div className="my-4 mt-3 flex flex-col gap-2 col-span-2">
+                  <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
                     {product.colors.map((color, index) => (
-                      <div className="flex gap-2 items-center ms-5" key={index}>
+                      <div
+                        className={PRODUCT_COLOR_ROW_CLASSNAME}
+                        key={index}
+                      >
                         <Button
                           size="lg"
                           variant="gradient"

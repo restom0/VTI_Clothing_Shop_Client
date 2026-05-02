@@ -96,10 +96,10 @@ const CartPage = () => {
                   className="w-20 h-20 object-cover rounded mx-auto"
                 />
               </div>
-              <span className="col-span-2 text-sm font-medium" style={{ color: "var(--color-text-base)" }}>
+              <span className="cart-item-title">
                 {item.product_id.product_id.product_id?.name}
               </span>
-              <span className="col-span-2 text-sm" style={{ color: "var(--color-text-muted)" }}>
+              <span className="cart-item-price">
                 {formatPrice(unitPrice)}
               </span>
 
@@ -130,8 +130,7 @@ const CartPage = () => {
               </div>
 
               <span
-                className="col-span-3 text-sm font-semibold"
-                style={{ color: "var(--color-primary)" }}
+                className="cart-line-total"
               >
                 {formatPrice(unitPrice * item.quantity)}
               </span>
@@ -150,10 +149,10 @@ const CartPage = () => {
       <div className="cart-summary stack-sm">
         {/* Voucher card */}
         <div className="cart-summary-card">
-          <p className="font-semibold" style={{ color: "var(--color-text-base)" }}>Giảm giá</p>
+          <p className="cart-summary-title">Giảm giá</p>
           <div className="flex-between mt-4">
-            <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>SAVE200</span>
-            <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>- 0%</span>
+            <span className="summary-label">SAVE200</span>
+            <span className="summary-label">- 0%</span>
           </div>
           <button className="btn-outline w-full mt-4">Nhập mã giảm giá</button>
         </div>
@@ -161,18 +160,18 @@ const CartPage = () => {
         {/* Order summary card */}
         <div className="cart-summary-card">
           <div className="flex-between">
-            <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Tạm tính</span>
-            <span className="text-sm font-medium" style={{ color: "var(--color-text-base)" }}>
+            <span className="summary-label">Tạm tính</span>
+            <span className="summary-value">
               {formatPrice(total)}
             </span>
           </div>
           <div className="flex-between mt-3">
-            <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>Giảm giá</span>
-            <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>{formatPrice(0)}</span>
+            <span className="summary-label">Giảm giá</span>
+            <span className="summary-label">{formatPrice(0)}</span>
           </div>
-          <div className="flex-between mt-3 pt-3 border-t" style={{ borderColor: "var(--color-border)" }}>
-            <span className="font-semibold" style={{ color: "var(--color-text-base)" }}>Tổng cộng</span>
-            <span className="font-bold text-lg" style={{ color: "var(--color-primary)" }}>
+          <div className="cart-total-row">
+            <span className="cart-total-label">Tổng cộng</span>
+            <span className="cart-total-value">
               {formatPrice(total)}
             </span>
           </div>

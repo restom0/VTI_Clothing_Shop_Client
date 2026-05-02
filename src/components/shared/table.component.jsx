@@ -1,25 +1,27 @@
-import React from "react";
+import { useRef } from "react";
 import PropTypes from "prop-types";
-import {
-  Button,
-  Card,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-} from "@material-tailwind/react";
-import TableHeader from "./header_table";
-import AdminPagination from "./admin/admin_pagination.component";
-import SettingButton from "./admin/setting_button.component";
+import { Card, Typography } from "@material-tailwind/react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "../../features/slices/select_id.slice";
-import { setSort } from "../../features/slices/sort.slice";
+import usePaginatedItems from "../../hooks/usePaginatedItems.hook";
+import useSortedRows from "../../hooks/useSortedRows.hook";
+import AdminPagination from "./admin/admin_pagination.component";
+import SettingButton from "./admin/setting_button.component";
+import TableHeader from "./header_table";
+
+const ADMIN_TABLE_PAGE_SIZE = 24;
+const ADMIN_TABLE_ROW_ESTIMATE = 64;
+
+const getTotalColSpan = (tableHead, noDelete, noUpdate) =>
+  tableHead.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.col,
+    !noDelete || !noUpdate ? 2 : 1
+  );
+
 const Table = ({
   TABLE_HEAD,
   TABLE_ROWS,
-  // active,
-  // setActive,
   handleDetailOpen,
   handleUpdateOpen,
   handleDeleteOpen,
@@ -33,82 +35,113 @@ const Table = ({
   const active = useSelector((state) => state.active.value);
   const sort = useSelector((state) => state.sort);
   const dispatch = useDispatch();
+  const tableScrollRef = useRef(null);
+  const sortedRows = useSortedRows(TABLE_ROWS, sort);
+  const { pageCount, pageItems } = usePaginatedItems(
+    sortedRows,
+    active,
+    ADMIN_TABLE_PAGE_SIZE
+  );
+  const rowVirtualizer = useVirtualizer({
+    count: pageItems.length,
+    estimateSize: () => ADMIN_TABLE_ROW_ESTIMATE,
+    getScrollElement: () => tableScrollRef.current,
+    overscan: 5,
+  });
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const topPadding = virtualRows.length > 0 ? virtualRows[0].start : 0;
+  const bottomPadding =
+    virtualRows.length > 0
+      ? rowVirtualizer.getTotalSize() - virtualRows.at(-1).end
+      : 0;
+  const totalColSpan = getTotalColSpan(TABLE_HEAD, noDelete, noUpdate);
+  const selectRow = (rowId) => {
+    dispatch(setSelectedId(rowId));
+    handleDetailOpen?.();
+  };
+
   return (
     <Card>
-      <table className="w-full min-w-max table-auto text-center">
-        <TableHeader
-          TABLE_HEAD={TABLE_HEAD}
-          noUpdate={noUpdate}
-          noDelete={noDelete}
-        />
-        <tbody>
-          {TABLE_ROWS.length > 0 ? (
-            [...TABLE_ROWS]
-              .sort((a, b) => {
-                if (sort.type === "ASC") {
-                  return Object.values(a)[sort.id] > Object.values(b)[sort.id]
-                    ? 1
-                    : -1;
-                } else {
-                  return Object.values(a)[sort.id] < Object.values(b)[sort.id]
-                    ? 1
-                    : -1;
-                }
-              })
-              .slice((active - 1) * 6, active * 6)
-              .map((row, index) => (
-                <tr key={index} className="border-b border-gray-200">
-                  {Object.values(row)
-                    .slice(1)
-                    .map((value, index1) => (
-                      <td
-                        key={index1}
-                        className="p-4"
-                        onClick={() => {
-                          handleDetailOpen(), dispatch(setSelectedId(row.id));
-                        }}
-                        colSpan={TABLE_HEAD[index1].col}
-                      >
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {value}
-                        </Typography>
-                      </td>
-                    ))}
-                  {(!noDelete || !noUpdate) && (
-                    <SettingButton
-                      id={row.id}
-                      handleDeleteOpen={handleDeleteOpen}
-                      handleUpdateOpen={handleUpdateOpen}
-                      updateContent={updateContent}
-                      deleteContent={deleteContent}
-                      noUpdate={noUpdate}
-                      noDelete={noDelete}
-                      isDeleted={isDeleted}
-                      isUpdated={isUpdated}
+      <div ref={tableScrollRef} className="admin-table-scroll">
+        <table className="w-full min-w-max table-auto text-center">
+          <TableHeader
+            TABLE_HEAD={TABLE_HEAD}
+            noUpdate={noUpdate}
+            noDelete={noDelete}
+          />
+          <tbody>
+            {pageItems.length > 0 ? (
+              <>
+                {topPadding > 0 && (
+                  <tr aria-hidden="true">
+                    <td
+                      colSpan={totalColSpan}
+                      style={{ height: topPadding, padding: 0 }}
                     />
-                  )}
-                </tr>
-              ))
-          ) : (
-            <tr className="border-b border-gray-200">
-              <td
-                className="p-4"
-                colSpan={TABLE_HEAD.reduce(
-                  (accumulator, currentValue) => accumulator + currentValue.col,
-                  !noDelete || !noUpdate ? 2 : 1
+                  </tr>
                 )}
-              >
-                Bảng không có phần tử
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <AdminPagination page={Math.ceil(TABLE_ROWS.length / 6)} />
+                {virtualRows.map((virtualRow) => {
+                  const row = pageItems[virtualRow.index];
+
+                  return (
+                    <tr
+                      key={row.id ?? virtualRow.key}
+                      className="border-b border-gray-200"
+                    >
+                      {Object.values(row)
+                        .slice(1)
+                        .map((value, index) => (
+                          <td
+                            key={index}
+                            className="p-4"
+                            onClick={() => selectRow(row.id)}
+                            colSpan={TABLE_HEAD[index].col}
+                          >
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {value}
+                            </Typography>
+                          </td>
+                        ))}
+                      {(!noDelete || !noUpdate) && (
+                        <SettingButton
+                          id={row.id}
+                          handleDeleteOpen={handleDeleteOpen}
+                          handleUpdateOpen={handleUpdateOpen}
+                          updateContent={updateContent}
+                          deleteContent={deleteContent}
+                          noUpdate={noUpdate}
+                          noDelete={noDelete}
+                          isDeleted={isDeleted}
+                          isUpdated={isUpdated}
+                        />
+                      )}
+                    </tr>
+                  );
+                })}
+                {bottomPadding > 0 && (
+                  <tr aria-hidden="true">
+                    <td
+                      colSpan={totalColSpan}
+                      style={{ height: bottomPadding, padding: 0 }}
+                    />
+                  </tr>
+                )}
+              </>
+            ) : (
+              <tr className="border-b border-gray-200">
+                <td className="p-4" colSpan={totalColSpan}>
+                  Bảng không có phần tử
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      <AdminPagination page={pageCount} />
     </Card>
   );
 };
@@ -120,15 +153,16 @@ Table.propTypes = {
       col: PropTypes.number.isRequired,
     })
   ).isRequired,
-  TABLE_ROWS: PropTypes.array.isRequired,
+  TABLE_ROWS: PropTypes.arrayOf(PropTypes.object).isRequired,
+  deleteContent: PropTypes.string,
+  handleDeleteOpen: PropTypes.func,
   handleDetailOpen: PropTypes.func,
   handleUpdateOpen: PropTypes.func,
-  handleDeleteOpen: PropTypes.func,
-  updateContent: PropTypes.string,
-  deleteContent: PropTypes.string,
-  noUpdate: PropTypes.bool,
+  isDeleted: PropTypes.bool,
+  isUpdated: PropTypes.bool,
   noDelete: PropTypes.bool,
-  data: PropTypes.array.isRequired,
-  handleData: PropTypes.func.isRequired,
+  noUpdate: PropTypes.bool,
+  updateContent: PropTypes.string,
 };
+
 export default Table;
