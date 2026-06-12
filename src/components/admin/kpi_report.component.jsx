@@ -1,15 +1,9 @@
 import React from "react";
 
-import {
-  Button,
-  Typography,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Card,
-  CardBody,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
 
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";

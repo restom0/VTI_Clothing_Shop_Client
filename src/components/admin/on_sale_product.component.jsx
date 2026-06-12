@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { input, Input, Option } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Option } from "@material-tailwind/react/components/Select";
 import dayjs from "dayjs";
 
 import {
@@ -21,7 +22,8 @@ import {
   InputAdornment,
   OutlinedInput,
 } from "@mui/material";
-import { Typography, Button } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Button } from "@material-tailwind/react/components/Button";
 import {
   changePriceList,
   changePricesList,

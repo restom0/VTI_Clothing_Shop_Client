@@ -1,4 +1,4 @@
-import { Radio } from "@material-tailwind/react";
+import { Radio } from "@material-tailwind/react/components/Radio";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useI18n } from "../../../i18n";

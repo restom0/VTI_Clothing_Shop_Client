@@ -1,13 +1,9 @@
-import {
-  Card,
-  IconButton,
-  Select,
-  Tab,
-  Tabs,
-  TabsHeader,
-  Tooltip,
-  Typography,
-} from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Select } from "@material-tailwind/react/components/Select";
+import { Tab, Tabs, TabsHeader } from "@material-tailwind/react/components/Tabs";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import SettingsIcon from "@mui/icons-material/Settings";
 import React from "react";
 import PropTypes from "prop-types";

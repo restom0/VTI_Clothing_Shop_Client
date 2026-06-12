@@ -1,5 +1,5 @@
 import React from "react";
-import { Step, Stepper } from "@material-tailwind/react";
+import { Step, Stepper } from "@material-tailwind/react/components/Stepper";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Container } from "@mui/material";
 import ReceiptIcon from "@mui/icons-material/Receipt";

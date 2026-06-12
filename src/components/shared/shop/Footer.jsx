@@ -4,20 +4,24 @@ import { FOOTER_MENU, SOCIAL_LINKS } from "./footer.config";
 
 const currentYear = new Date().getFullYear();
 
+// Social icon size — developer-icons accepts a `size` number prop
+const SOCIAL_ICON_SIZE = 22;
+
 export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
   <footer className="footer-root">
     <div className="page-container mt-5">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mb-10">
-        <p className="footer-brand">
-          VTI Shop
-        </p>
+        <p className="footer-brand">VTI Shop</p>
+
         <div className="footer-links-grid grid grid-cols-2 gap-4 sm:grid-cols-3">
           {footerMenu.map(({ titleKey, items }) => (
             <ul key={titleKey}>
               <li className="footer-nav-title">{t(titleKey)}</li>
               {items.map(({ labelKey, link }) => (
                 <li key={labelKey}>
-                  <a href={link} className="footer-nav-link">{t(labelKey)}</a>
+                  <a href={link} className="footer-nav-link">
+                    {t(labelKey)}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -25,9 +29,7 @@ export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
         </div>
       </div>
 
-      <div
-        className="footer-bottom"
-      >
+      <div className="footer-bottom">
         <p className="footer-copyright">
           &copy; {year}{" "}
           <a href="/" className="footer-home-link">
@@ -36,12 +38,18 @@ export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
           . {t("common.all_rights_reserved")}
         </p>
 
-        <div className="flex items-center gap-4">
-          {socialLinks.map(({ label, href, path, fillRule, clipRule }) => (
-            <a key={label} href={href} aria-label={label} className="footer-social-btn">
-              <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path fillRule={fillRule} clipRule={clipRule} d={path} />
-              </svg>
+        <div className="flex items-center gap-3">
+          {socialLinks.map(({ label, href, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              aria-label={label}
+              className="footer-social-btn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {/* developer-icons components accept size + className */}
+              <Icon size={SOCIAL_ICON_SIZE} />
             </a>
           ))}
         </div>
@@ -66,9 +74,7 @@ FooterView.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       href: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-      fillRule: PropTypes.string,
-      clipRule: PropTypes.string,
+      Icon: PropTypes.elementType.isRequired,
     })
   ).isRequired,
   t: PropTypes.func.isRequired,

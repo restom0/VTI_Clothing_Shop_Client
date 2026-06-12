@@ -1,19 +1,13 @@
 import React, { useEffect } from "react";
 import "./NavbarWithSublist.css";
-import {
-  Navbar,
-  Collapse,
-  Button,
-  IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Input,
-  Tooltip,
-} from "@material-tailwind/react";
+import { Navbar } from "@material-tailwind/react/components/Navbar";
+import { Collapse } from "@material-tailwind/react/components/Collapse";
+import { Button } from "@material-tailwind/react/components/Button";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { List, ListItem } from "@material-tailwind/react/components/List";
+import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import {
   ChevronDownIcon,
   Bars3Icon,
@@ -29,6 +23,7 @@ import { useGetCartQuery } from "../../../apis/order.api";
 import LanguageSwitcher from "../LanguageSwitcher";
 import SkeletonBlock from "../SkeletonBlock";
 import ThemeSwitcher from "../ThemeSwitcher";
+import SeasonSwitcher from "../SeasonSwitcher";
 import useDelayedLoading from "../../../hooks/useDelayedLoading.hook";
 import { useCurrency } from "../../../currency";
 import { useI18n } from "../../../i18n";
@@ -231,7 +226,7 @@ export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
         <div key={id} className="grid grid-cols-5 gap-3 items-center">
           <img
             src={imageUrl}
-            alt=""
+            alt={title ? `Ảnh sản phẩm: ${title}` : "Ảnh sản phẩm"}
             className="w-12 h-12 object-cover rounded mx-auto"
           />
           <span className="text-xs font-medium col-span-1 text-center">{title}</span>
@@ -293,7 +288,13 @@ CartTooltip.propTypes = {
 };
 
 export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) => (
-  <Navbar className="mx-auto max-w-screen-3xl rounded-none px-4 py-2 sticky top-0 z-50">
+  <Navbar
+    className="mx-auto max-w-screen-3xl rounded-none px-4 py-2 sticky top-0 z-50"
+    // role="navigation" đã có trong Navbar component của Material-Tailwind;
+    // thêm aria-label để phân biệt với các nav khác (WCAG 2.4.6)
+    aria-label="Điều hướng chính"
+    as="nav"
+  >
     <div className="flex-between">
       <a href="/" className="navbar-brand mr-4 lg:ml-2">
         <span className="brand-highlight">VTI</span> Shop
@@ -321,6 +322,7 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
           </button>
         </div>
 
+        <SeasonSwitcher />
         <ThemeSwitcher />
         <LanguageSwitcher />
 
@@ -340,21 +342,27 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
         </Tooltip>
       </div>
 
+      {/* aria-expanded + aria-controls: WCAG 4.1.2 — Name, Role, Value */}
       <IconButton
         variant="text"
         color="blue-gray"
         className="lg:hidden"
         onClick={onToggleNav}
+        aria-expanded={openNav}
+        aria-controls="mobile-nav"
+        aria-label={openNav ? "Đóng menu" : "Mở menu"}
       >
         {openNav
-          ? <XMarkIcon className="h-6 w-6" strokeWidth={2} />
-          : <Bars3Icon className="h-6 w-6" strokeWidth={2} />}
+          ? <XMarkIcon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
+          : <Bars3Icon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />}
       </IconButton>
     </div>
 
-    <Collapse open={openNav}>
+    {/* id="mobile-nav" khớp với aria-controls trên toggle button */}
+    <Collapse open={openNav} id="mobile-nav">
       <NavList />
       <div className={ACTION_ROW_CLASSNAME}>
+        <SeasonSwitcher />
         <ThemeSwitcher />
         <LanguageSwitcher />
         <a href="/login" className="flex-1">

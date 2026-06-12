@@ -2,12 +2,14 @@
 // MAIN STYLESHEET — VTI Clothing Shop
 // Import order quan trọng:
 //  1. _variables  → SCSS vars + CSS custom properties (:root)
-//  2. Tailwind directives
-//  3. _components → @layer components (cần Tailwind loaded trước)
+//  2. _components / _animations / _seasons
+//  3. Tailwind directives
 // ============================================================
 
 @use 'variables';
 @use 'components';
+@use 'animations';
+@use 'seasons';
 
 // Tailwind layers
 @tailwind base;

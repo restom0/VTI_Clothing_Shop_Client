@@ -22,7 +22,12 @@ describe("footer config", () => {
       "Facebook",
       "Twitter / X",
       "GitHub",
+      "Instagram",
     ]);
+    // Mỗi link phải có Icon component để render được
+    SOCIAL_LINKS.forEach(({ Icon, label }) => {
+      expect(Icon, `${label} cần có Icon component`).toBeDefined();
+    });
   });
 
   it("formats copyright text", () => {

@@ -1,10 +1,5 @@
-import {
-  Button,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
 import {
   ChevronDownIcon,
   ComputerDesktopIcon,

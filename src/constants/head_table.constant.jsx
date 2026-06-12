@@ -1,12 +1,6 @@
-import {
-  Button,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Option,
-  Select,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Option, Select } from "@material-tailwind/react/components/Select";
 import FilterListIcon from "@mui/icons-material/FilterList";
 const allorder = [
   { label: "Mã vận đơn", col: 1 },

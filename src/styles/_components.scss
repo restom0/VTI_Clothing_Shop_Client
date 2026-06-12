@@ -12,9 +12,73 @@
   // LAYOUT HELPERS
   // ----------------------------------------------------------
 
+  // -------------------------------------------------------
+  // SKIP TO CONTENT (WCAG 2.1 AA — SC 2.4.1)
+  // Visually hidden cho đến khi focus — screen reader + keyboard users
+  // -------------------------------------------------------
+  .skip-to-content {
+    @apply sr-only fixed top-2 left-2 z-[9999] px-4 py-2 rounded text-sm font-semibold;
+    background-color: var(--color-primary);
+    color: var(--color-text-invert);
+
+    &:focus,
+    &:focus-visible {
+      // Hiện ra khi focused
+      clip: auto;
+      clip-path: none;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      white-space: normal;
+      position: fixed;
+      outline: 3px solid var(--color-primary-dark);
+      outline-offset: 2px;
+    }
+  }
+
+  // Screen-reader only text utility
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  // -------------------------------------------------------
+  // 12-COLUMN GRID PRIMITIVES
+  // Nguồn gốc mọi layout: chuẩn 12 cột nhất quán
+  // -------------------------------------------------------
+
+  // Base 12-column grid container
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns, 12), minmax(0, 1fr));
+    gap: var(--grid-gutter);
+  }
+
+  // Column span helpers — dùng cho children của .grid-12
+  // (Tailwind đã có col-span-*, nhưng khai báo ở đây để dùng trong SCSS context)
+  @for $i from 1 through 12 {
+    .col-span-#{$i} { grid-column: span #{$i} / span #{$i}; }
+  }
+
+  // -------------------------------------------------------
+  // ARIA LIVE REGION
+  // -------------------------------------------------------
+  .results-count[aria-live] {
+    // Không ẩn — vẫn visible; chỉ đảm bảo screen reader nhận update
+    speak: normal;
+  }
+
   // Page-level max-width wrapper
   .page-container {
-    @apply mx-auto w-full max-w-7xl;
+    @apply mx-auto w-full;
+    max-width: var(--grid-max-width, 80rem);
     padding-inline: var(--spacing-page-x);
   }
 
@@ -106,10 +170,15 @@
     margin-block: var(--space-lg) var(--space-2xl);
   }
 
+  // Sidebar 3/12 = 25% | Content 9/12 = 75% — derived from 12-column grid
   .shop-browse-layout {
     display: grid;
-    grid-template-columns: minmax(14rem, 1fr) minmax(0, 3fr);
-    gap: var(--space-xl);
+    grid-template-columns: 3fr 9fr;
+    gap: var(--grid-gutter);
+
+    > .shop-filter-panel {
+      min-width: 13rem; // Đảm bảo sidebar không bị quá hẹp ở tablet
+    }
   }
 
   .shop-filter-panel {
@@ -126,10 +195,11 @@
     margin-bottom: var(--space-xl);
   }
 
+  // 4/12 + 4/12 + 4/12 = 3 columns derived from 12-col
   .shop-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-xl);
+    gap: var(--grid-gutter);
   }
 
   .virtual-scroll {
@@ -150,7 +220,7 @@
     top: 0;
     display: grid;
     grid-template-columns: repeat(var(--virtual-grid-columns), minmax(0, 1fr));
-    gap: var(--space-xl);
+    gap: var(--grid-gutter); // Dùng grid-gutter token thống nhất
     will-change: transform;
   }
 
@@ -188,11 +258,16 @@
     margin-top: var(--space-xl);
   }
 
+  // Cart items 8/12 | Summary 4/12 — derived from 12-column grid
   .cart-page {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(18rem, 1fr);
-    gap: var(--space-2xl);
+    grid-template-columns: 8fr 4fr;
+    gap: var(--grid-gutter);
     margin-block: var(--space-2xl);
+
+    > .cart-summary {
+      min-width: 16rem; // Order summary không bị quá nhỏ ở tablet
+    }
   }
 
   .cart-items,
@@ -204,11 +279,13 @@
     padding: var(--space-xl) var(--spacing-page-x);
   }
 
+  // Media 6/12 | Info 6/12 — derived from 12-column grid
   .product-detail-layout {
-    @apply mx-auto grid place-items-center;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-2xl);
-    max-width: 72rem;
+    @apply mx-auto grid;
+    align-items: start;
+    grid-template-columns: 6fr 6fr;
+    gap: var(--grid-gutter);
+    max-width: var(--grid-max-width, 80rem);
   }
 
   .product-media-column,
@@ -344,16 +421,18 @@
     gap: var(--space-2xl);
   }
 
+  // 6/12 + 6/12 — derived from 12-column grid
   .responsive-grid-2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-lg);
+    gap: var(--grid-gutter);
   }
 
+  // 4/12 + 4/12 + 4/12 — derived from 12-column grid
   .responsive-grid-3 {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-xl);
+    gap: var(--grid-gutter);
   }
 
   .product-review-card {
@@ -395,10 +474,16 @@
     margin: 0 !important;
   }
 
+  // Sidebar 3/12 | Content 9/12 — derived from 12-column grid
   .profile-page {
     display: grid;
-    grid-template-columns: minmax(16rem, 1fr) minmax(0, 3fr);
+    grid-template-columns: 3fr 9fr;
+    gap: var(--grid-gutter);
     min-height: 70vh;
+
+    > :first-child {
+      min-width: 14rem; // Đảm bảo profile sidebar không bị quá hẹp
+    }
   }
 
   .profile-content {
@@ -796,16 +881,49 @@
   // ----------------------------------------------------------
 
   .card-product {
-    @apply overflow-hidden cursor-pointer;
+    // ScrollReveal wraps the card — forward overflow + radius to inner
     border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-    margin-bottom: var(--space-2xl);
-    box-shadow: var(--shadow-card);
-    transition: box-shadow #{$transition-slow}, transform #{$transition-slow};
 
-    &:hover {
-      box-shadow: var(--shadow-card-hover);
-      @apply -translate-y-1;
+    // <a> thay thế div[role=link] — block display + inherit color
+    &__link {
+      @apply block w-full overflow-hidden cursor-pointer no-underline;
+      border-radius: var(--radius-lg);
+      background-color: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow #{$transition-slow}, transform #{$transition-slow};
+      color: inherit;
+
+      &:hover {
+        box-shadow: var(--shadow-card-hover);
+        @apply -translate-y-1;
+      }
+
+      // Focus ring rõ ràng cho keyboard users (WCAG 2.4.7)
+      &:focus-visible {
+        outline: 3px solid var(--color-primary);
+        outline-offset: 3px;
+        box-shadow: var(--shadow-card-hover);
+      }
+    }
+
+    // Legacy alias (backwards compat với CSS references cũ)
+    &__inner {
+      @apply block overflow-hidden cursor-pointer w-full;
+      border-radius: var(--radius-lg);
+      background-color: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow #{$transition-slow}, transform #{$transition-slow};
+      color: inherit;
+
+      &:hover {
+        box-shadow: var(--shadow-card-hover);
+        @apply -translate-y-1;
+      }
+
+      &:focus-visible {
+        outline: 3px solid var(--color-primary);
+        outline-offset: 3px;
+      }
     }
 
     &__image {
@@ -814,6 +932,11 @@
       img {
         @apply w-full h-full object-cover;
       }
+    }
+
+    // LazyImage wrapper inside the card image slot
+    &__lazy {
+      @apply h-56 w-full;
     }
 
     &__body {
@@ -1173,6 +1296,11 @@
     color: var(--color-text-base);
   }
 
+  .sidebar-item-active {
+    background-color: var(--color-surface) !important;
+    color: var(--color-primary) !important;
+  }
+
   // Table row hover
   .table-row-hover {
     @apply transition-colors;
@@ -1219,6 +1347,12 @@
     place-items: center;
   }
 
+  .admin-panel-fallback {
+    display: grid;
+    min-height: 24rem;
+    place-items: center;
+  }
+
   .error-message {
     @apply text-sm text-center py-10;
     color: var(--color-danger);
@@ -1253,12 +1387,21 @@
       flex-wrap: wrap;
     }
 
+    // Tất cả multi-column layouts collapse về 1 cột trên mobile
     .shop-browse-layout,
     .cart-page,
     .product-detail-layout,
+    .profile-page,
     .responsive-grid-2,
     .responsive-grid-3 {
       grid-template-columns: 1fr;
+    }
+
+    // Reset min-width constraints khi stack về 1 cột
+    .shop-browse-layout > .shop-filter-panel,
+    .cart-page > .cart-summary,
+    .profile-page > :first-child {
+      min-width: 0;
     }
 
     .shop-browse-page {
@@ -1285,7 +1428,7 @@
 
     .shop-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-md);
+      gap: var(--grid-gutter); // grid-gutter đã được override về --grid-gutter-sm ở mobile
     }
 
     .home-hero {

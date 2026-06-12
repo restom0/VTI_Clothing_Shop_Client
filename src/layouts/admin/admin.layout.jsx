@@ -1,16 +1,11 @@
-import {
-  Button,
-  Card,
-  IconButton,
-  Typography,
-  Tooltip,
-  Input,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Select,
-  Option,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
+import { Select, Option } from "@material-tailwind/react/components/Select";
 import {
   Dialog,
   DialogContent,

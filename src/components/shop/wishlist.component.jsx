@@ -1,12 +1,7 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  IconButton,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import React from "react";
 import {
   MagnifyingGlassIcon,

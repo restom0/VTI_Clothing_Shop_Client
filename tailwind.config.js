@@ -84,6 +84,19 @@ export default withMT({
         "section-y": "var(--spacing-section-y)",
         "card-padding": "var(--spacing-card-padding)",
         "panel-padding": "var(--spacing-panel-padding)",
+        "grid-gutter": "var(--grid-gutter)",
+      },
+      // 12-column grid utilities — nhất quán với --grid-columns token
+      gridTemplateColumns: {
+        // Tailwind mặc định đã có grid-cols-12.
+        // Thêm các preset theo 12-col proportions hay dùng:
+        "sidebar-9":  "3fr 9fr",   // 3/12 sidebar + 9/12 content
+        "half":       "6fr 6fr",   // 6/12 + 6/12 = equal halves
+        "cart":       "8fr 4fr",   // 8/12 items + 4/12 summary
+        "4-8":        "4fr 8fr",   // 4/12 + 8/12 (variant sidebar)
+      },
+      maxWidth: {
+        "grid": "var(--grid-max-width, 80rem)", // 1280px
       },
     },
   },

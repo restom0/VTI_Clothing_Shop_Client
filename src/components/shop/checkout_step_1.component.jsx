@@ -1,19 +1,13 @@
 import React from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Checkbox,
-  Input,
-  List,
-  ListItem,
-  Radio,
-  Step,
-  Stepper,
-  Textarea,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Checkbox } from "@material-tailwind/react/components/Checkbox";
+import { Input } from "@material-tailwind/react/components/Input";
+import { List, ListItem } from "@material-tailwind/react/components/List";
+import { Radio } from "@material-tailwind/react/components/Radio";
+import { Step, Stepper } from "@material-tailwind/react/components/Stepper";
+import { Textarea } from "@material-tailwind/react/components/Textarea";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Container, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";

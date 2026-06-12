@@ -10,22 +10,15 @@ import {
   ArrowLeftIcon,
 } from "@heroicons/react/24/solid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
-  CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Chip } from "@material-tailwind/react/components/Chip";
+import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
+import { Avatar } from "@material-tailwind/react/components/Avatar";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import Pagination from "../shared/pagination.component";
 import Tablist from "../shared/list_tab.component";
 import { allorder_tab } from "../../constants/tab.constant";

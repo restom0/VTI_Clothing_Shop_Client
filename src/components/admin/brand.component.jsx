@@ -1,21 +1,12 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Input,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Textarea,
-  Tooltip,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Textarea } from "@material-tailwind/react/components/Textarea";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import { Container, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";

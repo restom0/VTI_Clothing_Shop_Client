@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  Navbar,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  Button,
-} from "@material-tailwind/react";
+import { Navbar } from "@material-tailwind/react/components/Navbar";
+import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
+import { Avatar } from "@material-tailwind/react/components/Avatar";
+import { Button } from "@material-tailwind/react/components/Button";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";

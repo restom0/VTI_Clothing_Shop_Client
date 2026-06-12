@@ -1,49 +1,148 @@
+// ESLint v9 flat config
 import js from "@eslint/js";
 import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
+// prettier + unused-imports are optional (installed via yarn install)
+// They are loaded conditionally so the config works even before `yarn install`
+let prettierPlugin = null;
+let prettierConfig = { rules: {} };
+let unusedImports = null;
+
+try {
+  prettierPlugin = (await import("eslint-plugin-prettier")).default;
+  prettierConfig = (await import("eslint-config-prettier")).default;
+  unusedImports = (await import("eslint-plugin-unused-imports")).default;
+} catch {
+  // packages not yet installed — run `yarn install`
+}
+
+const extraPlugins = {
+  ...(prettierPlugin ? { prettier: prettierPlugin } : {}),
+  ...(unusedImports ? { "unused-imports": unusedImports } : {}),
+};
+
+const extraRules = {
+  // unused-imports auto-removes unused imports on --fix
+  ...(unusedImports
+    ? {
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            vars: "all",
+            varsIgnorePattern: "^_",
+            args: "after-used",
+            argsIgnorePattern: "^_",
+            caughtErrorsIgnorePattern: "^_",
+          },
+        ],
+        "no-unused-vars": "off", // delegated to unused-imports
+      }
+    : {
+        "no-unused-vars": [
+          "warn",
+          {
+            varsIgnorePattern: "^_",
+            argsIgnorePattern: "^_",
+            caughtErrorsIgnorePattern: "^_",
+          },
+        ],
+      }),
+
+  // Prettier formatting (only when installed)
+  ...(prettierPlugin
+    ? { ...prettierConfig.rules, "prettier/prettier": "warn" }
+    : {}),
+};
+
 export default [
+  // ── Global ignores ────────────────────────────────────────────────
   {
-    ignores: ["coverage", "dist", "node_modules", ".vercel"],
+    ignores: [
+      "coverage/**",
+      "dist/**",
+      "node_modules/**",
+      ".vercel/**",
+      "public/**",
+      "scripts/**",
+      "vite.config.js",
+      "tailwind.config.js",
+      "postcss.config.js",
+    ],
   },
+
+  // ── Base JS recommended ───────────────────────────────────────────
   js.configs.recommended,
+
+  // ── Main config for src ───────────────────────────────────────────
   {
-    files: ["**/*.{js,jsx}"],
+    files: ["src/**/*.{js,jsx}"],
+
     languageOptions: {
       ecmaVersion: "latest",
+      sourceType: "module",
       globals: {
         ...globals.browser,
-        ...globals.node,
         ...globals.es2020,
       },
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
-      sourceType: "module",
     },
+
     plugins: {
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
+      ...extraPlugins,
     },
+
+    settings: {
+      react: { version: "detect" },
+    },
+
     rules: {
+      // ── React ───────────────────────────────────────────────────
       ...react.configs.recommended.rules,
       ...react.configs["jsx-runtime"].rules,
-      ...reactHooks.configs.recommended.rules,
+      "react/react-in-jsx-scope": "off",
       "react/jsx-no-target-blank": "off",
+      "react/prop-types": "warn",          // downgraded: warn not error
+      "react/display-name": "warn",
+
+      // ── React Hooks ─────────────────────────────────────────────
+      ...reactHooks.configs.recommended.rules,
+      "react-hooks/rules-of-hooks": "error",  // stays error — causes crashes
+      "react-hooks/exhaustive-deps": "warn",
+
+      // ── Fast Refresh ────────────────────────────────────────────
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },
       ],
+
+      // ── Code quality ────────────────────────────────────────────
+      "no-console":    ["warn", { allow: ["warn", "error"] }],
+      "no-debugger":   "error",
+      "no-duplicate-imports": "error",
+      "prefer-const":  "warn",
+      "no-var":        "error",
+      "eqeqeq":        ["warn", "always", { null: "ignore" }],
+
+      // ── Unused vars / imports ────────────────────────────────────
+      ...extraRules,
     },
-    settings: {
-      react: {
-        version: "detect",
-      },
+  },
+
+  // ── Test files ────────────────────────────────────────────────────
+  {
+    files: ["**/*.test.{js,jsx}", "**/*.spec.{js,jsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+      "no-unused-vars": "off",
     },
   },
 ];

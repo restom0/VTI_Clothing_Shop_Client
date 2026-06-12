@@ -1,21 +1,12 @@
-import {
-  Button,
-  Card,
-  IconButton,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Tooltip,
-  Typography,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  Dialog,
-  Textarea,
-  Select,
-  Option,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
+import { Textarea } from "@material-tailwind/react/components/Textarea";
+import { Select, Option } from "@material-tailwind/react/components/Select";
 import { Container } from "@mui/material";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import SettingsIcon from "@mui/icons-material/Settings";

@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Input } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Input } from "@material-tailwind/react/components/Input";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Icon from "../assets/login_icon.asset";

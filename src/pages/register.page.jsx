@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Button, Input, Radio, Typography } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Radio } from "@material-tailwind/react/components/Radio";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";

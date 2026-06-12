@@ -1,37 +1,26 @@
-import React from "react";
 import Kpi from "./kpi.component";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Typography } from "@material-tailwind/react/components/Typography";
 
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { Container } from "@mui/material";
 import { useGetStatQuery } from "../../apis/statistic.api";
+import { getChartDatasetTheme } from "../../constants/chart_theme.constant";
 import Loading from "../shared/loading.component";
+
 const Analytic = () => {
-  const [filter, setFilter] = React.useState("ALL");
   const { data: datas, isLoading, error } = useGetStatQuery();
   if (isLoading) return <Loading />;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error?.message ?? "Unable to load stats"}</div>;
+
   const monthlyIncome = datas.object.monthlyIncome;
-  const color = ["#FF6633", "#FFB399", "#FF33FF", "#FFFF99", "#00B3E6"];
-  const border = ["#FF6633", "#FFB399", "#FF33FF", "#FFFF99", "#00B3E6"];
   const datasets = Object.keys(monthlyIncome).map((year, index) => ({
     label: year,
     data: monthlyIncome[year],
     fill: false,
-    backgroundColor: color[index],
-    borderColor: border[index],
+    ...getChartDatasetTheme(index),
   }));
 
   const data = {

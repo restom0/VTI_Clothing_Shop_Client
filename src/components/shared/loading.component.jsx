@@ -1,7 +1,8 @@
 import "./loading.css";
 const Loading = () => {
   return (
-    <div id="loader-container">
+    // role="status" + aria-label: screen reader đọc "Đang tải..." (WCAG 4.1.3)
+    <div id="loader-container" role="status" aria-label="Đang tải..." aria-live="polite">
       <svg
         id="loader"
         width="285"
@@ -9,6 +10,7 @@ const Loading = () => {
         viewBox="0 0 285 59"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <mask
           id="path-1-outside-1_1_6"

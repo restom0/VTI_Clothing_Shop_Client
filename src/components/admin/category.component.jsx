@@ -1,20 +1,12 @@
-import {
-  Button,
-  Card,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-  IconButton,
-  Tooltip,
-  Input,
-  Textarea,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card } from "@material-tailwind/react/components/Card";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Textarea } from "@material-tailwind/react/components/Textarea";
+import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react/components/Dialog";
 import { Container, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";

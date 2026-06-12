@@ -1,4 +1,7 @@
-import { Button, Card, IconButton, Typography } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import {
   Select,
   Container,

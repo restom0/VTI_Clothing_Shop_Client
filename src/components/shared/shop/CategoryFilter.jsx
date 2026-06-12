@@ -1,4 +1,5 @@
-import { Radio, Typography } from "@material-tailwind/react";
+import { Radio } from "@material-tailwind/react/components/Radio";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import React from "react";
 
 const CategoryFilter = () => {

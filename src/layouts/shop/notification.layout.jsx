@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types"; // Import PropTypes
-import { Typography, Button } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Button } from "@material-tailwind/react/components/Button";
 import { useNavigate } from "react-router-dom";
 
 export function NotificationLayout({ noti }) {

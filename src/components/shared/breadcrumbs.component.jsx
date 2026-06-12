@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Breadcrumbs } from "@material-tailwind/react";
+import { Breadcrumbs } from "@material-tailwind/react/components/Breadcrumbs";
 
 import PropTypes from "prop-types";
 

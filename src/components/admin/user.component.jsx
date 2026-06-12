@@ -1,18 +1,11 @@
-import {
-  Button,
-  Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Input,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Tooltip,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card } from "@material-tailwind/react/components/Card";
+import { DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import {
   Container,
   Dialog,

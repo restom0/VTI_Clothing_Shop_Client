@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Option, Select } from "@material-tailwind/react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { Option, Select } from "@material-tailwind/react/components/Select";
 import PropTypes from "prop-types";
 import ProductCard from "./ProductCard";
 import Pagination from "../pagination.component";
@@ -7,14 +7,26 @@ import VirtualizedGrid from "../VirtualizedGrid";
 import usePaginatedItems from "../../../hooks/usePaginatedItems.hook";
 import useResponsiveColumns from "../../../hooks/useResponsiveColumns.hook";
 
-const PRODUCT_PAGE_SIZE = 24;
+const PRODUCT_PAGE_SIZE        = 24;
 const VIRTUAL_PRODUCT_ROW_ESTIMATE = 384;
 
-const ShopList = ({ products }) => {
+/**
+ * ShopList — danh sách sản phẩm với virtualization + pagination.
+ *
+ * a11y:
+ *  - aria-live="polite" trên kết quả count (WCAG 4.1.3 — Status Messages)
+ *  - aria-label trên <section> và sort <Select>
+ *  - Scroll về đầu grid khi chuyển trang
+ *
+ * performance:
+ *  - React.memo: chỉ re-render khi products thay đổi
+ *  - useCallback: memoize renderItem + getKey
+ */
+const ShopList = memo(({ products }) => {
   const [filter, setFilter] = useState("new");
-  const handleFilter = (e) => setFilter(e);
-
   const [active, setActive] = useState(1);
+  const gridRef = useRef(null);
+
   const columns = useResponsiveColumns();
   const { pageCount, pageItems } = usePaginatedItems(
     products,
@@ -22,43 +34,86 @@ const ShopList = ({ products }) => {
     PRODUCT_PAGE_SIZE
   );
 
+  // Scroll về đầu danh sách mỗi khi chuyển trang
+  useEffect(() => {
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [active]);
+
+  // Memoize callbacks để tránh VirtualizedGrid re-render không cần thiết
+  const renderItem  = useCallback((product) => <ProductCard {...product} />, []);
+  const getKey      = useCallback((product) => product.id, []);
+  const handlePage  = useCallback((page) => setActive(page), []);
+
   return (
-    <section className="shop-results">
+    <section
+      className="shop-results"
+      aria-label="Danh sách sản phẩm"
+    >
+      {/* Toolbar: kết quả + sort */}
       <div className="shop-list-toolbar">
-        <div>{products.length} kết quả</div>
+        {/*
+          aria-live="polite": screen reader thông báo khi số kết quả đổi
+          (WCAG 4.1.3 — Status Messages)
+        */}
+        <div
+          className="results-count"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span className="sr-only">Số sản phẩm tìm thấy: </span>
+          {products.length} kết quả
+        </div>
+
         <div className="cluster-sm">
-          <span>Phân loại:</span>
+          {/* htmlFor không dùng được với Select của MT, dùng aria-label thay */}
+          <label id="sort-label" className="text-sm">
+            Phân loại:
+          </label>
           <span>
-            <Select value={filter} onChange={handleFilter} className="rounded">
-              <Option value="new" defaultChecked>
-                Mới nhất
-              </Option>
+            <Select
+              value={filter}
+              onChange={setFilter}
+              className="rounded"
+              aria-labelledby="sort-label"
+              aria-label="Sắp xếp sản phẩm"
+            >
+              <Option value="new">Mới nhất</Option>
               <Option value="old">Cũ nhất</Option>
-              <Option value="A->Z">A {" -> "} Z</Option>
-              <Option value="Z->A">Z {" -> "} A</Option>
+              <Option value="A->Z">A → Z</Option>
+              <Option value="Z->A">Z → A</Option>
               <Option value="price-asc">Giá tăng dần</Option>
               <Option value="price-desc">Giá giảm dần</Option>
             </Select>
           </span>
         </div>
       </div>
-      <VirtualizedGrid
-        className="virtual-shop-grid"
-        columns={columns}
-        estimateRowHeight={VIRTUAL_PRODUCT_ROW_ESTIMATE}
-        getKey={(product) => product.id}
-        items={pageItems}
-        renderItem={(product) => <ProductCard {...product} />}
-      />
+
+      {/* Ref dùng để scroll về đầu khi đổi trang */}
+      <div ref={gridRef}>
+        <VirtualizedGrid
+          className="virtual-shop-grid"
+          columns={columns}
+          estimateRowHeight={VIRTUAL_PRODUCT_ROW_ESTIMATE}
+          getKey={getKey}
+          items={pageItems}
+          renderItem={renderItem}
+          aria-label={`Trang ${active} — ${pageItems.length} sản phẩm`}
+        />
+      </div>
+
       <Pagination
         page={pageCount}
         active={active}
-        setActive={setActive}
+        setActive={handlePage}
       />
     </section>
   );
-};
+});
+
+ShopList.displayName = "ShopList";
+
 ShopList.propTypes = {
   products: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
 export default ShopList;

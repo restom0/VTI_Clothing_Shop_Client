@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import {
   PresentationChartBarIcon,
   ShoppingBagIcon,
@@ -5,22 +6,30 @@ import {
 } from "@heroicons/react/24/solid";
 
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import Analytic from "../components/admin/analytic.component";
-import Report from "../components/admin/report.component";
-import History from "../components/admin/log.component";
-import Brand from "../components/admin/brand.component";
-import Category from "../components/admin/category.component";
-import ProductList from "../components/admin/product.component";
-import Comment from "../components/admin/comment.component";
-import Inventory from "../components/admin/inventory.component";
-import ImportProduct from "../components/admin/import_product.component";
-import OnsaleProduct from "../components/admin/on_sale_product.component";
-import AllOrder from "../components/admin/order.component";
-import ConfirmOrder from "../components/admin/payment_channel.component";
-import Voucher from "../components/admin/voucher.component";
-import User from "../components/admin/user.component";
-import Inbox from "../components/admin/inbox.component";
-import Web from "../components/admin/web.component";
+
+const Analytic = lazy(() => import("../components/admin/analytic.component"));
+const Report = lazy(() => import("../components/admin/report.component"));
+const History = lazy(() => import("../components/admin/log.component"));
+const Brand = lazy(() => import("../components/admin/brand.component"));
+const Category = lazy(() => import("../components/admin/category.component"));
+const ProductList = lazy(() => import("../components/admin/product.component"));
+const Comment = lazy(() => import("../components/admin/comment.component"));
+const Inventory = lazy(() => import("../components/admin/inventory.component"));
+const ImportProduct = lazy(() =>
+  import("../components/admin/import_product.component")
+);
+const OnsaleProduct = lazy(() =>
+  import("../components/admin/on_sale_product.component")
+);
+const AllOrder = lazy(() => import("../components/admin/order.component"));
+const ConfirmOrder = lazy(() =>
+  import("../components/admin/payment_channel.component")
+);
+const Voucher = lazy(() => import("../components/admin/voucher.component"));
+const User = lazy(() => import("../components/admin/user.component"));
+const Inbox = lazy(() => import("../components/admin/inbox.component"));
+const Web = lazy(() => import("../components/admin/web.component"));
+
 const SIDEBAR_SEARCH = [
   {
     title: {
@@ -28,9 +37,9 @@ const SIDEBAR_SEARCH = [
       icon: <PresentationChartBarIcon className="h-5 w-5" />,
     },
     sublist: [
-      { label: "Thống kê", elements: <Analytic /> },
-      { label: "Báo cáo", elements: <Report /> },
-      { label: "Lịch sử", elements: <History /> },
+      { label: "Thống kê", Component: Analytic },
+      { label: "Báo cáo", Component: Report },
+      { label: "Lịch sử", Component: History },
     ],
   },
   {
@@ -39,13 +48,13 @@ const SIDEBAR_SEARCH = [
       icon: <ShoppingBagIcon className="h-5 w-5" />,
     },
     sublist: [
-      { label: "Thương hiệu", elements: <Brand /> },
-      { label: "Loại sản phẩm", elements: <Category /> },
-      { label: "Danh sách sản phẩm", elements: <ProductList /> },
-      { label: "Nhập hàng", elements: <ImportProduct /> },
-      { label: "Nhập giá", elements: <OnsaleProduct /> },
-      { label: "Kho hàng", elements: <Inventory /> },
-      { label: "Lượt bình luận", elements: <Comment /> },
+      { label: "Thương hiệu", Component: Brand },
+      { label: "Loại sản phẩm", Component: Category },
+      { label: "Danh sách sản phẩm", Component: ProductList },
+      { label: "Nhập hàng", Component: ImportProduct },
+      { label: "Nhập giá", Component: OnsaleProduct },
+      { label: "Kho hàng", Component: Inventory },
+      { label: "Lượt bình luận", Component: Comment },
     ],
   },
   {
@@ -54,9 +63,9 @@ const SIDEBAR_SEARCH = [
       icon: <ReceiptIcon className="h-5 w-5" />,
     },
     sublist: [
-      { label: "Tất cả", elements: <AllOrder /> },
-      { label: "Kênh thanh toán", elements: <ConfirmOrder /> },
-      { label: "Khuyến mãi", elements: <Voucher /> },
+      { label: "Tất cả", Component: AllOrder },
+      { label: "Kênh thanh toán", Component: ConfirmOrder },
+      { label: "Khuyến mãi", Component: Voucher },
     ],
   },
   {
@@ -65,14 +74,19 @@ const SIDEBAR_SEARCH = [
       icon: <UserCircleIcon className="h-5 w-5" />,
     },
     sublist: [
-      { label: "Danh sách người dùng", elements: <User /> },
-      { label: "Phản hồi", elements: <Inbox /> },
+      { label: "Danh sách người dùng", Component: User },
+      { label: "Phản hồi", Component: Inbox },
     ],
   },
   {
     title: null,
-    sublist: [{ label: "Trang web", elements: <Web /> }],
+    sublist: [{ label: "Trang web", Component: Web }],
   },
 ];
 
-export { SIDEBAR_SEARCH };
+const SIDEBAR_ITEMS = SIDEBAR_SEARCH.flatMap((item) => item.sublist);
+
+const getSidebarItemByLabel = (label) =>
+  SIDEBAR_ITEMS.find((item) => item.label === label) ?? SIDEBAR_ITEMS[0];
+
+export { SIDEBAR_SEARCH, getSidebarItemByLabel };

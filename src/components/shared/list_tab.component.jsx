@@ -1,4 +1,4 @@
-import { Tab, Tabs, TabsHeader } from "@material-tailwind/react";
+import { Tab, Tabs, TabsHeader } from "@material-tailwind/react/components/Tabs";
 import React from "react";
 import PropTypes from "prop-types";
 

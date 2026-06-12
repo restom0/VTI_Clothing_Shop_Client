@@ -1,17 +1,11 @@
 import React from "react";
-import {
-  Navbar,
-  MobileNav,
-  Typography,
-  Button,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  Card,
-  IconButton,
-} from "@material-tailwind/react";
+import { Navbar, MobileNav } from "@material-tailwind/react/components/Navbar";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
+import { Avatar } from "@material-tailwind/react/components/Avatar";
+import { Card } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
 import {
   CubeTransparentIcon,
   UserCircleIcon,

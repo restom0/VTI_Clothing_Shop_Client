@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
-import { Card, Typography } from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react/components/Card";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "../../features/slices/select_id.slice";

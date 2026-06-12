@@ -2,17 +2,10 @@ import React from "react";
 import Kpi from "./kpi.component";
 import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { Container } from "@mui/material";
 import { set } from "date-fns";

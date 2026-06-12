@@ -1,21 +1,12 @@
-import {
-  Button,
-  Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Typography,
-  Dialog,
-  Tooltip,
-  Input,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Select,
-  Option,
-  CardBody,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
+import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
+import { Select, Option } from "@material-tailwind/react/components/Select";
 import { Container, Divider, Rating, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { allorder_tab } from "../../constants/tab.constant";

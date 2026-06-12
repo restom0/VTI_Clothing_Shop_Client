@@ -1,11 +1,18 @@
-import React from "react";
+import { Suspense, useMemo } from "react";
 import AdminNavbar from "../components/shared/admin/admin_navbar.component";
 import SidebarWithSearch from "../components/shared/search_sidebar.component";
-import { SIDEBAR_SEARCH } from "../constants/sidebar_search.constant";
+import Loading from "../components/shared/loading.component";
+import { getSidebarItemByLabel } from "../constants/sidebar_search.constant";
 import { useSelector } from "react-redux";
 
 const Adminpage = () => {
   const sidebar_item = useSelector((state) => state.sidebar_item.value);
+  const activeSidebarItem = useMemo(
+    () => getSidebarItemByLabel(sidebar_item),
+    [sidebar_item]
+  );
+  const ActivePanel = activeSidebarItem.Component;
+
   return (
     <div>
       <AdminNavbar />
@@ -14,11 +21,15 @@ const Adminpage = () => {
           <SidebarWithSearch />
         </div>
         <div className="col-span-10">
-          {SIDEBAR_SEARCH.map((item) =>
-            item.sublist.map(
-              (subitem) => subitem.label === sidebar_item && subitem.elements
-            )
-          )}
+          <Suspense
+            fallback={
+              <div className="admin-panel-fallback">
+                <Loading />
+              </div>
+            }
+          >
+            <ActivePanel />
+          </Suspense>
         </div>
       </div>
     </div>

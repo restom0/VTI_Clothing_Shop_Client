@@ -1,4 +1,6 @@
-import { Button, IconButton, Tooltip } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";

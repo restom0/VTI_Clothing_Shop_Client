@@ -18,8 +18,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import { Google as GoogleIcon, Facebook as FacebookIcon } from "developer-icons";
 import MailOutlineIcon from "@mui/icons-material/MailOutlined";
 import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
@@ -358,8 +357,8 @@ const UserInfo = () => {
             </div>
             <div className="col-span-5">
               <div className="grid grid-cols-2 gap-8 my-auto mt-5">
-                <Typography variant="large" className="my-auto">
-                  <GoogleIcon className="me-2" />
+                <Typography variant="large" className="my-auto flex items-center gap-2">
+                  <GoogleIcon size={20} />
                   Google
                 </Typography>
                 <div>
@@ -371,8 +370,8 @@ const UserInfo = () => {
                     </Button>
                   )}
                 </div>
-                <Typography variant="large" className="my-auto">
-                  <FacebookIcon className="me-2" />
+                <Typography variant="large" className="my-auto flex items-center gap-2">
+                  <FacebookIcon size={20} />
                   Facebook
                 </Typography>
                 <div>

@@ -1,18 +1,11 @@
 import React from "react";
-import {
-  Card,
-  Typography,
-  List,
-  ListItem,
-  ListItemPrefix,
-  ListItemSuffix,
-  Chip,
-  Accordion,
-  AccordionHeader,
-  AccordionBody,
-  Alert,
-  Input,
-} from "@material-tailwind/react";
+import { Card } from "@material-tailwind/react/components/Card";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { List, ListItem, ListItemPrefix, ListItemSuffix } from "@material-tailwind/react/components/List";
+import { Chip } from "@material-tailwind/react/components/Chip";
+import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react/components/Accordion";
+import { Alert } from "@material-tailwind/react/components/Alert";
+import { Input } from "@material-tailwind/react/components/Input";
 import {
   PresentationChartBarIcon,
   ShoppingBagIcon,

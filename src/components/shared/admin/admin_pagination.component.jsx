@@ -1,5 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { Button, CardFooter, IconButton } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { CardFooter } from "@material-tailwind/react/components/Card";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";

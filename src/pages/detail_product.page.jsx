@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionBody,
-  AccordionHeader,
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Progress,
-  Radio,
-  Textarea,
-  Tooltip,
-  Typography,
-} from "@material-tailwind/react";
+import { Accordion, AccordionBody, AccordionHeader } from "@material-tailwind/react/components/Accordion";
+import { Avatar } from "@material-tailwind/react/components/Avatar";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Progress } from "@material-tailwind/react/components/Progress";
+import { Radio } from "@material-tailwind/react/components/Radio";
+import { Textarea } from "@material-tailwind/react/components/Textarea";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Typography } from "@material-tailwind/react/components/Typography";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Navigation } from "swiper/modules";
@@ -153,13 +145,18 @@ const ProductDetailpage = () => {
           item.product_id.material_id.id === material
       )
     ) {
-      setImage([
-        product?.object[0].product_id.image_url,
-        product?.object[0].product_id.slider_url_1,
-        product?.object[0].product_id.slider_url_2,
-        product?.object[0].product_id.slider_url_3,
-        product?.object[0].product_id.slider_url_4,
-      ]);
+      const first = product?.object?.[0];
+      setImage(
+        first
+          ? [
+              first.product_id?.image_url,
+              first.product_id?.slider_url_1,
+              first.product_id?.slider_url_2,
+              first.product_id?.slider_url_3,
+              first.product_id?.slider_url_4,
+            ].filter(Boolean)
+          : []
+      );
       setStock(0);
     } else {
       const search = product?.object.find(
@@ -168,14 +165,16 @@ const ProductDetailpage = () => {
           item.product_id.size_id.id === size &&
           item.product_id.material_id.id === material
       );
-      setImage([
-        search.product_id.image_url,
-        search.product_id.slider_url_1,
-        search.product_id.slider_url_2,
-        search.product_id.slider_url_3,
-        search.product_id.slider_url_4,
-      ]);
-      setStock(search.product_id.stock);
+      setImage(
+        [
+          search?.product_id?.image_url,
+          search?.product_id?.slider_url_1,
+          search?.product_id?.slider_url_2,
+          search?.product_id?.slider_url_3,
+          search?.product_id?.slider_url_4,
+        ].filter(Boolean)
+      );
+      setStock(search?.product_id?.stock ?? 0);
     }
   }, [select, product?.object, size, material, color]);
   if (isLoading)
@@ -184,54 +183,38 @@ const ProductDetailpage = () => {
         <Loading />
       </div>
     );
-  if (error) return navigate("/error");
+  if (error) {
+    navigate("/error");
+    return null;
+  }
 
-  // const image = [
-  //   product.object.product_id.image_url,
-  //   product.object.product_id.slider_url_1,
-  //   product.object.product_id.slider_url_2,
-  //   product.object.product_id.slider_url_3,
-  //   product.object.product_id.slider_url_4,
-  // ];
+  const firstItem = product?.object?.[0];
+  if (!firstItem) return null;
+
   const handleAddCart = async () => {
+    if (!localStorage.getItem("token")) return navigate("/login");
     try {
-      if (!localStorage.getItem("token")) return navigate("/login");
-      const message = await createOrderItem({
+      await createOrderItem({
         order_id: Number(localStorage.getItem("order_id")),
-        product_id: product.object[0].id,
+        product_id: firstItem.id,
         quantity: 1,
-      })
-        .unwrap()
-        .then(() => {
-          Toast.fire({
-            icon: "success",
-            title: "Thêm giỏ hàng thành công",
-          });
-        });
-    } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: "Thêm giỏ hàng thất bại",
-      });
+      }).unwrap();
+      Toast.fire({ icon: "success", title: "Thêm giỏ hàng thành công" });
+    } catch {
+      Toast.fire({ icon: "error", title: "Thêm giỏ hàng thất bại" });
     }
   };
+
   const handleAddCarts = async () => {
+    if (!localStorage.getItem("token")) return navigate("/login");
     try {
-      if (!localStorage.getItem("token")) return navigate("/login");
-      const message = await createOrderItem({
+      await createOrderItem({
         order_id: Number(localStorage.getItem("order_id")),
-        product_id: product.object[0].id,
+        product_id: firstItem.id,
         quantity: amount,
-      })
-        .unwrap()
-        .then(() => {
-          Toast.fire({
-            icon: "success",
-            title: "Thêm giỏ hàng thành công",
-          });
-        });
-    } catch (error) {
-      console.log(error);
+      }).unwrap();
+      Toast.fire({ icon: "success", title: "Thêm giỏ hàng thành công" });
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Thêm giỏ hàng thất bại",
@@ -290,24 +273,21 @@ const ProductDetailpage = () => {
           </div>
           <div className={PRODUCT_INFO_COLUMN_CLASSNAME}>
             <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
-              {product.object[0].product_id.product_id.name}
+              {firstItem.product_id?.product_id?.name ?? ""}
             </Typography>
             <Typography variant="h5">
-              {formatPrice(product.object[0].sale_price)}
+              {formatPrice(firstItem.sale_price ?? 0)}
             </Typography>
             <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
-              {product.object[0].product_id.product_id.short_description}
+              {firstItem.product_id?.product_id?.short_description ?? ""}
             </Typography>
             <Typography color="blue-gray" variant="h6">
               Màu sắc
             </Typography>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
-              {/* <div className="h-8 w-8 rounded-full border border-gray-900 bg-blue-gray-600 "></div>
-              <div className="h-8 w-8 rounded-full border border-blue-gray-100 "></div>
-              <div className="h-8 w-8 rounded-full border border-blue-gray-100 bg-gray-900 "></div> */}
-              {product.object.map((color, index) => (
+              {(product.object ?? []).map((color, index) => (
                 <Tooltip
-                  content={color.product_id.color_id.color_name}
+                  content={color.product_id?.color_id?.color_name ?? ""}
                   key={index}
                 >
                   <Button

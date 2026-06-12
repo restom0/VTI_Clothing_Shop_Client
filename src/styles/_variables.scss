@@ -164,11 +164,25 @@ $shadow-card-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0
 $shadow-panel:      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 // -------------------------------------------------------
-// 12. TRANSITION
+// 12. TRANSITION & ANIMATION
 // -------------------------------------------------------
 $transition-fast:    150ms ease;
 $transition-default: 300ms ease;
 $transition-slow:    500ms ease;
+
+// Easing curves
+$ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+$ease-out-quart:  cubic-bezier(0.25, 1, 0.5, 1);
+$ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+
+// Scroll-reveal durations
+$duration-reveal:      0.55s;
+$duration-reveal-fast: 0.35s;
+$duration-reveal-slow: 0.75s;
+
+// Parallax
+$parallax-banner-height: 400px;
+$parallax-bg-overshoot:  80px; // extra height so bg has room to shift
 
 // -------------------------------------------------------
 // 13. Z-INDEX
@@ -177,6 +191,19 @@ $z-navbar:   50;
 $z-dropdown: 100;
 $z-modal:    200;
 $z-toast:    300;
+
+// -------------------------------------------------------
+// 14. 12-COLUMN GRID SYSTEM
+// Toàn bộ layout dùng hệ lưới 12 cột nhất quán.
+// Sidebar  = 3/12 col  (25%)
+// Content  = 9/12 col  (75%)
+// Half     = 6/12 col  (50%)
+// Cart     = 8fr + 4fr
+// -------------------------------------------------------
+$grid-columns:    12;
+$grid-gutter:     $space-xl;    // 2rem  — gap mặc định (desktop)
+$grid-gutter-sm:  $space-md;    // 1rem  — gap mobile
+$grid-max-width:  80rem;        // 1280px — max-width của page container
 
 // ============================================================
 // PUBLISH AS CSS CUSTOM PROPERTIES
@@ -289,6 +316,22 @@ $z-toast:    300;
   --shadow-card-hover: #{$shadow-card-hover};
   --shadow-panel:      #{$shadow-panel};
 
+  // Animation / easing
+  --ease-out-expo:   #{$ease-out-expo};
+  --ease-out-quart:  #{$ease-out-quart};
+  --ease-in-out:     #{$ease-in-out};
+  --duration-reveal:      #{$duration-reveal};
+  --duration-reveal-fast: #{$duration-reveal-fast};
+  --duration-reveal-slow: #{$duration-reveal-slow};
+  --parallax-banner-height: #{$parallax-banner-height};
+  --parallax-bg-overshoot:  #{$parallax-bg-overshoot};
+
+  // 12-column grid system
+  --grid-columns:   #{$grid-columns};
+  --grid-gutter:    #{$grid-gutter};
+  --grid-gutter-sm: #{$grid-gutter-sm};
+  --grid-max-width: #{$grid-max-width};
+
   // Data visualization / product swatches
   --chart-series-1: #{$chart-series-1};
   --chart-series-2: #{$chart-series-2};
@@ -303,10 +346,12 @@ $z-toast:    300;
 
 @media (max-width: 767px) {
   :root {
-    --spacing-page-x: #{$spacing-page-x-mobile};
+    --spacing-page-x:   #{$spacing-page-x-mobile};
     --spacing-section-y: #{$spacing-section-y-mobile};
-    --spacing-card-padding: #{$space-sm};
+    --spacing-card-padding:  #{$space-sm};
     --spacing-panel-padding: #{$space-md};
+    // Thu hẹp grid gutter trên mobile
+    --grid-gutter: #{$grid-gutter-sm};
   }
 }
 

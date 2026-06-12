@@ -1,22 +1,12 @@
-import {
-  Button,
-  Card,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  IconButton,
-  Typography,
-  Dialog,
-  Tooltip,
-  Input,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Select,
-  Option,
-  CardFooter,
-  useSelect,
-} from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react/components/Button";
+import { Card, CardFooter } from "@material-tailwind/react/components/Card";
+import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Tooltip } from "@material-tailwind/react/components/Tooltip";
+import { Input } from "@material-tailwind/react/components/Input";
+import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
+import { Select, Option } from "@material-tailwind/react/components/Select";
 import { Container, Rating, TableHead } from "@mui/material";
 import React from "react";
 import useOpen from "../../hooks/useOpen.hook";

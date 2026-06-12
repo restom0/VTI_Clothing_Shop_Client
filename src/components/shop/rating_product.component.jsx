@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 
-import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
-  Tab,
-  TabPanel,
-  Card,
-  Typography,
-  CardBody,
-  Button,
-  IconButton,
-  Input,
-} from "@material-tailwind/react";
+import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react/components/Tabs";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
+import { Typography } from "@material-tailwind/react/components/Typography";
+import { Button } from "@material-tailwind/react/components/Button";
+import { IconButton } from "@material-tailwind/react/components/IconButton";
+import { Input } from "@material-tailwind/react/components/Input";
 import { Rating } from "@mui/material";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import Pagination from "../shared/pagination.component";
