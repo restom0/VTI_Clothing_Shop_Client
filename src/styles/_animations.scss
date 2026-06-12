@@ -1,0 +1,206 @@
+@use 'variables' as *;
+
+// ============================================================
+// ANIMATIONS — VTI Clothing Shop
+// Keyframes, scroll-reveal classes, lazy-image shimmer,
+// parallax banner CSS
+// ============================================================
+
+
+// ── 1. KEYFRAMES ─────────────────────────────────────────────────────
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scalePop {
+  from { opacity: 0; transform: scale(0.90); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes imageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+// ── 2. SCROLL REVEAL ─────────────────────────────────────────────────
+// Usage:
+//   <div class="reveal reveal-fade-up"> → hidden initially
+//   JS adds .in-view when entering viewport → animates in
+//
+// Variants: reveal-fade-up | reveal-fade-down | reveal-fade-left
+//           reveal-fade-right | reveal-scale
+//
+// Stagger: wrap items in <div class="stagger"> for sequential delays
+
+.reveal {
+  opacity: 0;
+  will-change: opacity, transform;
+
+  &.reveal-fade-up    { transform: translateY(32px); }
+  &.reveal-fade-down  { transform: translateY(-32px); }
+  &.reveal-fade-left  { transform: translateX(-32px); }
+  &.reveal-fade-right { transform: translateX(32px); }
+  &.reveal-scale      { transform: scale(0.90); }
+  &.reveal-fade       { /* only opacity */ }
+
+  &.in-view {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity  var(--duration-reveal) var(--ease-out-expo),
+      transform var(--duration-reveal) var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+}
+
+// Staggered container: direct .reveal children get incremental delays
+@for $i from 1 through 12 {
+  .stagger > .reveal:nth-child(#{$i}) {
+    --reveal-delay: #{($i - 1) * 0.07s};
+  }
+}
+
+// Respect reduced-motion preference
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.in-view {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+
+// ── 3. LAZY IMAGE ────────────────────────────────────────────────────
+// .lazy-image-wrapper wraps every LazyImage component.
+// The shimmer runs until the real image loads, then fades out.
+
+.lazy-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  background-color: var(--color-skeleton-base);
+
+  // Shimmer overlay (pseudo-element)
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      var(--color-skeleton-highlight) 50%,
+      transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    transition: opacity 0.4s ease;
+  }
+
+  // Hide shimmer once image has loaded
+  &.loaded::after {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // The actual <img> inside
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+
+    &.img-loaded {
+      opacity: 1;
+    }
+  }
+}
+
+
+// ── 4. PARALLAX BANNER ───────────────────────────────────────────────
+// A full-width decorative section with a JS-driven parallax background.
+// The .parallax-banner__bg transforms via inline style from useParallax.
+
+.parallax-banner {
+  position: relative;
+  overflow: hidden;
+  height: var(--parallax-banner-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Background layer — taller than container so it has room to shift
+  &__bg {
+    position: absolute;
+    inset: calc(var(--parallax-bg-overshoot) * -1) 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    will-change: transform;
+    transform: translateY(var(--parallax-offset, 0px));
+    z-index: 0;
+    transition: transform 0.05s linear; // micro-smooth on fast scroll
+  }
+
+  // Dark gradient overlay for text legibility
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      145deg,
+      rgba(0, 0, 0, 0.60) 0%,
+      rgba(0, 0, 0, 0.30) 60%,
+      rgba(0, 0, 0, 0.50) 100%
+    );
+    z-index: 1;
+  }
+
+  // Content slot
+  &__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding-inline: var(--spacing-page-x);
+    max-width: 44rem;
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: -0.02em;
+      line-height: var(--line-height-tight);
+      margin-bottom: 0.75rem;
+    }
+
+    p {
+      font-size: clamp(0.95rem, 2vw, 1.125rem);
+      opacity: 0.88;
+      line-height: var(--line-height-relaxed);
+    }
+  }
+}
