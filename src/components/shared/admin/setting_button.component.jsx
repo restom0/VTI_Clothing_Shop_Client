@@ -1,7 +1,6 @@
 import { Button } from "@material-tailwind/react/components/Button";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Tooltip } from "@material-tailwind/react/components/Tooltip";
-import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
@@ -34,7 +33,7 @@ const SettingButton = ({
                 color="green"
                 loading={isUpdated}
                 onClick={() => {
-                  handleUpdateOpen(), dispatch(setSelectedId(id));
+                  (handleUpdateOpen(), dispatch(setSelectedId(id)));
                 }}
               >
                 <EditIcon fontSize="small" />
@@ -52,7 +51,7 @@ const SettingButton = ({
               <IconButton
                 color="red"
                 onClick={() => {
-                  handleDeleteOpen(), dispatch(setSelectedId(id));
+                  (handleDeleteOpen(), dispatch(setSelectedId(id)));
                 }}
               >
                 <DeleteIcon fontSize="small" />

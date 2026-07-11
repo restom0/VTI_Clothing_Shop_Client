@@ -140,10 +140,7 @@ const Analytic = () => {
                 <Typography variant="h6" color="blue-gray">
                   Doanh thu hàng năm
                 </Typography>
-                <Typography
-                  variant="small"
-                  className="font-normal text-gray-600 mt-1"
-                >
+                <Typography variant="small" className="font-normal text-gray-600 mt-1">
                   So sánh doanh thu các tháng với năm gần nhất
                 </Typography>
               </div>

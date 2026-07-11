@@ -1,38 +1,12 @@
-import React from "react";
 import { Card } from "@material-tailwind/react/components/Card";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { List, ListItem, ListItemPrefix, ListItemSuffix } from "@material-tailwind/react/components/List";
-import { Chip } from "@material-tailwind/react/components/Chip";
-import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react/components/Accordion";
-import { Alert } from "@material-tailwind/react/components/Alert";
-import { Input } from "@material-tailwind/react/components/Input";
-import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
-import {
-  ChevronRightIcon,
-  ChevronDownIcon,
-  CubeTransparentIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
-import AdminNavbar from "./admin/admin_navbar.component";
-import ReceiptIcon from "@mui/icons-material/Receipt";
+import { List, ListItem, ListItemPrefix } from "@material-tailwind/react/components/List";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { profile_menu } from "../../constants/menu_item.constant";
 import { Avatar } from "@mui/material";
 const ProfileSidebar = ({ tab, setTab }) => {
-  const [open, setOpen] = React.useState(1);
-  const [openAlert, setOpenAlert] = React.useState(true);
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
   const navigate = useNavigate();
   return (
     <div>
@@ -55,19 +29,13 @@ const ProfileSidebar = ({ tab, setTab }) => {
               <Typography variant="small" color="gray" className="font-normal">
                 Tài khoản của
               </Typography>
-              <Typography variant="h6">
-                {localStorage.getItem("name")}
-              </Typography>
+              <Typography variant="h6">{localStorage.getItem("name")}</Typography>
             </div>
           </div>
         </div>
         <List>
           {profile_menu.map(({ label }, index) => (
-            <ListItem
-              key={label}
-              selected={tab === index}
-              onClick={() => setTab(index)}
-            >
+            <ListItem key={label} selected={tab === index} onClick={() => setTab(index)}>
               <ListItemPrefix>
                 <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
               </ListItemPrefix>

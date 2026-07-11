@@ -3,36 +3,31 @@ import {
   Button,
   Card,
   CardContent,
-  CardActions,
   Radio,
   Typography,
   Chip,
   Switch,
   FormControl,
-  FormLabel,
   RadioGroup,
   FormControlLabel,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
 } from "@mui/material";
-import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { Google as GoogleIcon, Facebook as FacebookIcon } from "developer-icons";
 import MailOutlineIcon from "@mui/icons-material/MailOutlined";
-import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import React, { useEffect, useState } from "react";
-import CountrySelect from "../country_select.component";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { TextField } from "@mui/material";
 import {
   useGetUserProfileQuery,
   useUpdatePasswordMutation,
@@ -45,21 +40,19 @@ import { Toast } from "../../configs/sweetalert2.config";
 
 const UserInfo = () => {
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [birthday, setBirthday] = useState(null);
   const [gender, setGender] = useState("");
   const [confirmChange, setConfirmChange] = useState(false);
-  const [date, setDate] = React.useState(new Date());
   const [open, setOpen] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [publicId, setPublicId] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reTypePassword, setReTypePassword] = useState("");
-  const [isGoogleLinked, setIsGoogleLinked] = React.useState(false);
+  const [isGoogleLinked] = React.useState(false);
   const { data: user, isLoading, isError } = useGetUserProfileQuery();
   const handleClose = () => {
     setOpen(false);
@@ -75,15 +68,9 @@ const UserInfo = () => {
   const handleAddClick = () => {
     setOpenAdd(true);
   };
-  const [
-    updatePassword,
-    { isLoading: isUpdatePassword, isError: updatePassswordError },
-  ] = useUpdatePasswordMutation();
+  const [updatePassword, { isLoading: isUpdatePassword }] = useUpdatePasswordMutation();
 
-  const [
-    updateProfile,
-    { isLoading: isUpdateProfile, isError: updateProfileError },
-  ] = useUpdateUserProfileMutation();
+  const [updateProfile] = useUpdateUserProfileMutation();
 
   useEffect(() => {
     if (user?.object) {
@@ -146,9 +133,7 @@ const UserInfo = () => {
         address,
         birthday: dayjs(birthday).format("YYYY-MM-DD"),
         avatar_url: avatar ? avatar : user?.object.avatar_url,
-        public_id_avatar_url: publicId
-          ? publicId
-          : user?.object.public_id_avatar_url,
+        public_id_avatar_url: publicId ? publicId : user?.object.public_id_avatar_url,
       }).unwrap();
       if (response.statusCode === 200) {
         Toast.fire({
@@ -168,18 +153,10 @@ const UserInfo = () => {
       <Card className="h-full w-full border-t-2 p-2">
         <CardContent>
           <div className="grid grid-cols-12 gap-8">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className="mb-2 col-span-7"
-            >
+            <Typography variant="h5" color="blue-gray" className="mb-2 col-span-7">
               Thông tin cá nhân
             </Typography>
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className="mb-2 col-span-5"
-            >
+            <Typography variant="h5" color="blue-gray" className="mb-2 col-span-5">
               Liên kết
             </Typography>
           </div>
@@ -193,11 +170,7 @@ const UserInfo = () => {
                 onClick={handleAddClick}
               />
               <div className="col-span-2 grid grid-cols-6 my-auto gap-4">
-                <Typography
-                  variant="small"
-                  color="gray"
-                  className="col-span-2 !my-auto"
-                >
+                <Typography variant="small" color="gray" className="col-span-2 !my-auto">
                   Họ và tên
                 </Typography>
                 <div className="col-span-4">
@@ -241,16 +214,8 @@ const UserInfo = () => {
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                     >
-                      <FormControlLabel
-                        value="FEMAlE"
-                        control={<Radio />}
-                        label="Nữ"
-                      />
-                      <FormControlLabel
-                        value="MALE"
-                        control={<Radio />}
-                        label="Nam"
-                      />
+                      <FormControlLabel value="FEMAlE" control={<Radio />} label="Nữ" />
+                      <FormControlLabel value="MALE" control={<Radio />} label="Nam" />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -272,11 +237,7 @@ const UserInfo = () => {
               </div>
 
               <div className="col-span-3 grid grid-cols-12 gap-4">
-                <Typography
-                  variant="h5"
-                  color="blue-gray"
-                  className="col-span-8"
-                >
+                <Typography variant="h5" color="blue-gray" className="col-span-8">
                   Địa chỉ liên lạc
                 </Typography>
                 <div className="col-span-4 my-auto">
@@ -290,10 +251,7 @@ const UserInfo = () => {
                     {confirmChange === false ? "Thay đổi" : "Hủy"}
                   </Button>
                 </div>
-                <Typography
-                  variant="small"
-                  className="col-span-4 !my-auto !mx-auto"
-                >
+                <Typography variant="small" className="col-span-4 !my-auto !mx-auto">
                   <MailOutlineIcon />
                 </Typography>
                 <div className="col-span-8">
@@ -307,10 +265,7 @@ const UserInfo = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                <Typography
-                  variant="small"
-                  className="col-span-4 !my-auto !mx-auto"
-                >
+                <Typography variant="small" className="col-span-4 !my-auto !mx-auto">
                   <LocalPhoneOutlinedIcon />
                 </Typography>
                 <div className="col-span-8">
@@ -324,10 +279,7 @@ const UserInfo = () => {
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
-                <Typography
-                  variant="small"
-                  className="col-span-4 !my-auto !mx-auto"
-                >
+                <Typography variant="small" className="col-span-4 !my-auto !mx-auto">
                   <FmdGoodOutlinedIcon />
                 </Typography>
                 <div className="col-span-8">
@@ -342,11 +294,7 @@ const UserInfo = () => {
                   />
                 </div>
                 <div className="mx-auto col-span-12">
-                  <Button
-                    className="mx-auto"
-                    size="large"
-                    onClick={handleChangeProfile}
-                  >
+                  <Button className="mx-auto" size="large" onClick={handleChangeProfile}>
                     Lưu thay đổi
                   </Button>
                   <Button className="mx-auto" color="error" size="large">
@@ -384,11 +332,7 @@ const UserInfo = () => {
                   )}
                 </div>
                 <div className="col-span-2">
-                  <Typography
-                    variant="h5"
-                    color="blue-gray"
-                    className="mb-2 col-span-5"
-                  >
+                  <Typography variant="h5" color="blue-gray" className="mb-2 col-span-5">
                     Bảo mật
                   </Typography>
                   <div className="grid grid-cols-12 py-3">
@@ -421,16 +365,8 @@ const UserInfo = () => {
                         </Typography>
                       </div>
                     </div>
-                    <div
-                      className="col-span-4 my-auto"
-                      onClick={handleOpenClick}
-                    >
-                      <Button
-                        color="error"
-                        size="sm"
-                        variant="outlined"
-                        className="w-full"
-                      >
+                    <div className="col-span-4 my-auto" onClick={handleOpenClick}>
+                      <Button color="error" size="sm" variant="outlined" className="w-full">
                         Thay đổi
                       </Button>
                     </div>
@@ -449,12 +385,7 @@ const UserInfo = () => {
                       </div>
                     </div>
                     <div className="col-span-4 my-auto">
-                      <Button
-                        color="error"
-                        size="sm"
-                        variant="outlined"
-                        className="w-full"
-                      >
+                      <Button color="error" size="sm" variant="outlined" className="w-full">
                         Xóa
                       </Button>
                     </div>
@@ -483,7 +414,7 @@ const UserInfo = () => {
                 className="w-full !mt-4"
                 color="error"
                 onClick={() => {
-                  handleDelete({ publicId }), setAvatar(null);
+                  (handleDelete({ publicId }), setAvatar(null));
                 }}
               >
                 Xóa ảnh
@@ -513,8 +444,7 @@ const UserInfo = () => {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
+                      <span className="font-semibold">Click to upload</span> or drag and drop
                     </p>
 
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -528,10 +458,7 @@ const UserInfo = () => {
                       Hình đại diện
                     </Typography>
                   </div>
-                  <ImageUpload
-                    setPublicId={setPublicId}
-                    setAvatar={setAvatar}
-                  />
+                  <ImageUpload setPublicId={setPublicId} setAvatar={setAvatar} />
                 </label>
               </div>
             </figure>
@@ -572,10 +499,7 @@ const UserInfo = () => {
           <Button
             onClick={handleChangePassword}
             disable={
-              password === "" ||
-              newPassword === "" ||
-              reTypePassword === "" ||
-              isUpdatePassword
+              password === "" || newPassword === "" || reTypePassword === "" || isUpdatePassword
             }
             loading={isUpdatePassword}
             color="primary"

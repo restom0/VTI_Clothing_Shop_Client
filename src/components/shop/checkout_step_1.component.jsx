@@ -5,18 +5,14 @@ import { Checkbox } from "@material-tailwind/react/components/Checkbox";
 import { Input } from "@material-tailwind/react/components/Input";
 import { List, ListItem } from "@material-tailwind/react/components/List";
 import { Radio } from "@material-tailwind/react/components/Radio";
-import { Step, Stepper } from "@material-tailwind/react/components/Stepper";
 import { Textarea } from "@material-tailwind/react/components/Textarea";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Container, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCurrency } from "../../currency";
 
 const Step1Checkout = ({ handleNext }) => {
-  const [check, setCheck] = React.useState(
-    localStorage.getItem("token") ? true : false
-  );
+  const [check, setCheck] = React.useState(localStorage.getItem("token") ? true : false);
 
   const [check1, setCheck1] = React.useState(false);
   const [check2, setCheck2] = React.useState(false);
@@ -62,11 +58,7 @@ const Step1Checkout = ({ handleNext }) => {
                 <div className="flex items-center">
                   <Radio
                     name="address"
-                    label={
-                      <Typography>
-                        Đăng nhập để chọn địa chỉ giao hàng đã lưu
-                      </Typography>
-                    }
+                    label={<Typography>Đăng nhập để chọn địa chỉ giao hàng đã lưu</Typography>}
                   />
                 </div>
               </ListItem>
@@ -193,9 +185,7 @@ const Step1Checkout = ({ handleNext }) => {
                   <Radio
                     checked={check2 === 1}
                     name="method"
-                    label={
-                      <Typography>Thanh toán tiền mặt khi nhận hàng</Typography>
-                    }
+                    label={<Typography>Thanh toán tiền mặt khi nhận hàng</Typography>}
                   />
                 </div>
               </ListItem>
@@ -238,10 +228,7 @@ const Step1Checkout = ({ handleNext }) => {
           <Divider />
           <div className="flex items-center justify-between mt-4">
             <Typography className="" variant="body" color="blue-gray">
-              1 x{" "}
-              <span className="text-cyan-300 w-[100px] text-wrap">
-                Áo thun nam
-              </span>
+              1 x <span className="text-cyan-300 w-[100px] text-wrap">Áo thun nam</span>
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">
@@ -266,12 +253,7 @@ const Step1Checkout = ({ handleNext }) => {
               }}
               containerProps={{ className: "min-w-[100px]" }}
             />
-            <Button
-              size="md"
-              className="w-1/2"
-              variant="outlined"
-              color="lightBlue"
-            >
+            <Button size="md" className="w-1/2" variant="outlined" color="lightBlue">
               Dùng mã
             </Button>
           </div>

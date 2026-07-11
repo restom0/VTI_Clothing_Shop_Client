@@ -1,15 +1,9 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Button } from "@material-tailwind/react/components/Button";
 import { CardFooter } from "@material-tailwind/react/components/Card";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
-import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  decrement,
-  increment,
-  setActive,
-} from "../../../features/slices/active.slice";
+import { decrement, increment, setActive } from "../../../features/slices/active.slice";
 const AdminPagination = ({ page }) => {
   const active = useSelector((state) => state.active.value);
   const dispatch = useDispatch();

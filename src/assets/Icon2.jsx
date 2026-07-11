@@ -1,4 +1,3 @@
-import React from "react";
 import "./Icon2.css";
 const Icon2 = () => {
   return (
@@ -1212,17 +1211,8 @@ const Icon2 = () => {
             radius="2"
             result="DILATED"
           ></feMorphology>
-          <feFlood
-            floodColor="#32DFEC"
-            floodOpacity="1"
-            result="PINK"
-          ></feFlood>
-          <feComposite
-            in="PINK"
-            in2="DILATED"
-            operator="in"
-            result="OUTLINE"
-          ></feComposite>
+          <feFlood floodColor="#32DFEC" floodOpacity="1" result="PINK"></feFlood>
+          <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>
           <feMerge>
             <feMergeNode in="OUTLINE"></feMergeNode>
             <feMergeNode in="SourceGraphic"></feMergeNode>
@@ -1236,12 +1226,7 @@ const Icon2 = () => {
             result="DILATED"
           ></feMorphology>
           <feFlood floodColor="red" floodOpacity="0.5" result="PINK"></feFlood>
-          <feComposite
-            in="PINK"
-            in2="DILATED"
-            operator="in"
-            result="OUTLINE"
-          ></feComposite>
+          <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>
           <feMerge>
             <feMergeNode in="OUTLINE"></feMergeNode>
             <feMergeNode in="SourceGraphic"></feMergeNode>

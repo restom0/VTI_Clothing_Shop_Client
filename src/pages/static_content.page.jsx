@@ -64,18 +64,12 @@ const StaticContentPage = ({
 }) => (
   <main className="bg-surface">
     <section className="relative min-h-[360px] overflow-hidden border-b border-border">
-      <img
-        src={heroImage}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-black/55" />
       <div className="page-container relative flex min-h-[360px] items-center py-14">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-wide text-primary">{eyebrow}</p>
-          <h1 className="mt-3 text-4xl font-bold leading-tight text-white md:text-5xl">
-            {title}
-          </h1>
+          <h1 className="mt-3 text-4xl font-bold leading-tight text-white md:text-5xl">{title}</h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-white/85">{subtitle}</p>
           {actions.length > 0 && (
             <div className="mt-7 flex flex-wrap gap-3">
@@ -344,8 +338,7 @@ const policyPage = {
     {
       icon: TruckIcon,
       title: "Vận chuyển",
-      description:
-        "Thời gian giao hàng phụ thuộc địa chỉ nhận và tình trạng sản phẩm tại kho.",
+      description: "Thời gian giao hàng phụ thuộc địa chỉ nhận và tình trạng sản phẩm tại kho.",
     },
     {
       icon: ShieldCheckIcon,

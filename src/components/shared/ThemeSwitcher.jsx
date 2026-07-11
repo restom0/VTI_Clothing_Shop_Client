@@ -31,9 +31,7 @@ const ThemeSwitcher = () => {
           aria-label={t("theme.switcher_label")}
         >
           <ActiveIcon className="h-4 w-4" />
-          <span className="hidden text-xs font-semibold sm:inline">
-            {t(`theme.${theme}`)}
-          </span>
+          <span className="hidden text-xs font-semibold sm:inline">{t(`theme.${theme}`)}</span>
           <ChevronDownIcon className="h-3 w-3" strokeWidth={2.5} />
         </Button>
       </MenuHandler>

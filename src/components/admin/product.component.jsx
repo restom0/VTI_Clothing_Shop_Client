@@ -1,12 +1,10 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import {
   Select,
   Container,
   FormControl,
-  InputLabel,
   MenuItem,
   Rating,
   Dialog,
@@ -36,18 +34,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../apis/category.api";
 import { useGetBrandsQuery } from "../../apis/brand.api";
 import { Toast } from "../../configs/sweetalert2.config";
-import { useDispatch, useSelector } from "react-redux";
-import { resetSelectedId } from "../../features/slices/select_id.slice";
-import { resetName, setName } from "../../features/slices/name.slice";
-import {
-  resetDescription,
-  setDescription,
-} from "../../features/slices/description.slice";
-import {
-  resetCategory,
-  setCategory,
-} from "../../features/slices/category.slice";
-import { resetBrand, setBrand } from "../../features/slices/brand.slice";
+import { useSelector } from "react-redux";
+
 import {
   ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME,
   ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME,
@@ -62,9 +50,8 @@ import {
 } from "../../styles/classNames";
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
 const ProductList = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open] = React.useState(false);
 
-  const handleOpen = () => setOpen(!open);
   const product = {
     id: 0,
     colors: SHOP_PRODUCT_COLORS,
@@ -83,7 +70,6 @@ const ProductList = () => {
     short_description: `As we live, our hearts turn colder.`,
   };
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [addOpen, setAddOpen] = React.useState(false);
   const selectedId = useSelector((state) => state.selectedId.value);
   // const name = useSelector((state) => state.name.value);
@@ -104,22 +90,15 @@ const ProductList = () => {
     isLoading: isLoading_Product,
     error: isError_Product,
   } = useGetProductsQuery();
-  const {
-    data: brands,
-    error: isError_Brand,
-    isLoading_Brand,
-  } = useGetBrandsQuery();
+  const { data: brands, error: isError_Brand, isLoading_Brand } = useGetBrandsQuery();
   const {
     data: categories,
     error: isError_Category,
     isLoading: isLoading_Category,
   } = useGetCategoriesQuery();
-  const [addProduct, { isLoading: isAdded, error: AddError }] =
-    useCreateProductMutation();
-  const [updateProduct, { isLoading: isUpdated, error: updateError }] =
-    useUpdateProductMutation();
-  const [deleteProduct, { isLoading: isDeleted, error: deleteError }] =
-    useDeleteProductMutation();
+  const [addProduct, { isLoading: isAdded }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdated }] = useUpdateProductMutation();
+  const [deleteProduct, { isLoading: isDeleted }] = useDeleteProductMutation();
 
   useEffect(() => {
     if (selectedId !== -1) {
@@ -153,7 +132,7 @@ const ProductList = () => {
             setCategory(null);
           });
         });
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Thêm sản phẩm thất bại",
@@ -185,20 +164,18 @@ const ProductList = () => {
           title: "Xóa thành công",
         });
       }
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Xóa thất bại",
       });
     }
   };
-  if (isLoading_Brand || isLoading_Category || isLoading_Product)
-    return <Loading />;
-  if (isError_Brand || isError_Category || isError_Product)
-    return navigate("/error");
+  if (isLoading_Brand || isLoading_Category || isLoading_Product) return <Loading />;
+  if (isError_Brand || isError_Category || isError_Product) return navigate("/error");
   const ListProduct = [];
   products && products.object.length > 0;
-  products.object.map((item, index) => {
+  products.object.map((item) => {
     ListProduct.push({
       id: item.id,
       name: item.name,
@@ -273,28 +250,18 @@ const ProductList = () => {
                   <Typography variant="h6">Danh mục:</Typography>
                   <Typography variant="small">Quần áo</Typography>
                 </div>
-                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>
-                  Mô tả
-                </Typography>
+                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>Mô tả</Typography>
                 <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
                   {product.short_description}
                 </Typography>
                 <div className={PRODUCT_RATING_ROW_CLASSNAME}>
-                  <Rating
-                    readOnly
-                    value={product.rating}
-                    className="disabled text-amber-500"
-                  />
+                  <Rating readOnly value={product.rating} className="disabled text-amber-500" />
                   <Typography className="!text-sm font-bold !text-gray-700">
                     {product.rating.toPrecision(2)}/5 (100 reviews)
                   </Typography>
                 </div>
                 <div className={PRODUCT_VARIANT_GRID_CLASSNAME}>
-                  <Typography
-                    color="blue-gray"
-                    variant="h6"
-                    className="col-span-2"
-                  >
+                  <Typography color="blue-gray" variant="h6" className="col-span-2">
                     Màu sắc
                   </Typography>
                   <Typography color="blue-gray" variant="h6">
@@ -305,10 +272,7 @@ const ProductList = () => {
                   </Typography>
                   <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
                     {product.colors.map((color, index) => (
-                      <div
-                        className={PRODUCT_COLOR_ROW_CLASSNAME}
-                        key={index}
-                      >
+                      <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={index}>
                         <Button
                           size="lg"
                           variant="gradient"
@@ -325,20 +289,14 @@ const ProductList = () => {
 
                   <div className="my-8 mt-3 flex flex-col gap-2">
                     {product.sizes.map((size, index) => (
-                      <Typography
-                        key={index}
-                        className="!text-gray-700 text-center"
-                      >
+                      <Typography key={index} className="!text-gray-700 text-center">
                         {size}
                       </Typography>
                     ))}
                   </div>
                   <div className="my-8 mt-3 flex flex-col gap-2">
                     {product.materials.map((material, index) => (
-                      <Typography
-                        key={index}
-                        className="!text-gray-700 text-center"
-                      >
+                      <Typography key={index} className="!text-gray-700 text-center">
                         {material}
                       </Typography>
                     ))}
@@ -348,35 +306,21 @@ const ProductList = () => {
                   <Dialog open={open} onClose={handleClose}>
                     <DialogTitle className="pb-0 flex justify-between">
                       <Typography variant="h4">Nhập giá sản phẩm</Typography>
-                      <IconButton
-                        className="border-none"
-                        variant="outlined"
-                        onClose={handleClose}
-                      >
+                      <IconButton className="border-none" variant="outlined" onClose={handleClose}>
                         <CloseIcon />
                       </IconButton>
                     </DialogTitle>
                     <DialogContent>
-                      The key to more success is to have a lot of pillows. Put
-                      it this way, it took me twenty five years to get these
-                      plants, twenty five years of blood sweat and tears, and
-                      I&apos;m never giving up, I&apos;m just getting started.
-                      I&apos;m up to something. Fan luv.
+                      The key to more success is to have a lot of pillows. Put it this way, it took
+                      me twenty five years to get these plants, twenty five years of blood sweat and
+                      tears, and I&apos;m never giving up, I&apos;m just getting started. I&apos;m
+                      up to something. Fan luv.
                     </DialogContent>
                     <DialogActions>
-                      <Button
-                        variant="text"
-                        color="red"
-                        onClose={handleClose}
-                        className="mr-1"
-                      >
+                      <Button variant="text" color="red" onClose={handleClose} className="mr-1">
                         <span>Cancel</span>
                       </Button>
-                      <Button
-                        variant="gradient"
-                        color="green"
-                        onClose={handleClose}
-                      >
+                      <Button variant="gradient" color="green" onClose={handleClose}>
                         <span>Confirm</span>
                       </Button>
                     </DialogActions>
@@ -390,11 +334,7 @@ const ProductList = () => {
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên sản phẩm:
               </Typography>
               <TextField
@@ -407,18 +347,11 @@ const ProductList = () => {
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên thương hiệu:
               </Typography>
               <FormControl fullWidth>
-                <Select
-                  value={updateBrand}
-                  onChange={(e) => setUpdateBrand(e.target.value)}
-                >
+                <Select value={updateBrand} onChange={(e) => setUpdateBrand(e.target.value)}>
                   {brands?.object?.length > 0 &&
                     brands.object.map((item, index) => (
                       <MenuItem key={index} value={item.id}>
@@ -429,18 +362,11 @@ const ProductList = () => {
               </FormControl>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên danh mục:
               </Typography>
               <FormControl fullWidth>
-                <Select
-                  value={updateCategory}
-                  onChange={(e) => setUpdateCategory(e.target.value)}
-                >
+                <Select value={updateCategory} onChange={(e) => setUpdateCategory(e.target.value)}>
                   {categories &&
                     categories.object.length > 0 &&
                     categories.object.map((item, index) => (
@@ -487,22 +413,14 @@ const ProductList = () => {
       <Dialog open={addOpen} onClose={handleClose}>
         <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h4">Thêm sản phẩm</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleAddOpen}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleAddOpen}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên sản phẩm:
               </Typography>
               <TextField
@@ -515,11 +433,7 @@ const ProductList = () => {
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên thương hiệu:
               </Typography>
               <FormControl fullWidth>
@@ -538,18 +452,11 @@ const ProductList = () => {
               </FormControl>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên danh mục:
               </Typography>
               <FormControl fullWidth>
-                <Select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
+                <Select value={category} onChange={(e) => setCategory(e.target.value)}>
                   {categories &&
                     categories.object.length > 0 &&
                     categories.object.map((item, index) => (
@@ -578,12 +485,7 @@ const ProductList = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleAddSubmit}
-            loading={isAdded}
-          >
+          <Button variant="gradient" color="green" onClick={handleAddSubmit} loading={isAdded}>
             {!isAdded && <span>Thêm mới</span>}
           </Button>
         </DialogActions>

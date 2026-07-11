@@ -17,7 +17,7 @@ export const SEASON_OPTIONS = [
     labelKey: "season.spring",
     emoji: "🌸",
     label: "Xuân",
-    months: [3, 4, 5],        // March – May
+    months: [3, 4, 5], // March – May
     primaryColor: "#C2586B",
   },
   {
@@ -25,7 +25,7 @@ export const SEASON_OPTIONS = [
     labelKey: "season.summer",
     emoji: "☀️",
     label: "Hạ",
-    months: [6, 7, 8],        // June – August
+    months: [6, 7, 8], // June – August
     primaryColor: "#0098A6",
   },
   {
@@ -33,7 +33,7 @@ export const SEASON_OPTIONS = [
     labelKey: "season.autumn",
     emoji: "🍂",
     label: "Thu",
-    months: [9, 10, 11],      // September – November
+    months: [9, 10, 11], // September – November
     primaryColor: "#BC5E2A",
   },
   {
@@ -41,7 +41,7 @@ export const SEASON_OPTIONS = [
     labelKey: "season.winter",
     emoji: "❄️",
     label: "Đông",
-    months: [12, 1, 2],       // December – February
+    months: [12, 1, 2], // December – February
     primaryColor: "#1B509A",
   },
 ];
@@ -52,9 +52,7 @@ export const SEASON_OPTIONS = [
  */
 export const detectSeasonByMonth = () => {
   const month = new Date().getMonth() + 1; // 1–12
-  const season = SEASON_OPTIONS.find(
-    (opt) => opt.months && opt.months.includes(month)
-  );
+  const season = SEASON_OPTIONS.find((opt) => opt.months && opt.months.includes(month));
   return season?.value ?? "spring";
 };
 

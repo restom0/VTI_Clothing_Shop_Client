@@ -11,72 +11,70 @@
 //   winter  ❄️ Đông — deep navy  · icy frost    · silver mist
 // ============================================================
 
-
 // ── 🌸 SPRING — Xuân ────────────────────────────────────────────────
 // Palette: cherry blossom rose, fresh sage, soft petal white
 // "Hoa nở, mùa mới, sắc tươi"
 
 :root[data-season="spring"] {
   // Primary — sakura rose
-  --color-primary:       #C2586B;
-  --color-primary-dark:  #9B3752;
-  --color-primary-light: #E28898;
-  --color-primary-muted: #FDF0F3;
+  --color-primary: #c2586b;
+  --color-primary-dark: #9b3752;
+  --color-primary-light: #e28898;
+  --color-primary-muted: #fdf0f3;
 
   // Surface — warm petal white
-  --color-surface:         #FFFBFC;
-  --color-surface-raised:  #FFF5F8;
+  --color-surface: #fffbfc;
+  --color-surface-raised: #fff5f8;
   --color-surface-overlay: rgba(194, 88, 107, 0.05);
 
   // Border — soft rose
-  --color-border:        #F0CDD5;
-  --color-border-strong: #E0A8B5;
+  --color-border: #f0cdd5;
+  --color-border-strong: #e0a8b5;
 
   // Skeleton — rose shimmer
-  --color-skeleton-base:      #F9E8EC;
+  --color-skeleton-base: #f9e8ec;
   --color-skeleton-highlight: rgba(255, 255, 255, 0.75);
 
   // Text
-  --color-text-base:   #2D1520;
-  --color-text-strong: #5C2E3A;
-  --color-text-muted:  #8B5A68;
-  --color-text-invert: #FFFFFF;
+  --color-text-base: #2d1520;
+  --color-text-strong: #5c2e3a;
+  --color-text-muted: #8b5a68;
+  --color-text-invert: #ffffff;
 
   // Seasonal accent (used via custom utilities)
-  --color-season-accent:   #7BC47E;   // fresh spring green
-  --color-season-accent-2: #C8A8D8;   // soft lavender
-  --color-season-name:     "Xuân";
+  --color-season-accent: #7bc47e; // fresh spring green
+  --color-season-accent-2: #c8a8d8; // soft lavender
+  --color-season-name: "Xuân";
 
   // Shadows — warm rose tint
-  --shadow-card:       0 1px 3px 0 rgba(180, 60, 80, 0.10), 0 1px 2px -1px rgba(180, 60, 80, 0.08);
-  --shadow-card-hover: 0 20px 25px -5px rgba(180, 60, 80, 0.14), 0 8px 10px -6px rgba(180, 60, 80, 0.10);
+  --shadow-card: 0 1px 3px 0 rgba(180, 60, 80, 0.1), 0 1px 2px -1px rgba(180, 60, 80, 0.08);
+  --shadow-card-hover: 0 20px 25px -5px rgba(180, 60, 80, 0.14), 0 8px 10px -6px rgba(180, 60, 80, 0.1);
 }
 
 // Spring × Dark mode
 :root[data-season="spring"][data-theme="dark"] {
-  --color-primary:       #E8A0B0;
-  --color-primary-dark:  #D07090;
-  --color-primary-light: #F0C0CC;
+  --color-primary: #e8a0b0;
+  --color-primary-dark: #d07090;
+  --color-primary-light: #f0c0cc;
   --color-primary-muted: rgba(232, 160, 176, 0.14);
 
-  --color-surface:         #180C10;
-  --color-surface-raised:  #241018;
+  --color-surface: #180c10;
+  --color-surface-raised: #241018;
   --color-surface-overlay: rgba(232, 160, 176, 0.08);
 
-  --color-border:        #3D2030;
-  --color-border-strong: #5A3045;
+  --color-border: #3d2030;
+  --color-border-strong: #5a3045;
 
-  --color-skeleton-base:      #2A1520;
-  --color-skeleton-highlight: rgba(255, 255, 255, 0.10);
+  --color-skeleton-base: #2a1520;
+  --color-skeleton-highlight: rgba(255, 255, 255, 0.1);
 
-  --color-text-base:   #F5E8EC;
-  --color-text-strong: #F0D0D8;
-  --color-text-muted:  #C090A0;
+  --color-text-base: #f5e8ec;
+  --color-text-strong: #f0d0d8;
+  --color-text-muted: #c090a0;
 
-  --shadow-card:       0 1px 3px 0 rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
-  --shadow-card-hover: 0 20px 25px -5px rgba(0,0,0,0.55), 0 8px 10px -6px rgba(0,0,0,0.50);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
-
 
 // ── ☀️ SUMMER — Hạ ──────────────────────────────────────────────────
 // Palette: ocean teal, tropical coral, sandy gold
@@ -84,65 +82,64 @@
 
 :root[data-season="summer"] {
   // Primary — ocean teal
-  --color-primary:       #0098A6;
-  --color-primary-dark:  #006E7A;
-  --color-primary-light: #40BDC8;
-  --color-primary-muted: #E0F7FA;
+  --color-primary: #0098a6;
+  --color-primary-dark: #006e7a;
+  --color-primary-light: #40bdc8;
+  --color-primary-muted: #e0f7fa;
 
   // Surface — cool aqua white
-  --color-surface:         #F8FFFE;
-  --color-surface-raised:  #F0FAFB;
+  --color-surface: #f8fffe;
+  --color-surface-raised: #f0fafb;
   --color-surface-overlay: rgba(0, 152, 166, 0.05);
 
   // Border — aqua tone
-  --color-border:        #A8DDE5;
-  --color-border-strong: #6CCCDA;
+  --color-border: #a8dde5;
+  --color-border-strong: #6cccda;
 
   // Skeleton — sea foam shimmer
-  --color-skeleton-base:      #D8F2F5;
-  --color-skeleton-highlight: rgba(255, 255, 255, 0.80);
+  --color-skeleton-base: #d8f2f5;
+  --color-skeleton-highlight: rgba(255, 255, 255, 0.8);
 
   // Text
-  --color-text-base:   #082028;
-  --color-text-strong: #0F3D4A;
-  --color-text-muted:  #3D808C;
-  --color-text-invert: #FFFFFF;
+  --color-text-base: #082028;
+  --color-text-strong: #0f3d4a;
+  --color-text-muted: #3d808c;
+  --color-text-invert: #ffffff;
 
   // Seasonal accent
-  --color-season-accent:   #FF6B35;   // tropical coral
-  --color-season-accent-2: #FFD166;   // sandy gold
-  --color-season-name:     "Hạ";
+  --color-season-accent: #ff6b35; // tropical coral
+  --color-season-accent-2: #ffd166; // sandy gold
+  --color-season-name: "Hạ";
 
   // Shadows — teal tint
-  --shadow-card:       0 1px 3px 0 rgba(0, 120, 140, 0.10), 0 1px 2px -1px rgba(0, 120, 140, 0.08);
-  --shadow-card-hover: 0 20px 25px -5px rgba(0, 120, 140, 0.15), 0 8px 10px -6px rgba(0, 120, 140, 0.10);
+  --shadow-card: 0 1px 3px 0 rgba(0, 120, 140, 0.1), 0 1px 2px -1px rgba(0, 120, 140, 0.08);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 120, 140, 0.15), 0 8px 10px -6px rgba(0, 120, 140, 0.1);
 }
 
 // Summer × Dark mode
 :root[data-season="summer"][data-theme="dark"] {
-  --color-primary:       #40D0E0;
-  --color-primary-dark:  #20B8C8;
-  --color-primary-light: #80E8F0;
+  --color-primary: #40d0e0;
+  --color-primary-dark: #20b8c8;
+  --color-primary-light: #80e8f0;
   --color-primary-muted: rgba(64, 208, 224, 0.14);
 
-  --color-surface:         #050E10;
-  --color-surface-raised:  #0A1C20;
+  --color-surface: #050e10;
+  --color-surface-raised: #0a1c20;
   --color-surface-overlay: rgba(64, 208, 224, 0.08);
 
-  --color-border:        #103840;
+  --color-border: #103840;
   --color-border-strong: #205868;
 
-  --color-skeleton-base:      #0A2028;
-  --color-skeleton-highlight: rgba(255, 255, 255, 0.10);
+  --color-skeleton-base: #0a2028;
+  --color-skeleton-highlight: rgba(255, 255, 255, 0.1);
 
-  --color-text-base:   #E0F8FA;
-  --color-text-strong: #C0EEF2;
-  --color-text-muted:  #70C0CC;
+  --color-text-base: #e0f8fa;
+  --color-text-strong: #c0eef2;
+  --color-text-muted: #70c0cc;
 
-  --shadow-card:       0 1px 3px 0 rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
-  --shadow-card-hover: 0 20px 25px -5px rgba(0,0,0,0.55), 0 8px 10px -6px rgba(0,0,0,0.50);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
-
 
 // ── 🍂 AUTUMN — Thu ─────────────────────────────────────────────────
 // Palette: burnt terracotta, warm amber, deep umber
@@ -150,70 +147,69 @@
 
 :root[data-season="autumn"] {
   // Primary — terracotta/burnt sienna
-  --color-primary:       #BC5E2A;
-  --color-primary-dark:  #8F3F10;
-  --color-primary-light: #D88E5A;
-  --color-primary-muted: #FDF3EB;
+  --color-primary: #bc5e2a;
+  --color-primary-dark: #8f3f10;
+  --color-primary-light: #d88e5a;
+  --color-primary-muted: #fdf3eb;
 
   // Surface — warm cream
-  --color-surface:         #FDFAF6;
-  --color-surface-raised:  #FAF2E8;
+  --color-surface: #fdfaf6;
+  --color-surface-raised: #faf2e8;
   --color-surface-overlay: rgba(188, 94, 42, 0.05);
 
   // Border — warm wheat
-  --color-border:        #E8CAAA;
-  --color-border-strong: #D4A87C;
+  --color-border: #e8caaa;
+  --color-border-strong: #d4a87c;
 
   // Skeleton — amber shimmer
-  --color-skeleton-base:      #F5E8D5;
-  --color-skeleton-highlight: rgba(255, 248, 235, 0.90);
+  --color-skeleton-base: #f5e8d5;
+  --color-skeleton-highlight: rgba(255, 248, 235, 0.9);
 
   // Text
-  --color-text-base:   #261204;
-  --color-text-strong: #4A2810;
-  --color-text-muted:  #7A5038;
-  --color-text-invert: #FFFFFF;
+  --color-text-base: #261204;
+  --color-text-strong: #4a2810;
+  --color-text-muted: #7a5038;
+  --color-text-invert: #ffffff;
 
   // Seasonal accent
-  --color-season-accent:   #E8A020;   // harvest amber/gold
-  --color-season-accent-2: #6B4226;   // deep warm umber
-  --color-season-name:     "Thu";
+  --color-season-accent: #e8a020; // harvest amber/gold
+  --color-season-accent-2: #6b4226; // deep warm umber
+  --color-season-name: "Thu";
 
   // Danger shifts warm for autumn
-  --color-danger:       #C0392B;
-  --color-danger-dark:  #962D22;
-  --color-danger-light: #FDECEA;
+  --color-danger: #c0392b;
+  --color-danger-dark: #962d22;
+  --color-danger-light: #fdecea;
 
   // Shadows — warm amber tint
-  --shadow-card:       0 1px 3px 0 rgba(160, 80, 20, 0.10), 0 1px 2px -1px rgba(160, 80, 20, 0.08);
-  --shadow-card-hover: 0 20px 25px -5px rgba(160, 80, 20, 0.16), 0 8px 10px -6px rgba(160, 80, 20, 0.10);
+  --shadow-card: 0 1px 3px 0 rgba(160, 80, 20, 0.1), 0 1px 2px -1px rgba(160, 80, 20, 0.08);
+  --shadow-card-hover: 0 20px 25px -5px rgba(160, 80, 20, 0.16), 0 8px 10px -6px rgba(160, 80, 20, 0.1);
 }
 
 // Autumn × Dark mode
 :root[data-season="autumn"][data-theme="dark"] {
-  --color-primary:       #E89060;
-  --color-primary-dark:  #D07040;
-  --color-primary-light: #F0B080;
+  --color-primary: #e89060;
+  --color-primary-dark: #d07040;
+  --color-primary-light: #f0b080;
   --color-primary-muted: rgba(232, 144, 96, 0.14);
 
-  --color-surface:         #150A04;
-  --color-surface-raised:  #221308;
+  --color-surface: #150a04;
+  --color-surface-raised: #221308;
   --color-surface-overlay: rgba(232, 144, 96, 0.08);
 
-  --color-border:        #3D2510;
-  --color-border-strong: #5A3818;
+  --color-border: #3d2510;
+  --color-border-strong: #5a3818;
 
-  --color-skeleton-base:      #281408;
-  --color-skeleton-highlight: rgba(255, 255, 255, 0.10);
+  --color-skeleton-base: #281408;
+  --color-skeleton-highlight: rgba(255, 255, 255, 0.1);
 
-  --color-text-base:   #F8F0E8;
-  --color-text-strong: #F0DEC8;
-  --color-text-muted:  #C09070;
+  --color-text-base: #f8f0e8;
+  --color-text-strong: #f0dec8;
+  --color-text-muted: #c09070;
 
-  --shadow-card:       0 1px 3px 0 rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
-  --shadow-card-hover: 0 20px 25px -5px rgba(0,0,0,0.55), 0 8px 10px -6px rgba(0,0,0,0.50);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
-
 
 // ── ❄️ WINTER — Đông ────────────────────────────────────────────────
 // Palette: deep navy, icy frost, silver mist
@@ -221,65 +217,64 @@
 
 :root[data-season="winter"] {
   // Primary — deep winter navy
-  --color-primary:       #1B509A;
-  --color-primary-dark:  #0D3570;
-  --color-primary-light: #5088C8;
-  --color-primary-muted: #EAF0F9;
+  --color-primary: #1b509a;
+  --color-primary-dark: #0d3570;
+  --color-primary-light: #5088c8;
+  --color-primary-muted: #eaf0f9;
 
   // Surface — icy white
-  --color-surface:         #F5F8FD;
-  --color-surface-raised:  #ECF1FA;
+  --color-surface: #f5f8fd;
+  --color-surface-raised: #ecf1fa;
   --color-surface-overlay: rgba(27, 80, 154, 0.05);
 
   // Border — frost blue
-  --color-border:        #C5D5EC;
-  --color-border-strong: #9ABCDE;
+  --color-border: #c5d5ec;
+  --color-border-strong: #9abcde;
 
   // Skeleton — silver frost shimmer
-  --color-skeleton-base:      #DFE9F5;
+  --color-skeleton-base: #dfe9f5;
   --color-skeleton-highlight: rgba(255, 255, 255, 0.85);
 
   // Text
-  --color-text-base:   #080E1E;
-  --color-text-strong: #12254A;
-  --color-text-muted:  #4A6280;
-  --color-text-invert: #FFFFFF;
+  --color-text-base: #080e1e;
+  --color-text-strong: #12254a;
+  --color-text-muted: #4a6280;
+  --color-text-invert: #ffffff;
 
   // Seasonal accent
-  --color-season-accent:   #8C1C44;   // deep burgundy/wine (holiday)
-  --color-season-accent-2: #8EA8C8;   // icy silver-blue
-  --color-season-name:     "Đông";
+  --color-season-accent: #8c1c44; // deep burgundy/wine (holiday)
+  --color-season-accent-2: #8ea8c8; // icy silver-blue
+  --color-season-name: "Đông";
 
   // Shadows — cool blue tint
-  --shadow-card:       0 1px 3px 0 rgba(20, 50, 120, 0.10), 0 1px 2px -1px rgba(20, 50, 120, 0.08);
-  --shadow-card-hover: 0 20px 25px -5px rgba(20, 50, 120, 0.16), 0 8px 10px -6px rgba(20, 50, 120, 0.10);
+  --shadow-card: 0 1px 3px 0 rgba(20, 50, 120, 0.1), 0 1px 2px -1px rgba(20, 50, 120, 0.08);
+  --shadow-card-hover: 0 20px 25px -5px rgba(20, 50, 120, 0.16), 0 8px 10px -6px rgba(20, 50, 120, 0.1);
 }
 
 // Winter × Dark mode
 :root[data-season="winter"][data-theme="dark"] {
-  --color-primary:       #6898DC;
-  --color-primary-dark:  #4878C0;
-  --color-primary-light: #98BCF0;
+  --color-primary: #6898dc;
+  --color-primary-dark: #4878c0;
+  --color-primary-light: #98bcf0;
   --color-primary-muted: rgba(104, 152, 220, 0.14);
 
-  --color-surface:         #060910;
-  --color-surface-raised:  #0C1220;
+  --color-surface: #060910;
+  --color-surface-raised: #0c1220;
   --color-surface-overlay: rgba(104, 152, 220, 0.08);
 
-  --color-border:        #182038;
+  --color-border: #182038;
   --color-border-strong: #283858;
 
-  --color-skeleton-base:      #101828;
-  --color-skeleton-highlight: rgba(255, 255, 255, 0.10);
+  --color-skeleton-base: #101828;
+  --color-skeleton-highlight: rgba(255, 255, 255, 0.1);
 
-  --color-text-base:   #E8EEF8;
-  --color-text-strong: #D0DCF0;
-  --color-text-muted:  #7898C0;
+  --color-text-base: #e8eef8;
+  --color-text-strong: #d0dcf0;
+  --color-text-muted: #7898c0;
 
-  --shadow-card:       0 1px 3px 0 rgba(0,0,0,0.40), 0 1px 2px -1px rgba(0,0,0,0.40);
-  --shadow-card-hover: 0 20px 25px -5px rgba(0,0,0,0.55), 0 8px 10px -6px rgba(0,0,0,0.50);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.55), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
-
 
 // ── SEASONAL BADGE UTILITIES ─────────────────────────────────────────
 // Small decorative indicator showing the active season
@@ -297,5 +292,7 @@
   color: var(--color-primary);
   border: 1px solid var(--color-border);
   user-select: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }

@@ -7,10 +7,7 @@ import { useSelector } from "react-redux";
 
 const Adminpage = () => {
   const sidebar_item = useSelector((state) => state.sidebar_item.value);
-  const activeSidebarItem = useMemo(
-    () => getSidebarItemByLabel(sidebar_item),
-    [sidebar_item]
-  );
+  const activeSidebarItem = useMemo(() => getSidebarItemByLabel(sidebar_item), [sidebar_item]);
   const ActivePanel = activeSidebarItem.Component;
 
   return (

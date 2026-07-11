@@ -1,13 +1,14 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
-import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
+import {
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Dialog,
+} from "@material-tailwind/react/components/Dialog";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Input } from "@material-tailwind/react/components/Input";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Select, Option } from "@material-tailwind/react/components/Select";
-import { Container, Rating } from "@mui/material";
+import { Rating } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { inventory_tab } from "../../constants/tab.constant";
 import AdminLayout from "../../layouts/admin/admin.layout";
@@ -18,7 +19,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "../../configs/swiper.css";
 import { inventory } from "../../constants/head_table.constant";
-import useOpen from "../../hooks/useOpen.hook";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetImportedProductsQuery } from "../../apis/import_product.api";
 import Loading from "../shared/loading.component";
@@ -40,19 +40,9 @@ const Inventory = () => {
   const [tab1, setTab1] = useState("ALL");
   const { formatPrice } = useCurrency();
   const [open, setOpen] = React.useState(false);
-  const [tab, setTab] = React.useState(inventory_tab[0].value);
   const [importProducts, setImportProducts] = React.useState(null);
-  const [active, setActive] = React.useState(1);
   const handleOpen = () => setOpen(!open);
 
-  const TABLE_ROWS = [
-    {
-      name: "001",
-      role: "USER",
-      action: "Tạo tài khoản",
-      date: "23/04/18",
-    },
-  ];
   const product = {
     id: 0,
     colors: SHOP_PRODUCT_COLORS,
@@ -77,15 +67,10 @@ const Inventory = () => {
   } = useGetImportedProductsQuery();
   useEffect(() => {
     if (tab1 === "AVAILABLE") {
-      setImportProducts(
-        importProduct?.object.filter((product) => product.stock > 0)
-      );
+      setImportProducts(importProduct?.object.filter((product) => product.stock > 0));
     }
     if (tab1 === "OUT_OF_STOCK") {
-      console.log("Product");
-      setImportProducts(
-        importProduct?.object.filter((product) => product.stock === 0)
-      );
+      setImportProducts(importProduct?.object.filter((product) => product.stock === 0));
     }
     if (tab1 === "ALL") {
       setImportProducts(importProduct?.object);
@@ -95,15 +80,11 @@ const Inventory = () => {
   if (importProductError) return <div>{importProductError}</div>;
   const listImportedProducts =
     importProducts &&
-    importProducts.map((item, index) => {
+    importProducts.map((item) => {
       return {
         id: item.id,
         avatar: (
-          <img
-            className="h-auto w-16 mx-auto"
-            src={item.image_url}
-            alt={item.product_id.name}
-          />
+          <img className="h-auto w-16 mx-auto" src={item.image_url} alt={item.product_id.name} />
         ),
         name: item.product_id.name,
         sku: item.sku,
@@ -181,28 +162,18 @@ const Inventory = () => {
                   <Typography variant="h6">Danh mục:</Typography>
                   <Typography variant="small">Quần áo</Typography>
                 </div>
-                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>
-                  Mô tả
-                </Typography>
+                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>Mô tả</Typography>
                 <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
                   {product.short_description}
                 </Typography>
                 <div className={PRODUCT_RATING_ROW_CLASSNAME}>
-                  <Rating
-                    readOnly
-                    value={product.rating}
-                    className="disabled text-amber-500"
-                  />
+                  <Rating readOnly value={product.rating} className="disabled text-amber-500" />
                   <Typography className="!text-sm font-bold !text-gray-700">
                     {product.rating.toPrecision(2)}/5 (100 reviews)
                   </Typography>
                 </div>
                 <div className={PRODUCT_VARIANT_GRID_CLASSNAME}>
-                  <Typography
-                    color="blue-gray"
-                    variant="h6"
-                    className="col-span-2"
-                  >
+                  <Typography color="blue-gray" variant="h6" className="col-span-2">
                     Màu sắc
                   </Typography>
                   <Typography color="blue-gray" variant="h6">
@@ -213,10 +184,7 @@ const Inventory = () => {
                   </Typography>
                   <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
                     {product.colors.map((color, index) => (
-                      <div
-                        className={PRODUCT_COLOR_ROW_CLASSNAME}
-                        key={index}
-                      >
+                      <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={index}>
                         <Button
                           size="lg"
                           variant="gradient"
@@ -233,20 +201,14 @@ const Inventory = () => {
 
                   <div className="my-8 mt-3 flex flex-col gap-2">
                     {product.sizes.map((size, index) => (
-                      <Typography
-                        key={index}
-                        className="!text-gray-700 text-center"
-                      >
+                      <Typography key={index} className="!text-gray-700 text-center">
                         {size}
                       </Typography>
                     ))}
                   </div>
                   <div className="my-8 mt-3 flex flex-col gap-2">
                     {product.materials.map((material, index) => (
-                      <Typography
-                        key={index}
-                        className="!text-gray-700 text-center"
-                      >
+                      <Typography key={index} className="!text-gray-700 text-center">
                         {material}
                       </Typography>
                     ))}
@@ -256,35 +218,21 @@ const Inventory = () => {
                   <Dialog open={open} handler={handleOpen}>
                     <DialogHeader className="pb-0 flex justify-between">
                       <Typography variant="h4">Nhập sản phẩm mới</Typography>
-                      <IconButton
-                        className="border-none"
-                        variant="outlined"
-                        onClick={handleOpen}
-                      >
+                      <IconButton className="border-none" variant="outlined" onClick={handleOpen}>
                         <CloseIcon />
                       </IconButton>
                     </DialogHeader>
                     <DialogBody>
-                      The key to more success is to have a lot of pillows. Put
-                      it this way, it took me twenty five years to get these
-                      plants, twenty five years of blood sweat and tears, and
-                      I&apos;m never giving up, I&apos;m just getting started.
-                      I&apos;m up to something. Fan luv.
+                      The key to more success is to have a lot of pillows. Put it this way, it took
+                      me twenty five years to get these plants, twenty five years of blood sweat and
+                      tears, and I&apos;m never giving up, I&apos;m just getting started. I&apos;m
+                      up to something. Fan luv.
                     </DialogBody>
                     <DialogFooter>
-                      <Button
-                        variant="text"
-                        color="red"
-                        onClick={handleOpen}
-                        className="mr-1"
-                      >
+                      <Button variant="text" color="red" onClick={handleOpen} className="mr-1">
                         <span>Cancel</span>
                       </Button>
-                      <Button
-                        variant="gradient"
-                        color="green"
-                        onClick={handleOpen}
-                      >
+                      <Button variant="gradient" color="green" onClick={handleOpen}>
                         <span>Confirm</span>
                       </Button>
                     </DialogFooter>

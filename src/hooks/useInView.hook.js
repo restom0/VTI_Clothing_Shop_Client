@@ -14,11 +14,7 @@ import { useEffect, useRef, useState } from "react";
  *   const { ref, inView } = useInView();
  *   <div ref={ref} className={`reveal reveal-fade-up ${inView ? "in-view" : ""}`} />
  */
-const useInView = ({
-  threshold = 0.15,
-  rootMargin = "0px",
-  once = true,
-} = {}) => {
+const useInView = ({ threshold = 0.15, rootMargin = "0px", once = true } = {}) => {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
 

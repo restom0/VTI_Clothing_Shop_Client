@@ -35,9 +35,7 @@ const Checkoutpage = () => {
         </Stepper>
       </Container>
       {activeStep === 0 && <Step1Checkout handleNext={handleNext} />}
-      {activeStep === 1 && (
-        <Step2Checkout handleNext={handleNext} handlePrev={handlePrev} />
-      )}
+      {activeStep === 1 && <Step2Checkout handleNext={handleNext} handlePrev={handlePrev} />}
       {activeStep === 2 && <Step3Checkout />}
     </>
   );

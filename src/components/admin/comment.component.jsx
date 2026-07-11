@@ -1,41 +1,13 @@
-import { Button } from "@material-tailwind/react/components/Button";
-import { Card, CardFooter } from "@material-tailwind/react/components/Card";
-import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
-import { Input } from "@material-tailwind/react/components/Input";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Select, Option } from "@material-tailwind/react/components/Select";
-import { Container, Rating, TableHead } from "@mui/material";
-import React from "react";
-import useOpen from "../../hooks/useOpen.hook";
+import { Container, Rating } from "@mui/material";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import { comment } from "../../constants/head_table.constant";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import {
-  useAddCommentMutation,
-  useDeleteCommentMutation,
-  useGetCommentsQuery,
-  useUpdateCommentMutation,
-} from "../../apis/comment.api";
+import { useDeleteCommentMutation, useGetCommentsQuery } from "../../apis/comment.api";
 import Loading from "../shared/loading.component";
 
 const Comment = () => {
-  const TABLE_ROWS = [
-    {
-      name: "001",
-      role: "USER",
-      action: "Tạo tài khoản",
-      date: "23/04/18",
-    },
-  ];
-  const navigate = useNavigate();
-  const selectId = useSelector((state) => state.selectId);
   const { data: comments, error, isLoading } = useGetCommentsQuery();
-  const [deleteComment, { isLoading: isDeleted, error: deleteError }] =
-    useDeleteCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
   // const [updateComment, { isLoading: isUpdated, error: updateError }] =
   //   useUpdateCommentMutation();
   // const [createComment, { isLoading: isAdded, error: addError }] =
@@ -47,7 +19,7 @@ const Comment = () => {
       const message = await deleteComment(id);
       return message;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (
@@ -80,9 +52,7 @@ const Comment = () => {
                 <div className="flex items-center gap-4">
                   <Typography variant="h6">Nội dung: </Typography>
                 </div>
-                <Typography variant="small">
-                  Áo thun đẹp, chất lượng tốt, giá hợp lý
-                </Typography>
+                <Typography variant="small">Áo thun đẹp, chất lượng tốt, giá hợp lý</Typography>
               </div>
               <div className="mx-auto col-span-2">
                 <img

@@ -62,5 +62,4 @@ export const SOCIAL_LINKS = [
   },
 ];
 
-export const getFooterCopyright = (year, owner, rightsText) =>
-  `© ${year} ${owner}. ${rightsText}`;
+export const getFooterCopyright = (year, owner, rightsText) => `© ${year} ${owner}. ${rightsText}`;

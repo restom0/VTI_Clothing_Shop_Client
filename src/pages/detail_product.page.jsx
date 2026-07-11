@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, AccordionBody, AccordionHeader } from "@material-tailwind/react/components/Accordion";
+import {
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
+} from "@material-tailwind/react/components/Accordion";
 import { Avatar } from "@material-tailwind/react/components/Avatar";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Card, CardBody } from "@material-tailwind/react/components/Card";
-import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
+import { Dialog, DialogBody, DialogHeader } from "@material-tailwind/react/components/Dialog";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Progress } from "@material-tailwind/react/components/Progress";
 import { Radio } from "@material-tailwind/react/components/Radio";
@@ -17,10 +21,9 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "swiper/css/effect-fade";
 import "../configs/swiper.css";
 import { Container, Rating } from "@mui/material";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Pagination from "../components/shared/pagination.component";
 import { useGetOnSaleProductQuery } from "../apis/on_sale_product.api";
 import { useCreateOrderItemMutation } from "../apis/order_item.api";
@@ -46,24 +49,6 @@ import {
   RESPONSIVE_GRID_2_CLASSNAME,
   RESPONSIVE_GRID_3_CLASSNAME,
 } from "../styles/classNames";
-import { SHOP_PRODUCT_COLORS } from "../mocks/shop_products.mock";
-const product = {
-  id: 0,
-  colors: SHOP_PRODUCT_COLORS,
-  sizes: ["XS", "S", "M", "L", "XL"],
-  materials: ["Cotton", "Vải len"],
-  price: 155000,
-  rating: 4.0,
-  imageUrl: [
-    "https://www.material-tailwind.com/image/product-4.png",
-    "https://www.material-tailwind.com/image/product-4.png",
-    "https://www.material-tailwind.com/image/product-4.png",
-    "https://www.material-tailwind.com/image/product-4.png",
-  ],
-  title: "Abisko Trail Stretch Trousers M",
-  description: `The key to more success is to have a lot of pillows. Put it this way, it took me twenty five years to get these plants, twenty five years of blood sweat and tears, and I'm never giving up, I'm just getting started. I'm up to something. Fan luv.`,
-  short_description: `As we live, our hearts turn colder.`,
-};
 const stars = [50, 50, 50, 50, 50];
 const total_star = stars.reduce((a, b) => a + b, 0);
 const reviews = [
@@ -122,7 +107,7 @@ const ProductDetailpage = () => {
   const [material, setMaterial] = useState(null);
   const [stock, setStock] = useState(0);
   const [amount, setAmount] = useState(1);
-  const [select, setSelect] = useState(-1);
+  const [select] = useState(-1);
   const handleOpen = () => setOpen(!open);
   const [description, setDescription] = React.useState(false);
   const [star, setStar] = React.useState(false);
@@ -130,8 +115,7 @@ const ProductDetailpage = () => {
   const { data: product, isLoading, error } = useGetOnSaleProductQuery(id);
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
-  const [createOrderItem, { isLoading: isAdded, error: isAddError }] =
-    useCreateOrderItemMutation();
+  const [createOrderItem] = useCreateOrderItemMutation();
   useEffect(() => {
     if (
       !color ||
@@ -275,9 +259,7 @@ const ProductDetailpage = () => {
             <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
               {firstItem.product_id?.product_id?.name ?? ""}
             </Typography>
-            <Typography variant="h5">
-              {formatPrice(firstItem.sale_price ?? 0)}
-            </Typography>
+            <Typography variant="h5">{formatPrice(firstItem.sale_price ?? 0)}</Typography>
             <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
               {firstItem.product_id?.product_id?.short_description ?? ""}
             </Typography>
@@ -286,10 +268,7 @@ const ProductDetailpage = () => {
             </Typography>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               {(product.object ?? []).map((color, index) => (
-                <Tooltip
-                  content={color.product_id?.color_id?.color_name ?? ""}
-                  key={index}
-                >
+                <Tooltip content={color.product_id?.color_id?.color_name ?? ""} key={index}>
                   <Button
                     size="lg"
                     variant="gradient"
@@ -335,10 +314,9 @@ const ProductDetailpage = () => {
               <Dialog open={open} handler={handleOpen}>
                 <DialogHeader>Its a simple dialog.</DialogHeader>
                 <DialogBody>
-                  The key to more success is to have a lot of pillows. Put it
-                  this way, it took me twenty five years to get these plants,
-                  twenty five years of blood sweat and tears, and I&apos;m never
-                  giving up, I&apos;m just getting started. I&apos;m up to
+                  The key to more success is to have a lot of pillows. Put it this way, it took me
+                  twenty five years to get these plants, twenty five years of blood sweat and tears,
+                  and I&apos;m never giving up, I&apos;m just getting started. I&apos;m up to
                   something. Fan luv.
                 </DialogBody>
               </Dialog>
@@ -348,10 +326,7 @@ const ProductDetailpage = () => {
                 .filter(
                   (value, index, self) =>
                     index ===
-                    self.findIndex(
-                      (t) =>
-                        t.product_id.size_id.id === value.product_id.size_id.id
-                    )
+                    self.findIndex((t) => t.product_id.size_id.id === value.product_id.size_id.id)
                 )
                 .map((size, index) => (
                   <Tooltip
@@ -396,9 +371,7 @@ const ProductDetailpage = () => {
                     (value, index, self) =>
                       index ===
                       self.findIndex(
-                        (t) =>
-                          t.product_id.material_id.id ===
-                          value.product_id.material_id.id
+                        (t) => t.product_id.material_id.id === value.product_id.material_id.id
                       )
                   )
                   .map((material, index) => (
@@ -406,9 +379,7 @@ const ProductDetailpage = () => {
                       name="type"
                       label={material.product_id.material_id.name}
                       key={index}
-                      onClick={() =>
-                        setMaterial(material.product_id.material_id.id)
-                      }
+                      onClick={() => setMaterial(material.product_id.material_id.id)}
                     />
                   ))}
                 {/* {product.materials.map((material, index) => (
@@ -425,9 +396,7 @@ const ProductDetailpage = () => {
               <Typography variant="h6">Số lượng</Typography>
               <div className="flex items-center gap-3">
                 <Button
-                  onClick={() =>
-                    setAmount(amount - 1 < 1 ? amount : amount - 1)
-                  }
+                  onClick={() => setAmount(amount - 1 < 1 ? amount : amount - 1)}
                   variant="gradient"
                   color="white"
                   className="rounded-full"
@@ -436,9 +405,7 @@ const ProductDetailpage = () => {
                 </Button>
                 <Typography>{amount}</Typography>
                 <Button
-                  onClick={() =>
-                    setAmount(amount + 1 > stock ? amount : amount + 1)
-                  }
+                  onClick={() => setAmount(amount + 1 > stock ? amount : amount + 1)}
                   variant="gradient"
                   color="white"
                   className="rounded-full"
@@ -470,9 +437,7 @@ const ProductDetailpage = () => {
             </AccordionHeader>
             <AccordionBody>
               <div className={RESPONSIVE_GRID_2_CLASSNAME}>
-                <Typography>
-                  {product.object[0].product_id.product_id.short_description}
-                </Typography>
+                <Typography>{product.object[0].product_id.product_id.short_description}</Typography>
               </div>
             </AccordionBody>
           </Accordion>
@@ -499,19 +464,11 @@ const ProductDetailpage = () => {
                             value={5 - index}
                             className="disabled text-amber-500 mt-3"
                           />
-                          <Typography
-                            color="blue-gray"
-                            variant="h6"
-                            className="mt-3"
-                          >
+                          <Typography color="blue-gray" variant="h6" className="mt-3">
                             {star}
                           </Typography>
                         </div>
-                        <Progress
-                          size="sm"
-                          value={(star / total_star) * 100}
-                          color="blue"
-                        />
+                        <Progress size="sm" value={(star / total_star) * 100} color="blue" />
                       </div>
                     ))}
                   </div>
@@ -553,11 +510,7 @@ const ProductDetailpage = () => {
                     id="file_input"
                     type="file"
                   />
-                  <Button
-                    variant="gradient"
-                    className="my-3 w-full"
-                    color="green"
-                  >
+                  <Button variant="gradient" className="my-3 w-full" color="green">
                     Gửi
                   </Button>
                 </div>
@@ -589,11 +542,7 @@ const ProductDetailpage = () => {
                   </div>
                   <div className="col-span-8">
                     <div className="flex items-center">
-                      <Rating
-                        readOnly
-                        value={review.rating}
-                        className="disabled text-amber-500"
-                      />
+                      <Rating readOnly value={review.rating} className="disabled text-amber-500" />
                       <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
                         {(review.rating === 5 && "Cực kì hài lòng") ||
                           (review.rating === 4 && "Hài lòng") ||
@@ -602,22 +551,14 @@ const ProductDetailpage = () => {
                           (review.rating === 1 && "Rất không hài lòng")}
                       </Typography>
                     </div>
-                    <Typography className="mt-1 text-sm">
-                      {review.date}
-                    </Typography>
-                    <Typography className="pt-3 pe-10 pb-5">
-                      {review.content}
-                    </Typography>
+                    <Typography className="mt-1 text-sm">{review.date}</Typography>
+                    <Typography className="pt-3 pe-10 pb-5">{review.content}</Typography>
                   </div>
                 </CardBody>
               </Card>
             ))}
           </div>
-          <Pagination
-            page={Math.ceil(reviews.length / 4)}
-            active={active}
-            setActive={setActive}
-          />
+          <Pagination page={Math.ceil(reviews.length / 4)} active={active} setActive={setActive} />
         </Container>
       </section>
     </>

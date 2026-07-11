@@ -1,18 +1,9 @@
 import { describe, expect, it } from "vitest";
-import {
-  DEFAULT_THEME,
-  THEME_OPTIONS,
-  normalizeTheme,
-  resolveTheme,
-} from "./theme.config";
+import { DEFAULT_THEME, THEME_OPTIONS, normalizeTheme, resolveTheme } from "./theme.config";
 
 describe("theme config", () => {
   it("defines the supported theme modes", () => {
-    expect(THEME_OPTIONS.map(({ value }) => value)).toEqual([
-      "light",
-      "dark",
-      "system",
-    ]);
+    expect(THEME_OPTIONS.map(({ value }) => value)).toEqual(["light", "dark", "system"]);
   });
 
   it("normalizes invalid theme values to the default mode", () => {

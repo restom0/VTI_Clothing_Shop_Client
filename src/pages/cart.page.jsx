@@ -56,11 +56,7 @@ const CartPage = () => {
   // ── All hooks MUST be called unconditionally (Rules of Hooks) ──
   const hasToken = Boolean(localStorage.getItem("token"));
 
-  const {
-    data: cart,
-    isLoading,
-    error,
-  } = useGetCartQuery(undefined, { skip: !hasToken });
+  const { data: cart, isLoading, error } = useGetCartQuery(undefined, { skip: !hasToken });
 
   const [updateOrderItem] = useUpdateOrderItemMutation();
 
@@ -87,7 +83,12 @@ const CartPage = () => {
 
   // ── Early returns AFTER all hooks ──────────────────────────────
   if (!hasToken) return null;
-  if (isLoading) return <div className="h-96"><Loading /></div>;
+  if (isLoading)
+    return (
+      <div className="h-96">
+        <Loading />
+      </div>
+    );
   if (error)
     return (
       <div className="error-message">
@@ -125,8 +126,7 @@ const CartPage = () => {
           const discount = item.product_id?.discount ?? 0;
           const unitPrice = salePrice * (1 - discount / 100);
           const imageSrc = item.product_id?.product_id?.image_url ?? "";
-          const productName =
-            item.product_id?.product_id?.product_id?.name ?? "Sản phẩm";
+          const productName = item.product_id?.product_id?.product_id?.name ?? "Sản phẩm";
 
           return (
             <div className="cart-row" key={index}>

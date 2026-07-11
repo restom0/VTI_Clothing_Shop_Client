@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import {
   FALLBACK_LANGUAGE,
@@ -20,9 +13,7 @@ const I18nContext = createContext(null);
 const detectBrowserLanguage = () => {
   if (typeof navigator === "undefined") return null;
 
-  const languages = navigator.languages?.length
-    ? navigator.languages
-    : [navigator.language];
+  const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
 
   return languages.map(normalizeLanguage).find(Boolean) ?? null;
 };
@@ -30,9 +21,7 @@ const detectBrowserLanguage = () => {
 const getInitialLanguage = () => {
   if (typeof window === "undefined") return FALLBACK_LANGUAGE;
 
-  const storedLanguage = normalizeLanguage(
-    window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
-  );
+  const storedLanguage = normalizeLanguage(window.localStorage.getItem(LANGUAGE_STORAGE_KEY));
 
   return storedLanguage ?? detectBrowserLanguage() ?? FALLBACK_LANGUAGE;
 };

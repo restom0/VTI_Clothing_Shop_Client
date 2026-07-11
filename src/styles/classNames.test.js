@@ -45,25 +45,17 @@ import {
 describe("style class names", () => {
   it("exposes reusable layout class names", () => {
     expect(ACTION_ROW_CLASSNAME).toBe("action-row");
-    expect(ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME).toBe(
-      "admin-product-thumb-media"
-    );
-    expect(ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME).toBe(
-      "mySwiper admin-product-thumb-swiper"
-    );
+    expect(ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME).toBe("admin-product-thumb-media");
+    expect(ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME).toBe("mySwiper admin-product-thumb-swiper");
     expect(CLUSTER_MD_CLASSNAME).toBe("cluster-md");
     expect(CLUSTER_SM_CLASSNAME).toBe("cluster-sm");
     expect(IMPORT_ACTIONS_CLASSNAME).toBe("import-actions");
-    expect(IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME).toBe(
-      "import-avatar-preview-image"
-    );
+    expect(IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME).toBe("import-avatar-preview-image");
     expect(IMPORT_FORM_GRID_CLASSNAME).toBe("import-form-grid");
     expect(IMPORT_UPLOAD_DROPZONE_CLASSNAME).toBe("import-upload-dropzone");
     expect(PRODUCT_COLOR_COLUMN_CLASSNAME).toBe("product-color-column");
     expect(PRODUCT_COLOR_ROW_CLASSNAME).toBe("product-color-row");
-    expect(PRODUCT_DESCRIPTION_LABEL_CLASSNAME).toBe(
-      "product-description-label"
-    );
+    expect(PRODUCT_DESCRIPTION_LABEL_CLASSNAME).toBe("product-description-label");
     expect(PRODUCT_DESCRIPTION_TEXT_CLASSNAME).toBe("product-description-text");
     expect(PRODUCT_DETAIL_ACTIONS_CLASSNAME).toBe("product-detail-actions");
     expect(PRODUCT_DETAIL_LAYOUT_CLASSNAME).toBe("product-detail-layout");
@@ -94,11 +86,7 @@ describe("style class names", () => {
     expect(STYLE_CLASS_NAMES.actionRow).toBe(ACTION_ROW_CLASSNAME);
     expect(STYLE_CLASS_NAMES.importActions).toBe(IMPORT_ACTIONS_CLASSNAME);
     expect(STYLE_CLASS_NAMES.importFormGrid).toBe(IMPORT_FORM_GRID_CLASSNAME);
-    expect(STYLE_CLASS_NAMES.productDescriptionLabel).toBe(
-      PRODUCT_DESCRIPTION_LABEL_CLASSNAME
-    );
-    expect(STYLE_CLASS_NAMES.productDescriptionText).toBe(
-      PRODUCT_DESCRIPTION_TEXT_CLASSNAME
-    );
+    expect(STYLE_CLASS_NAMES.productDescriptionLabel).toBe(PRODUCT_DESCRIPTION_LABEL_CLASSNAME);
+    expect(STYLE_CLASS_NAMES.productDescriptionText).toBe(PRODUCT_DESCRIPTION_TEXT_CLASSNAME);
   });
 });

@@ -12,12 +12,7 @@ import { getAccountMenuItems, getBannerLabels } from "./banner.helpers";
 
 const hasAuthToken = () => Boolean(localStorage.getItem("token"));
 
-export const ProfileMenuView = ({
-  accountItems,
-  avatarUrl,
-  isMenuOpen,
-  onMenuOpenChange,
-}) => (
+export const ProfileMenuView = ({ accountItems, avatarUrl, isMenuOpen, onMenuOpenChange }) => (
   <Menu open={isMenuOpen} handler={onMenuOpenChange} placement="bottom-end">
     <MenuHandler>
       <Button
@@ -50,10 +45,7 @@ export const ProfileMenuView = ({
             className: `h-4 w-4 ${isDanger ? "text-red-500" : ""}`,
             strokeWidth: 2,
           })}
-          <a
-            href={href}
-            className={`text-sm font-normal ${isDanger ? "text-red-500" : ""}`}
-          >
+          <a href={href} className={`text-sm font-normal ${isDanger ? "text-red-500" : ""}`}>
             {text}
           </a>
         </MenuItem>
@@ -92,12 +84,7 @@ const ProfileMenu = () => {
   );
 };
 
-export const BannerView = ({
-  isAuthenticated,
-  labels,
-  onLoginClick,
-  onRegisterClick,
-}) => (
+export const BannerView = ({ isAuthenticated, labels, onLoginClick, onRegisterClick }) => (
   <Navbar className="mx-auto max-w-screen-3xl rounded-none p-0">
     <div className="shop-banner-bar text-blue-gray-900">
       <span className="text-sm font-semibold">{labels.freeShipping}</span>
@@ -107,7 +94,9 @@ export const BannerView = ({
           <button className="btn-ghost px-3 py-1 text-sm" onClick={onLoginClick}>
             {labels.login}
           </button>
-          <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>/</span>
+          <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
+            /
+          </span>
           <button className="btn-ghost px-3 py-1 text-sm" onClick={onRegisterClick}>
             {labels.register}
           </button>

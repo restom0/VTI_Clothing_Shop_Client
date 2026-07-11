@@ -16,23 +16,15 @@ import ScrollReveal from "../ScrollReveal";
  *  - React.memo: chỉ re-render khi props thay đổi
  *  - LazyImage đã dùng loading="lazy" + decoding="async"
  */
-const ProductCard = memo(({
-  discount = 0,
-  id,
-  imageUrl,
-  price,
-  product_id,
-  sale_price,
-  title,
-}) => {
+const ProductCard = memo(({ discount = 0, id, imageUrl, price, product_id, sale_price, title }) => {
   const { formatPrice } = useCurrency();
 
-  const productInfo    = product_id?.product_id ?? product_id ?? {};
-  const productName    = productInfo.name ?? title ?? "";
-  const productImage   = product_id?.image_url ?? imageUrl ?? "";
-  const originalPrice  = sale_price ?? price ?? 0;
-  const finalPrice     = originalPrice * (1 - discount / 100);
-  const hasDiscount    = discount > 0;
+  const productInfo = product_id?.product_id ?? product_id ?? {};
+  const productName = productInfo.name ?? title ?? "";
+  const productImage = product_id?.image_url ?? imageUrl ?? "";
+  const originalPrice = sale_price ?? price ?? 0;
+  const finalPrice = originalPrice * (1 - discount / 100);
+  const hasDiscount = discount > 0;
 
   // Mô tả đầy đủ cho screen reader
   const ariaLabel = hasDiscount
@@ -48,11 +40,7 @@ const ProductCard = memo(({
         - Enter/Space kích hoạt mặc định (không cần onKeyDown)
         - Screen reader đọc đúng "link"
       */}
-      <a
-        href={`/product/${id}`}
-        className="card-product__link"
-        aria-label={ariaLabel}
-      >
+      <a href={`/product/${id}`} className="card-product__link" aria-label={ariaLabel}>
         <div className="card-product__image">
           <LazyImage
             src={productImage}
@@ -67,9 +55,7 @@ const ProductCard = memo(({
           <p className="card-product__name">{productName}</p>
 
           <div className="card-product__price-row">
-            <span className="card-product__price-sale">
-              {formatPrice(finalPrice)}
-            </span>
+            <span className="card-product__price-sale">{formatPrice(finalPrice)}</span>
             {hasDiscount && (
               <span className="badge-discount" aria-hidden="true">
                 -{discount}%

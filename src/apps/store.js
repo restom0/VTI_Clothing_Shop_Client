@@ -75,9 +75,7 @@ export const store = configureStore({
     // Observability State
     reactMetrics: reactMetricsReducer,
     // RTK Query API reducers
-    ...Object.fromEntries(
-      rtkQueryApis.map((api) => [api.reducerPath, api.reducer])
-    ),
+    ...Object.fromEntries(rtkQueryApis.map((api) => [api.reducerPath, api.reducer])),
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -95,9 +93,7 @@ export const store = configureStore({
     : false,
   duplicateMiddlewareCheck: true,
   enhancers: (getDefaultEnhancers) =>
-    getDefaultEnhancers({ autoBatch: false }).concat(
-      autoBatchEnhancer({ type: "raf" })
-    ),
+    getDefaultEnhancers({ autoBatch: false }).concat(autoBatchEnhancer({ type: "raf" })),
 });
 
 setupListeners(store.dispatch);

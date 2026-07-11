@@ -1,22 +1,11 @@
 import React from "react";
-import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import {
-  PencilIcon,
-  UserPlusIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-} from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Card, CardHeader, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Card, CardHeader, CardBody } from "@material-tailwind/react/components/Card";
 import { Input } from "@material-tailwind/react/components/Input";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Button } from "@material-tailwind/react/components/Button";
 import { Chip } from "@material-tailwind/react/components/Chip";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Avatar } from "@material-tailwind/react/components/Avatar";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import Pagination from "../shared/pagination.component";
@@ -24,8 +13,6 @@ import Tablist from "../shared/list_tab.component";
 import { allorder_tab } from "../../constants/tab.constant";
 import TableHeader from "../shared/header_table";
 import { order } from "../../constants/head_table.constant";
-import SettingButton from "../shared/admin/setting_button.component";
-import useOpen from "../../hooks/useOpen.hook";
 
 const TABLE_ROWS = [
   {
@@ -77,14 +64,6 @@ const TABLE_ROWS = [
 
 const Order = () => {
   const [tab, setTab] = React.useState("ALL");
-  const {
-    detailOpen,
-    updateOpen,
-    deleteOpen,
-    handleDetailOpen,
-    handleUpdateOpen,
-    handleDeleteOpen,
-  } = useOpen();
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -96,10 +75,7 @@ const Order = () => {
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <div className="w-full md:w-72">
-              <Input
-                label="Search"
-                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-              />
+              <Input label="Search" icon={<MagnifyingGlassIcon className="h-5 w-5" />} />
             </div>
           </div>
         </div>
@@ -111,29 +87,19 @@ const Order = () => {
           <tbody>
             {TABLE_ROWS.map(({ id, sum, status, date }, index) => {
               const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
+              const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
               return (
                 <tr key={index}>
                   <td className={classes}>
                     <div className="flex items-center gap-3">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
+                      <Typography variant="small" color="blue-gray" className="font-normal">
                         {id}
                       </Typography>
                     </div>
                   </td>
                   <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
+                    <Typography variant="small" color="blue-gray" className="font-normal">
                       {sum}
                     </Typography>
                   </td>
@@ -144,35 +110,27 @@ const Order = () => {
                         size="sm"
                         value={status}
                         color={
-                          status == "ONHOLD"
+                          status === "ONHOLD"
                             ? "blue-gray"
-                            : status == "CONFIRMED"
-                            ? "cyan"
-                            : status == "DELIVERING"
-                            ? "blue"
-                            : status == "COMPLETED"
-                            ? "green"
-                            : "red"
+                            : status === "CONFIRMED"
+                              ? "cyan"
+                              : status === "DELIVERING"
+                                ? "blue"
+                                : status === "COMPLETED"
+                                  ? "green"
+                                  : "red"
                         }
                       />
                     </div>
                   </td>
                   <td className={classes}>
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
+                    <Typography variant="small" color="blue-gray" className="font-normal">
                       {date}
                     </Typography>
                   </td>
                   <td className={classes}>
                     <Tooltip content="Hủy đơn hàng">
-                      <IconButton
-                        variant="text"
-                        color="red"
-                        disabled={status == "CANCELLED"}
-                      >
+                      <IconButton variant="text" color="red" disabled={status === "CANCELLED"}>
                         <DeleteIcon className="h-4 w-4" />
                       </IconButton>
                     </Tooltip>

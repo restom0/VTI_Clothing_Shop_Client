@@ -38,11 +38,7 @@ const Table = ({
   const dispatch = useDispatch();
   const tableScrollRef = useRef(null);
   const sortedRows = useSortedRows(TABLE_ROWS, sort);
-  const { pageCount, pageItems } = usePaginatedItems(
-    sortedRows,
-    active,
-    ADMIN_TABLE_PAGE_SIZE
-  );
+  const { pageCount, pageItems } = usePaginatedItems(sortedRows, active, ADMIN_TABLE_PAGE_SIZE);
   const rowVirtualizer = useVirtualizer({
     count: pageItems.length,
     estimateSize: () => ADMIN_TABLE_ROW_ESTIMATE,
@@ -52,9 +48,7 @@ const Table = ({
   const virtualRows = rowVirtualizer.getVirtualItems();
   const topPadding = virtualRows.length > 0 ? virtualRows[0].start : 0;
   const bottomPadding =
-    virtualRows.length > 0
-      ? rowVirtualizer.getTotalSize() - virtualRows.at(-1).end
-      : 0;
+    virtualRows.length > 0 ? rowVirtualizer.getTotalSize() - virtualRows.at(-1).end : 0;
   const totalColSpan = getTotalColSpan(TABLE_HEAD, noDelete, noUpdate);
   const selectRow = (rowId) => {
     dispatch(setSelectedId(rowId));
@@ -65,30 +59,20 @@ const Table = ({
     <Card>
       <div ref={tableScrollRef} className="admin-table-scroll">
         <table className="w-full min-w-max table-auto text-center">
-          <TableHeader
-            TABLE_HEAD={TABLE_HEAD}
-            noUpdate={noUpdate}
-            noDelete={noDelete}
-          />
+          <TableHeader TABLE_HEAD={TABLE_HEAD} noUpdate={noUpdate} noDelete={noDelete} />
           <tbody>
             {pageItems.length > 0 ? (
               <>
                 {topPadding > 0 && (
                   <tr aria-hidden="true">
-                    <td
-                      colSpan={totalColSpan}
-                      style={{ height: topPadding, padding: 0 }}
-                    />
+                    <td colSpan={totalColSpan} style={{ height: topPadding, padding: 0 }} />
                   </tr>
                 )}
                 {virtualRows.map((virtualRow) => {
                   const row = pageItems[virtualRow.index];
 
                   return (
-                    <tr
-                      key={row.id ?? virtualRow.key}
-                      className="border-b border-gray-200"
-                    >
+                    <tr key={row.id ?? virtualRow.key} className="border-b border-gray-200">
                       {Object.values(row)
                         .slice(1)
                         .map((value, index) => (
@@ -98,11 +82,7 @@ const Table = ({
                             onClick={() => selectRow(row.id)}
                             colSpan={TABLE_HEAD[index].col}
                           >
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
+                            <Typography variant="small" color="blue-gray" className="font-normal">
                               {value}
                             </Typography>
                           </td>
@@ -125,10 +105,7 @@ const Table = ({
                 })}
                 {bottomPadding > 0 && (
                   <tr aria-hidden="true">
-                    <td
-                      colSpan={totalColSpan}
-                      style={{ height: bottomPadding, padding: 0 }}
-                    />
+                    <td colSpan={totalColSpan} style={{ height: bottomPadding, padding: 0 }} />
                   </tr>
                 )}
               </>

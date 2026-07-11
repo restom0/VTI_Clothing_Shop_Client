@@ -1,23 +1,16 @@
 import React from "react";
-import Kpi from "./kpi.component";
 import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
+import { Card, CardBody } from "@material-tailwind/react/components/Card";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Container } from "@mui/material";
-import { set } from "date-fns";
 import KpiReport from "./kpi_report.component";
-import { plugins } from "chart.js/auto";
 import { report_items } from "../../constants/menu_item.constant";
 import Table from "../shared/table.component";
-import Pagination from "../shared/pagination.component";
-import {
-  CHART_TITLE_FONT_SIZE,
-  getChartDatasetTheme,
-} from "../../constants/chart_theme.constant";
+import { CHART_TITLE_FONT_SIZE, getChartDatasetTheme } from "../../constants/chart_theme.constant";
 
 const Report = () => {
   const [tab, setTab] = React.useState("doanh thu");
@@ -102,8 +95,7 @@ const Report = () => {
     plugins: {
       title: {
         display: true,
-        text:
-          `Biểu đồ Top 5 ` + tab + ` các tháng năm ` + new Date().getFullYear(),
+        text: `Biểu đồ Top 5 ` + tab + ` các tháng năm ` + new Date().getFullYear(),
         font: {
           size: CHART_TITLE_FONT_SIZE,
         },
@@ -212,31 +204,19 @@ const Report = () => {
                     className="flex items-center gap-1 !border-gray-300"
                   >
                     {tab}
-                    <ChevronDownIcon
-                      strokeWidth={4}
-                      className="w-3 h-3 text-gray-900"
-                    />
+                    <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-gray-900" />
                   </Button>
                 </MenuHandler>
                 <MenuList>
                   {report_items.map((item) => (
-                    <MenuItem
-                      key={item}
-                      value={item}
-                      onClick={handleTab}
-                      className="uppercase"
-                    >
+                    <MenuItem key={item} value={item} onClick={handleTab} className="uppercase">
                       {item}
                     </MenuItem>
                   ))}
                 </MenuList>
               </Menu>
             </div>
-            <Button
-              className=" !border-gray-300"
-              color="gray"
-              variant="outlined"
-            >
+            <Button className=" !border-gray-300" color="gray" variant="outlined">
               Export
             </Button>
           </div>

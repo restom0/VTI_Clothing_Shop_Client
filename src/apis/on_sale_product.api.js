@@ -19,5 +19,4 @@ export const onSaleProductApi = createApi({
   }),
 });
 
-export const { useGetOnSaleProductQuery, useGetOnSaleProductsQuery } =
-  onSaleProductApi;
+export const { useGetOnSaleProductQuery, useGetOnSaleProductsQuery } = onSaleProductApi;

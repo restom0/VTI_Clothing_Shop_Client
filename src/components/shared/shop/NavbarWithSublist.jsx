@@ -8,11 +8,7 @@ import { List, ListItem } from "@material-tailwind/react/components/List";
 import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
 import { Input } from "@material-tailwind/react/components/Input";
 import { Tooltip } from "@material-tailwind/react/components/Tooltip";
-import {
-  ChevronDownIcon,
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
@@ -75,9 +71,7 @@ const NavMenuItems = ({ items, type }) =>
   items.map(({ name: itemName, id }) => (
     <a href={`/${type}/${id}`} key={id}>
       <MenuItem className="flex items-center gap-3 rounded-lg">
-        <span className="nav-menu-link-label">
-          {itemName}
-        </span>
+        <span className="nav-menu-link-label">{itemName}</span>
       </MenuItem>
     </a>
   ));
@@ -135,9 +129,7 @@ export const NavListMenu = ({ name, type, data }) => {
           </div>
         </MenuHandler>
         <MenuList className="hidden max-w-screen-xl rounded-xl lg:block">
-          <ul className={`grid grid-cols-${cols} gap-y-2 outline-none`}>
-            {renderItems()}
-          </ul>
+          <ul className={`grid grid-cols-${cols} gap-y-2 outline-none`}>{renderItems()}</ul>
         </MenuList>
       </Menu>
       <div className="block lg:hidden">
@@ -203,22 +195,14 @@ const NavList = () => {
 
   if (isNavLoading) return shouldShowSkeleton ? <NavSkeleton /> : null;
 
-  return (
-    <NavListView
-      brands={brands}
-      categories={categories}
-      labels={getNavbarLabels(t)}
-    />
-  );
+  return <NavListView brands={brands} categories={categories} labels={getNavbarLabels(t)} />;
 };
 
 export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
   <div className="nav-tooltip-panel">
     <div className="flex-between mb-3">
       <span className="font-semibold">{labels.cart}</span>
-      <span className="nav-tooltip-muted">
-        {labels.itemCount}
-      </span>
+      <span className="nav-tooltip-muted">{labels.itemCount}</span>
     </div>
     <Divider />
     <div className="grid grid-cols-1 gap-3 my-3">
@@ -232,18 +216,14 @@ export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
           <span className="text-xs font-medium col-span-1 text-center">{title}</span>
           <span className="text-xs text-center">{quantity}x</span>
           <span className="text-xs text-center">{formatPrice(unitPrice)}</span>
-          <span className="nav-tooltip-line-total">
-            {formatPrice(lineTotal)}
-          </span>
+          <span className="nav-tooltip-line-total">{formatPrice(lineTotal)}</span>
         </div>
       ))}
     </div>
     <Divider />
     <div className="flex-between mt-3">
       <span className="font-semibold">{labels.total}</span>
-      <span className="nav-tooltip-total-value">
-        {formatPrice(total)}
-      </span>
+      <span className="nav-tooltip-total-value">{formatPrice(total)}</span>
     </div>
   </div>
 );
@@ -352,9 +332,11 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
         aria-controls="mobile-nav"
         aria-label={openNav ? "Đóng menu" : "Mở menu"}
       >
-        {openNav
-          ? <XMarkIcon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
-          : <Bars3Icon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />}
+        {openNav ? (
+          <XMarkIcon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
+        ) : (
+          <Bars3Icon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
+        )}
       </IconButton>
     </div>
 

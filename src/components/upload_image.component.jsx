@@ -1,4 +1,3 @@
-import React from "react";
 const ImageUpload = ({ image, setPublicId, setAvatar }) => {
   const uploadImage = async (e) => {
     const files = e.target.files;
@@ -7,13 +6,10 @@ const ImageUpload = ({ image, setPublicId, setAvatar }) => {
     data.append("upload_preset", "ml_default");
     data.append("cloud_name", "dnv0lrysf");
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/dnv0lrysf/image/upload`,
-      {
-        method: "POST",
-        body: data,
-      }
-    );
+    const res = await fetch(`https://api.cloudinary.com/v1_1/dnv0lrysf/image/upload`, {
+      method: "POST",
+      body: data,
+    });
 
     const file = await res.json();
     setAvatar(file.url);

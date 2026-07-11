@@ -1,16 +1,8 @@
-import { Card } from "@material-tailwind/react/components/Card";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Select } from "@material-tailwind/react/components/Select";
-import { Tab, Tabs, TabsHeader } from "@material-tailwind/react/components/Tabs";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import SettingsIcon from "@mui/icons-material/Settings";
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { setSort } from "../../features/slices/sort.slice";
 const TableHeader = ({ TABLE_HEAD, noUpdate, noDelete }) => {

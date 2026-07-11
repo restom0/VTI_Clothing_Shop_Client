@@ -28,9 +28,7 @@ const cartItem = {
 
 describe("navbar helpers", () => {
   it("normalizes dropdown data and column counts", () => {
-    expect(getMenuItems({ object: [{ id: 1, name: "Nike" }] })).toEqual([
-      { id: 1, name: "Nike" },
-    ]);
+    expect(getMenuItems({ object: [{ id: 1, name: "Nike" }] })).toEqual([{ id: 1, name: "Nike" }]);
     expect(getMenuItems({})).toEqual([]);
     expect(getDropdownColumnCount([])).toBe(1);
     expect(getDropdownColumnCount([1, 2])).toBe(2);

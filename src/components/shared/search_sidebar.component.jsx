@@ -1,5 +1,8 @@
-import React from "react";
-import { Accordion, AccordionBody, AccordionHeader } from "@material-tailwind/react/components/Accordion";
+import {
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
+} from "@material-tailwind/react/components/Accordion";
 import { Card } from "@material-tailwind/react/components/Card";
 import { List, ListItem, ListItemPrefix } from "@material-tailwind/react/components/List";
 import { Typography } from "@material-tailwind/react/components/Typography";
@@ -10,8 +13,7 @@ import { SIDEBAR_SEARCH } from "../../constants/sidebar_search.constant";
 import { setOpenAccordion } from "../../features/slices/open_accordion.slice";
 import { setSidebarItem } from "../../features/slices/sidebar_item.slice";
 
-const getSidebarItemClassName = (isActive) =>
-  isActive ? "sidebar-item-active" : "";
+const getSidebarItemClassName = (isActive) => (isActive ? "sidebar-item-active" : "");
 
 const SidebarWithSearch = () => {
   const sidebarItem = useSelector((state) => state.sidebar_item.value);
@@ -42,18 +44,12 @@ const SidebarWithSearch = () => {
                     className="border-b-0 p-3"
                   >
                     <ListItemPrefix>{item.title.icon}</ListItemPrefix>
-                    <Typography
-                      color="blue-gray"
-                      className="mr-auto font-normal"
-                    >
+                    <Typography color="blue-gray" className="mr-auto font-normal">
                       {item.title.label}
                     </Typography>
                   </AccordionHeader>
                 </ListItem>
-                <AccordionBody
-                  className="py-1"
-                  key={`accord-body-${item.title.label}`}
-                >
+                <AccordionBody className="py-1" key={`accord-body-${item.title.label}`}>
                   <List className="p-0" key={`list-${item.title.label}`}>
                     {item.sublist.map((subitem) => {
                       const isActive = sidebarItem === subitem.label;
@@ -62,16 +58,11 @@ const SidebarWithSearch = () => {
                         <ListItem
                           selected={isActive}
                           key={subitem.label}
-                          onClick={() =>
-                            dispatch(setSidebarItem({ label: subitem.label }))
-                          }
+                          onClick={() => dispatch(setSidebarItem({ label: subitem.label }))}
                           className={getSidebarItemClassName(isActive)}
                         >
                           <ListItemPrefix>
-                            <ChevronRightIcon
-                              strokeWidth={3}
-                              className="h-3 w-5"
-                            />
+                            <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                           </ListItemPrefix>
                           {subitem.label}
                         </ListItem>
@@ -88,9 +79,7 @@ const SidebarWithSearch = () => {
                   <ListItem
                     key={subitem.label}
                     selected={isActive}
-                    onClick={() =>
-                      dispatch(setSidebarItem({ label: subitem.label }))
-                    }
+                    onClick={() => dispatch(setSidebarItem({ label: subitem.label }))}
                     className={getSidebarItemClassName(isActive)}
                   >
                     <ListItemPrefix>

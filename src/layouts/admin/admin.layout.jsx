@@ -1,30 +1,14 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
-import { Input } from "@material-tailwind/react/components/Input";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Select, Option } from "@material-tailwind/react/components/Select";
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-  DialogTitle,
-  Container,
-  Rating,
-} from "@mui/material";
-import React, { useState } from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import { Dialog, DialogContent, DialogActions, DialogTitle, Container } from "@mui/material";
+import React from "react";
 import useOpen from "../../hooks/useOpen.hook";
 import Table from "../../components/shared/table.component";
 import Tablist from "../../components/shared/list_tab.component";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import { Toast } from "../../configs/sweetalert2.config";
-import { useDispatch, useSelector } from "react-redux";
-import { useDeleteBrandMutation } from "../../apis/brand.api";
+import { useSelector } from "react-redux";
 
 const AdminLayout = ({
   children,
@@ -69,9 +53,7 @@ const AdminLayout = ({
       Swal.fire({
         title:
           "Bạn có chắc chắn muốn xóa?" +
-          (selectedId === -1
-            ? ""
-            : TABLE_ROWS.find((row) => row.id === selectedId)?.name || ""),
+          (selectedId === -1 ? "" : TABLE_ROWS.find((row) => row.id === selectedId)?.name || ""),
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Xác nhận",
@@ -85,13 +67,7 @@ const AdminLayout = ({
         handleDeleteClose();
       });
     }
-  }, [
-    deleteOpen,
-    TABLE_ROWS,
-    selectedId,
-    handleDeleteSubmit,
-    handleDeleteClose,
-  ]);
+  }, [deleteOpen, TABLE_ROWS, selectedId, handleDeleteSubmit, handleDeleteClose]);
   const handleUpdateSubmit = async () => {
     try {
       const message = await updateSubmit();
@@ -103,7 +79,7 @@ const AdminLayout = ({
           handleUpdateClose();
         });
       }
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Cập nhật thất bại",
@@ -166,7 +142,7 @@ const AdminLayout = ({
               variant="gradient"
               color="green"
               onClick={() => {
-                handleDetailClose(), handleUpdateOpen();
+                (handleDetailClose(), handleUpdateOpen());
               }}
             >
               <span>Cập nhật</span>
@@ -178,7 +154,7 @@ const AdminLayout = ({
               color="red"
               loading={isDeleted}
               onClick={() => {
-                handleDetailClose(), handleDetailOpen();
+                (handleDetailClose(), handleDetailOpen());
               }}
             >
               <span>Xóa</span>
@@ -186,22 +162,13 @@ const AdminLayout = ({
           )}
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={updateOpen}
-        onClose={handleUpdateClose}
-        maxWidth={sizeUpdate}
-      >
+      <Dialog open={updateOpen} onClose={handleUpdateClose} maxWidth={sizeUpdate}>
         <DialogTitle>
           <Typography variant="h4">{headerUpdate}</Typography>
         </DialogTitle>
         <DialogContent>{bodyUpdate}</DialogContent>
         <DialogActions>
-          <Button
-            variant="gradient"
-            color="green"
-            loading={isUpdated}
-            onClick={handleUpdateSubmit}
-          >
+          <Button variant="gradient" color="green" loading={isUpdated} onClick={handleUpdateSubmit}>
             {!isUpdated && <span>Xác nhận</span>}
           </Button>
         </DialogActions>

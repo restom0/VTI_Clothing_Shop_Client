@@ -1,34 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react/components/Tabs";
 import { Card, CardBody } from "@material-tailwind/react/components/Card";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Button } from "@material-tailwind/react/components/Button";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Input } from "@material-tailwind/react/components/Input";
-import { Rating } from "@mui/material";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import Pagination from "../shared/pagination.component";
-import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/list_tab.component";
 import { voucher } from "../../constants/tab.constant";
-import {
-  useGetAvailableVouchersQuery,
-  useGetVouchersQuery,
-} from "../../apis/voucher.api";
+import { useGetAvailableVouchersQuery, useGetVouchersQuery } from "../../apis/voucher.api";
 import Loading from "../shared/loading.component";
 const Voucher = () => {
   const [tab, setTab] = useState("ALL");
-  const {
-    data: vouchers,
-    isLoading: loadingVouchers,
-    isError: errorVouchers,
-  } = useGetVouchersQuery();
-  const {
-    data: availablevoucher,
-    isLoading: loadingAvailableVoucher,
-    isError: errorAvailableVoucher,
-  } = useGetAvailableVouchersQuery();
+  const { isLoading: loadingVouchers, isError: errorVouchers } = useGetVouchersQuery();
+  const { isLoading: loadingAvailableVoucher, isError: errorAvailableVoucher } =
+    useGetAvailableVouchersQuery();
   if (loadingVouchers || loadingAvailableVoucher) return <Loading />;
   if (errorVouchers || errorAvailableVoucher) return <div>Error</div>;
   return (
@@ -59,11 +42,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -94,11 +73,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -129,11 +104,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -164,11 +135,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -205,11 +172,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -240,11 +203,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -275,11 +234,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>
@@ -310,11 +265,7 @@ const Voucher = () => {
                     <Typography variant="h6" color="blue-gray">
                       Giảm 100K
                     </Typography>
-                    <Typography
-                      variant="small"
-                      color="gray"
-                      className="mb-2 font-extralight"
-                    >
+                    <Typography variant="small" color="gray" className="mb-2 font-extralight">
                       Cho sản phẩm bất kì
                     </Typography>
                   </div>

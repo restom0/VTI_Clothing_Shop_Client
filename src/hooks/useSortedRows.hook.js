@@ -14,7 +14,6 @@ export const sortRows = (rows, sort) => {
   });
 };
 
-const useSortedRows = (rows, sort) =>
-  useMemo(() => sortRows(rows, sort), [rows, sort]);
+const useSortedRows = (rows, sort) => useMemo(() => sortRows(rows, sort), [rows, sort]);
 
 export default useSortedRows;

@@ -8,12 +8,7 @@ describe("row sorting helper", () => {
       { id: 2, name: "A" },
     ];
 
-    expect(sortRows(rows, { id: 1, type: "ASC" }).map(({ id }) => id)).toEqual([
-      2,
-      1,
-    ]);
-    expect(
-      sortRows(rows, { id: 1, type: "DESC" }).map(({ id }) => id)
-    ).toEqual([1, 2]);
+    expect(sortRows(rows, { id: 1, type: "ASC" }).map(({ id }) => id)).toEqual([2, 1]);
+    expect(sortRows(rows, { id: 1, type: "DESC" }).map(({ id }) => id)).toEqual([1, 2]);
   });
 });

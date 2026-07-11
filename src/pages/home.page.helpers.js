@@ -1,9 +1,7 @@
 export const getProductId = (product) => product?.product_id?.product_id?.id;
 
 export const getUniqueProducts = (productsResponse) => {
-  const products = Array.isArray(productsResponse?.object)
-    ? productsResponse.object
-    : [];
+  const products = Array.isArray(productsResponse?.object) ? productsResponse.object : [];
   const seenIds = new Set();
 
   return products.filter((product) => {

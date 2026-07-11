@@ -6,10 +6,10 @@
 //  3. Tailwind directives
 // ============================================================
 
-@use 'variables';
-@use 'components';
-@use 'animations';
-@use 'seasons';
+@use "variables";
+@use "components";
+@use "animations";
+@use "seasons";
 
 // Tailwind layers
 @tailwind base;
@@ -28,7 +28,7 @@
   }
 
   html {
-    font-family: var(--font-sans, 'Inter', ui-sans-serif, system-ui, sans-serif);
+    font-family: var(--font-sans, "Inter", ui-sans-serif, system-ui, sans-serif);
     color: var(--color-text-base);
     background-color: var(--color-surface);
     -webkit-font-smoothing: antialiased;
@@ -86,13 +86,25 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes skeleton-shimmer {

@@ -2,8 +2,7 @@ export const NAV_SKELETON_DELAY_MS = 400;
 
 export const NAV_SKELETON_WIDTHS = ["9.9rem", "8rem", "8.75rem", "6.6rem", "4.6rem"];
 
-export const getMenuItems = (data) =>
-  Array.isArray(data?.object) ? data.object : [];
+export const getMenuItems = (data) => (Array.isArray(data?.object) ? data.object : []);
 
 export const getDropdownColumnCount = (items) => {
   const itemCount = Array.isArray(items) ? items.length : 0;

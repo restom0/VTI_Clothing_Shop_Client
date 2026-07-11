@@ -7,30 +7,30 @@
 // -------------------------------------------------------
 // 1. BRAND / PRIMARY
 // -------------------------------------------------------
-$color-primary:       #006edc;
-$color-primary-dark:  #0056b3;
+$color-primary: #006edc;
+$color-primary-dark: #0056b3;
 $color-primary-light: #4d9ef0;
 $color-primary-muted: #e8f1fb;
 
 // -------------------------------------------------------
 // 2. SEMANTIC COLORS
 // -------------------------------------------------------
-$color-danger:        #ef5350;
-$color-danger-dark:   #c62828;
-$color-danger-light:  #ffebee;
+$color-danger: #ef5350;
+$color-danger-dark: #c62828;
+$color-danger-light: #ffebee;
 
-$color-success:       #4caf50;
-$color-success-dark:  #2e7d32;
+$color-success: #4caf50;
+$color-success-dark: #2e7d32;
 $color-success-light: #e8f5e9;
 
-$color-warning:       #ff9800;
-$color-warning-dark:  #e65100;
+$color-warning: #ff9800;
+$color-warning-dark: #e65100;
 $color-warning-light: #fff3e0;
 
 // -------------------------------------------------------
 // 3. NEUTRALS
 // -------------------------------------------------------
-$gray-50:  #fafafa;
+$gray-50: #fafafa;
 $gray-100: #f5f5f5;
 $gray-200: #eeeeee;
 $gray-300: #e0e0e0;
@@ -40,7 +40,7 @@ $gray-700: #616161;
 $gray-900: #212121;
 
 // Blue-gray (Material Tailwind default palette)
-$blue-gray-50:  #eceff1;
+$blue-gray-50: #eceff1;
 $blue-gray-100: #cfd8dc;
 $blue-gray-200: #b0bec5;
 $blue-gray-500: #607d8b;
@@ -49,58 +49,58 @@ $blue-gray-900: #263238;
 // -------------------------------------------------------
 // 4. SURFACE / BACKGROUND
 // -------------------------------------------------------
-$color-surface:         #ffffff;
-$color-surface-raised:  $gray-50;
+$color-surface: #ffffff;
+$color-surface-raised: $gray-50;
 $color-surface-overlay: rgba(0, 0, 0, 0.04);
 
 // -------------------------------------------------------
 // 5. BORDER
 // -------------------------------------------------------
-$color-border:       $blue-gray-100;   // #cfd8dc
-$color-border-strong: $blue-gray-200;  // #b0bec5
+$color-border: $blue-gray-100; // #cfd8dc
+$color-border-strong: $blue-gray-200; // #b0bec5
 $color-skeleton-base: #e7eef3;
 $color-skeleton-highlight: rgba(255, 255, 255, 0.72);
 
 // -------------------------------------------------------
 // 6. TEXT
 // -------------------------------------------------------
-$color-text-base:   $blue-gray-900;  // #263238
-$color-text-strong: $gray-700;       // #616161
-$color-text-muted:  $blue-gray-500;  // #607d8b
+$color-text-base: $blue-gray-900; // #263238
+$color-text-strong: $gray-700; // #616161
+$color-text-muted: $blue-gray-500; // #607d8b
 $color-text-invert: #ffffff;
 
 // -------------------------------------------------------
 // 7. TYPOGRAPHY
 // -------------------------------------------------------
-$font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-$font-size-xs:   0.75rem;    // 12px
-$font-size-sm:   0.875rem;   // 14px
-$font-size-base: 1rem;       // 16px
-$font-size-lg:   1.125rem;   // 18px
-$font-size-xl:   1.25rem;    // 20px
-$font-size-2xl:  1.5rem;     // 24px
-$font-size-3xl:  1.875rem;   // 30px
-$font-weight-normal:   400;
-$font-weight-medium:   500;
+$font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-weight-normal: 400;
+$font-weight-medium: 500;
 $font-weight-semibold: 600;
-$font-weight-bold:     700;
-$line-height-tight:  1.25;
+$font-weight-bold: 700;
+$line-height-tight: 1.25;
 $line-height-normal: 1.5;
 $line-height-relaxed: 1.6875; // 27px at 16px base font size
 
 $space-2xs: 0.25rem;
-$space-xs:  0.5rem;
-$space-sm:  0.75rem;
-$space-md:  1rem;
-$space-lg:  1.5rem;
-$space-xl:  2rem;
+$space-xs: 0.5rem;
+$space-sm: 0.75rem;
+$space-md: 1rem;
+$space-lg: 1.5rem;
+$space-xl: 2rem;
 $space-2xl: 2.5rem;
 
 // -------------------------------------------------------
 // 8. SPACING
 // -------------------------------------------------------
-$spacing-page-x:   2.5rem;   // px-10 ≈ horizontal page padding
-$spacing-section-y: 2.5rem;  // my-10 ≈ vertical section margin
+$spacing-page-x: 2.5rem; // px-10 ≈ horizontal page padding
+$spacing-section-y: 2.5rem; // my-10 ≈ vertical section margin
 
 $spacing-page-x-mobile: $space-md;
 $spacing-section-y-mobile: $space-xl;
@@ -150,47 +150,53 @@ $product-swatch-dark-gray: #777777;
 $border-width-base: 1px;
 $border-width-strong: 2px;
 
-$radius-sm:   0.25rem;   // 4px
-$radius-md:   0.5rem;    // 8px
-$radius-lg:   0.75rem;   // 12px
-$radius-xl:   1rem;      // 16px
+$radius-sm: 0.25rem; // 4px
+$radius-md: 0.5rem; // 8px
+$radius-lg: 0.75rem; // 12px
+$radius-xl: 1rem; // 16px
 $radius-full: 9999px;
 
 // -------------------------------------------------------
 // 11. SHADOW
 // -------------------------------------------------------
-$shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-$shadow-card-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-$shadow-panel:      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-card:
+  0 1px 3px 0 rgb(0 0 0 / 0.1),
+  0 1px 2px -1px rgb(0 0 0 / 0.1);
+$shadow-card-hover:
+  0 20px 25px -5px rgb(0 0 0 / 0.1),
+  0 8px 10px -6px rgb(0 0 0 / 0.1);
+$shadow-panel:
+  0 4px 6px -1px rgb(0 0 0 / 0.1),
+  0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 // -------------------------------------------------------
 // 12. TRANSITION & ANIMATION
 // -------------------------------------------------------
-$transition-fast:    150ms ease;
+$transition-fast: 150ms ease;
 $transition-default: 300ms ease;
-$transition-slow:    500ms ease;
+$transition-slow: 500ms ease;
 
 // Easing curves
-$ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
-$ease-out-quart:  cubic-bezier(0.25, 1, 0.5, 1);
-$ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);
+$ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
 // Scroll-reveal durations
-$duration-reveal:      0.55s;
+$duration-reveal: 0.55s;
 $duration-reveal-fast: 0.35s;
 $duration-reveal-slow: 0.75s;
 
 // Parallax
 $parallax-banner-height: 400px;
-$parallax-bg-overshoot:  80px; // extra height so bg has room to shift
+$parallax-bg-overshoot: 80px; // extra height so bg has room to shift
 
 // -------------------------------------------------------
 // 13. Z-INDEX
 // -------------------------------------------------------
-$z-navbar:   50;
+$z-navbar: 50;
 $z-dropdown: 100;
-$z-modal:    200;
-$z-toast:    300;
+$z-modal: 200;
+$z-toast: 300;
 
 // -------------------------------------------------------
 // 14. 12-COLUMN GRID SYSTEM
@@ -200,10 +206,10 @@ $z-toast:    300;
 // Half     = 6/12 col  (50%)
 // Cart     = 8fr + 4fr
 // -------------------------------------------------------
-$grid-columns:    12;
-$grid-gutter:     $space-xl;    // 2rem  — gap mặc định (desktop)
-$grid-gutter-sm:  $space-md;    // 1rem  — gap mobile
-$grid-max-width:  80rem;        // 1280px — max-width của page container
+$grid-columns: 12;
+$grid-gutter: $space-xl; // 2rem  — gap mặc định (desktop)
+$grid-gutter-sm: $space-md; // 1rem  — gap mobile
+$grid-max-width: 80rem; // 1280px — max-width của page container
 
 // ============================================================
 // PUBLISH AS CSS CUSTOM PROPERTIES
@@ -211,48 +217,48 @@ $grid-max-width:  80rem;        // 1280px — max-width của page container
 // ============================================================
 :root {
   // Brand
-  --color-primary:       #{$color-primary};
-  --color-primary-dark:  #{$color-primary-dark};
+  --color-primary: #{$color-primary};
+  --color-primary-dark: #{$color-primary-dark};
   --color-primary-light: #{$color-primary-light};
   --color-primary-muted: #{$color-primary-muted};
 
   // Semantic
-  --color-danger:        #{$color-danger};
-  --color-danger-dark:   #{$color-danger-dark};
-  --color-danger-light:  #{$color-danger-light};
-  --color-success:       #{$color-success};
-  --color-success-dark:  #{$color-success-dark};
+  --color-danger: #{$color-danger};
+  --color-danger-dark: #{$color-danger-dark};
+  --color-danger-light: #{$color-danger-light};
+  --color-success: #{$color-success};
+  --color-success-dark: #{$color-success-dark};
   --color-success-light: #{$color-success-light};
-  --color-warning:       #{$color-warning};
-  --color-warning-dark:  #{$color-warning-dark};
+  --color-warning: #{$color-warning};
+  --color-warning-dark: #{$color-warning-dark};
   --color-warning-light: #{$color-warning-light};
 
   // Surface
-  --color-surface:         #{$color-surface};
-  --color-surface-raised:  #{$color-surface-raised};
+  --color-surface: #{$color-surface};
+  --color-surface-raised: #{$color-surface-raised};
   --color-surface-overlay: #{$color-surface-overlay};
 
   // Border
-  --color-border:       #{$color-border};
+  --color-border: #{$color-border};
   --color-border-strong: #{$color-border-strong};
   --color-skeleton-base: #{$color-skeleton-base};
   --color-skeleton-highlight: #{$color-skeleton-highlight};
 
   // Text
-  --color-text-base:   #{$color-text-base};
+  --color-text-base: #{$color-text-base};
   --color-text-strong: #{$color-text-strong};
-  --color-text-muted:  #{$color-text-muted};
+  --color-text-muted: #{$color-text-muted};
   --color-text-invert: #{$color-text-invert};
 
   // Spacing
   --space-2xs: #{$space-2xs};
-  --space-xs:  #{$space-xs};
-  --space-sm:  #{$space-sm};
-  --space-md:  #{$space-md};
-  --space-lg:  #{$space-lg};
-  --space-xl:  #{$space-xl};
+  --space-xs: #{$space-xs};
+  --space-sm: #{$space-sm};
+  --space-md: #{$space-md};
+  --space-lg: #{$space-lg};
+  --space-xl: #{$space-xl};
   --space-2xl: #{$space-2xl};
-  --spacing-page-x:   #{$spacing-page-x};
+  --spacing-page-x: #{$spacing-page-x};
   --spacing-section-y: #{$spacing-section-y};
   --spacing-page-x-mobile: #{$spacing-page-x-mobile};
   --spacing-section-y-mobile: #{$spacing-section-y-mobile};
@@ -305,30 +311,30 @@ $grid-max-width:  80rem;        // 1280px — max-width của page container
   --border-standard-strong: var(--border-width-strong) solid var(--color-border);
 
   // Radius
-  --radius-sm:   #{$radius-sm};
-  --radius-md:   #{$radius-md};
-  --radius-lg:   #{$radius-lg};
-  --radius-xl:   #{$radius-xl};
+  --radius-sm: #{$radius-sm};
+  --radius-md: #{$radius-md};
+  --radius-lg: #{$radius-lg};
+  --radius-xl: #{$radius-xl};
   --radius-full: #{$radius-full};
 
   // Shadow
-  --shadow-card:       #{$shadow-card};
+  --shadow-card: #{$shadow-card};
   --shadow-card-hover: #{$shadow-card-hover};
-  --shadow-panel:      #{$shadow-panel};
+  --shadow-panel: #{$shadow-panel};
 
   // Animation / easing
-  --ease-out-expo:   #{$ease-out-expo};
-  --ease-out-quart:  #{$ease-out-quart};
-  --ease-in-out:     #{$ease-in-out};
-  --duration-reveal:      #{$duration-reveal};
+  --ease-out-expo: #{$ease-out-expo};
+  --ease-out-quart: #{$ease-out-quart};
+  --ease-in-out: #{$ease-in-out};
+  --duration-reveal: #{$duration-reveal};
   --duration-reveal-fast: #{$duration-reveal-fast};
   --duration-reveal-slow: #{$duration-reveal-slow};
   --parallax-banner-height: #{$parallax-banner-height};
-  --parallax-bg-overshoot:  #{$parallax-bg-overshoot};
+  --parallax-bg-overshoot: #{$parallax-bg-overshoot};
 
   // 12-column grid system
-  --grid-columns:   #{$grid-columns};
-  --grid-gutter:    #{$grid-gutter};
+  --grid-columns: #{$grid-columns};
+  --grid-gutter: #{$grid-gutter};
   --grid-gutter-sm: #{$grid-gutter-sm};
   --grid-max-width: #{$grid-max-width};
 
@@ -346,9 +352,9 @@ $grid-max-width:  80rem;        // 1280px — max-width của page container
 
 @media (max-width: 767px) {
   :root {
-    --spacing-page-x:   #{$spacing-page-x-mobile};
+    --spacing-page-x: #{$spacing-page-x-mobile};
     --spacing-section-y: #{$spacing-section-y-mobile};
-    --spacing-card-padding:  #{$space-sm};
+    --spacing-card-padding: #{$space-sm};
     --spacing-panel-padding: #{$space-md};
     // Thu hẹp grid gutter trên mobile
     --grid-gutter: #{$grid-gutter-sm};
@@ -358,36 +364,36 @@ $grid-max-width:  80rem;        // 1280px — max-width của page container
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-primary:       #66aef7;
-  --color-primary-dark:  #3f8fe4;
+  --color-primary: #66aef7;
+  --color-primary-dark: #3f8fe4;
   --color-primary-light: #a9d3ff;
   --color-primary-muted: rgba(102, 174, 247, 0.16);
 
-  --color-danger:        #ff8a80;
-  --color-danger-dark:   #ef5350;
-  --color-danger-light:  rgba(255, 138, 128, 0.14);
-  --color-success:       #81c784;
-  --color-success-dark:  #4caf50;
+  --color-danger: #ff8a80;
+  --color-danger-dark: #ef5350;
+  --color-danger-light: rgba(255, 138, 128, 0.14);
+  --color-success: #81c784;
+  --color-success-dark: #4caf50;
   --color-success-light: rgba(129, 199, 132, 0.14);
-  --color-warning:       #ffb74d;
-  --color-warning-dark:  #ff9800;
+  --color-warning: #ffb74d;
+  --color-warning-dark: #ff9800;
   --color-warning-light: rgba(255, 183, 77, 0.14);
 
-  --color-surface:         #111827;
-  --color-surface-raised:  #1f2937;
+  --color-surface: #111827;
+  --color-surface-raised: #1f2937;
   --color-surface-overlay: rgba(255, 255, 255, 0.08);
 
-  --color-border:        #374151;
+  --color-border: #374151;
   --color-border-strong: #4b5563;
   --color-skeleton-base: #263244;
   --color-skeleton-highlight: rgba(255, 255, 255, 0.12);
 
-  --color-text-base:   #f3f4f6;
+  --color-text-base: #f3f4f6;
   --color-text-strong: #e5e7eb;
-  --color-text-muted:  #9ca3af;
+  --color-text-muted: #9ca3af;
   --color-text-invert: #111827;
 
-  --shadow-card:       0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.35);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.35);
   --shadow-card-hover: 0 20px 25px -5px rgb(0 0 0 / 0.45), 0 8px 10px -6px rgb(0 0 0 / 0.45);
-  --shadow-panel:      0 10px 20px -10px rgb(0 0 0 / 0.65);
+  --shadow-panel: 0 10px 20px -10px rgb(0 0 0 / 0.65);
 }

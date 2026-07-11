@@ -85,12 +85,7 @@ const Footer = () => {
   const { t } = useI18n();
 
   return (
-    <FooterView
-      footerMenu={FOOTER_MENU}
-      socialLinks={SOCIAL_LINKS}
-      t={t}
-      year={currentYear}
-    />
+    <FooterView footerMenu={FOOTER_MENU} socialLinks={SOCIAL_LINKS} t={t} year={currentYear} />
   );
 };
 

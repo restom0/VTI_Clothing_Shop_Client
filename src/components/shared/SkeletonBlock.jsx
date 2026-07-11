@@ -6,11 +6,7 @@ const SkeletonBlock = ({
   children = "\u00A0",
   ...props
 }) => (
-  <Component
-    className={`skeleton ${className}`.trim()}
-    aria-hidden="true"
-    {...props}
-  >
+  <Component className={`skeleton ${className}`.trim()} aria-hidden="true" {...props}>
     {children}
   </Component>
 );

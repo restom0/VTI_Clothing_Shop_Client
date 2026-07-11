@@ -5,26 +5,18 @@ import {
   translations,
 } from "./generated/labels.js";
 
-export {
-  FALLBACK_LANGUAGE,
-  LANGUAGE_STORAGE_KEY,
-  SUPPORTED_LANGUAGES,
-  translations,
-};
+export { FALLBACK_LANGUAGE, LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, translations };
 
 export const normalizeLanguage = (language) => {
   if (!language) return null;
 
   const languageCode = language.toLowerCase().split("-")[0];
-  return SUPPORTED_LANGUAGES.some(({ code }) => code === languageCode)
-    ? languageCode
-    : null;
+  return SUPPORTED_LANGUAGES.some(({ code }) => code === languageCode) ? languageCode : null;
 };
 
 export const interpolateMessage = (template, params = {}) =>
   Object.entries(params).reduce(
-    (message, [key, value]) =>
-      message.replace(new RegExp(`\\{${key}\\}`, "g"), String(value)),
+    (message, [key, value]) => message.replace(new RegExp(`\\{${key}\\}`, "g"), String(value)),
     template
   );
 

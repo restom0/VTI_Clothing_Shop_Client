@@ -35,7 +35,6 @@ export const slidersSlice = createSlice({
   },
 });
 
-export const { setSlider, deleteSlider, resetSlider, resetAllSliders } =
-  slidersSlice.actions;
+export const { setSlider, deleteSlider, resetSlider, resetAllSliders } = slidersSlice.actions;
 
 export default slidersSlice.reducer;

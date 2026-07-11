@@ -5,7 +5,7 @@ import { useSeasonMode } from "../../theme/SeasonProvider";
 
 // Season accent colors for the swatch dot in each menu item
 const SEASON_DOT_COLORS = {
-  auto:   "linear-gradient(135deg, #C2586B 0%, #0098A6 33%, #BC5E2A 66%, #1B509A 100%)",
+  auto: "linear-gradient(135deg, #C2586B 0%, #0098A6 33%, #BC5E2A 66%, #1B509A 100%)",
   spring: "#C2586B",
   summer: "#0098A6",
   autumn: "#BC5E2A",
@@ -30,8 +30,7 @@ const SeasonSwitcher = () => {
   const { activeSeason, season, setSeason, seasonOptions } = useSeasonMode();
 
   // Find the display option for the currently stored selection (could be "auto")
-  const currentOption = seasonOptions.find((o) => o.value === season)
-    ?? seasonOptions[0];
+  const currentOption = seasonOptions.find((o) => o.value === season) ?? seasonOptions[0];
 
   return (
     <Menu placement="bottom-end">
@@ -68,9 +67,7 @@ const SeasonSwitcher = () => {
               <SeasonDot value={value} size={10} />
               <span className="text-sm leading-none">
                 {emoji} {label}
-                {isCurrentSeason && (
-                  <span className="ml-1 text-xs opacity-60">(nay)</span>
-                )}
+                {isCurrentSeason && <span className="ml-1 text-xs opacity-60">(nay)</span>}
               </span>
               {isActive && (
                 <span className="ml-auto text-xs" style={{ color: "var(--color-primary)" }}>

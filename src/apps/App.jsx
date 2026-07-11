@@ -18,9 +18,7 @@ const Productpage = lazy(() => import("../pages/list_product.page"));
 const Profilepage = lazy(() => import("../pages/profile.page"));
 const Registerpage = lazy(() => import("../pages/register.page"));
 const CareerLayout = lazy(() => import("../layouts/career/career.layout"));
-const HelpCenterLayout = lazy(() =>
-  import("../layouts/helpcenter/help_center.layout")
-);
+const HelpCenterLayout = lazy(() => import("../layouts/helpcenter/help_center.layout"));
 const AboutUsPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.AboutUsPage,

@@ -1,0 +1,12 @@
+# Qodana configuration — https://www.jetbrains.com/help/qodana/qodana-yaml.html
+version: "1.0"
+linter: jetbrains/qodana-js:latest
+profile:
+  name: qodana.recommended
+exclude:
+  - name: All
+    paths:
+      - dist
+      - coverage
+      - node_modules
+      - public

@@ -1,22 +1,8 @@
-import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { DialogBody, DialogFooter, DialogHeader, Dialog } from "@material-tailwind/react/components/Dialog";
 import { Textarea } from "@material-tailwind/react/components/Textarea";
 import { Select, Option } from "@material-tailwind/react/components/Select";
 import { Container } from "@mui/material";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
-import TableHeader from "../shared/header_table";
 import { inbox } from "../../constants/head_table.constant";
-import Table from "../shared/table.component";
-import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";
 const TABLE_ROWS = [
   {
@@ -42,17 +28,15 @@ const Inbox = () => {
               Nội dung:
             </Typography>
             <Typography color="blue-gray" className="font-normal mb-5">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies
-              tincidunt, nunc nec ultricies?
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt, nunc nec
+              ultricies tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies?
             </Typography>
             <Typography variant="h6" color="blue-gray" className="font-bold">
               Trả lời:
             </Typography>
             <Typography color="blue-gray" className="font-normal">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies
-              tincidunt, nunc nec ultricies?
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt, nunc nec
+              ultricies tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies?
             </Typography>
           </Container>
         }
@@ -63,17 +47,15 @@ const Inbox = () => {
               Nội dung:
             </Typography>
             <Typography color="blue-gray" className="font-normal mb-5">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies
-              tincidunt, nunc nec ultricies?
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt, nunc nec
+              ultricies tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies?
             </Typography>
             <Typography variant="h6" color="blue-gray" className="font-bold">
               Trả lời:
             </Typography>
             <Textarea color="lightBlue" size="regular" placeholder="Trả lời">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies
-              tincidunt, nunc nec ultricies?
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt, nunc nec
+              ultricies tincidunt, nunc nec ultricies tincidunt, nunc nec ultricies?
             </Textarea>
           </Container>
         }

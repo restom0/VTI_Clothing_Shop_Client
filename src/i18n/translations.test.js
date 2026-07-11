@@ -23,9 +23,7 @@ describe("i18n translations", () => {
 
     SUPPORTED_LANGUAGES.forEach(({ code }) => {
       expect(translations[code]).toBeDefined();
-      expect(Object.keys(translations[code]).sort()).toEqual(
-        fallbackKeys.sort()
-      );
+      expect(Object.keys(translations[code]).sort()).toEqual(fallbackKeys.sort());
     });
   });
 
@@ -39,15 +37,11 @@ describe("i18n translations", () => {
   it("translates labels and interpolates params", () => {
     expect(translate("de-DE", "common.search")).toBe("Suche");
     expect(translate("es", "common.items", { count: 3 })).toBe("3 productos");
-    expect(interpolateMessage("Hello {name}", { name: "VTI" })).toBe(
-      "Hello VTI"
-    );
+    expect(interpolateMessage("Hello {name}", { name: "VTI" })).toBe("Hello VTI");
   });
 
   it("falls back to English and then to the key", () => {
     expect(translate("vi", "common.search")).toBe("Search");
-    expect(translate("fr", "missing.translation.key")).toBe(
-      "missing.translation.key"
-    );
+    expect(translate("fr", "missing.translation.key")).toBe("missing.translation.key");
   });
 });

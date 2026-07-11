@@ -1,8 +1,4 @@
-import React from "react";
-
-import { Button } from "@material-tailwind/react/components/Button";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
 import { Card, CardBody } from "@material-tailwind/react/components/Card";
 
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
@@ -14,9 +10,7 @@ const KpiCard = ({ title, percentage, price, color, icon }) => {
     <Card className="shadow-sm border border-gray-200 !rounded-lg">
       <CardBody className="p-4">
         <div className="flex justify-between items-center">
-          <Typography className="!font-medium !text-xs text-gray-600">
-            {title}
-          </Typography>
+          <Typography className="!font-medium !text-xs text-gray-600">{title}</Typography>
           <div className="flex items-center gap-1">
             {icon}
             <Typography color={color} className="font-medium !text-xs">
@@ -148,30 +142,20 @@ const KpiReport = ({ tab }) => {
     cards.map((card) => ({
       ...card,
       price:
-        card.price?.currencyAmount == null
-          ? card.price
-          : formatPrice(card.price.currencyAmount),
+        card.price?.currencyAmount == null ? card.price : formatPrice(card.price.currencyAmount),
     }));
 
   return (
     <section className="container mx-auto py-5 px-8">
       <div className="mt-6 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-center md:gap-2.5 gap-4">
         {tab === "doanh thu" &&
-          getDisplayCards(income).map((props, key) => (
-            <KpiCard key={key} {...props} />
-          ))}
+          getDisplayCards(income).map((props, key) => <KpiCard key={key} {...props} />)}
         {tab === "thương hiệu" &&
-          getDisplayCards(brand).map((props, key) => (
-            <KpiCard key={key} {...props} />
-          ))}
+          getDisplayCards(brand).map((props, key) => <KpiCard key={key} {...props} />)}
         {tab === "danh mục" &&
-          getDisplayCards(category).map((props, key) => (
-            <KpiCard key={key} {...props} />
-          ))}
+          getDisplayCards(category).map((props, key) => <KpiCard key={key} {...props} />)}
         {tab === "sản phẩm" &&
-          getDisplayCards(product).map((props, key) => (
-            <KpiCard key={key} {...props} />
-          ))}
+          getDisplayCards(product).map((props, key) => <KpiCard key={key} {...props} />)}
       </div>
     </section>
   );

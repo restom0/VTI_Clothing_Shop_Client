@@ -1,24 +1,11 @@
 import React from "react";
-import { Navbar, MobileNav } from "@material-tailwind/react/components/Navbar";
+import { Navbar } from "@material-tailwind/react/components/Navbar";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
 import { Avatar } from "@material-tailwind/react/components/Avatar";
-import { Card } from "@material-tailwind/react/components/Card";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
-import {
-  CubeTransparentIcon,
-  UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
-  ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
-  PowerIcon,
-  RocketLaunchIcon,
-  Bars2Icon,
-} from "@heroicons/react/24/solid";
+import { ChevronDownIcon, Bars2Icon } from "@heroicons/react/24/solid";
 import { account_menu } from "../../../constants/menu_item.constant";
 
 const ProfileMenu = () => {
@@ -48,9 +35,7 @@ const ProfileMenu = () => {
           />
           <ChevronDownIcon
             strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
+            className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
           />
         </Button>
       </MenuHandler>
@@ -62,9 +47,7 @@ const ProfileMenu = () => {
               key={label}
               onClick={closeMenu}
               className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
+                isLastItem ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" : ""
               }`}
             >
               {React.createElement(icon, {
@@ -88,15 +71,12 @@ const ProfileMenu = () => {
 };
 
 const AdminNavbar = () => {
-  const [isNavOpen, setIsNavOpen] = React.useState(false);
+  const [, setIsNavOpen] = React.useState(false);
 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false)
-    );
+    window.addEventListener("resize", () => window.innerWidth >= 960 && setIsNavOpen(false));
   }, []);
 
   return (

@@ -1,22 +1,15 @@
-import React from "react";
-
-import { Button } from "@material-tailwind/react/components/Button";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
 import { Card, CardBody } from "@material-tailwind/react/components/Card";
 
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";
 import { useCurrency } from "../../currency";
 
-const KpiCard = ({ title, percentage, price, color, icon }) => {
+const KpiCard = ({ title, price }) => {
   return (
     <Card className="shadow-sm border border-gray-200 !rounded-lg mb-7">
       <CardBody className="p-4">
         <div className="flex justify-between items-center">
-          <Typography className="!font-medium !text-xs text-gray-600">
-            {title}
-          </Typography>
+          <Typography className="!font-medium !text-xs text-gray-600">{title}</Typography>
           {/* <div className="flex items-center gap-1">
             {icon}
             <Typography color={color} className="font-medium !text-xs">

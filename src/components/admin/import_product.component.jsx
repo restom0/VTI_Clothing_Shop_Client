@@ -1,11 +1,7 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card, CardFooter } from "@material-tailwind/react/components/Card";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Input } from "@material-tailwind/react/components/Input";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Option } from "@material-tailwind/react/components/Select";
 import { Radio } from "@material-tailwind/react/components/Radio";
 import {
   Select,
@@ -14,7 +10,6 @@ import {
   DialogActions,
   DialogTitle,
   Container,
-  Rating,
   TextField,
   InputAdornment,
   FormControl,
@@ -36,18 +31,7 @@ import {
 } from "../../apis/import_product.api";
 import { Toast } from "../../configs/sweetalert2.config";
 import ImageUpload from "../upload_image.component";
-import {
-  deleteAvatar,
-  resetAvatar,
-  setAvatar,
-} from "../../features/slices/avatar_url.slice";
-import axios from "axios";
-import CryptoJS from "crypto-js";
-import {
-  deleteSlider,
-  resetSlider,
-  setSlider,
-} from "../../features/slices/sliders.slice";
+
 import Loading from "../shared/loading.component";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import { handleDelete } from "../../utils/delete_image.util";
@@ -92,8 +76,7 @@ const ImportProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { formatPrice } = useCurrency();
-  const formatOptionalPrice = (price) =>
-    price == null ? "" : formatPrice(price);
+  const formatOptionalPrice = (price) => (price == null ? "" : formatPrice(price));
   // const avatar_url = useSelector((state) => state.avatar_url);
   // const slider1 = useSelector((state) => state.slider1);
   // const slider2 = useSelector((state) => state.slider2);
@@ -157,16 +140,9 @@ const ImportProduct = () => {
     error: isError_ImportedProducts,
     isLoading: isLoading_ImportProducts,
   } = useGetImportedProductsQuery();
-  const [addImportedProduct, { error: isAddedError, isLoading: isAdded }] =
-    useAddImportedProductMutation();
-  const [
-    updateImportedProduct,
-    { error: isUpdatedError, isLoading: isUpdated },
-  ] = useUpdateImportedProductMutation();
-  const [
-    deleteImportedProduct,
-    { error: isDeletedError, isLoading: isDeleted },
-  ] = useDeleteImportedProductMutation();
+  const [addImportedProduct, { isLoading: isAdded }] = useAddImportedProductMutation();
+  const [updateImportedProduct, { isLoading: isUpdated }] = useUpdateImportedProductMutation();
+  const [deleteImportedProduct, { isLoading: isDeleted }] = useDeleteImportedProductMutation();
   const handleAddSubmit = async () => {
     try {
       if (oldOpen) {
@@ -255,7 +231,7 @@ const ImportProduct = () => {
           });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       Toast.fire({
         icon: "error",
         title: "Thêm thương hiệu thất bại",
@@ -315,7 +291,7 @@ const ImportProduct = () => {
           dispatch(resetSelectedId());
         });
       }
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Xóa thất bại",
@@ -324,9 +300,7 @@ const ImportProduct = () => {
   };
   useEffect(() => {
     if (selectedId !== -1) {
-      const search = importedProducts?.object.find(
-        (row) => row.id === selectedId
-      );
+      const search = importedProducts?.object.find((row) => row.id === selectedId);
       if (search) {
         setUpdateSlider1(search.slider_url_1);
         setUpdateSlider2(search.slider_url_2);
@@ -412,12 +386,11 @@ const ImportProduct = () => {
                         selectedId === -1
                           ? ""
                           : importedProducts
-                          ? importedProducts.object.length > 0
-                            ? importedProducts.object.find(
-                                (row) => row.id === selectedId
-                              )?.image_url || ""
+                            ? importedProducts.object.length > 0
+                              ? importedProducts.object.find((row) => row.id === selectedId)
+                                  ?.image_url || ""
+                              : ""
                             : ""
-                          : ""
                       }
                       alt=""
                       className={IMPORT_DETAIL_MAIN_IMAGE_CLASSNAME}
@@ -439,12 +412,11 @@ const ImportProduct = () => {
                           selectedId === -1
                             ? ""
                             : importedProducts
-                            ? importedProducts.object.length > 0
-                              ? importedProducts.object.find(
-                                  (row) => row.id === selectedId
-                                )?.slider_url_1 || ""
+                              ? importedProducts.object.length > 0
+                                ? importedProducts.object.find((row) => row.id === selectedId)
+                                    ?.slider_url_1 || ""
+                                : ""
                               : ""
-                            : ""
                         }
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
@@ -465,12 +437,11 @@ const ImportProduct = () => {
                           selectedId === -1
                             ? ""
                             : importedProducts
-                            ? importedProducts.object.length > 0
-                              ? importedProducts.object.find(
-                                  (row) => row.id === selectedId
-                                )?.slider_url_2 || ""
+                              ? importedProducts.object.length > 0
+                                ? importedProducts.object.find((row) => row.id === selectedId)
+                                    ?.slider_url_2 || ""
+                                : ""
                               : ""
-                            : ""
                         }
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
@@ -491,12 +462,11 @@ const ImportProduct = () => {
                           selectedId === -1
                             ? ""
                             : importedProducts
-                            ? importedProducts.object.length > 0
-                              ? importedProducts.object.find(
-                                  (row) => row.id === selectedId
-                                )?.slider_url_3 || ""
+                              ? importedProducts.object.length > 0
+                                ? importedProducts.object.find((row) => row.id === selectedId)
+                                    ?.slider_url_3 || ""
+                                : ""
                               : ""
-                            : ""
                         }
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
@@ -517,12 +487,11 @@ const ImportProduct = () => {
                           selectedId === -1
                             ? ""
                             : importedProducts
-                            ? importedProducts.object.length > 0
-                              ? importedProducts.object.find(
-                                  (row) => row.id === selectedId
-                                )?.slider_url_4 || ""
+                              ? importedProducts.object.length > 0
+                                ? importedProducts.object.find((row) => row.id === selectedId)
+                                    ?.slider_url_4 || ""
+                                : ""
                               : ""
-                            : ""
                         }
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
@@ -545,12 +514,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.product_id.name || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.product_id
+                              .name || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -559,12 +527,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.color_id.color_code || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.color_id
+                              .color_code || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -573,12 +540,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.color_id.color_name || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.color_id
+                              .color_name || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -587,12 +553,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.size_id.size || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
+                              .size || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -601,12 +566,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.size_id.height || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
+                              .height || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -615,12 +579,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.size_id.weight || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
+                              .weight || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -629,12 +592,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.material_id.name || ""
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)
+                              ?.material_id.name || ""
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -643,18 +605,16 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.gender === "MALE"
-                          ? "Nam"
-                          : importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.gender === "FEMALE"
-                          ? "Nữ"
-                          : "Unisex"
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)?.gender ===
+                            "MALE"
+                            ? "Nam"
+                            : importedProducts.object.find((row) => row.id === selectedId)
+                                  ?.gender === "FEMALE"
+                              ? "Nữ"
+                              : "Unisex"
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -663,12 +623,11 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? importedProducts.object.find(
-                            (row) => row.id === selectedId
-                          )?.importNumber
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? importedProducts.object.find((row) => row.id === selectedId)
+                              ?.importNumber
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
@@ -677,14 +636,13 @@ const ImportProduct = () => {
                     {selectedId === -1
                       ? ""
                       : importedProducts
-                      ? importedProducts.object.length > 0
-                        ? formatOptionalPrice(
-                            importedProducts.object.find(
-                              (row) => row.id === selectedId
-                            )?.importPrice
-                          )
-                        : ""
-                      : ""}
+                        ? importedProducts.object.length > 0
+                          ? formatOptionalPrice(
+                              importedProducts.object.find((row) => row.id === selectedId)
+                                ?.importPrice
+                            )
+                          : ""
+                        : ""}
                   </Typography>
                 </div>
               </div>
@@ -700,10 +658,7 @@ const ImportProduct = () => {
                 {updateAvatar_Url === "" ? (
                   <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                     <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label
-                        htmlFor="avatar_url"
-                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                      >
+                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                         <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
                             className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
@@ -721,8 +676,7 @@ const ImportProduct = () => {
                             />
                           </svg>
                           <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong>{" "}
-                            or drag and drop
+                            <strong>Click to upload</strong> or drag and drop
                           </p>
 
                           <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
@@ -769,10 +723,7 @@ const ImportProduct = () => {
                   {updateSlider1 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_1"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -790,8 +741,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -833,10 +783,7 @@ const ImportProduct = () => {
                   {updateSlider2 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_2"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -854,8 +801,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -897,10 +843,7 @@ const ImportProduct = () => {
                   {updateSlider3 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_3"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -918,8 +861,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -961,10 +903,7 @@ const ImportProduct = () => {
                   {updateSlider4 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_4"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -982,8 +921,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1030,9 +968,7 @@ const ImportProduct = () => {
                   <FormControl fullWidth size="small">
                     <Select
                       value={
-                        importedProducts.object.find(
-                          (row) => row.id === selectedId
-                        )?.product_id.id
+                        importedProducts.object.find((row) => row.id === selectedId)?.product_id.id
                       }
                     >
                       {products &&
@@ -1081,16 +1017,14 @@ const ImportProduct = () => {
                     size="small"
                     value={updateHeight}
                     id="outlined-adornment-weight"
-                    endAdornment={
-                      <InputAdornment position="end">cm</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                     onChange={(e) =>
                       setUpdateHeight(
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 300
-                          ? 300
-                          : e.target.value
+                            ? 300
+                            : e.target.value
                       )
                     }
                   />
@@ -1101,16 +1035,14 @@ const ImportProduct = () => {
                     size="small"
                     value={updateWeight}
                     id="outlined-adornment-weight"
-                    endAdornment={
-                      <InputAdornment position="end">kg</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">kg</InputAdornment>}
                     onChange={(e) =>
                       setUpdateWeight(
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 150
-                          ? 150
-                          : e.target.value
+                            ? 150
+                            : e.target.value
                       )
                     }
                   />
@@ -1158,9 +1090,7 @@ const ImportProduct = () => {
                     value={updateImportNumber}
                     onChange={(e) =>
                       setUpdateImportNumber(
-                        isNaN(e.target.value) || e.target.value < 1
-                          ? 1
-                          : e.target.value
+                        isNaN(e.target.value) || e.target.value < 1 ? 1 : e.target.value
                       )
                     }
                   />
@@ -1170,14 +1100,10 @@ const ImportProduct = () => {
                   <OutlinedInput
                     size="small"
                     value={updateImportPrice}
-                    endAdornment={
-                      <InputAdornment position="end">đ</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">đ</InputAdornment>}
                     onChange={(e) =>
                       setUpdateImportPrice(
-                        isNaN(e.target.value) || e.target.value < 1000
-                          ? 1000
-                          : e.target.value
+                        isNaN(e.target.value) || e.target.value < 1000 ? 1000 : e.target.value
                       )
                     }
                   />
@@ -1205,9 +1131,7 @@ const ImportProduct = () => {
             color="gray"
             variant="outlined"
             onClick={handleOldOpen}
-            disabled={
-              importedProducts ? importedProducts.object.length === 0 : true
-            }
+            disabled={importedProducts ? importedProducts.object.length === 0 : true}
           >
             Nhập sẵn
           </Button>
@@ -1232,11 +1156,7 @@ const ImportProduct = () => {
       <Dialog open={newOpen} onClose={handleNewClose} maxWidth="xl">
         <DialogTitle className={IMPORT_DIALOG_HEADER_CLASSNAME}>
           <Typography variant="h4">Nhập sản phẩm mới</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleNewClose}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleNewClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -1247,10 +1167,7 @@ const ImportProduct = () => {
                 {avatar_url === "" ? (
                   <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                     <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label
-                        htmlFor="avatar_url"
-                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                      >
+                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                         <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
                             className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
@@ -1268,8 +1185,7 @@ const ImportProduct = () => {
                             />
                           </svg>
                           <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong>{" "}
-                            or drag and drop
+                            <strong>Click to upload</strong> or drag and drop
                           </p>
 
                           <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
@@ -1316,10 +1232,7 @@ const ImportProduct = () => {
                   {slider1 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_1"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1337,8 +1250,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1380,10 +1292,7 @@ const ImportProduct = () => {
                   {slider2 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_2"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1401,8 +1310,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1444,10 +1352,7 @@ const ImportProduct = () => {
                   {slider3 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_3"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1465,8 +1370,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1508,10 +1412,7 @@ const ImportProduct = () => {
                   {slider4 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_4"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1529,8 +1430,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1628,16 +1528,14 @@ const ImportProduct = () => {
                     type="text"
                     value={height}
                     placeholder="170"
-                    endAdornment={
-                      <InputAdornment position="end">cm</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                     onChange={(e) =>
                       setHeight(
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 300
-                          ? 300
-                          : e.target.value
+                            ? 300
+                            : e.target.value
                       )
                     }
                   />
@@ -1649,16 +1547,14 @@ const ImportProduct = () => {
                     type="text"
                     value={weight}
                     placeholder="80"
-                    endAdornment={
-                      <InputAdornment position="end">kg</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">kg</InputAdornment>}
                     onChange={(e) =>
                       setWeight(
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 150
-                          ? 150
-                          : e.target.value
+                            ? 150
+                            : e.target.value
                       )
                     }
                   />
@@ -1705,9 +1601,7 @@ const ImportProduct = () => {
                     size="small"
                     value={importNumber}
                     placeholder="Cotton"
-                    onChange={(e) =>
-                      setImportNumber(e.target.value < 1 ? 1 : e.target.value)
-                    }
+                    onChange={(e) => setImportNumber(e.target.value < 1 ? 1 : e.target.value)}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1716,14 +1610,8 @@ const ImportProduct = () => {
                     size="small"
                     value={importPrice}
                     placeholder="1000"
-                    endAdornment={
-                      <InputAdornment position="end">đ</InputAdornment>
-                    }
-                    onChange={(e) =>
-                      setImportPrice(
-                        e.target.value < 1000 ? 1000 : e.target.value
-                      )
-                    }
+                    endAdornment={<InputAdornment position="end">đ</InputAdornment>}
+                    onChange={(e) => setImportPrice(e.target.value < 1000 ? 1000 : e.target.value)}
                   />
                 </div>
               </div>
@@ -1731,12 +1619,7 @@ const ImportProduct = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleAddSubmit}
-            loading={isAdded}
-          >
+          <Button variant="gradient" color="green" onClick={handleAddSubmit} loading={isAdded}>
             {!isAdded && <span>Xác nhận</span>}
           </Button>
         </DialogActions>
@@ -1744,11 +1627,7 @@ const ImportProduct = () => {
       <Dialog open={oldOpen} onClose={handleOldClose} maxWidth="xl">
         <DialogTitle className={IMPORT_DIALOG_HEADER_CLASSNAME}>
           <Typography variant="h4">Nhập sản phẩm có sẵn</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleOldClose}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleOldClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -1759,10 +1638,7 @@ const ImportProduct = () => {
                 {avatar_url === "" ? (
                   <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                     <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label
-                        htmlFor="avatar_url"
-                        className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                      >
+                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                         <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
                           <svg
                             className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
@@ -1780,8 +1656,7 @@ const ImportProduct = () => {
                             />
                           </svg>
                           <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong>{" "}
-                            or drag and drop
+                            <strong>Click to upload</strong> or drag and drop
                           </p>
 
                           <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
@@ -1828,10 +1703,7 @@ const ImportProduct = () => {
                   {slider1 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_1"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1849,8 +1721,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1892,10 +1763,7 @@ const ImportProduct = () => {
                   {slider2 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_2"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1913,8 +1781,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -1955,10 +1822,7 @@ const ImportProduct = () => {
                   {slider3 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_3"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -1976,8 +1840,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -2018,10 +1881,7 @@ const ImportProduct = () => {
                   {slider4 === "" ? (
                     <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
                       <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label
-                          htmlFor="slider_url_4"
-                          className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}
-                        >
+                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
                           <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
                             <svg
                               className={IMPORT_UPLOAD_ICON_CLASSNAME}
@@ -2039,8 +1899,7 @@ const ImportProduct = () => {
                               />
                             </svg>
                             <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong>{" "}
-                              or drag and drop
+                              <strong>Click to upload</strong> or drag and drop
                             </p>
                             <Typography
                               as="caption"
@@ -2110,10 +1969,7 @@ const ImportProduct = () => {
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
                         importedProducts.object.map((item, index) => (
-                          <MenuItem
-                            key={index}
-                            value={item.color_id.color_code}
-                          >
+                          <MenuItem key={index} value={item.color_id.color_code}>
                             {item.color_id.color_code}
                           </MenuItem>
                         ))}
@@ -2127,9 +1983,7 @@ const ImportProduct = () => {
                     disabled
                     value={
                       importedProducts.object?.find(
-                        (item) =>
-                          item.product_id.id === product &&
-                          item.color_id.id === color_code
+                        (item) => item.product_id.id === product && item.color_id.id === color_code
                       )?.color_id.color_name
                     }
                     placeholder="Trắng"
@@ -2146,11 +2000,7 @@ const ImportProduct = () => {
                       onChange={(e) => dispatch(setSize(e.target.value))}
                     /> */}
                   <FormControl fullWidth>
-                    <Select
-                      value={size}
-                      onChange={(e) => setSize(e.target.value)}
-                      size="small"
-                    >
+                    <Select value={size} onChange={(e) => setSize(e.target.value)} size="small">
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
                         importedProducts.object.map((item, index) => (
@@ -2166,14 +2016,10 @@ const ImportProduct = () => {
                   <OutlinedInput
                     size="small"
                     disabled
-                    endAdornment={
-                      <InputAdornment position="end">cm</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                     value={
                       importedProducts.object?.find(
-                        (item) =>
-                          item.product_id.id === product &&
-                          item.size_id.size === size
+                        (item) => item.product_id.id === product && item.size_id.size === size
                       )?.size_id.height
                     }
                     placeholder="170cm"
@@ -2184,14 +2030,10 @@ const ImportProduct = () => {
                   <OutlinedInput
                     size="small"
                     disabled
-                    endAdornment={
-                      <InputAdornment position="end">kg</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">kg</InputAdornment>}
                     value={
                       importedProducts.object?.find(
-                        (item) =>
-                          item.product_id.id === product &&
-                          item.size_id.id === size
+                        (item) => item.product_id.id === product && item.size_id.id === size
                       )?.size_id.weight
                     }
                     placeholder="170cm"
@@ -2251,8 +2093,7 @@ const ImportProduct = () => {
                     placeholder="1"
                     onChange={(e) =>
                       setImportNumber(
-                        isNaN(Number(e.target.value)) ||
-                          Number(e.target.value) < 1
+                        isNaN(Number(e.target.value)) || Number(e.target.value) < 1
                           ? 1
                           : Number(e.target.value)
                       )
@@ -2265,13 +2106,10 @@ const ImportProduct = () => {
                     size="small"
                     value={importPrice}
                     placeholder="1000"
-                    endAdornment={
-                      <InputAdornment position="end">đ</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">đ</InputAdornment>}
                     onChange={(e) =>
                       setImportPrice(
-                        isNaN(Number(e.target.value)) ||
-                          Number(e.target.value) < 1000
+                        isNaN(Number(e.target.value)) || Number(e.target.value) < 1000
                           ? 1000
                           : Number(e.target.value)
                       )
@@ -2283,12 +2121,7 @@ const ImportProduct = () => {
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleAddSubmit}
-            loading={isAdded}
-          >
+          <Button variant="gradient" color="green" onClick={handleAddSubmit} loading={isAdded}>
             {!isAdded && <span>Xác nhận</span>}
           </Button>
         </DialogActions>

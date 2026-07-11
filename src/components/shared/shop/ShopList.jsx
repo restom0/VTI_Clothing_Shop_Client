@@ -7,7 +7,7 @@ import VirtualizedGrid from "../VirtualizedGrid";
 import usePaginatedItems from "../../../hooks/usePaginatedItems.hook";
 import useResponsiveColumns from "../../../hooks/useResponsiveColumns.hook";
 
-const PRODUCT_PAGE_SIZE        = 24;
+const PRODUCT_PAGE_SIZE = 24;
 const VIRTUAL_PRODUCT_ROW_ESTIMATE = 384;
 
 /**
@@ -28,11 +28,7 @@ const ShopList = memo(({ products }) => {
   const gridRef = useRef(null);
 
   const columns = useResponsiveColumns();
-  const { pageCount, pageItems } = usePaginatedItems(
-    products,
-    active,
-    PRODUCT_PAGE_SIZE
-  );
+  const { pageCount, pageItems } = usePaginatedItems(products, active, PRODUCT_PAGE_SIZE);
 
   // Scroll về đầu danh sách mỗi khi chuyển trang
   useEffect(() => {
@@ -40,26 +36,19 @@ const ShopList = memo(({ products }) => {
   }, [active]);
 
   // Memoize callbacks để tránh VirtualizedGrid re-render không cần thiết
-  const renderItem  = useCallback((product) => <ProductCard {...product} />, []);
-  const getKey      = useCallback((product) => product.id, []);
-  const handlePage  = useCallback((page) => setActive(page), []);
+  const renderItem = useCallback((product) => <ProductCard {...product} />, []);
+  const getKey = useCallback((product) => product.id, []);
+  const handlePage = useCallback((page) => setActive(page), []);
 
   return (
-    <section
-      className="shop-results"
-      aria-label="Danh sách sản phẩm"
-    >
+    <section className="shop-results" aria-label="Danh sách sản phẩm">
       {/* Toolbar: kết quả + sort */}
       <div className="shop-list-toolbar">
         {/*
           aria-live="polite": screen reader thông báo khi số kết quả đổi
           (WCAG 4.1.3 — Status Messages)
         */}
-        <div
-          className="results-count"
-          aria-live="polite"
-          aria-atomic="true"
-        >
+        <div className="results-count" aria-live="polite" aria-atomic="true">
           <span className="sr-only">Số sản phẩm tìm thấy: </span>
           {products.length} kết quả
         </div>
@@ -101,11 +90,7 @@ const ShopList = memo(({ products }) => {
         />
       </div>
 
-      <Pagination
-        page={pageCount}
-        active={active}
-        setActive={handlePage}
-      />
+      <Pagination page={pageCount} active={active} setActive={handlePage} />
     </section>
   );
 });

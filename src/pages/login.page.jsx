@@ -1,11 +1,10 @@
 import React from "react";
 import { Button } from "@material-tailwind/react/components/Button";
-import { Input } from "@material-tailwind/react/components/Input";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import Icon from "../assets/login_icon.asset";
 import { Container, TextField } from "@mui/material";
-import { accountApi, useLoginMutation } from "../apis/account.api";
+import { useLoginMutation } from "../apis/account.api";
 import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
 
@@ -58,14 +57,14 @@ function Loginpage() {
         localStorage.setItem("token", message.object.token);
         navigate(message.object.url);
       });
-    } catch (error) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Đăng nhập thất bại",
       });
     }
   };
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   return (
     <>
       <div className="auth-page grid lg:grid-cols-3 sm:grid-cols-1 lg:border-r-4">

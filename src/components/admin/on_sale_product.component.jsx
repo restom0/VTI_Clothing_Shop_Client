@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Input } from "@material-tailwind/react/components/Input";
-import { Option } from "@material-tailwind/react/components/Select";
 import dayjs from "dayjs";
 
 import {
-  Card,
   IconButton,
   Dialog,
   Container,
@@ -12,12 +10,10 @@ import {
   FormControl,
   InputLabel,
   Pagination,
-  Rating,
   Select,
   MenuItem,
   TextField,
   DialogTitle,
-  DialogActions,
   DialogContent,
   InputAdornment,
   OutlinedInput,
@@ -146,7 +142,6 @@ const OnsaleProduct = () => {
   const [updateEndDate, setUpdateEndDate] = React.useState(null);
   const [updateFilter, setUpdateFilter] = React.useState(null);
   const [updateFilterId, setUpdateFilterId] = React.useState(null);
-  const [active, setActive] = React.useState(1);
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
@@ -163,26 +158,14 @@ const OnsaleProduct = () => {
     error: productsError,
     isLoading: productsLoading,
   } = useGetProductsQuery();
-  const {
-    data: brands,
-    error: brandsError,
-    isLoading: brandsLoading,
-  } = useGetBrandsQuery();
+  const { data: brands, error: brandsError, isLoading: brandsLoading } = useGetBrandsQuery();
   const {
     data: categories,
     error: categoriesError,
     isLoading: categoriesLoading,
   } = useGetCategoriesQuery();
-  const {
-    data: colors,
-    error: colorsError,
-    isLoading: colorsLoading,
-  } = useGetColorsQuery();
-  const {
-    data: sizes,
-    error: sizesError,
-    isLoading: sizesLoading,
-  } = useGetSizesQuery();
+  const { data: colors, error: colorsError, isLoading: colorsLoading } = useGetColorsQuery();
+  const { data: sizes, error: sizesError, isLoading: sizesLoading } = useGetSizesQuery();
   const {
     data: materials,
     error: materialsError,
@@ -193,22 +176,14 @@ const OnsaleProduct = () => {
     error: import_productsError,
     isLoading: import_productsLoading,
   } = useGetImportedProductsQuery();
-  const {
-    data: previews,
-    error: previewsError,
-    isLoading: previewsLoading,
-  } = useGetImportedProductQuery(
+  const { data: previews } = useGetImportedProductQuery(
     { filter: filters, id: values },
     {
       skip: !values && filters !== "ALL",
     }
   );
 
-  const {
-    data: updatePreviews,
-    error: updatePreviewsError,
-    isLoading: updatePreviewsLoading,
-  } = useGetImportedProductQuery(
+  const { data: updatePreviews } = useGetImportedProductQuery(
     { filter: updateFilter, id: updateFilterId },
     {
       skip: !updateFilterId && updateFilter !== "ALL",
@@ -225,10 +200,7 @@ const OnsaleProduct = () => {
             size: preview.size_id.size,
             material: preview.material_id.name,
             importPrice: formatPrice(preview.importPrice),
-            salePrice: formatPrice(
-              ((preview.importPrice * prices) / 100) *
-                (1 - discounts / 100)
-            ),
+            salePrice: formatPrice(((preview.importPrice * prices) / 100) * (1 - discounts / 100)),
           };
         }) || []
       );
@@ -242,8 +214,7 @@ const OnsaleProduct = () => {
             sku: preview.product_id.name,
             importPrice: formatPrice(preview.importPrice),
             salePrice: formatPrice(
-              ((preview.importPrice * updateSalePercentage) / 100) *
-                (1 - updateDiscount / 100)
+              ((preview.importPrice * updateSalePercentage) / 100) * (1 - updateDiscount / 100)
             ),
           };
         }) || []
@@ -269,12 +240,9 @@ const OnsaleProduct = () => {
       setUpdateEndDate(search?.end_date);
     }
   }, [selectedId, inputSale?.object]);
-  const [createInputSale, { error: addError, isLoading: isAdded }] =
-    useCreateInputSaleMutation();
-  const [updateInputSale, { error: updateError, isLoading: isUpdated }] =
-    useUpdateInputSaleMutation();
-  const [deleteInputSale, { error: deleteError, isLoading: isDeleted }] =
-    useDeleteInputSaleMutation();
+  const [createInputSale] = useCreateInputSaleMutation();
+  const [updateInputSale] = useUpdateInputSaleMutation();
+  const [deleteInputSale] = useDeleteInputSaleMutation();
   if (
     isLoading ||
     brandsLoading ||
@@ -305,7 +273,7 @@ const OnsaleProduct = () => {
   };
   const handleAddImportedProduct = async () => {
     try {
-      const message = await createInputSale({
+      await createInputSale({
         filter: filters,
         filter_id: value,
         salePercentage: Number(price),
@@ -326,7 +294,7 @@ const OnsaleProduct = () => {
   };
   const handleAddImportedProducts = async () => {
     try {
-      const message = await createInputSale({
+      await createInputSale({
         filter: filters,
         filter_id: values || 1,
         salePercentage: Number(prices),
@@ -363,7 +331,7 @@ const OnsaleProduct = () => {
     setStartDates(null);
     setEndDates(null);
   };
-  const ListInputSales = inputSale?.object.map((item, index) => {
+  const ListInputSales = inputSale?.object.map((item) => {
     return {
       id: item.id,
       filter: item.filter,
@@ -371,9 +339,7 @@ const OnsaleProduct = () => {
       salePercentage: item.salePercentage + "%",
       discount: item.discount + "%",
       available_date: new Date(item.available_date).toLocaleDateString("en-GB"),
-      end_date: item.end_date
-        ? new Date(item.end_date).toLocaleDateString("en-GB")
-        : "Không có",
+      end_date: item.end_date ? new Date(item.end_date).toLocaleDateString("en-GB") : "Không có",
     };
   });
   const handleUpdateInputSales = async () => {
@@ -432,10 +398,7 @@ const OnsaleProduct = () => {
                     Loại nhập:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    {
-                      inputSale.object.find((item) => item.id === selectedId)
-                        ?.filter
-                    }
+                    {inputSale.object.find((item) => item.id === selectedId)?.filter}
                   </Typography>
                 </div>
                 <div className="text-center flex items-center gap-4">
@@ -443,10 +406,7 @@ const OnsaleProduct = () => {
                     Tên:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    {
-                      inputSale.object.find((item) => item.id === selectedId)
-                        ?.filter_id
-                    }
+                    {inputSale.object.find((item) => item.id === selectedId)?.filter_id}
                   </Typography>
                 </div>
               </div>
@@ -456,8 +416,7 @@ const OnsaleProduct = () => {
                     Giá trị gia tăng:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    {inputSale.object.find((item) => item.id === selectedId)
-                      ?.salePercentage + "%"}
+                    {inputSale.object.find((item) => item.id === selectedId)?.salePercentage + "%"}
                   </Typography>
                 </div>
                 <div className="text-center flex items-center gap-4">
@@ -465,8 +424,7 @@ const OnsaleProduct = () => {
                     Giảm giá:
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    {inputSale.object.find((item) => item.id === selectedId)
-                      ?.discount + "%"}
+                    {inputSale.object.find((item) => item.id === selectedId)?.discount + "%"}
                   </Typography>
                 </div>
               </div>
@@ -478,9 +436,7 @@ const OnsaleProduct = () => {
                   <Typography variant="body" className="" color="blue-gray">
                     {
                       new Date(
-                        inputSale.object.find(
-                          (item) => item.id === selectedId
-                        )?.available_date
+                        inputSale.object.find((item) => item.id === selectedId)?.available_date
                       )
                         .toLocaleString("en-GB")
                         .split(",")[0]
@@ -492,13 +448,8 @@ const OnsaleProduct = () => {
                     Ngày kết thúc
                   </Typography>
                   <Typography variant="body" className="" color="blue-gray">
-                    {inputSale.object.find((item) => item.id === selectedId)
-                      ?.end_date
-                      ? new Date(
-                          inputSale.object.find(
-                            (item) => item.id === selectedId
-                          ).end_date
-                        )
+                    {inputSale.object.find((item) => item.id === selectedId)?.end_date
+                      ? new Date(inputSale.object.find((item) => item.id === selectedId).end_date)
                           .toLocaleString("en-GB")
                           .split(",")[0]
                       : "Không có"}
@@ -523,10 +474,7 @@ const OnsaleProduct = () => {
                     updateImport_Product
                       .slice((subActive - 1) * 5, subActive * 5)
                       .map((row, index) => (
-                        <tr
-                          key={index}
-                          className="text-center border-b border-gray-200"
-                        >
+                        <tr key={index} className="text-center border-b border-gray-200">
                           {Object.values(row).map((value, index) => (
                             <td className="p-2" key={index}>
                               {value}
@@ -569,17 +517,8 @@ const OnsaleProduct = () => {
                     <Typography variant="h6" color="blue-gray">
                       Loại nhập:
                     </Typography>
-                    <FormControl
-                      size="small"
-                      className="col-span-2"
-                      fullWidth
-                      required
-                    >
-                      <Select
-                        id="demo-simple-select2"
-                        value={updateFilter}
-                        disabled
-                      >
+                    <FormControl size="small" className="col-span-2" fullWidth required>
+                      <Select id="demo-simple-select2" value={updateFilter} disabled>
                         {filter_items.map((item, index) => (
                           <MenuItem key={index} value={item.value}>
                             {item.label}
@@ -587,20 +526,10 @@ const OnsaleProduct = () => {
                         ))}
                       </Select>
                     </FormControl>
-                    <Typography
-                      variant="h6"
-                      className="my-auto"
-                      color="blue-gray"
-                    >
+                    <Typography variant="h6" className="my-auto" color="blue-gray">
                       Tên:
                     </Typography>
-                    <FormControl
-                      size="small"
-                      className="col-span-2"
-                      fullWidth
-                      required
-                      disabled
-                    >
+                    <FormControl size="small" className="col-span-2" fullWidth required disabled>
                       <Select
                         id="demo-simple-select2"
                         value={filter_items}
@@ -613,33 +542,21 @@ const OnsaleProduct = () => {
                         ))}
                       </Select>
                     </FormControl>
-                    <Typography
-                      variant="h6"
-                      color="blue-gray"
-                      className="my-auto"
-                    >
+                    <Typography variant="h6" color="blue-gray" className="my-auto">
                       Giá trị gia tăng:
                     </Typography>
                     <OutlinedInput
-                      endAdornment={
-                        <InputAdornment position="end">%</InputAdornment>
-                      }
+                      endAdornment={<InputAdornment position="end">%</InputAdornment>}
                       className="col-span-2"
                       size="small"
                       value={updateSalePercentage}
                       onChange={(e) =>
                         setUpdateSalePercentage(
-                          isNaN(e.target.value) || e.target.value < 0
-                            ? 0
-                            : e.target.value
+                          isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
                         )
                       }
                     />
-                    <Typography
-                      variant="h6"
-                      color="blue-gray"
-                      className="my-auto"
-                    >
+                    <Typography variant="h6" color="blue-gray" className="my-auto">
                       Giảm giá:
                     </Typography>
                     <OutlinedInput
@@ -651,19 +568,13 @@ const OnsaleProduct = () => {
                           isNaN(e.target.value) || e.target.value < 0
                             ? 0
                             : e.target.value > 100
-                            ? 100
-                            : e.target.value
+                              ? 100
+                              : e.target.value
                         )
                       }
-                      endAdornment={
-                        <InputAdornment position="end">%</InputAdornment>
-                      }
+                      endAdornment={<InputAdornment position="end">%</InputAdornment>}
                     />
-                    <Typography
-                      variant="h6"
-                      color="blue-gray"
-                      className="my-auto"
-                    >
+                    <Typography variant="h6" color="blue-gray" className="my-auto">
                       Ngày áp dụng:
                     </Typography>
                     <div className="col-span-2">
@@ -675,18 +586,12 @@ const OnsaleProduct = () => {
                               textField: { size: "medium", required: true },
                             }}
                             value={dayjs(updateStartDate)}
-                            onChange={(newValue) =>
-                              setUpdateStartDate(newValue)
-                            }
+                            onChange={(newValue) => setUpdateStartDate(newValue)}
                           />
                         </DemoContainer>
                       </LocalizationProvider>
                     </div>
-                    <Typography
-                      variant="h6"
-                      color="blue-gray"
-                      className="my-auto"
-                    >
+                    <Typography variant="h6" color="blue-gray" className="my-auto">
                       Ngày kết thúc:
                     </Typography>
                     <div className="col-span-2">
@@ -706,11 +611,7 @@ const OnsaleProduct = () => {
                 </div>
               </div>
               <div className="col-span-7">
-                <Typography
-                  variant="h5"
-                  color="blue-gray"
-                  className="font-bold text-center mb-5"
-                >
+                <Typography variant="h5" color="blue-gray" className="font-bold text-center mb-5">
                   Danh sách sản phẩm
                 </Typography>
                 <table className="w-full min-w-max table-auto text-left">
@@ -721,10 +622,7 @@ const OnsaleProduct = () => {
                       updateImport_Product
                         .slice((subActive - 1) * 5, subActive * 5)
                         .map((row, index) => (
-                          <tr
-                            key={index}
-                            className="text-center border-b border-gray-200"
-                          >
+                          <tr key={index} className="text-center border-b border-gray-200">
                             {Object.values(row).map((value, index) => (
                               <td className="p-2" key={index}>
                                 {value}
@@ -752,18 +650,10 @@ const OnsaleProduct = () => {
         }
       >
         <div className="w-7/12 flex items-center justify-between gap-4">
-          <Button
-            className="w-full border-gray-400"
-            variant="outlined"
-            onClick={handleOpens}
-          >
+          <Button className="w-full border-gray-400" variant="outlined" onClick={handleOpens}>
             Nhập nhiều
           </Button>
-          <Button
-            className="w-full border-gray-400"
-            variant="outlined"
-            onClick={handleOpen}
-          >
+          <Button className="w-full border-gray-400" variant="outlined" onClick={handleOpen}>
             Nhập đơn
           </Button>
           <Input
@@ -788,11 +678,7 @@ const OnsaleProduct = () => {
       <Dialog maxWidth="xl" open={open} onClose={handleCloseOpen}>
         <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h5">Nhập giá từng sản phẩm</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleCloseOpen}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleCloseOpen}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -830,9 +716,7 @@ const OnsaleProduct = () => {
                     className="w-full"
                     label="Giá trị gia tăng"
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
                     }}
                     required
                     size="medium"
@@ -840,11 +724,7 @@ const OnsaleProduct = () => {
                     variant="outlined"
                     value={price}
                     onChange={(e) =>
-                      setPrice(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value
-                      )
+                      setPrice(isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value)
                     }
                   />
                 </div>
@@ -853,9 +733,7 @@ const OnsaleProduct = () => {
                     className="w-full"
                     label="Giảm giá"
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
                     }}
                     required
                     size="medium"
@@ -867,8 +745,8 @@ const OnsaleProduct = () => {
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 100
-                          ? 100
-                          : e.target.value
+                            ? 100
+                            : e.target.value
                       )
                     }
                   />
@@ -914,21 +792,13 @@ const OnsaleProduct = () => {
                   </Button>
                 </div>
                 <div className="flex justify-end gap-8">
-                  <Button
-                    variant="contained"
-                    color="red"
-                    onClick={handleResetAddImportedProduct}
-                  >
+                  <Button variant="contained" color="red" onClick={handleResetAddImportedProduct}>
                     Hủy
                   </Button>
                 </div>
               </div>
               <div className="col-span-7">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold text-center !mb-5"
-                >
+                <Typography variant="h4" color="blue-gray" className="font-bold text-center !mb-5">
                   Danh sách sản phẩm
                 </Typography>
                 <table className="w-full text-center table-auto ">
@@ -937,22 +807,16 @@ const OnsaleProduct = () => {
                     {import_products?.object
                       ?.filter((product) => product.product_id.id === value)
                       .map((product, index) => (
-                        <tr
-                          key={index}
-                          className="text-center border-b border-gray-200"
-                        >
+                        <tr key={index} className="text-center border-b border-gray-200">
                           {/* <td className="p-2">{product.id}</td> */}
                           <td className="p-2">{product.sku}</td>
                           {/* <td className="p-2">{product.color_id.color_name}</td>
                           <td className="p-2">{product.size_id.size}</td>
                           <td className="p-2">{product.material_id.name}</td> */}
-                          <td className="p-2">
-                            {formatPrice(product.importPrice)}
-                          </td>
+                          <td className="p-2">{formatPrice(product.importPrice)}</td>
                           <td className="p-2">
                             {formatPrice(
-                              ((product.importPrice * price) / 100) *
-                                (1 - discount / 100)
+                              ((product.importPrice * price) / 100) * (1 - discount / 100)
                             )}
                           </td>
                         </tr>
@@ -963,16 +827,14 @@ const OnsaleProduct = () => {
                   <Typography variant="p">
                     Tất cả:{" "}
                     {
-                      import_products?.object?.filter(
-                        (product) => product.product_id.id === value
-                      ).length
+                      import_products?.object?.filter((product) => product.product_id.id === value)
+                        .length
                     }{" "}
                     lô hàng
                   </Typography>
                   {Math.ceil(
-                    import_products?.object?.filter(
-                      (product) => product.product_id.id === value
-                    ).length / 5
+                    import_products?.object?.filter((product) => product.product_id.id === value)
+                      .length / 5
                   ) > 1 && (
                     <Pagination
                       count={Math.ceil(
@@ -993,11 +855,7 @@ const OnsaleProduct = () => {
       <Dialog maxWidth="xl" open={opens} onClose={handleCloseOpens}>
         <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h5">Nhập giá nhiều sản phẩm</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleCloseOpens}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleCloseOpens}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -1013,9 +871,7 @@ const OnsaleProduct = () => {
                   Thông tin nhập
                 </Typography>
                 <FormControl size="medium" fullWidth required>
-                  <InputLabel id="demo-simple-select-label1">
-                    Loại nhập
-                  </InputLabel>
+                  <InputLabel id="demo-simple-select-label1">Loại nhập</InputLabel>
                   <Select
                     label="Loại nhập"
                     labelId="demo-simple-select-label1"
@@ -1087,9 +943,7 @@ const OnsaleProduct = () => {
                     className="w-full"
                     label="Giá trị gia tăng"
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
                     }}
                     required
                     size="medium"
@@ -1097,11 +951,7 @@ const OnsaleProduct = () => {
                     variant="outlined"
                     value={prices}
                     onChange={(e) =>
-                      setPrices(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value
-                      )
+                      setPrices(isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value)
                     }
                   />
                 </div>
@@ -1110,9 +960,7 @@ const OnsaleProduct = () => {
                     className="w-full"
                     label="Giảm giá"
                     InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">%</InputAdornment>
-                      ),
+                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
                     }}
                     required
                     size="medium"
@@ -1124,8 +972,8 @@ const OnsaleProduct = () => {
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 100
-                          ? 100
-                          : e.target.value
+                            ? 100
+                            : e.target.value
                       )
                     }
                   />
@@ -1160,11 +1008,7 @@ const OnsaleProduct = () => {
                   </LocalizationProvider>
                 </div>
                 <div className="flex justify-end gap-8 col-span-2">
-                  <Button
-                    variant="outlined"
-                    color="red"
-                    onClick={handleResetAddImportedProducts}
-                  >
+                  <Button variant="outlined" color="red" onClick={handleResetAddImportedProducts}>
                     Hủy
                   </Button>
                   <Button
@@ -1178,36 +1022,23 @@ const OnsaleProduct = () => {
                 </div>
               </div>
               <div className="col-span-7">
-                <Typography
-                  variant="h4"
-                  color="blue-gray"
-                  className="font-bold text-center !mb-5"
-                >
+                <Typography variant="h4" color="blue-gray" className="font-bold text-center !mb-5">
                   Danh sách sản phẩm
                 </Typography>
                 <table className="w-full text-center table-auto ">
-                  <TableHeader
-                    noDelete
-                    noUpdate
-                    TABLE_HEAD={changePricesList}
-                  />
+                  <TableHeader noDelete noUpdate TABLE_HEAD={changePricesList} />
                   <tbody>
                     {import_product &&
                       import_product.length > 0 &&
-                      import_product
-                        .slice((subActive - 1) * 5, subActive * 5)
-                        .map((row, index) => (
-                          <tr
-                            key={index}
-                            className="text-center border-b border-gray-200"
-                          >
-                            {Object.values(row).map((value, index) => (
-                              <td className="p-2" key={index}>
-                                {value}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
+                      import_product.slice((subActive - 1) * 5, subActive * 5).map((row, index) => (
+                        <tr key={index} className="text-center border-b border-gray-200">
+                          {Object.values(row).map((value, index) => (
+                            <td className="p-2" key={index}>
+                              {value}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
                 <div className="flex justify-between mt-3">

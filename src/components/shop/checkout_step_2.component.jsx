@@ -1,39 +1,19 @@
-import React from "react";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
-import { Checkbox } from "@material-tailwind/react/components/Checkbox";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Input } from "@material-tailwind/react/components/Input";
-import { List, ListItem } from "@material-tailwind/react/components/List";
-import { Radio } from "@material-tailwind/react/components/Radio";
-import { Step, Stepper } from "@material-tailwind/react/components/Stepper";
-import { Textarea } from "@material-tailwind/react/components/Textarea";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Container, Divider, Icon } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Divider } from "@mui/material";
 import { useCurrency } from "../../currency";
 
 const Step2Checkout = ({ handleNext, handlePrev }) => {
-  const [check, setCheck] = React.useState(
-    localStorage.getItem("token") ? true : false
-  );
-
-  const [check1, setCheck1] = React.useState(false);
-  const [check2, setCheck2] = React.useState(false);
-  const navigate = useNavigate();
   const { formatPrice } = useCurrency();
   return (
     <div className="grid grid-cols-3 mb-1">
       <Card className="mt-6 col-span-2">
         <CardBody>
           <div className="flex items-center my-auto mb-2">
-            <IconButton
-              variant="outlined"
-              className="border-none"
-              onClick={handlePrev}
-            >
+            <IconButton variant="outlined" className="border-none" onClick={handlePrev}>
               <ArrowBackIcon color="black" />
             </IconButton>
             <Typography variant="h5" color="blue-gray" className="">
@@ -45,32 +25,16 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
             src="/public/1719545334144.6924.png"
             alt="QR code"
           />
-          <Typography
-            variant="body"
-            color="blue-gray"
-            className="mt-1 text-center"
-          >
+          <Typography variant="body" color="blue-gray" className="mt-1 text-center">
             Hoặc chuyển qua ngân hàng OCB
           </Typography>
-          <Typography
-            variant="body"
-            color="blue-gray"
-            className="mt-1 text-center"
-          >
+          <Typography variant="body" color="blue-gray" className="mt-1 text-center">
             Số tài khoản: 123456789
           </Typography>
-          <Typography
-            variant="body"
-            color="blue-gray"
-            className="mt-1 text-center"
-          >
+          <Typography variant="body" color="blue-gray" className="mt-1 text-center">
             Tên chủ tài khoản: Nguyễn Văn A
           </Typography>
-          <Typography
-            variant="body"
-            color="blue-gray"
-            className="mt-1 text-center"
-          >
+          <Typography variant="body" color="blue-gray" className="mt-1 text-center">
             Nội dung chuyển tiền: Mã đơn hàng + Số điện thoại
           </Typography>
         </CardBody>
@@ -88,10 +52,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           <Divider />
           <div className="flex items-center justify-between mt-4">
             <Typography className="" variant="body" color="blue-gray">
-              1 x{" "}
-              <span className="text-cyan-300 w-[100px] text-wrap">
-                Áo thun nam
-              </span>
+              1 x <span className="text-cyan-300 w-[100px] text-wrap">Áo thun nam</span>
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">

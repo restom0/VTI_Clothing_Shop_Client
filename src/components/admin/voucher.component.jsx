@@ -1,39 +1,23 @@
 import React, { useEffect } from "react";
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Input } from "@material-tailwind/react/components/Input";
-import { Tabs, TabsHeader, Tab } from "@material-tailwind/react/components/Tabs";
-import { Option } from "@material-tailwind/react/components/Select";
 import {
   TextField,
-  Select,
   Dialog,
   DialogActions,
   DialogTitle,
   DialogContent,
-  Menu,
-  FormControl,
   OutlinedInput,
   InputAdornment,
+  Container,
 } from "@mui/material";
-import { Container, Divider } from "@mui/material";
-import {
-  changePriceList,
-  onsaleproduct,
-  voucher,
-  voucherDetail,
-} from "../../constants/head_table.constant";
-import useOpen from "../../hooks/useOpen.hook";
-import Pagination from "../shared/pagination.component";
-import TableHeader from "../shared/header_table";
+import { voucher } from "../../constants/head_table.constant";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   useAddVoucherMutation,
-  useDeleteVoucherMutation,
   useGetVouchersQuery,
   useUpdateVoucherMutation,
 } from "../../apis/voucher.api";
@@ -45,76 +29,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { Toast } from "../../configs/sweetalert2.config";
-const TABLE_ROWS = [
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    date: "23/04/18",
-  },
-];
 const Voucher = () => {
-  const [subActive, setSubActive] = React.useState(1);
   const [code, setCode] = React.useState(null);
   const [inputStock, setInputStock] = React.useState(null);
   const [value, setValue] = React.useState(null);
@@ -128,46 +43,25 @@ const Voucher = () => {
   const selectedId = useSelector((state) => state.selectedId.value);
 
   const [open, setOpen] = React.useState(false);
-  const [opens, setOpens] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleOpens = () => setOpens(true);
   const handleClose = () => setOpen(false);
-  const handleCloses = () => setOpen(false);
   const {
     data: vouchers,
     isLoading: vouchersLoading,
     isError: vouchersError,
   } = useGetVouchersQuery();
-  const [addVoucher, { isLoading: isAdded, isError: addError }] =
-    useAddVoucherMutation();
-  const [updateVoucher, { isLoading: isUpdated, isError: updateError }] =
-    useUpdateVoucherMutation();
-  const [deleteVoucher, { isLoading: isDeleted, isError: deleteError }] =
-    useDeleteVoucherMutation();
+  const [addVoucher] = useAddVoucherMutation();
+  const [updateVoucher] = useUpdateVoucherMutation();
   useEffect(() => {
     if (selectedId !== 1) {
-      setUpdateCode(
-        vouchers?.object.find((voucher) => voucher.id === selectedId)?.code
-      );
-      setUpdateValue(
-        vouchers?.object.find((voucher) => voucher.id === selectedId)?.value
-      );
-      setUpdateInputStock(
-        vouchers?.object.find((voucher) => voucher.id === selectedId)?.stock
-      );
+      setUpdateCode(vouchers?.object.find((voucher) => voucher.id === selectedId)?.code);
+      setUpdateValue(vouchers?.object.find((voucher) => voucher.id === selectedId)?.value);
+      setUpdateInputStock(vouchers?.object.find((voucher) => voucher.id === selectedId)?.stock);
       setUpdateStartDate(
-        new Date(
-          vouchers?.object.find(
-            (voucher) => voucher.id === selectedId
-          )?.available_date
-        )
+        new Date(vouchers?.object.find((voucher) => voucher.id === selectedId)?.available_date)
       );
       setUpdateEndDate(
-        new Date(
-          vouchers?.object.find(
-            (voucher) => voucher.id === selectedId
-          )?.expired_date
-        )
+        new Date(vouchers?.object.find((voucher) => voucher.id === selectedId)?.expired_date)
       );
     }
   }, [selectedId, vouchers?.object]);
@@ -176,7 +70,7 @@ const Voucher = () => {
 
   const handleAddSubmit = async () => {
     try {
-      const message = await addVoucher({
+      await addVoucher({
         code,
         input_stock: inputStock,
         value,
@@ -219,7 +113,7 @@ const Voucher = () => {
       });
     }
   };
-  const listVouchers = vouchers.object.map((item, index) => {
+  const listVouchers = vouchers.object.map((item) => {
     return {
       id: item.id,
       code: item.code,
@@ -252,72 +146,38 @@ const Voucher = () => {
               </Typography>
               <div className="mx-auto">
                 <div className="grid grid-cols-3 gap-4 mb-5">
-                  <Typography
-                    variant="h6"
-                    className="my-auto"
-                    color="blue-gray"
-                  >
+                  <Typography variant="h6" className="my-auto" color="blue-gray">
                     Mã nhập:
                   </Typography>
                   <Typography className="my-auto col-span-2" color="blue-gray">
-                    {
-                      vouchers?.object.find(
-                        (voucher) => voucher.id === selectedId
-                      )?.code
-                    }
+                    {vouchers?.object.find((voucher) => voucher.id === selectedId)?.code}
                   </Typography>
 
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Giảm giá:
                   </Typography>
                   <Typography className="my-auto col-span-2" color="blue-gray">
-                    {vouchers?.object.find(
-                      (voucher) => voucher.id === selectedId
-                    )?.value + " %"}
+                    {vouchers?.object.find((voucher) => voucher.id === selectedId)?.value + " %"}
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Số lượng:
                   </Typography>
                   <Typography className="my-auto col-span-2" color="blue-gray">
-                    {
-                      vouchers?.object.find(
-                        (voucher) => voucher.id === selectedId
-                      )?.stock
-                    }
+                    {vouchers?.object.find((voucher) => voucher.id === selectedId)?.stock}
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày áp dụng:
                   </Typography>
                   <Typography className="my-auto col-span-2" color="blue-gray">
                     {new Date(
-                      vouchers?.object.find(
-                        (voucher) => voucher.id === selectedId
-                      )?.available_date
+                      vouchers?.object.find((voucher) => voucher.id === selectedId)?.available_date
                     ).toLocaleDateString("en-GB")}
                   </Typography>
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày kết thúc:
                   </Typography>
                   {new Date(
-                    vouchers?.object.find(
-                      (voucher) => voucher.id === selectedId
-                    )?.expired_date
+                    vouchers?.object.find((voucher) => voucher.id === selectedId)?.expired_date
                   ).toLocaleDateString("en-GB")}
                 </div>
               </div>
@@ -338,11 +198,7 @@ const Voucher = () => {
               </Typography>
               <div className="mx-auto">
                 <div className="grid grid-cols-3 gap-4 mb-5">
-                  <Typography
-                    variant="h6"
-                    className="my-auto"
-                    color="blue-gray"
-                  >
+                  <Typography variant="h6" className="my-auto" color="blue-gray">
                     Mã nhập:
                   </Typography>
                   <TextField
@@ -352,11 +208,7 @@ const Voucher = () => {
                     onChange={(e) => setUpdateCode(e.target.value)}
                   />
 
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Giảm giá:
                   </Typography>
                   <OutlinedInput
@@ -368,41 +220,27 @@ const Voucher = () => {
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 100
-                          ? 100
-                          : e.target.value
+                            ? 100
+                            : e.target.value
                       )
                     }
-                    endAdornment={
-                      <InputAdornment position="end">%</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">%</InputAdornment>}
                   />
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Số lượng:
                   </Typography>
                   <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end">đơn vị</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">đơn vị</InputAdornment>}
                     className="col-span-2"
                     size="small"
                     value={updateInputStock}
                     onChange={(e) =>
                       setUpdateInputStock(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value
+                        isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
                       )
                     }
                   />
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày áp dụng:
                   </Typography>
                   <div className="col-span-2">
@@ -423,11 +261,7 @@ const Voucher = () => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày kết thúc:
                   </Typography>
                   <div className="col-span-2">
@@ -480,19 +314,10 @@ const Voucher = () => {
             </Select> */}
         </div>
       </AdminLayout>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="lg"
-        className="overflow-y-auto"
-      >
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" className="overflow-y-auto">
         <DialogTitle className="pb-0 flex justify-between">
           <Typography variant="h4">Thêm mã giảm giá</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleClose}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -508,11 +333,7 @@ const Voucher = () => {
               </Typography>
               <div className="mx-auto">
                 <div className="grid grid-cols-3 gap-4 mb-5">
-                  <Typography
-                    variant="h6"
-                    className="my-auto"
-                    color="blue-gray"
-                  >
+                  <Typography variant="h6" className="my-auto" color="blue-gray">
                     Mã nhập:
                   </Typography>
                   <TextField
@@ -522,11 +343,7 @@ const Voucher = () => {
                     onChange={(e) => setCode(e.target.value)}
                   />
 
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Giảm giá:
                   </Typography>
                   <OutlinedInput
@@ -538,41 +355,27 @@ const Voucher = () => {
                         isNaN(e.target.value) || e.target.value < 0
                           ? 0
                           : e.target.value > 100
-                          ? 100
-                          : e.target.value
+                            ? 100
+                            : e.target.value
                       )
                     }
-                    endAdornment={
-                      <InputAdornment position="end">%</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">%</InputAdornment>}
                   />
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Số lượng:
                   </Typography>
                   <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end">đơn vị</InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">đơn vị</InputAdornment>}
                     className="col-span-2"
                     size="small"
                     value={inputStock}
                     onChange={(e) =>
                       setInputStock(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value
+                        isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
                       )
                     }
                   />
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày áp dụng:
                   </Typography>
                   <div className="col-span-2">
@@ -593,11 +396,7 @@ const Voucher = () => {
                       </DemoContainer>
                     </LocalizationProvider>
                   </div>
-                  <Typography
-                    variant="h6"
-                    color="blue-gray"
-                    className="my-auto"
-                  >
+                  <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày kết thúc:
                   </Typography>
                   <div className="col-span-2">

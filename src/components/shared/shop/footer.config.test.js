@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  FOOTER_MENU,
-  SOCIAL_LINKS,
-  getFooterCopyright,
-} from "./footer.config";
+import { FOOTER_MENU, SOCIAL_LINKS, getFooterCopyright } from "./footer.config";
 
 describe("footer config", () => {
   it("keeps footer menu groups renderable", () => {
@@ -31,7 +27,8 @@ describe("footer config", () => {
   });
 
   it("formats copyright text", () => {
-    expect(getFooterCopyright(2026, "VTI Corporation", "All Rights Reserved."))
-      .toBe("© 2026 VTI Corporation. All Rights Reserved.");
+    expect(getFooterCopyright(2026, "VTI Corporation", "All Rights Reserved.")).toBe(
+      "© 2026 VTI Corporation. All Rights Reserved."
+    );
   });
 });

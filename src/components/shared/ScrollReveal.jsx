@@ -33,9 +33,7 @@ const ScrollReveal = ({
   return (
     <Tag
       ref={ref}
-      className={[revealClass, staggerClass, inViewClass, className]
-        .filter(Boolean)
-        .join(" ")}
+      className={[revealClass, staggerClass, inViewClass, className].filter(Boolean).join(" ")}
       style={delay !== "0s" ? { "--reveal-delay": delay } : undefined}
       {...rest}
     >

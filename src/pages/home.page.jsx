@@ -18,23 +18,14 @@ import ScrollReveal from "../components/shared/ScrollReveal";
 import { useGetOnSaleProductsQuery } from "../apis/on_sale_product.api";
 import { useI18n } from "../i18n";
 import PropTypes from "prop-types";
-import {
-  getHomeErrorMessage,
-  getHomeLabels,
-  getUniqueProducts,
-} from "./home.page.helpers";
+import { getHomeErrorMessage, getHomeLabels, getUniqueProducts } from "./home.page.helpers";
 
 // Background for the parallax break between sections
-const PARALLAX_IMAGE =
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80";
+const PARALLAX_IMAGE = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80";
 
 const renderSlide = (slide, index) => (
   <SwiperSlide key={index}>
-    <img
-      src={slide}
-      alt={`Slide ${index + 1}`}
-      loading={index === 0 ? "eager" : "lazy"}
-    />
+    <img src={slide} alt={`Slide ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
   </SwiperSlide>
 );
 
@@ -62,12 +53,7 @@ export const HomepageView = ({ labels, products, slides }) => (
     </ScrollReveal>
 
     {/* ── Parallax banner #1 ────────────────────────────── */}
-    <ParallaxBanner
-      imageUrl={PARALLAX_IMAGE}
-      speed={0.28}
-      height="360px"
-      overlay={0.52}
-    >
+    <ParallaxBanner imageUrl={PARALLAX_IMAGE} speed={0.28} height="360px" overlay={0.52}>
       <h2>#WearWithStyle</h2>
       <p style={{ marginTop: "0.75rem" }}>
         <em>{labels.styleQuote}</em>

@@ -20,8 +20,7 @@ describe("chart theme tokens", () => {
     vi.stubGlobal("window", {
       document: { documentElement: {} },
       getComputedStyle: () => ({
-        getPropertyValue: (token) =>
-          token === "--chart-series-1" ? "rgb(1, 2, 3)" : "",
+        getPropertyValue: (token) => (token === "--chart-series-1" ? "rgb(1, 2, 3)" : ""),
       }),
     });
 

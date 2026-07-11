@@ -1,19 +1,17 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card, CardBody } from "@material-tailwind/react/components/Card";
-import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+} from "@material-tailwind/react/components/Dialog";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Input } from "@material-tailwind/react/components/Input";
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
-import { Textarea } from "@material-tailwind/react/components/Textarea";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { Container, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import useOpen from "../../hooks/useOpen.hook";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import { brand } from "../../constants/head_table.constant";
-import useFetch from "../../hooks/useFetch.hook";
 import {
   useAddBrandMutation,
   useDeleteBrandMutation,
@@ -22,16 +20,10 @@ import {
 } from "../../apis/brand.api";
 import { useDispatch, useSelector } from "react-redux";
 import { Toast } from "../../configs/sweetalert2.config";
-import { useNavigate } from "react-router-dom";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
-import {
-  resetDescription,
-  setDescription,
-} from "../../features/slices/description.slice";
-import { resetName, setName } from "../../features/slices/name.slice";
+
 const Brand = () => {
-  const navigate = useNavigate();
   const { data: brands, error, isLoading } = useGetBrandsQuery();
   const selectedId = useSelector((state) => state.selectedId.value);
   const [name, setName] = useState("");
@@ -43,18 +35,14 @@ const Brand = () => {
   useEffect(() => {
     if (selectedId !== -1) {
       setUpdateName(brands?.object.find((row) => row.id === selectedId)?.name);
-      setUpdateDescription(
-        brands?.object.find((row) => row.id === selectedId)?.description
-      );
+      setUpdateDescription(brands?.object.find((row) => row.id === selectedId)?.description);
     }
   }, [selectedId, brands]);
   const [addOpen, setAddOpen] = React.useState(false);
   const handleAddOpen = () => setAddOpen(!addOpen);
 
-  const [addBrand, { isLoading: isAdded, error: AddError }] =
-    useAddBrandMutation();
-  const [updateBrand, { isLoading: isUpdated, error: updateError }] =
-    useUpdateBrandMutation();
+  const [addBrand, { isLoading: isAdded }] = useAddBrandMutation();
+  const [updateBrand] = useUpdateBrandMutation();
   const handleAddSubmit = async () => {
     try {
       await addBrand({ name, description })
@@ -69,7 +57,7 @@ const Brand = () => {
             setDescription("");
           });
         });
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Thêm thương hiệu thất bại",
@@ -89,8 +77,7 @@ const Brand = () => {
     });
     return message;
   };
-  const [deleteBrand, { isLoading: isDeleted, error: deleteError }] =
-    useDeleteBrandMutation();
+  const [deleteBrand] = useDeleteBrandMutation();
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteBrand(brands.object[selectedId].id);
@@ -102,7 +89,7 @@ const Brand = () => {
           dispatch(resetSelectedId());
         });
       }
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Xóa thất bại",
@@ -130,8 +117,7 @@ const Brand = () => {
               <Typography variant="medium" className="my-auto">
                 {selectedId === -1
                   ? ""
-                  : brands.object.find((row) => row.id === selectedId)?.name ||
-                    ""}
+                  : brands.object.find((row) => row.id === selectedId)?.name || ""}
               </Typography>
             </div>
             <Typography variant="h5" color="blue-gray" className="font-bold">
@@ -140,8 +126,7 @@ const Brand = () => {
             <Typography variant="medium">
               {selectedId === -1
                 ? ""
-                : brands.object.find((row) => row.id === selectedId)
-                    ?.description || ""}
+                : brands.object.find((row) => row.id === selectedId)?.description || ""}
             </Typography>
           </Container>
         }
@@ -149,11 +134,7 @@ const Brand = () => {
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-2 gap-4">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên thương hiệu:
               </Typography>
               {/* <Input
@@ -216,22 +197,14 @@ const Brand = () => {
       <Dialog open={addOpen} handler={handleAddOpen} size="md">
         <DialogHeader className="pb-0 flex justify-between">
           <Typography variant="h4">Thêm thương hiệu</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleAddOpen}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleAddOpen}>
             <CloseIcon />
           </IconButton>
         </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên thương hiệu:
               </Typography>
               <TextField
@@ -261,12 +234,7 @@ const Brand = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleAddSubmit}
-            loading={isAdded}
-          >
+          <Button variant="gradient" color="green" onClick={handleAddSubmit} loading={isAdded}>
             {!isAdded && <span>Thêm mới</span>}
           </Button>
         </DialogFooter>

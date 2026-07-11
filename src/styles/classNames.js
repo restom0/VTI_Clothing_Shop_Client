@@ -1,16 +1,13 @@
 export const ACTION_ROW_CLASSNAME = "action-row";
 export const ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME = "admin-product-thumb-media";
-export const ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME =
-  "mySwiper admin-product-thumb-swiper";
+export const ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME = "mySwiper admin-product-thumb-swiper";
 export const CLUSTER_MD_CLASSNAME = "cluster-md";
 export const CLUSTER_SM_CLASSNAME = "cluster-sm";
 export const IMPORT_ACTIONS_CLASSNAME = "import-actions";
 export const IMPORT_ACTION_BUTTON_CLASSNAME = "import-action-button";
-export const IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME =
-  "import-avatar-delete-button";
+export const IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME = "import-avatar-delete-button";
 export const IMPORT_AVATAR_PREVIEW_CLASSNAME = "import-avatar-preview";
-export const IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME =
-  "import-avatar-preview-image";
+export const IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME = "import-avatar-preview-image";
 export const IMPORT_AVATAR_PREVIEW_IMAGE_FULL_CLASSNAME =
   "import-avatar-preview-image import-avatar-preview-image--full";
 export const IMPORT_DETAIL_FIELD_CLASSNAME = "import-detail-field";
@@ -23,34 +20,29 @@ export const IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME = "import-detail-thumb-image";
 export const IMPORT_DIALOG_HEADER_CLASSNAME = "import-dialog-header";
 export const IMPORT_FORM_FIELD_CLASSNAME = "import-form-field";
 export const IMPORT_FORM_GRID_CLASSNAME = "import-form-grid";
-export const IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME =
-  "import-slider-delete-button";
+export const IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME = "import-slider-delete-button";
 export const IMPORT_SLIDER_GRID_CLASSNAME = "import-slider-grid";
 export const IMPORT_SLIDER_PREVIEW_CLASSNAME = "import-slider-preview";
 export const IMPORT_SLIDER_PREVIEW_FULL_CLASSNAME =
   "import-slider-preview import-slider-preview--full";
-export const IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME =
-  "import-slider-preview-image";
+export const IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME = "import-slider-preview-image";
 export const IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME =
   "import-slider-preview-image import-slider-preview-image--tall";
 export const IMPORT_UPLOAD_BODY_CLASSNAME = "import-upload-body";
-export const IMPORT_UPLOAD_BODY_PADDED_CLASSNAME =
-  "import-upload-body import-upload-body--padded";
+export const IMPORT_UPLOAD_BODY_PADDED_CLASSNAME = "import-upload-body import-upload-body--padded";
 export const IMPORT_UPLOAD_CENTER_CLASSNAME = "import-upload-center";
 export const IMPORT_UPLOAD_DROPZONE_CLASSNAME = "import-upload-dropzone";
 export const IMPORT_UPLOAD_FIGURE_CLASSNAME = "import-upload-figure";
 export const IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME = "import-upload-helper-text";
 export const IMPORT_UPLOAD_HINT_CLASSNAME = "import-upload-hint";
 export const IMPORT_UPLOAD_ICON_CLASSNAME = "import-upload-icon";
-export const IMPORT_UPLOAD_ICON_SPACED_CLASSNAME =
-  "import-upload-icon import-upload-icon--spaced";
+export const IMPORT_UPLOAD_ICON_SPACED_CLASSNAME = "import-upload-icon import-upload-icon--spaced";
 export const IMPORT_UPLOAD_TEXT_CLASSNAME = "import-upload-text";
 export const IMPORT_UPLOAD_CAPTION_CLASSNAME = "import-upload-caption";
 export const IMPORT_UPLOAD_STACK_CLASSNAME = "import-upload-stack";
 export const PRODUCT_COLOR_COLUMN_CLASSNAME = "product-color-column";
 export const PRODUCT_COLOR_ROW_CLASSNAME = "product-color-row";
-export const PRODUCT_DESCRIPTION_LABEL_CLASSNAME =
-  "product-description-label";
+export const PRODUCT_DESCRIPTION_LABEL_CLASSNAME = "product-description-label";
 export const PRODUCT_DESCRIPTION_TEXT_CLASSNAME = "product-description-text";
 export const PRODUCT_DETAIL_ACTIONS_CLASSNAME = "product-detail-actions";
 export const PRODUCT_DETAIL_LAYOUT_CLASSNAME = "product-detail-layout";

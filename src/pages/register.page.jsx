@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Input } from "@material-tailwind/react/components/Input";
 import { Radio } from "@material-tailwind/react/components/Radio";
@@ -8,8 +8,6 @@ import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { useRegisterMutation } from "../apis/account.api";
 import ImageUpload from "../components/upload_image.component";
-import CryptoJS from "crypto-js";
-import axios from "axios";
 import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,12 +23,12 @@ const Registerpage = () => {
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
   const [gender, setGender] = useState("");
-  const [address, setAddress] = useState("");
+  const [address] = useState("");
   const avatar_url = useSelector((state) => state.avatar_url.value);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [register, { isLoading, error }] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const handleRegister = async () => {
     const message = await register({
@@ -67,10 +65,7 @@ const Registerpage = () => {
           "url('https://giaiphapzalo.com/wp-content/uploads/2021/09/pagebg-1-1920x705.jpg')",
       }}
     >
-      <Container
-        maxWidth="md"
-        className="auth-card"
-      >
+      <Container maxWidth="md" className="auth-card">
         <h1 className="auth-title">
           <span className="text-[#006edc]">VTI</span> Shop
         </h1>
@@ -179,8 +174,7 @@ const Registerpage = () => {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
+                      <span className="font-semibold">Click to upload</span> or drag and drop
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       SVG, PNG, JPG or GIF (MAX. 800x400px)
@@ -191,11 +185,7 @@ const Registerpage = () => {
               </div>
             ) : (
               <div className="flex justify-around">
-                <img
-                  src={avatar_url}
-                  alt="avatar"
-                  className="h-[150px] w-[150px] rounded-full"
-                />
+                <img src={avatar_url} alt="avatar" className="h-[150px] w-[150px] rounded-full" />
                 <Button
                   onClick={() => dispatch(deleteAvatar())}
                   color="red"

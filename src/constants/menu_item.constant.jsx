@@ -1,15 +1,8 @@
 import {
-  CubeTransparentIcon,
   UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
-  ChevronDownIcon,
-  Cog6ToothIcon,
   InboxArrowDownIcon,
   LifebuoyIcon,
   PowerIcon,
-  RocketLaunchIcon,
-  Bars2Icon,
 } from "@heroicons/react/24/solid";
 import UserInfo from "../components/shop/user_info.component";
 import Order from "../components/shop/order.component";

@@ -1,9 +1,6 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
-import { Typography } from "@material-tailwind/react/components/Typography";
-import { Container } from "@mui/material";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
 import { history } from "../../constants/head_table.constant";
@@ -13,11 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const Log = () => {
   const navigate = useNavigate();
-  const {
-    data: logs,
-    isLoading: isLogsLoading,
-    error: logsError,
-  } = useGetLogsQuery();
+  const { data: logs, isLoading: isLogsLoading, error: logsError } = useGetLogsQuery();
   const [filter, setFilter] = useState("ALL");
   if (isLogsLoading) return <Loading />;
   if (logsError) return navigate("/error");
@@ -48,35 +41,20 @@ const Log = () => {
                       YEAR: "Năm nay",
                     }[filter]
                   }
-                  <ChevronDownIcon
-                    strokeWidth={4}
-                    className="w-3 h-3 text-gray-900"
-                  />
+                  <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-gray-900" />
                 </Button>
               </MenuHandler>
               <MenuList>
-                <MenuItem
-                  onClick={(e) => setFilter(e.target.value)}
-                  value="ALL"
-                >
+                <MenuItem onClick={(e) => setFilter(e.target.value)} value="ALL">
                   Tất cả
                 </MenuItem>
-                <MenuItem
-                  onClick={(e) => setFilter(e.target.value)}
-                  value="DAY"
-                >
+                <MenuItem onClick={(e) => setFilter(e.target.value)} value="DAY">
                   Hôm nay
                 </MenuItem>
-                <MenuItem
-                  onClick={(e) => setFilter(e.target.value)}
-                  value="MONTH"
-                >
+                <MenuItem onClick={(e) => setFilter(e.target.value)} value="MONTH">
                   Tháng này
                 </MenuItem>
-                <MenuItem
-                  onClick={(e) => setFilter(e.target.value)}
-                  value="YEAR"
-                >
+                <MenuItem onClick={(e) => setFilter(e.target.value)} value="YEAR">
                   Năm nay
                 </MenuItem>
               </MenuList>

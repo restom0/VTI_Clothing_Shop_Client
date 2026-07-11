@@ -1,10 +1,9 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import { Breadcrumbs } from "@material-tailwind/react/components/Breadcrumbs";
 
 import PropTypes from "prop-types";
 
-const BreadcrumbsWithIcon = ({ name }) => {
+const BreadcrumbsWithIcon = () => {
   const location = useLocation();
   const pathname = location.pathname.split("/");
   pathname.shift();

@@ -6,10 +6,7 @@ export const DEFAULT_COLUMN_BREAKPOINTS = Object.freeze([
   { minWidth: 0, columns: 1 },
 ]);
 
-export const getColumnCountForWidth = (
-  width,
-  breakpoints = DEFAULT_COLUMN_BREAKPOINTS
-) =>
+export const getColumnCountForWidth = (width, breakpoints = DEFAULT_COLUMN_BREAKPOINTS) =>
   breakpoints.find(({ minWidth }) => width >= minWidth)?.columns ??
   breakpoints.at(-1)?.columns ??
   1;

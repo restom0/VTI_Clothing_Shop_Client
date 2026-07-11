@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  getAccountMenuItems,
-  getBannerLabels,
-  isLogoutMenuItem,
-} from "./banner.helpers";
+import { getAccountMenuItems, getBannerLabels, isLogoutMenuItem } from "./banner.helpers";
 
 const Icon = () => null;
 

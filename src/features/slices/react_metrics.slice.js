@@ -1,8 +1,4 @@
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
 
 const MAX_RENDER_SAMPLES = 120;
 const MAX_MEMORY_SAMPLES = 60;
@@ -15,10 +11,7 @@ const renderSamplesAdapter = createEntityAdapter({
 const clampSamples = (state) => {
   if (state.ids.length <= state.maxRenderSamples) return;
 
-  renderSamplesAdapter.removeMany(
-    state,
-    state.ids.slice(state.maxRenderSamples)
-  );
+  renderSamplesAdapter.removeMany(state, state.ids.slice(state.maxRenderSamples));
 };
 
 const pushLimited = (items, item, limit) => {
@@ -86,35 +79,26 @@ export const {
   toggleReactMetricsPanel,
 } = reactMetricsSlice.actions;
 
-const renderSelectors = renderSamplesAdapter.getSelectors(
-  (state) => state.reactMetrics
-);
+const renderSelectors = renderSamplesAdapter.getSelectors((state) => state.reactMetrics);
 
 export const selectReactMetricsState = (state) => state.reactMetrics;
 export const selectRenderSamples = renderSelectors.selectAll;
-export const selectLatestMemorySample = (state) =>
-  state.reactMetrics.memorySamples[0] ?? null;
+export const selectLatestMemorySample = (state) => state.reactMetrics.memorySamples[0] ?? null;
 export const selectWebMetrics = (state) => state.reactMetrics.webMetrics;
 
 export const selectReactMetricsSummary = createSelector(
   [selectRenderSamples, selectLatestMemorySample, selectWebMetrics],
   (renderSamples, latestMemorySample, webMetrics) => {
     const renderCount = renderSamples.length;
-    const totalDuration = renderSamples.reduce(
-      (sum, sample) => sum + sample.actualDuration,
-      0
-    );
+    const totalDuration = renderSamples.reduce((sum, sample) => sum + sample.actualDuration, 0);
     const slowestRender = renderSamples.reduce(
       (slowest, sample) =>
-        !slowest || sample.actualDuration > slowest.actualDuration
-          ? sample
-          : slowest,
+        !slowest || sample.actualDuration > slowest.actualDuration ? sample : slowest,
       null
     );
 
     return {
-      averageRenderDuration:
-        renderCount > 0 ? Number((totalDuration / renderCount).toFixed(2)) : 0,
+      averageRenderDuration: renderCount > 0 ? Number((totalDuration / renderCount).toFixed(2)) : 0,
       latestMemorySample,
       renderCount,
       slowestRender,

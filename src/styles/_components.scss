@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use "variables" as *;
 
 // ============================================================
 // COMPONENT CLASSES — @layer components
@@ -7,7 +7,6 @@
 // ============================================================
 
 @layer components {
-
   // ----------------------------------------------------------
   // LAYOUT HELPERS
   // ----------------------------------------------------------
@@ -64,7 +63,9 @@
   // Column span helpers — dùng cho children của .grid-12
   // (Tailwind đã có col-span-*, nhưng khai báo ở đây để dùng trong SCSS context)
   @for $i from 1 through 12 {
-    .col-span-#{$i} { grid-column: span #{$i} / span #{$i}; }
+    .col-span-#{$i} {
+      grid-column: span #{$i} / span #{$i};
+    }
   }
 
   // -------------------------------------------------------
@@ -592,7 +593,9 @@
     border: var(--border-width-strong) dashed var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface-raised);
-    transition: background-color #{$transition-fast}, border-color #{$transition-fast};
+    transition:
+      background-color #{$transition-fast},
+      border-color #{$transition-fast};
 
     &:hover {
       border-color: var(--color-border-strong);
@@ -706,7 +709,6 @@
     border-bottom-left-radius: 0 !important;
   }
 
-
   // ----------------------------------------------------------
   // TYPOGRAPHY
   // ----------------------------------------------------------
@@ -751,7 +753,6 @@
   .border-theme {
     border-color: var(--color-border) !important;
   }
-
 
   // ----------------------------------------------------------
   // BUTTONS
@@ -858,7 +859,6 @@
     }
   }
 
-
   // ----------------------------------------------------------
   // BADGES / CHIPS
   // ----------------------------------------------------------
@@ -875,7 +875,6 @@
     color: var(--color-primary);
   }
 
-
   // ----------------------------------------------------------
   // PRODUCT CARD
   // ----------------------------------------------------------
@@ -890,7 +889,9 @@
       border-radius: var(--radius-lg);
       background-color: var(--color-surface);
       box-shadow: var(--shadow-card);
-      transition: box-shadow #{$transition-slow}, transform #{$transition-slow};
+      transition:
+        box-shadow #{$transition-slow},
+        transform #{$transition-slow};
       color: inherit;
 
       &:hover {
@@ -912,7 +913,9 @@
       border-radius: var(--radius-lg);
       background-color: var(--color-surface);
       box-shadow: var(--shadow-card);
-      transition: box-shadow #{$transition-slow}, transform #{$transition-slow};
+      transition:
+        box-shadow #{$transition-slow},
+        transform #{$transition-slow};
       color: inherit;
 
       &:hover {
@@ -963,7 +966,6 @@
     }
   }
 
-
   // ----------------------------------------------------------
   // PRICE DISPLAY (standalone, e.g. detail page)
   // ----------------------------------------------------------
@@ -977,7 +979,6 @@
     @apply text-sm line-through;
     color: var(--color-text-muted);
   }
-
 
   // ----------------------------------------------------------
   // CART
@@ -1090,7 +1091,6 @@
     color: var(--color-text-base);
   }
 
-
   // ----------------------------------------------------------
   // NAVBAR
   // ----------------------------------------------------------
@@ -1126,12 +1126,7 @@
       position: absolute;
       inset: 0;
       transform: translateX(-100%);
-      background: linear-gradient(
-        90deg,
-        transparent,
-        var(--color-skeleton-highlight),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, var(--color-skeleton-highlight), transparent);
       animation: skeleton-shimmer 1.35s ease-in-out infinite;
     }
   }
@@ -1171,7 +1166,6 @@
     }
   }
 
-
   // ----------------------------------------------------------
   // FILTER SIDEBAR
   // ----------------------------------------------------------
@@ -1189,7 +1183,6 @@
     @apply text-sm font-medium;
     color: var(--color-text-base);
   }
-
 
   // ----------------------------------------------------------
   // FOOTER
@@ -1252,7 +1245,6 @@
       color: var(--color-text-base);
     }
   }
-
 
   // ----------------------------------------------------------
   // ADMIN PANEL
@@ -1317,7 +1309,6 @@
     scrollbar-gutter: stable;
   }
 
-
   // ----------------------------------------------------------
   // FORM ELEMENTS
   // ----------------------------------------------------------
@@ -1330,7 +1321,6 @@
   .form-section {
     @apply mb-5;
   }
-
 
   // ----------------------------------------------------------
   // LOADING / ERROR STATES
@@ -1613,7 +1603,6 @@
       grid-template-columns: 1fr;
     }
   }
-
 
   // ----------------------------------------------------------
   // MISC UTILITIES

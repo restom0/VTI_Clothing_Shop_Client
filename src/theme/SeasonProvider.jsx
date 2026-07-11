@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import {
   DEFAULT_SEASON,
@@ -49,17 +42,15 @@ export const AppSeasonProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      activeSeason,   // resolved: "spring" | "summer" | "autumn" | "winter"
-      season,         // stored: "auto" | "spring" | "summer" | "autumn" | "winter"
+      activeSeason, // resolved: "spring" | "summer" | "autumn" | "winter"
+      season, // stored: "auto" | "spring" | "summer" | "autumn" | "winter"
       setSeason,
       seasonOptions: SEASON_OPTIONS,
     }),
     [activeSeason, season, setSeason]
   );
 
-  return (
-    <SeasonContext.Provider value={value}>{children}</SeasonContext.Provider>
-  );
+  return <SeasonContext.Provider value={value}>{children}</SeasonContext.Provider>;
 };
 
 AppSeasonProvider.propTypes = {

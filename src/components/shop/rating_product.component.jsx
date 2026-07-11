@@ -1,34 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react/components/Tabs";
 import { Card, CardBody } from "@material-tailwind/react/components/Card";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { Button } from "@material-tailwind/react/components/Button";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Input } from "@material-tailwind/react/components/Input";
 import { Rating } from "@mui/material";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import Pagination from "../shared/pagination.component";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/list_tab.component";
 import { rating } from "../../constants/tab.constant";
 const ProductRating = () => {
   const [tab, setTab] = useState("unrate");
-  const data = [
-    {
-      label: "Chờ đánh giá",
-      value: "unrate",
-      desc: `It really matters and then like it really doesn't matter.
-        What matters is the people who are sparked by it. And the people 
-        who are like offended by it, it doesn't matter.`,
-    },
-    {
-      label: "Đã đánh giá",
-      value: "rated",
-      desc: `Because it's about motivating the doers. Because I'm here
-        to follow my dreams and inspire other people to follow their dreams, too.`,
-    },
-  ];
 
   return (
     <>
@@ -164,9 +146,8 @@ const ProductRating = () => {
                 </Typography>
                 <Rating value={4} readOnly />
                 <Typography variant="small" color="gray">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                  nec purus feugiat, molestie ipsum et, consequat nibh. Etiam
-                  non est vel est suscipit posuere.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat,
+                  molestie ipsum et, consequat nibh. Etiam non est vel est suscipit posuere.
                 </Typography>
               </div>
             </div>
@@ -186,9 +167,8 @@ const ProductRating = () => {
                 </Typography>
                 <Rating value={4} readOnly />
                 <Typography variant="small" color="gray">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                  nec purus feugiat, molestie ipsum et, consequat nibh. Etiam
-                  non est vel est suscipit posuere.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat,
+                  molestie ipsum et, consequat nibh. Etiam non est vel est suscipit posuere.
                 </Typography>
               </div>
             </div>
@@ -208,9 +188,8 @@ const ProductRating = () => {
                 </Typography>
                 <Rating value={4} readOnly />
                 <Typography variant="small" color="gray">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-                  nec purus feugiat, molestie ipsum et, consequat nibh. Etiam
-                  non est vel est suscipit posuere.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat,
+                  molestie ipsum et, consequat nibh. Etiam non est vel est suscipit posuere.
                 </Typography>
               </div>
             </div>

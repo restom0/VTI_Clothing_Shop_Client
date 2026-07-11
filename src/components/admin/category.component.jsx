@@ -1,12 +1,12 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
-import { Input } from "@material-tailwind/react/components/Input";
-import { Textarea } from "@material-tailwind/react/components/Textarea";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react/components/Dialog";
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react/components/Dialog";
 import { Container, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
@@ -21,13 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
-import { useUpdateBrandMutation } from "../../apis/brand.api";
 import { Toast } from "../../configs/sweetalert2.config";
-import { resetName, setName } from "../../features/slices/name.slice";
-import {
-  resetDescription,
-  setDescription,
-} from "../../features/slices/description.slice";
 
 const Category = () => {
   const [addOpen, setAddOpen] = useState(false);
@@ -40,21 +34,14 @@ const Category = () => {
   const selectedId = useSelector((state) => state.selectedId.value);
 
   const { data: categories, error, isLoading } = useGetCategoriesQuery();
-  const [addCategory, { isLoading: isAdded, error: AddError }] =
-    useAddCategoryMutation();
-  const [updateCategory, { isLoading: isUpdated, error: updateError }] =
-    useUpdateCategoryMutation();
-  const [deleteCategory, { isLoading: isDeleted, error: deleteError }] =
-    useDeleteCategoryMutation();
+  const [addCategory, { isLoading: isAdded }] = useAddCategoryMutation();
+  const [updateCategory, { isLoading: isUpdated }] = useUpdateCategoryMutation();
+  const [deleteCategory, { isLoading: isDeleted }] = useDeleteCategoryMutation();
 
   useEffect(() => {
     if (selectedId !== -1) {
-      setUpdateName(
-        categories?.object.find((row) => row.id === selectedId)?.name
-      );
-      setUpdateDescription(
-        categories?.object.find((row) => row.id === selectedId)?.description
-      );
+      setUpdateName(categories?.object.find((row) => row.id === selectedId)?.name);
+      setUpdateDescription(categories?.object.find((row) => row.id === selectedId)?.description);
     }
   }, [selectedId, categories]);
   const handleAddSubmit = async () => {
@@ -69,7 +56,7 @@ const Category = () => {
             handleAddOpen();
           });
         });
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Thêm danh mục thất bại",
@@ -101,7 +88,7 @@ const Category = () => {
           dispatch(resetSelectedId());
         });
       }
-    } catch (err) {
+    } catch {
       Toast.fire({
         icon: "error",
         title: "Xóa thất bại",
@@ -128,8 +115,7 @@ const Category = () => {
               </Typography>
               <Typography variant="medium" className="my-auto">
                 {(selectedId !== -1 &&
-                  categories.object.find((row) => row.id === selectedId)
-                    ?.name) ||
+                  categories.object.find((row) => row.id === selectedId)?.name) ||
                   ""}
               </Typography>
             </div>
@@ -138,8 +124,7 @@ const Category = () => {
             </Typography>
             <Typography variant="medium">
               {(selectedId !== -1 &&
-                categories.object.find((row) => row.id === selectedId)
-                  ?.description) ||
+                categories.object.find((row) => row.id === selectedId)?.description) ||
                 ""}
             </Typography>
           </Container>
@@ -148,11 +133,7 @@ const Category = () => {
         bodyUpdate={
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên danh mục:
               </Typography>
               <TextField
@@ -200,22 +181,14 @@ const Category = () => {
       <Dialog open={addOpen} handler={handleAddOpen} size="md">
         <DialogHeader className="pb-0 flex justify-between">
           <Typography variant="h4">Thêm danh mục</Typography>
-          <IconButton
-            className="border-none"
-            variant="outlined"
-            onClick={handleAddOpen}
-          >
+          <IconButton className="border-none" variant="outlined" onClick={handleAddOpen}>
             <CloseIcon />
           </IconButton>
         </DialogHeader>
         <DialogBody>
           <Container>
             <div className="grid grid-cols-2 gap-4 mb-5">
-              <Typography
-                variant="h5"
-                color="blue-gray"
-                className="font-bold my-auto"
-              >
+              <Typography variant="h5" color="blue-gray" className="font-bold my-auto">
                 Tên danh mục:
               </Typography>
               <TextField
@@ -245,12 +218,7 @@ const Category = () => {
           </Container>
         </DialogBody>
         <DialogFooter>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={handleAddSubmit}
-            loading={isAdded}
-          >
+          <Button variant="gradient" color="green" onClick={handleAddSubmit} loading={isAdded}>
             {!isAdded && <span>Thêm mới</span>}
           </Button>
         </DialogFooter>

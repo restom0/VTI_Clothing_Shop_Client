@@ -1,47 +1,17 @@
 import { Button } from "@material-tailwind/react/components/Button";
-import { Card } from "@material-tailwind/react/components/Card";
-import { DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react/components/Dialog";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Input } from "@material-tailwind/react/components/Input";
-import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
-import { Tooltip } from "@material-tailwind/react/components/Tooltip";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import {
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
+import { Container, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import useOpen from "../../hooks/useOpen.hook";
 import Table from "../shared/table.component";
 import { user } from "../../constants/head_table.constant";
-import CloseIcon from "@mui/icons-material/Close";
 import { useGetUsersQuery } from "../../apis/user.api";
 import Loading from "../shared/loading.component";
 
-const TABLE_ROWS = [
-  {
-    name: "001",
-    role: "USER",
-    action: "Tạo tài khoản",
-    status: "BLOCKED",
-  },
-];
 const User = () => {
   const [active, setActive] = useState(1);
-  const {
-    detailOpen,
-    updateOpen,
-    deleteOpen,
-    handleDetailOpen,
-    handleUpdateOpen,
-    handleDeleteOpen,
-    handleDetailClose,
-    handleUpdateClose,
-    handleDeleteClose,
-  } = useOpen();
+  const { detailOpen, handleDetailOpen, handleDetailClose } = useOpen();
 
   const { data: users, error, isLoading } = useGetUsersQuery();
   if (isLoading) return <Loading />;
@@ -53,11 +23,7 @@ const User = () => {
           Danh sách người dùng
         </Typography>
         <div className="flex items-center justify-between gap-4">
-          <Button
-            className=" !border-gray-300 w-full"
-            color="gray"
-            variant="outlined"
-          >
+          <Button className=" !border-gray-300 w-full" color="gray" variant="outlined">
             Thêm mới
           </Button>
           <Input

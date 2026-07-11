@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use "variables" as *;
 
 // ============================================================
 // ANIMATIONS — VTI Clothing Shop
@@ -6,44 +6,80 @@
 // parallax banner CSS
 // ============================================================
 
-
 // ── 1. KEYFRAMES ─────────────────────────────────────────────────────
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-28px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeLeft {
-  from { opacity: 0; transform: translateX(-32px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes fadeRight {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes scalePop {
-  from { opacity: 0; transform: scale(0.90); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes imageFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-
 
 // ── 2. SCROLL REVEAL ─────────────────────────────────────────────────
 // Usage:
@@ -59,18 +95,30 @@
   opacity: 0;
   will-change: opacity, transform;
 
-  &.reveal-fade-up    { transform: translateY(32px); }
-  &.reveal-fade-down  { transform: translateY(-32px); }
-  &.reveal-fade-left  { transform: translateX(-32px); }
-  &.reveal-fade-right { transform: translateX(32px); }
-  &.reveal-scale      { transform: scale(0.90); }
-  &.reveal-fade       { /* only opacity */ }
+  &.reveal-fade-up {
+    transform: translateY(32px);
+  }
+  &.reveal-fade-down {
+    transform: translateY(-32px);
+  }
+  &.reveal-fade-left {
+    transform: translateX(-32px);
+  }
+  &.reveal-fade-right {
+    transform: translateX(32px);
+  }
+  &.reveal-scale {
+    transform: scale(0.9);
+  }
+  &.reveal-fade {
+    /* only opacity */
+  }
 
   &.in-view {
     opacity: 1;
     transform: none;
     transition:
-      opacity  var(--duration-reveal) var(--ease-out-expo),
+      opacity var(--duration-reveal) var(--ease-out-expo),
       transform var(--duration-reveal) var(--ease-out-expo);
     transition-delay: var(--reveal-delay, 0s);
   }
@@ -93,7 +141,6 @@
   }
 }
 
-
 // ── 3. LAZY IMAGE ────────────────────────────────────────────────────
 // .lazy-image-wrapper wraps every LazyImage component.
 // The shimmer runs until the real image loads, then fades out.
@@ -106,15 +153,10 @@
 
   // Shimmer overlay (pseudo-element)
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      105deg,
-      transparent 30%,
-      var(--color-skeleton-highlight) 50%,
-      transparent 70%
-    );
+    background: linear-gradient(105deg, transparent 30%, var(--color-skeleton-highlight) 50%, transparent 70%);
     background-size: 200% 100%;
     animation: shimmer 1.6s ease-in-out infinite;
     transition: opacity 0.4s ease;
@@ -140,7 +182,6 @@
     }
   }
 }
-
 
 // ── 4. PARALLAX BANNER ───────────────────────────────────────────────
 // A full-width decorative section with a JS-driven parallax background.
@@ -171,12 +212,7 @@
   &__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      145deg,
-      rgba(0, 0, 0, 0.60) 0%,
-      rgba(0, 0, 0, 0.30) 60%,
-      rgba(0, 0, 0, 0.50) 100%
-    );
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0.5) 100%);
     z-index: 1;
   }
 

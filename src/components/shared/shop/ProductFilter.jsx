@@ -99,9 +99,7 @@ const ProductFilter = () => {
       onColorSelect={(color) =>
         setSelectedColor((currentColor) => toggleSelection(currentColor, color))
       }
-      onSizeSelect={(size) =>
-        setSelectedSize((currentSize) => toggleSelection(currentSize, size))
-      }
+      onSizeSelect={(size) => setSelectedSize((currentSize) => toggleSelection(currentSize, size))}
       selectedColor={selectedColor}
       selectedSize={selectedSize}
       sizes={SIZES}

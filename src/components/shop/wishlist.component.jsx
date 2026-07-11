@@ -1,18 +1,7 @@
 import { Button } from "@material-tailwind/react/components/Button";
 import { Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react/components/Card";
-import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
-import React from "react";
-import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import {
-  PencilIcon,
-  UserPlusIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-} from "@heroicons/react/24/solid";
+
 import Pagination from "../shared/pagination.component";
 const ProductLove = () => {
   return (
@@ -51,11 +40,7 @@ const ProductLove = () => {
             <Typography>Abisko Trail Stretch Trousers M</Typography>
           </CardBody>
           <CardFooter className="pt-0">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-center mb-2"
-            >
+            <Typography variant="h5" color="blue-gray" className=" text-center mb-2">
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
@@ -74,11 +59,7 @@ const ProductLove = () => {
             <Typography>Abisko Trail Stretch Trousers M</Typography>
           </CardBody>
           <CardFooter className="pt-0">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-center mb-2"
-            >
+            <Typography variant="h5" color="blue-gray" className=" text-center mb-2">
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
@@ -97,11 +78,7 @@ const ProductLove = () => {
             <Typography>Abisko Trail Stretch Trousers M</Typography>
           </CardBody>
           <CardFooter className="pt-0">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-center mb-2"
-            >
+            <Typography variant="h5" color="blue-gray" className=" text-center mb-2">
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
@@ -120,11 +97,7 @@ const ProductLove = () => {
             <Typography>Abisko Trail Stretch Trousers M</Typography>
           </CardBody>
           <CardFooter className="pt-0">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-center mb-2"
-            >
+            <Typography variant="h5" color="blue-gray" className=" text-center mb-2">
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
@@ -143,11 +116,7 @@ const ProductLove = () => {
             <Typography>Abisko Trail Stretch Trousers M</Typography>
           </CardBody>
           <CardFooter className="pt-0">
-            <Typography
-              variant="h5"
-              color="blue-gray"
-              className=" text-center mb-2"
-            >
+            <Typography variant="h5" color="blue-gray" className=" text-center mb-2">
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">

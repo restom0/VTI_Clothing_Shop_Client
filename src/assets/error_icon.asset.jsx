@@ -1,4 +1,3 @@
-import React from "react";
 import "./error_icon.css";
 function IconError() {
   return (
@@ -1403,17 +1402,8 @@ function IconError() {
             radius="2"
             result="DILATED"
           ></feMorphology>
-          <feFlood
-            floodColor="#32DFEC"
-            floodOpacity="1"
-            result="PINK"
-          ></feFlood>
-          <feComposite
-            in="PINK"
-            in2="DILATED"
-            operator="in"
-            result="OUTLINE"
-          ></feComposite>
+          <feFlood floodColor="#32DFEC" floodOpacity="1" result="PINK"></feFlood>
+          <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>
           <feMerge>
             <feMergeNode in="OUTLINE"></feMergeNode>
             <feMergeNode in="SourceGraphic"></feMergeNode>
@@ -1427,12 +1417,7 @@ function IconError() {
             result="DILATED"
           ></feMorphology>
           <feFlood floodColor="red" floodOpacity="0.5" result="PINK"></feFlood>
-          <feComposite
-            in="PINK"
-            in2="DILATED"
-            operator="in"
-            result="OUTLINE"
-          ></feComposite>
+          <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>
           <feMerge>
             <feMergeNode in="OUTLINE"></feMergeNode>
             <feMergeNode in="SourceGraphic"></feMergeNode>

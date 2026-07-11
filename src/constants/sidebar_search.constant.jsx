@@ -15,16 +15,10 @@ const Category = lazy(() => import("../components/admin/category.component"));
 const ProductList = lazy(() => import("../components/admin/product.component"));
 const Comment = lazy(() => import("../components/admin/comment.component"));
 const Inventory = lazy(() => import("../components/admin/inventory.component"));
-const ImportProduct = lazy(() =>
-  import("../components/admin/import_product.component")
-);
-const OnsaleProduct = lazy(() =>
-  import("../components/admin/on_sale_product.component")
-);
+const ImportProduct = lazy(() => import("../components/admin/import_product.component"));
+const OnsaleProduct = lazy(() => import("../components/admin/on_sale_product.component"));
 const AllOrder = lazy(() => import("../components/admin/order.component"));
-const ConfirmOrder = lazy(() =>
-  import("../components/admin/payment_channel.component")
-);
+const ConfirmOrder = lazy(() => import("../components/admin/payment_channel.component"));
 const Voucher = lazy(() => import("../components/admin/voucher.component"));
 const User = lazy(() => import("../components/admin/user.component"));
 const Inbox = lazy(() => import("../components/admin/inbox.component"));

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useI18n } from "../i18n";
 import {
@@ -149,11 +142,7 @@ export const CurrencyProvider = ({ children }) => {
     };
   }, [currency, error, isUpdating, lastUpdated, locale, rates, refreshRates]);
 
-  return (
-    <CurrencyContext.Provider value={value}>
-      {children}
-    </CurrencyContext.Provider>
-  );
+  return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;
 };
 
 CurrencyProvider.propTypes = {

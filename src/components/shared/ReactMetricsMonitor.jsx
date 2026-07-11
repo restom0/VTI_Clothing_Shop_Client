@@ -1,10 +1,6 @@
 import { Profiler, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  ChartBarIcon,
-  TrashIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ChartBarIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearReactMetrics,
@@ -56,9 +52,7 @@ const useBrowserPerformanceMetrics = (enabled) => {
       );
     });
 
-    window.performance
-      .getEntriesByType("paint")
-      .forEach((entry) => recordPerformanceEntry(entry));
+    window.performance.getEntriesByType("paint").forEach((entry) => recordPerformanceEntry(entry));
 
     if (!("PerformanceObserver" in window)) {
       return undefined;
@@ -180,14 +174,8 @@ const ReactMetricsPanel = () => {
       </div>
 
       <div className="mt-4 grid gap-2">
-        <MetricLine
-          label="Render samples"
-          value={String(summary.renderCount)}
-        />
-        <MetricLine
-          label="Avg render"
-          value={formatMs(summary.averageRenderDuration)}
-        />
+        <MetricLine label="Render samples" value={String(summary.renderCount)} />
+        <MetricLine label="Avg render" value={formatMs(summary.averageRenderDuration)} />
         <MetricLine
           label="Slowest render"
           value={
@@ -196,18 +184,9 @@ const ReactMetricsPanel = () => {
               : "n/a"
           }
         />
-        <MetricLine
-          label="FCP"
-          value={getMetricValue(webMetrics["first-contentful-paint"])}
-        />
-        <MetricLine
-          label="LCP"
-          value={getMetricValue(webMetrics["largest-contentful-paint"])}
-        />
-        <MetricLine
-          label="CLS latest"
-          value={getMetricValue(webMetrics["layout-shift"])}
-        />
+        <MetricLine label="FCP" value={getMetricValue(webMetrics["first-contentful-paint"])} />
+        <MetricLine label="LCP" value={getMetricValue(webMetrics["largest-contentful-paint"])} />
+        <MetricLine label="CLS latest" value={getMetricValue(webMetrics["layout-shift"])} />
         <MetricLine
           label="JS heap"
           value={formatBytes(summary.latestMemorySample?.usedJSHeapSize)}
@@ -220,21 +199,13 @@ const ReactMetricsPanel = () => {
 const ReactMetricsMonitor = ({ children }) => {
   const dispatch = useDispatch();
   const enabled = useSelector((state) => state.reactMetrics.enabled);
-  const shouldMonitor =
-    import.meta.env.DEV || import.meta.env.VITE_ENABLE_REACT_MONITOR === "true";
+  const shouldMonitor = import.meta.env.DEV || import.meta.env.VITE_ENABLE_REACT_MONITOR === "true";
 
   useBrowserPerformanceMetrics(shouldMonitor && enabled);
 
   if (!shouldMonitor) return children;
 
-  const onRender = (
-    id,
-    phase,
-    actualDuration,
-    baseDuration,
-    startTime,
-    commitTime
-  ) => {
+  const onRender = (id, phase, actualDuration, baseDuration, startTime, commitTime) => {
     if (!enabled) return;
 
     dispatch(
@@ -244,8 +215,7 @@ const ReactMetricsMonitor = ({ children }) => {
         commitTime: Number(commitTime.toFixed(2)),
         componentId: id,
         phase,
-        route:
-          typeof window === "undefined" ? "unknown" : window.location.pathname,
+        route: typeof window === "undefined" ? "unknown" : window.location.pathname,
         startTime: Number(startTime.toFixed(2)),
         timestamp: Date.now(),
       })
