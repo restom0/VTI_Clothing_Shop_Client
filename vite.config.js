@@ -132,6 +132,9 @@ const getVendorChunk = (id) => {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    dedupe: ["react", "react-dom"],
+  },
   build: {
     chunkSizeWarningLimit: 500,
     rolldownOptions: {

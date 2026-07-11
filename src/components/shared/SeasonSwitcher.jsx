@@ -2,6 +2,7 @@ import { Button } from "@material-tailwind/react/components/Button";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useSeasonMode } from "../../theme/SeasonProvider";
+import { useI18n } from "../../i18n";
 
 // Season accent colors for the swatch dot in each menu item
 const SEASON_DOT_COLORS = {
@@ -28,9 +29,11 @@ const SeasonDot = ({ value, size = 10 }) => (
 
 const SeasonSwitcher = () => {
   const { activeSeason, season, setSeason, seasonOptions } = useSeasonMode();
+  const { t } = useI18n();
 
   // Find the display option for the currently stored selection (could be "auto")
   const currentOption = seasonOptions.find((o) => o.value === season) ?? seasonOptions[0];
+  const currentLabel = t(currentOption.labelKey);
 
   return (
     <Menu placement="bottom-end">
@@ -40,21 +43,22 @@ const SeasonSwitcher = () => {
           color="blue-gray"
           size="sm"
           className="flex items-center gap-1.5 px-2 py-2"
-          aria-label="Chọn mùa"
-          title={`Mùa hiện tại: ${currentOption.label}`}
+          aria-label={t("season.choose")}
+          title={t("season.current", { season: currentLabel })}
         >
           <SeasonDot value={season} size={10} />
           <span className="hidden text-xs font-semibold sm:inline">
-            {currentOption.emoji} {currentOption.label}
+            {currentOption.emoji} {currentLabel}
           </span>
           <ChevronDownIcon className="h-3 w-3" strokeWidth={2.5} />
         </Button>
       </MenuHandler>
 
       <MenuList className="p-1 min-w-[9rem]">
-        {seasonOptions.map(({ value, emoji, label }) => {
+        {seasonOptions.map(({ value, emoji, labelKey }) => {
           const isActive = value === season;
           const isCurrentSeason = value === activeSeason && season === "auto";
+          const label = t(labelKey);
 
           return (
             <MenuItem
@@ -67,7 +71,9 @@ const SeasonSwitcher = () => {
               <SeasonDot value={value} size={10} />
               <span className="text-sm leading-none">
                 {emoji} {label}
-                {isCurrentSeason && <span className="ml-1 text-xs opacity-60">(nay)</span>}
+                {isCurrentSeason && (
+                  <span className="ml-1 text-xs opacity-60">({t("season.now")})</span>
+                )}
               </span>
               {isActive && (
                 <span className="ml-auto text-xs" style={{ color: "var(--color-primary)" }}>

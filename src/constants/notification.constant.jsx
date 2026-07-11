@@ -17,10 +17,9 @@ const success_checkout = {
       />
     </svg>
   ),
-  name: "Thành công",
-  message: "Đơn hàng của bạn đã được đặt thành công",
-  subtitile:
-    "Chúng tôi sẽ gửi thông báo qua email và tin nhắn SMS cho bạn. Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi",
+  nameKey: "notification.checkout_success_name",
+  messageKey: "notification.checkout_success_message",
+  subtitleKey: "notification.checkout_success_subtitle",
 };
 const fail_checkout = {
   icon: (
@@ -39,16 +38,15 @@ const fail_checkout = {
       />
     </svg>
   ),
-  name: "Thất bại",
-  message: "Đơn hàng của bạn đã bị hủy",
-  subtitile:
-    "Vui lòng kiểm tra lại thông tin đơn hàng và thử lại sau. Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi",
+  nameKey: "notification.checkout_failed_name",
+  messageKey: "notification.checkout_failed_message",
+  subtitleKey: "notification.checkout_failed_subtitle",
 };
 const not_found = {
   icon: <FlagIcon color="red" className="w-20 h-20 mx-auto" />,
-  name: "Không tìm thấy",
-  message: "Không tìm thấy trang bạn yêu cầu",
-  subtitile: "Vui lòng kiểm tra lại đường dẫn hoặc quay lại trang chủ",
+  nameKey: "notification.not_found_name",
+  messageKey: "notification.not_found_message",
+  subtitleKey: "notification.not_found_subtitle",
 };
 const forbidden = {
   icon: (
@@ -67,14 +65,14 @@ const forbidden = {
       />
     </svg>
   ),
-  name: "Không có quyền truy cập",
-  message: "Bạn không có quyền truy cập trang này",
-  subtitile: "Vui lòng liên hệ với quản trị viên để biết thêm thông tin",
+  nameKey: "notification.forbidden_name",
+  messageKey: "notification.forbidden_message",
+  subtitleKey: "notification.forbidden_subtitle",
 };
 const error = {
   icon: <IconError />,
-  name: "Bảo trì hệ thống",
-  message: "Đã có lỗi xảy ra",
-  subtitile: "Vui lòng thử lại sau hoặc liên hệ với quản trị viên",
+  nameKey: "notification.error_name",
+  messageKey: "notification.error_message",
+  subtitleKey: "notification.error_subtitle",
 };
 export { success_checkout, fail_checkout, not_found, forbidden, error };

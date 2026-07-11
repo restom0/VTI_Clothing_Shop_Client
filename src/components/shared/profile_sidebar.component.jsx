@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { profile_menu } from "../../constants/menu_item.constant";
 import { Avatar } from "@mui/material";
+import { useI18n } from "../../i18n";
 const ProfileSidebar = ({ tab, setTab }) => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   return (
     <div>
       <Card className="profile-sidebar-card relative overflow-y-auto p-4 shadow-xl shadow-blue-gray-900/5 z-10">
@@ -27,19 +29,19 @@ const ProfileSidebar = ({ tab, setTab }) => {
             />
             <div>
               <Typography variant="small" color="gray" className="font-normal">
-                Tài khoản của
+                {t("profile.account_of")}
               </Typography>
               <Typography variant="h6">{localStorage.getItem("name")}</Typography>
             </div>
           </div>
         </div>
         <List>
-          {profile_menu.map(({ label }, index) => (
-            <ListItem key={label} selected={tab === index} onClick={() => setTab(index)}>
+          {profile_menu.map(({ labelKey }, index) => (
+            <ListItem key={labelKey} selected={tab === index} onClick={() => setTab(index)}>
               <ListItemPrefix>
                 <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
               </ListItemPrefix>
-              {label}
+              {t(labelKey)}
             </ListItem>
           ))}
           <ListItem
@@ -51,7 +53,7 @@ const ProfileSidebar = ({ tab, setTab }) => {
             <ListItemPrefix>
               <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
             </ListItemPrefix>
-            Đăng xuất
+            {t("common.logout")}
           </ListItem>
         </List>
       </Card>

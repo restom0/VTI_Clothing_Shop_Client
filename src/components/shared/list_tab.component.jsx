@@ -1,13 +1,15 @@
 import { Tab, Tabs, TabsHeader } from "@material-tailwind/react/components/Tabs";
 import PropTypes from "prop-types";
+import { useI18n } from "../../i18n";
 
 const Tablist = ({ TABS, tab, setTab }) => {
+  const { t } = useI18n();
   const handleTab = (value) => setTab(value);
   return (
     <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-3">
       <Tabs value={tab} className="w-full" as="div">
         <TabsHeader>
-          {TABS.map(({ label, value }) => (
+          {TABS.map(({ label, labelKey, value }) => (
             <Tab
               key={value}
               value={value}
@@ -15,7 +17,7 @@ const Tablist = ({ TABS, tab, setTab }) => {
                 handleTab(value);
               }}
             >
-              &nbsp;&nbsp;{label}&nbsp;&nbsp;
+              &nbsp;&nbsp;{labelKey ? t(labelKey) : label}&nbsp;&nbsp;
             </Tab>
           ))}
         </TabsHeader>
@@ -27,7 +29,8 @@ const Tablist = ({ TABS, tab, setTab }) => {
 Tablist.propTypes = {
   TABS: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.any.isRequired,
+      label: PropTypes.any,
+      labelKey: PropTypes.string,
       value: PropTypes.string.isRequired,
     })
   ).isRequired,

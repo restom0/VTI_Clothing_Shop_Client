@@ -3,7 +3,7 @@ import Notificationpage from "../../layouts/shop/notification.layout";
 import { fail_checkout, success_checkout } from "../../constants/notification.constant";
 const Step3Checkout = () => {
   const [check] = useState(true);
-  return <Notificationpage noti={check ? success_checkout : fail_checkout} />;
+  return <Notificationpage notification={check ? success_checkout : fail_checkout} />;
 };
 
 export default Step3Checkout;

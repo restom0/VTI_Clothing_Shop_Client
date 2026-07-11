@@ -6,9 +6,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 
-const FALLBACK_LANGUAGE = "en";
+const FALLBACK_LANGUAGE = "vi";
 const LANGUAGE_STORAGE_KEY = "vti-shop-language";
 const SUPPORTED_LANGUAGES = [
+  { code: "vi", labelKey: "language.vi" },
   { code: "en", labelKey: "language.en" },
   { code: "ca", labelKey: "language.ca" },
   { code: "it", labelKey: "language.it" },

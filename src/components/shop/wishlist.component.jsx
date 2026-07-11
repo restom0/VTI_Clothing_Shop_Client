@@ -3,11 +3,13 @@ import { Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react
 import { Typography } from "@material-tailwind/react/components/Typography";
 
 import Pagination from "../shared/pagination.component";
+import { useI18n } from "../../i18n";
 const ProductLove = () => {
+  const { t } = useI18n();
   return (
     <>
       <Typography variant="h4" color="blue-gray" className="my-3">
-        Sản phẩm yêu thích
+        {t("profile.menu_wishlist")}
       </Typography>
       <div className="grid grid-cols-3 gap-4">
         <Card className="mt-6">
@@ -25,7 +27,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>
@@ -44,7 +46,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>
@@ -63,7 +65,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>
@@ -82,7 +84,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>
@@ -101,7 +103,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>
@@ -120,7 +122,7 @@ const ProductLove = () => {
               $155.00
             </Typography>
             <Button className="w-full mt-1" color="red">
-              Bỏ yêu thích
+              {t("wishlist.remove")}
             </Button>
           </CardFooter>
         </Card>

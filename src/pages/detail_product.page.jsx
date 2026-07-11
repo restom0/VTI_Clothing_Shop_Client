@@ -30,6 +30,7 @@ import { useCreateOrderItemMutation } from "../apis/order_item.api";
 import { Toast } from "../configs/sweetalert2.config";
 import Loading from "../components/shared/loading.component";
 import { useCurrency } from "../currency";
+import { useI18n } from "../i18n";
 import {
   PRODUCT_DESCRIPTION_TEXT_CLASSNAME,
   PRODUCT_DETAIL_ACTIONS_CLASSNAME,
@@ -58,8 +59,8 @@ const reviews = [
     user: "Tania Andrew",
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-    date: "3 ngày trước",
-    content: `The craftsmanship and quality materials are exactly what you expect from Fjall. I sent these back for three reasons. 1) The taper below the knee wasn't strong enough. Not a fan of excess material in that area of a pant. 2) The stretch was nice & very comfortable, but the durability for anything other than high alpine(no bushwacking) or post hike pub probably fails. 3) When considering the materials used, many other manufactuers sell a similar pant for 50% less the cost.`,
+    dateKey: "product.review_date_3_days_ago",
+    contentKey: "product.review_sample_content",
   },
   {
     id: 1,
@@ -67,8 +68,8 @@ const reviews = [
     user: "Tania Andrew",
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-    date: "3 ngày trước",
-    content: `The craftsmanship and quality materials are exactly what you expect from Fjall. I sent these back for three reasons. 1) The taper below the knee wasn't strong enough. Not a fan of excess material in that area of a pant. 2) The stretch was nice & very comfortable, but the durability for anything other than high alpine(no bushwacking) or post hike pub probably fails. 3) When considering the materials used, many other manufactuers sell a similar pant for 50% less the cost.`,
+    dateKey: "product.review_date_3_days_ago",
+    contentKey: "product.review_sample_content",
   },
   {
     id: 2,
@@ -76,8 +77,8 @@ const reviews = [
     user: "Tania Andrew",
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-    date: "3 ngày trước",
-    content: `The craftsmanship and quality materials are exactly what you expect from Fjall. I sent these back for three reasons. 1) The taper below the knee wasn't strong enough. Not a fan of excess material in that area of a pant. 2) The stretch was nice & very comfortable, but the durability for anything other than high alpine(no bushwacking) or post hike pub probably fails. 3) When considering the materials used, many other manufactuers sell a similar pant for 50% less the cost.`,
+    dateKey: "product.review_date_3_days_ago",
+    contentKey: "product.review_sample_content",
   },
   {
     id: 3,
@@ -85,8 +86,8 @@ const reviews = [
     user: "Tania Andrew",
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-    date: "3 ngày trước",
-    content: `The craftsmanship and quality materials are exactly what you expect from Fjall. I sent these back for three reasons. 1) The taper below the knee wasn't strong enough. Not a fan of excess material in that area of a pant. 2) The stretch was nice & very comfortable, but the durability for anything other than high alpine(no bushwacking) or post hike pub probably fails. 3) When considering the materials used, many other manufactuers sell a similar pant for 50% less the cost.`,
+    dateKey: "product.review_date_3_days_ago",
+    contentKey: "product.review_sample_content",
   },
   {
     id: 3,
@@ -94,10 +95,28 @@ const reviews = [
     user: "Tania Andrew",
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-    date: "3 ngày trước",
-    content: `The craftsmanship and quality materials are exactly what you expect from Fjall. I sent these back for three reasons. 1) The taper below the knee wasn't strong enough. Not a fan of excess material in that area of a pant. 2) The stretch was nice & very comfortable, but the durability for anything other than high alpine(no bushwacking) or post hike pub probably fails. 3) When considering the materials used, many other manufactuers sell a similar pant for 50% less the cost.`,
+    dateKey: "product.review_date_3_days_ago",
+    contentKey: "product.review_sample_content",
   },
 ];
+
+const getRatingLabelKey = (rating) => {
+  switch (rating) {
+    case 5:
+      return "product.rating_5";
+    case 4:
+      return "product.rating_4";
+    case 3:
+      return "product.rating_3";
+    case 2:
+      return "product.rating_2";
+    case 1:
+      return "product.rating_1";
+    default:
+      return "product.rating_default";
+  }
+};
+
 const ProductDetailpage = () => {
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(1);
@@ -115,6 +134,7 @@ const ProductDetailpage = () => {
   const { data: product, isLoading, error } = useGetOnSaleProductQuery(id);
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { t } = useI18n();
   const [createOrderItem] = useCreateOrderItemMutation();
   useEffect(() => {
     if (
@@ -183,9 +203,9 @@ const ProductDetailpage = () => {
         product_id: firstItem.id,
         quantity: 1,
       }).unwrap();
-      Toast.fire({ icon: "success", title: "Thêm giỏ hàng thành công" });
+      Toast.fire({ icon: "success", title: t("product.add_cart_success") });
     } catch {
-      Toast.fire({ icon: "error", title: "Thêm giỏ hàng thất bại" });
+      Toast.fire({ icon: "error", title: t("product.add_cart_failed") });
     }
   };
 
@@ -197,11 +217,11 @@ const ProductDetailpage = () => {
         product_id: firstItem.id,
         quantity: amount,
       }).unwrap();
-      Toast.fire({ icon: "success", title: "Thêm giỏ hàng thành công" });
+      Toast.fire({ icon: "success", title: t("product.add_cart_success") });
     } catch {
       Toast.fire({
         icon: "error",
-        title: "Thêm giỏ hàng thất bại",
+        title: t("product.add_cart_failed"),
       });
     }
   };
@@ -225,7 +245,7 @@ const ProductDetailpage = () => {
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
-                    <img src={url} />
+                    <img src={url} alt={t("product.image_alt", { index: index + 1 })} />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -249,7 +269,7 @@ const ProductDetailpage = () => {
               >
                 {image.map((url, index) => (
                   <SwiperSlide key={index}>
-                    <img src={url} />
+                    <img src={url} alt={t("product.image_alt", { index: index + 1 })} />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -264,7 +284,7 @@ const ProductDetailpage = () => {
               {firstItem.product_id?.product_id?.short_description ?? ""}
             </Typography>
             <Typography color="blue-gray" variant="h6">
-              Màu sắc
+              {t("product.color")}
             </Typography>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               {(product.object ?? []).map((color, index) => (
@@ -300,7 +320,7 @@ const ProductDetailpage = () => {
             </div>
             <div className={PRODUCT_OPTION_HEADER_CLASSNAME}>
               <Typography color="blue-gray" variant="h6">
-                Kích cỡ
+                {t("product.size")}
               </Typography>
               {/* <Button
                 onClick={handleOpen}
@@ -309,16 +329,11 @@ const ProductDetailpage = () => {
                 color="white"
                 className="shadow-none"
               >
-                Hướng dẫn chi tiết
+                {t("product.size_guide")}
               </Button> */}
               <Dialog open={open} handler={handleOpen}>
-                <DialogHeader>Its a simple dialog.</DialogHeader>
-                <DialogBody>
-                  The key to more success is to have a lot of pillows. Put it this way, it took me
-                  twenty five years to get these plants, twenty five years of blood sweat and tears,
-                  and I&apos;m never giving up, I&apos;m just getting started. I&apos;m up to
-                  something. Fan luv.
-                </DialogBody>
+                <DialogHeader>{t("product.size_guide_title")}</DialogHeader>
+                <DialogBody>{t("product.size_guide_body")}</DialogBody>
               </Dialog>
             </div>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
@@ -362,7 +377,7 @@ const ProductDetailpage = () => {
               ))} */}
             </div>
             <Typography color="blue-gray" variant="h6">
-              Chất liệu
+              {t("product.material")}
             </Typography>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
               <div className={PRODUCT_MATERIAL_GROUP_CLASSNAME}>
@@ -388,12 +403,12 @@ const ProductDetailpage = () => {
               </div>
             </div>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
-              <Typography variant="h6">Còn:</Typography>
+              <Typography variant="h6">{t("product.stock_left")}:</Typography>
               <Typography>{stock}</Typography>
-              <Typography>sản phẩm</Typography>
+              <Typography>{t("product.stock_unit")}</Typography>
             </div>
             <div className={PRODUCT_OPTION_ROW_CLASSNAME}>
-              <Typography variant="h6">Số lượng</Typography>
+              <Typography variant="h6">{t("product.quantity")}</Typography>
               <div className="flex items-center gap-3">
                 <Button
                   onClick={() => setAmount(amount - 1 < 1 ? amount : amount - 1)}
@@ -417,10 +432,10 @@ const ProductDetailpage = () => {
 
             <div className={PRODUCT_DETAIL_ACTIONS_CLASSNAME}>
               <Button color="blue" className="w-52" onClick={handleAddCarts}>
-                Thêm vào giỏ hàng
+                {t("product.add_to_cart")}
               </Button>
               <Button color="green" className="w-64" onClick={handleAddCart}>
-                Thêm vào giỏ hàng nhanh
+                {t("product.quick_add_to_cart")}
               </Button>
               <IconButton color="red" variant="text" className="shrink-0">
                 <HeartIcon className="h-6 w-6" />
@@ -432,7 +447,7 @@ const ProductDetailpage = () => {
           <Accordion open={description === false}>
             <AccordionHeader onClick={() => setDescription(!description)}>
               <Typography variant="h3" className="">
-                Chi tiết sản phẩm
+                {t("product.detail")}
               </Typography>
             </AccordionHeader>
             <AccordionBody>
@@ -446,14 +461,14 @@ const ProductDetailpage = () => {
           <Accordion open={star === false}>
             <AccordionHeader onClick={() => setStar(!star)}>
               <Typography variant="h3" className="">
-                Đánh giá sản phẩm
+                {t("product.reviews")}
               </Typography>
             </AccordionHeader>
             <AccordionBody>
               <div className={RESPONSIVE_GRID_3_CLASSNAME}>
                 <div>
                   <Typography className="mt-5" variant="h6">
-                    Tổng quan
+                    {t("product.review_overview")}
                   </Typography>
                   <div className="flex flex-col">
                     {stars.map((star, index) => (
@@ -475,7 +490,7 @@ const ProductDetailpage = () => {
                 </div>
                 <div className="mx-auto">
                   <Typography className="my-5" variant="h6">
-                    Tổng thể
+                    {t("product.review_overall")}
                   </Typography>
                   <div className="flex items-center gap-8 mx-5">
                     <Typography variant="h1" className="text-center">
@@ -490,19 +505,19 @@ const ProductDetailpage = () => {
                         className="disabled text-amber-500"
                       />
                       <Typography color="blue-gray" className="text-center">
-                        {total_star} reviews
+                        {t("product.reviews_count", { count: total_star })}
                       </Typography>
                     </div>
                   </div>
                 </div>
                 <div>
                   <Typography className="my-3" variant="h6">
-                    Hãy chia sẻ cảm nhận của bạn
+                    {t("product.review_share_prompt")}
                   </Typography>
                   <Rating defaultValue={null} size="large" />
                   <Textarea
                     className="mt-3"
-                    label="Đánh giá sản phẩm"
+                    label={t("product.review_input_label")}
                     labelProps={{ className: "mt-3" }}
                   />
                   <input
@@ -511,7 +526,7 @@ const ProductDetailpage = () => {
                     type="file"
                   />
                   <Button variant="gradient" className="my-3 w-full" color="green">
-                    Gửi
+                    {t("product.submit_review")}
                   </Button>
                 </div>
               </div>
@@ -520,7 +535,7 @@ const ProductDetailpage = () => {
         </Container>
         <Container className="mt-5">
           <div>
-            <Typography variant="h3">Chi tiết đánh giá</Typography>
+            <Typography variant="h3">{t("product.review_details")}</Typography>
             {reviews.slice(active * 4 - 4, active * 4).map((review, index) => (
               <Card key={index} className="mt-5">
                 <CardBody className={PRODUCT_REVIEW_CARD_CLASSNAME}>
@@ -531,6 +546,7 @@ const ProductDetailpage = () => {
                         variant="circular"
                         src={review.avatar}
                         alt="tania andrew"
+                        title={review.user}
                         className="my-auto"
                       />
                       <div className="flex flex-col">
@@ -544,15 +560,11 @@ const ProductDetailpage = () => {
                     <div className="flex items-center">
                       <Rating readOnly value={review.rating} className="disabled text-amber-500" />
                       <Typography className="ml-3 mt-1 font-bold text-blue-gray-500">
-                        {(review.rating === 5 && "Cực kì hài lòng") ||
-                          (review.rating === 4 && "Hài lòng") ||
-                          (review.rating === 3 && "Bình thường") ||
-                          (review.rating === 2 && "Không hài lòng") ||
-                          (review.rating === 1 && "Rất không hài lòng")}
+                        {t(getRatingLabelKey(review.rating))}
                       </Typography>
                     </div>
-                    <Typography className="mt-1 text-sm">{review.date}</Typography>
-                    <Typography className="pt-3 pe-10 pb-5">{review.content}</Typography>
+                    <Typography className="mt-1 text-sm">{t(review.dateKey)}</Typography>
+                    <Typography className="pt-3 pe-10 pb-5">{t(review.contentKey)}</Typography>
                   </div>
                 </CardBody>
               </Card>

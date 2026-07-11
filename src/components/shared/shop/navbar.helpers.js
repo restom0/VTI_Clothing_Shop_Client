@@ -49,10 +49,14 @@ export const getNavbarLabels = (t) => ({
   search: t("common.search"),
   cart: t("common.cart"),
   login: t("common.login"),
+  mainAria: t("nav.main_aria"),
+  openMenu: t("nav.open_menu"),
+  closeMenu: t("nav.close_menu"),
 });
 
 export const getCartLabels = (t, itemCount) => ({
   cart: t("common.cart"),
   itemCount: t("common.items", { count: itemCount }),
   total: t("common.total"),
+  productImageAlt: t("nav.cart_product_image_alt"),
 });

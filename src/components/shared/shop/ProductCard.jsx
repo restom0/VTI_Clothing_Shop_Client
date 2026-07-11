@@ -1,6 +1,7 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
 import { useCurrency } from "../../../currency";
+import { useI18n } from "../../../i18n";
 import LazyImage from "../LazyImage";
 import ScrollReveal from "../ScrollReveal";
 
@@ -18,6 +19,7 @@ import ScrollReveal from "../ScrollReveal";
  */
 const ProductCard = memo(({ discount = 0, id, imageUrl, price, product_id, sale_price, title }) => {
   const { formatPrice } = useCurrency();
+  const { t } = useI18n();
 
   const productInfo = product_id?.product_id ?? product_id ?? {};
   const productName = productInfo.name ?? title ?? "";
@@ -28,8 +30,16 @@ const ProductCard = memo(({ discount = 0, id, imageUrl, price, product_id, sale_
 
   // Mô tả đầy đủ cho screen reader
   const ariaLabel = hasDiscount
-    ? `${productName} — ${formatPrice(finalPrice)} (giảm ${discount}%, giá gốc ${formatPrice(originalPrice)})`
-    : `${productName} — ${formatPrice(finalPrice)}`;
+    ? t("product.card_aria_discount", {
+        discount,
+        originalPrice: formatPrice(originalPrice),
+        price: formatPrice(finalPrice),
+        productName,
+      })
+    : t("product.card_aria", {
+        price: formatPrice(finalPrice),
+        productName,
+      });
 
   return (
     <ScrollReveal variant="fade-up" className="card-product" as="article">

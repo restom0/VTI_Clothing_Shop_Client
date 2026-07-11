@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#006EDC"/>
+  <rect x="72" y="80" width="368" height="352" rx="64" fill="#FFFFFF"/>
+  <path d="M168 186C168 137.399 207.399 98 256 98C304.601 98 344 137.399 344 186" stroke="#006EDC" stroke-width="28" stroke-linecap="round"/>
+  <path d="M138 186H374L346 394H166L138 186Z" fill="#E8F1FB" stroke="#006EDC" stroke-width="24" stroke-linejoin="round"/>
+  <path d="M170 246H342" stroke="#B0BEC5" stroke-width="16" stroke-linecap="round"/>
+  <path d="M185 292H327" stroke="#B0BEC5" stroke-width="16" stroke-linecap="round"/>
+  <path d="M216 348H296" stroke="#006EDC" stroke-width="18" stroke-linecap="round"/>
+  <text x="256" y="276" fill="#263238" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="700" text-anchor="middle">VTI</text>
+</svg>

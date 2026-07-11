@@ -5,9 +5,11 @@ import { Typography } from "@material-tailwind/react/components/Typography";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Divider } from "@mui/material";
 import { useCurrency } from "../../currency";
+import { useI18n } from "../../i18n";
 
 const Step2Checkout = ({ handleNext, handlePrev }) => {
   const { formatPrice } = useCurrency();
+  const { t } = useI18n();
   return (
     <div className="grid grid-cols-3 mb-1">
       <Card className="mt-6 col-span-2">
@@ -17,7 +19,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
               <ArrowBackIcon color="black" />
             </IconButton>
             <Typography variant="h5" color="blue-gray" className="">
-              Cổng thanh toán
+              {t("checkout.payment_gateway")}
             </Typography>
           </div>
           <img
@@ -26,16 +28,16 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
             alt="QR code"
           />
           <Typography variant="body" color="blue-gray" className="mt-1 text-center">
-            Hoặc chuyển qua ngân hàng OCB
+            {t("checkout.or_bank_transfer")}
           </Typography>
           <Typography variant="body" color="blue-gray" className="mt-1 text-center">
-            Số tài khoản: 123456789
+            {t("checkout.account_number")}: 123456789
           </Typography>
           <Typography variant="body" color="blue-gray" className="mt-1 text-center">
-            Tên chủ tài khoản: Nguyễn Văn A
+            {t("checkout.account_holder")}: {t("checkout.sample_account_holder")}
           </Typography>
           <Typography variant="body" color="blue-gray" className="mt-1 text-center">
-            Nội dung chuyển tiền: Mã đơn hàng + Số điện thoại
+            {t("checkout.transfer_note")}: {t("checkout.transfer_content")}
           </Typography>
         </CardBody>
       </Card>
@@ -43,16 +45,19 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
         <CardBody>
           <div className="flex items-center justify-between">
             <Typography variant="h5" color="blue-gray" className="mb-2">
-              Chi tiết đơn hàng #MX2001
+              {t("checkout.order_details")} #MX2001
             </Typography>
             <Typography as="a" href="/cart" color="cyan">
-              Sửa
+              {t("checkout.edit")}
             </Typography>
           </div>
           <Divider />
           <div className="flex items-center justify-between mt-4">
             <Typography className="" variant="body" color="blue-gray">
-              1 x <span className="text-cyan-300 w-[100px] text-wrap">Áo thun nam</span>
+              1 x{" "}
+              <span className="text-cyan-300 w-[100px] text-wrap">
+                {t("checkout.sample_product_name")}
+              </span>
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">
@@ -65,7 +70,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex justify-between items-center">
             <Typography variant="body" color="blue-gray">
-              Tạm tính
+              {t("checkout.subtotal")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(2000000)}
@@ -73,7 +78,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Giảm giá
+              {t("checkout.discount")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(0)}
@@ -81,7 +86,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Phí vận chuyển
+              {t("checkout.shipping_fee")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(27000)}
@@ -89,7 +94,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Phí gói quà
+              {t("checkout.gift_fee")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(10000)}
@@ -100,7 +105,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Tổng cộng
+              {t("common.total")}
             </Typography>
             <Typography variant="h6" color="blue-gray">
               {formatPrice(2000000)}
@@ -108,15 +113,15 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="flex items-center justify-between mt-10">
             <Typography variant="h5" color="blue-gray">
-              Giao tới
+              {t("checkout.deliver_to")}
             </Typography>
             <Typography color="cyan" onClick={handlePrev}>
-              Thay đổi
+              {t("checkout.change")}
             </Typography>
           </div>
           <div className="flex justify-around items-center mt-5">
             <Typography variant="body" color="blue-gray">
-              Rạng thái
+              {t("checkout.sample_recipient")}
             </Typography>
             <Divider variant="body" />
             <Typography variant="body" color="blue-gray">
@@ -125,13 +130,13 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
           </div>
           <div className="mt-5">
             <Typography variant="body" color="blue-gray">
-              Số nhà 1, đường 1, phường 1, quận 1, TP.HCM
+              {t("checkout.sample_address")}
             </Typography>
           </div>
         </CardBody>
         <CardFooter className="pt-0">
           <Button color="red" fullWidth onClick={handleNext}>
-            Xác nhận
+            {t("checkout.confirm")}
           </Button>
         </CardFooter>
       </Card>

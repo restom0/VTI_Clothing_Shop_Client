@@ -10,8 +10,10 @@ import { Typography } from "@material-tailwind/react/components/Typography";
 import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCurrency } from "../../currency";
+import { useI18n } from "../../i18n";
 
 const Step1Checkout = ({ handleNext }) => {
+  const { t } = useI18n();
   const [check, setCheck] = React.useState(localStorage.getItem("token") ? true : false);
 
   const [check1, setCheck1] = React.useState(false);
@@ -23,7 +25,7 @@ const Step1Checkout = ({ handleNext }) => {
       <Card className="mt-6">
         <CardBody>
           <Typography variant="h5" color="blue-gray" className="mb-2">
-            1. Địa chỉ giao hàng
+            1. {t("checkout.shipping_address")}
           </Typography>
           <List>
             {localStorage.getItem("token") ? (
@@ -36,7 +38,7 @@ const Step1Checkout = ({ handleNext }) => {
                       <div className="ms-3">
                         <div className="flex justify-around items-center">
                           <Typography variant="body" color="blue-gray">
-                            Rạng thái
+                            {t("checkout.sample_recipient")}
                           </Typography>
                           <Divider variant="body" />
                           <Typography variant="body" color="blue-gray">
@@ -45,7 +47,7 @@ const Step1Checkout = ({ handleNext }) => {
                         </div>
                         <div className="mt-5">
                           <Typography variant="body" color="blue-gray">
-                            Số nhà 1, đường 1, phường 1, quận 1, TP.HCM
+                            {t("checkout.sample_address")}
                           </Typography>
                         </div>
                       </div>
@@ -58,7 +60,7 @@ const Step1Checkout = ({ handleNext }) => {
                 <div className="flex items-center">
                   <Radio
                     name="address"
-                    label={<Typography>Đăng nhập để chọn địa chỉ giao hàng đã lưu</Typography>}
+                    label={<Typography>{t("checkout.login_to_select_address")}</Typography>}
                   />
                 </div>
               </ListItem>
@@ -68,7 +70,7 @@ const Step1Checkout = ({ handleNext }) => {
                 <Radio
                   checked={!check}
                   name="address"
-                  label={<Typography>Địa chỉ mới</Typography>}
+                  label={<Typography>{t("checkout.new_address")}</Typography>}
                 />
               </div>
             </ListItem>
@@ -77,7 +79,7 @@ const Step1Checkout = ({ handleNext }) => {
             <form className="mb-2 w-full mx-auto">
               <div className="mb-1 flex flex-col gap-6">
                 <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Họ và tên người nhận
+                  {t("checkout.recipient_name")}
                 </Typography>
                 <Input
                   size="lg"
@@ -88,7 +90,7 @@ const Step1Checkout = ({ handleNext }) => {
                   }}
                 />
                 <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Số điện thoại
+                  {t("checkout.phone")}
                 </Typography>
                 <Input
                   size="lg"
@@ -99,7 +101,7 @@ const Step1Checkout = ({ handleNext }) => {
                   }}
                 />
                 <Typography variant="h6" color="blue-gray" className="-mb-3">
-                  Địa chỉ
+                  {t("checkout.address")}
                 </Typography>
                 <Textarea
                   className="min-h-full border-1 focus:!border-gray-900"
@@ -118,7 +120,7 @@ const Step1Checkout = ({ handleNext }) => {
       <Card className="mt-6">
         <CardBody>
           <Typography variant="h5" color="blue-gray" className="mb-2">
-            2. Phương thức giao hàng
+            2. {t("checkout.shipping_method")}
           </Typography>
           <Typography>
             <List>
@@ -129,9 +131,9 @@ const Step1Checkout = ({ handleNext }) => {
                     name="type"
                     label={
                       <>
-                        <Typography>Giao hàng tiết kiệm</Typography>
+                        <Typography>{t("checkout.shipping_saver")}</Typography>
                         <Typography>
-                          Dự kiến giao từ 5-7 ngày |{" "}
+                          {t("checkout.shipping_saver_desc")} |{" "}
                           <span className="text-cyan-300">{formatPrice(20000)}</span>
                         </Typography>
                       </>
@@ -146,9 +148,9 @@ const Step1Checkout = ({ handleNext }) => {
                     name="type"
                     label={
                       <>
-                        <Typography>Giao hàng tiêu chuẩn</Typography>
+                        <Typography>{t("checkout.shipping_standard")}</Typography>
                         <Typography>
-                          Dự kiến giao từ 2-5 ngày |{" "}
+                          {t("checkout.shipping_standard_desc")} |{" "}
                           <span className="text-cyan-300">{formatPrice(25000)}</span>
                         </Typography>
                       </>
@@ -163,9 +165,9 @@ const Step1Checkout = ({ handleNext }) => {
                     name="type"
                     label={
                       <>
-                        <Typography>Giao hàng nhanh</Typography>
+                        <Typography>{t("checkout.shipping_express")}</Typography>
                         <Typography>
-                          Dự kiến giao từ 1-2 ngày |{" "}
+                          {t("checkout.shipping_express_desc")} |{" "}
                           <span className="text-cyan-300">{formatPrice(30000)}</span>
                         </Typography>
                       </>
@@ -176,7 +178,7 @@ const Step1Checkout = ({ handleNext }) => {
             </List>
           </Typography>
           <Typography variant="h5" color="blue-gray" className="mt-2">
-            3. Phương thức thanh toán
+            3. {t("checkout.payment_method")}
           </Typography>
           <Typography>
             <List>
@@ -185,7 +187,7 @@ const Step1Checkout = ({ handleNext }) => {
                   <Radio
                     checked={check2 === 1}
                     name="method"
-                    label={<Typography>Thanh toán tiền mặt khi nhận hàng</Typography>}
+                    label={<Typography>{t("checkout.payment_cod")}</Typography>}
                   />
                 </div>
               </ListItem>
@@ -196,7 +198,7 @@ const Step1Checkout = ({ handleNext }) => {
                     name="method"
                     label={
                       <>
-                        <Typography>Thanh toán qua thẻ ngân hàng</Typography>
+                        <Typography>{t("checkout.payment_card")}</Typography>
                       </>
                     }
                   />
@@ -207,7 +209,7 @@ const Step1Checkout = ({ handleNext }) => {
                   <Radio
                     checked={check2 === 3}
                     name="method"
-                    label={<Typography>Thanh toán qua MoMo</Typography>}
+                    label={<Typography>{t("checkout.payment_momo")}</Typography>}
                   />
                 </div>
               </ListItem>
@@ -219,16 +221,19 @@ const Step1Checkout = ({ handleNext }) => {
         <CardBody>
           <div className="flex items-center justify-between">
             <Typography variant="h5" color="blue-gray" className="mb-2">
-              Xác nhận đơn hàng
+              {t("checkout.confirm_order")}
             </Typography>
             <Typography as="a" href="/cart" color="cyan">
-              Sửa
+              {t("checkout.edit")}
             </Typography>
           </div>
           <Divider />
           <div className="flex items-center justify-between mt-4">
             <Typography className="" variant="body" color="blue-gray">
-              1 x <span className="text-cyan-300 w-[100px] text-wrap">Áo thun nam</span>
+              1 x{" "}
+              <span className="text-cyan-300 w-[100px] text-wrap">
+                {t("checkout.sample_product_name")}
+              </span>
             </Typography>
             <div className="flex flex-col">
               <Typography variant="body" color="blue-gray">
@@ -240,13 +245,13 @@ const Step1Checkout = ({ handleNext }) => {
             </div>
           </div>
           <Typography variant="body" color="blue-gray" className="mt-5 mb-3">
-            Mã giảm giá
+            {t("checkout.discount_code")}
           </Typography>
           <div className="flex items-center">
             <Input
               type="text"
               size="sm"
-              placeholder="Mã giảm giá"
+              placeholder={t("checkout.discount_code")}
               className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
               labelProps={{
                 className: "hidden",
@@ -254,16 +259,16 @@ const Step1Checkout = ({ handleNext }) => {
               containerProps={{ className: "min-w-[100px]" }}
             />
             <Button size="md" className="w-1/2" variant="outlined" color="lightBlue">
-              Dùng mã
+              {t("checkout.apply_code")}
             </Button>
           </div>
           <Typography variant="body" color="green">
             MX2000
           </Typography>
-          <Checkbox label="Gói quà sản phẩm" />
+          <Checkbox label={t("checkout.gift_wrap")} />
           <div className="flex justify-between items-center">
             <Typography variant="body" color="blue-gray">
-              Tạm tính
+              {t("checkout.subtotal")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(2000000)}
@@ -271,7 +276,7 @@ const Step1Checkout = ({ handleNext }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Giảm giá
+              {t("checkout.discount")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(0)}
@@ -279,7 +284,7 @@ const Step1Checkout = ({ handleNext }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Phí vận chuyển
+              {t("checkout.shipping_fee")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(27000)}
@@ -287,7 +292,7 @@ const Step1Checkout = ({ handleNext }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Phí gói quà
+              {t("checkout.gift_fee")}
             </Typography>
             <Typography variant="body" color="blue-gray">
               {formatPrice(10000)}
@@ -298,7 +303,7 @@ const Step1Checkout = ({ handleNext }) => {
           </div>
           <div className="flex justify-between items-center mt-2">
             <Typography variant="body" color="blue-gray">
-              Tổng cộng
+              {t("common.total")}
             </Typography>
             <Typography variant="h6" color="blue-gray">
               {formatPrice(2000000)}
@@ -307,7 +312,7 @@ const Step1Checkout = ({ handleNext }) => {
         </CardBody>
         <CardFooter className="pt-0">
           <Button color="red" fullWidth onClick={handleNext}>
-            Thanh toán
+            {t("checkout.pay")}
           </Button>
         </CardFooter>
       </Card>

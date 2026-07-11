@@ -9,15 +9,17 @@ import Pagination from "../shared/pagination.component";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 import Tablist from "../shared/list_tab.component";
 import { rating } from "../../constants/tab.constant";
+import { useI18n } from "../../i18n";
 const ProductRating = () => {
   const [tab, setTab] = useState("unrate");
+  const { t } = useI18n();
 
   return (
     <>
       <Card className="rounded-b-none">
         <CardBody className="pb-0">
           <Typography variant="h4" color="blue-gray" className="my-5">
-            Đánh giá của bạn
+            {t("profile.menu_reviews")}
           </Typography>
         </CardBody>
         <Tablist TABS={rating} tab={tab} setTab={setTab} />
@@ -42,8 +44,8 @@ const ProductRating = () => {
                 <div className="flex items-center gap-4">
                   <Input
                     type="text"
-                    label="Comment"
-                    placeholder="Hãy viết cảm nhận của bạn"
+                    label={t("rating.comment")}
+                    placeholder={t("rating.comment_placeholder")}
                     // value={email}
                     // onChange={onChange}
                     className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
@@ -76,8 +78,8 @@ const ProductRating = () => {
                 <div className="flex items-center gap-4">
                   <Input
                     type="text"
-                    label="Comment"
-                    placeholder="Hãy viết cảm nhận của bạn"
+                    label={t("rating.comment")}
+                    placeholder={t("rating.comment_placeholder")}
                     // value={email}
                     // onChange={onChange}
                     className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
@@ -110,8 +112,8 @@ const ProductRating = () => {
                 <div className="flex items-center gap-4">
                   <Input
                     type="text"
-                    label="Comment"
-                    placeholder="Hãy viết cảm nhận của bạn"
+                    label={t("rating.comment")}
+                    placeholder={t("rating.comment_placeholder")}
                     // value={email}
                     // onChange={onChange}
                     className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"

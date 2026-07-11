@@ -1,7 +1,9 @@
 import { Radio } from "@material-tailwind/react/components/Radio";
 import { Typography } from "@material-tailwind/react/components/Typography";
+import { useI18n } from "../../../i18n";
 
 const BrandFilter = () => {
+  const { t } = useI18n();
   const brands = [
     "Adidas",
     "Nike",
@@ -14,7 +16,7 @@ const BrandFilter = () => {
   ];
   return (
     <>
-      <Typography variant="h6">Thương hiệu</Typography>
+      <Typography variant="h6">{t("filter.brand")}</Typography>
       <div className="flex flex-col">
         {brands.map((brand) => (
           <Radio

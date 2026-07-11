@@ -10,6 +10,7 @@ import Loading from "../components/shared/loading.component";
 import { useUpdateOrderItemMutation } from "../apis/order_item.api";
 import { Toast } from "../configs/sweetalert2.config";
 import { useCurrency } from "../currency";
+import { useI18n } from "../i18n";
 
 // ─── SVG icons for quantity stepper ───────────────────────────────
 const MinusSVG = () => (
@@ -52,6 +53,7 @@ const PlusSVG = () => (
 const CartPage = () => {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { t } = useI18n();
 
   // ── All hooks MUST be called unconditionally (Rules of Hooks) ──
   const hasToken = Boolean(localStorage.getItem("token"));
@@ -75,9 +77,9 @@ const CartPage = () => {
         product_id: item.product_id?.id,
         quantity: newQty,
       });
-      Toast.fire({ icon: "success", title: "Cập nhật thành công" });
+      Toast.fire({ icon: "success", title: t("common.update_success") });
     } catch {
-      Toast.fire({ icon: "error", title: "Cập nhật thất bại" });
+      Toast.fire({ icon: "error", title: t("common.update_failed") });
     }
   };
 
@@ -92,7 +94,7 @@ const CartPage = () => {
   if (error)
     return (
       <div className="error-message">
-        Lỗi tải giỏ hàng: {error?.data?.message ?? "Vui lòng thử lại."}
+        {t("cart.load_error")}: {error?.data?.message ?? t("common.retry")}
       </div>
     );
 
@@ -103,18 +105,18 @@ const CartPage = () => {
     <div className="page-container cart-page">
       {/* ── Left: cart items ── */}
       <div className="cart-items">
-        <h2 className="section-title mb-5">Giỏ hàng</h2>
+        <h2 className="section-title mb-5">{t("common.cart")}</h2>
 
         {/* Header row */}
         <div className="cart-header">
           <Checkbox color="blue" />
-          <span className="col-span-2">Hình ảnh</span>
-          <span className="col-span-2">Sản phẩm</span>
-          <span className="col-span-2">Đơn giá</span>
-          <span>Số lượng</span>
-          <span className="col-span-3">Thành tiền</span>
-          <Tooltip content="Xóa toàn bộ">
-            <IconButton color="white" aria-label="Xóa tất cả">
+          <span className="col-span-2">{t("common.image")}</span>
+          <span className="col-span-2">{t("common.product")}</span>
+          <span className="col-span-2">{t("cart.unit_price")}</span>
+          <span>{t("common.quantity")}</span>
+          <span className="col-span-3">{t("cart.line_total")}</span>
+          <Tooltip content={t("common.delete_all")}>
+            <IconButton color="white" aria-label={t("common.delete_all")}>
               <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
@@ -126,7 +128,7 @@ const CartPage = () => {
           const discount = item.product_id?.discount ?? 0;
           const unitPrice = salePrice * (1 - discount / 100);
           const imageSrc = item.product_id?.product_id?.image_url ?? "";
-          const productName = item.product_id?.product_id?.product_id?.name ?? "Sản phẩm";
+          const productName = item.product_id?.product_id?.product_id?.name ?? t("common.product");
 
           return (
             <div className="cart-row" key={index}>
@@ -147,7 +149,7 @@ const CartPage = () => {
                 <button
                   type="button"
                   className="qty-btn"
-                  aria-label="Giảm số lượng"
+                  aria-label={t("cart.decrease_quantity")}
                   onClick={() => handleUpdateQuantity(item, -1)}
                 >
                   <MinusSVG />
@@ -157,12 +159,12 @@ const CartPage = () => {
                   className="qty-input"
                   value={item.quantity ?? 0}
                   readOnly
-                  aria-label="Số lượng"
+                  aria-label={t("common.quantity")}
                 />
                 <button
                   type="button"
                   className="qty-btn"
-                  aria-label="Tăng số lượng"
+                  aria-label={t("cart.increase_quantity")}
                   onClick={() => handleUpdateQuantity(item, 1)}
                 >
                   <PlusSVG />
@@ -173,7 +175,7 @@ const CartPage = () => {
                 {formatPrice(unitPrice * (item.quantity ?? 0))}
               </span>
 
-              <IconButton color="white" aria-label="Xóa sản phẩm">
+              <IconButton color="white" aria-label={t("cart.delete_product")}>
                 <DeleteIcon color="error" />
               </IconButton>
             </div>
@@ -182,7 +184,7 @@ const CartPage = () => {
 
         {items.length === 0 && (
           <p className="text-center py-12" style={{ color: "var(--color-text-muted)" }}>
-            Giỏ hàng của bạn đang trống.
+            {t("cart.empty")}
           </p>
         )}
 
@@ -193,26 +195,26 @@ const CartPage = () => {
       <div className="cart-summary stack-sm">
         {/* Voucher card */}
         <div className="cart-summary-card">
-          <p className="cart-summary-title">Giảm giá</p>
+          <p className="cart-summary-title">{t("checkout.discount")}</p>
           <div className="flex-between mt-4">
-            <span className="summary-label">Mã giảm giá</span>
+            <span className="summary-label">{t("checkout.discount_code")}</span>
             <span className="summary-label">- 0%</span>
           </div>
-          <button className="btn-outline w-full mt-4">Nhập mã giảm giá</button>
+          <button className="btn-outline w-full mt-4">{t("cart.enter_discount_code")}</button>
         </div>
 
         {/* Order summary card */}
         <div className="cart-summary-card">
           <div className="flex-between">
-            <span className="summary-label">Tạm tính</span>
+            <span className="summary-label">{t("checkout.subtotal")}</span>
             <span className="summary-value">{formatPrice(total)}</span>
           </div>
           <div className="flex-between mt-3">
-            <span className="summary-label">Giảm giá</span>
+            <span className="summary-label">{t("checkout.discount")}</span>
             <span className="summary-label">{formatPrice(0)}</span>
           </div>
           <div className="cart-total-row">
-            <span className="cart-total-label">Tổng cộng</span>
+            <span className="cart-total-label">{t("common.total")}</span>
             <span className="cart-total-value">{formatPrice(total)}</span>
           </div>
           <button
@@ -220,7 +222,7 @@ const CartPage = () => {
             onClick={() => navigate("/checkout")}
             disabled={items.length === 0}
           >
-            Thanh toán
+            {t("checkout.pay")}
           </button>
         </div>
       </div>

@@ -13,6 +13,16 @@ import Tablist from "../shared/list_tab.component";
 import { allorder_tab } from "../../constants/tab.constant";
 import TableHeader from "../shared/header_table";
 import { order } from "../../constants/head_table.constant";
+import { useI18n } from "../../i18n";
+
+const ORDER_STATUS_LABEL_KEYS = {
+  CANCELLED: "order.status_cancelled",
+  COMPLETED: "order.status_completed",
+  CONFIRMED: "order.status_confirmed",
+  DELIVERING: "order.status_delivering",
+  ONHOLD: "order.status_on_hold",
+  ON_HOLD: "order.status_on_hold",
+};
 
 const TABLE_ROWS = [
   {
@@ -64,18 +74,24 @@ const TABLE_ROWS = [
 
 const Order = () => {
   const [tab, setTab] = React.useState("ALL");
+  const { t } = useI18n();
+  const getOrderStatusLabel = (status) =>
+    t(ORDER_STATUS_LABEL_KEYS[status] ?? "order.status_unknown");
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Danh sách đơn hàng
+              {t("order.list_title")}
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <div className="w-full md:w-72">
-              <Input label="Search" icon={<MagnifyingGlassIcon className="h-5 w-5" />} />
+              <Input
+                label={t("common.search")}
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+              />
             </div>
           </div>
         </div>
@@ -108,7 +124,7 @@ const Order = () => {
                       <Chip
                         variant="ghost"
                         size="sm"
-                        value={status}
+                        value={getOrderStatusLabel(status)}
                         color={
                           status === "ONHOLD"
                             ? "blue-gray"
@@ -129,7 +145,7 @@ const Order = () => {
                     </Typography>
                   </td>
                   <td className={classes}>
-                    <Tooltip content="Hủy đơn hàng">
+                    <Tooltip content={t("order.cancel_order")}>
                       <IconButton variant="text" color="red" disabled={status === "CANCELLED"}>
                         <DeleteIcon className="h-4 w-4" />
                       </IconButton>

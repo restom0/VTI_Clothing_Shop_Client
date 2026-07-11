@@ -1,0 +1,43 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F7FAFC"/>
+  <rect x="56" y="48" width="1088" height="534" rx="40" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="2"/>
+  <rect x="56" y="48" width="1088" height="86" rx="40" fill="#E8F1FB"/>
+  <rect x="56" y="104" width="1088" height="30" fill="#E8F1FB"/>
+  <text x="96" y="101" fill="#263238" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">VTI Shop</text>
+  <text x="270" y="99" fill="#607D8B" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">Product list</text>
+  <text x="420" y="99" fill="#607D8B" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">Brands</text>
+  <text x="520" y="99" fill="#607D8B" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">Categories</text>
+  <rect x="844" y="72" width="220" height="36" rx="18" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <circle cx="880" cy="90" r="10" stroke="#B0BEC5" stroke-width="4"/>
+  <path d="M888 98L899 109" stroke="#B0BEC5" stroke-width="4" stroke-linecap="round"/>
+  <text x="918" y="98" fill="#9E9E9E" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="500">Search</text>
+  <rect x="94" y="176" width="458" height="310" rx="28" fill="#006EDC"/>
+  <path d="M94 348C196 293 290 300 376 348C439 383 500 383 552 348V486H94V348Z" fill="#004F9D" opacity="0.42"/>
+  <text x="138" y="254" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="700">VTI Shop</text>
+  <text x="140" y="309" fill="#E8F1FB" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600">#WearWithStyle</text>
+  <rect x="140" y="354" width="186" height="52" rx="12" fill="#FFFFFF"/>
+  <text x="174" y="388" fill="#006EDC" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">Shop new</text>
+  <rect x="615" y="176" width="145" height="214" rx="18" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <rect x="633" y="194" width="109" height="106" rx="12" fill="#E8F1FB"/>
+  <path d="M664 252L688 218L716 252" stroke="#006EDC" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="633" y="322" width="96" height="14" rx="7" fill="#263238"/>
+  <rect x="633" y="352" width="68" height="12" rx="6" fill="#006EDC"/>
+  <rect x="786" y="176" width="145" height="214" rx="18" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <rect x="804" y="194" width="109" height="106" rx="12" fill="#E8F1FB"/>
+  <path d="M842 252L860 224L884 252" stroke="#C2586B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="804" y="322" width="98" height="14" rx="7" fill="#263238"/>
+  <rect x="804" y="352" width="70" height="12" rx="6" fill="#006EDC"/>
+  <rect x="957" y="176" width="145" height="214" rx="18" fill="#FFFFFF" stroke="#CFD8DC"/>
+  <rect x="975" y="194" width="109" height="106" rx="12" fill="#E8F1FB"/>
+  <path d="M1013 252L1031 224L1055 252" stroke="#0098A6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="975" y="322" width="96" height="14" rx="7" fill="#263238"/>
+  <rect x="975" y="352" width="68" height="12" rx="6" fill="#006EDC"/>
+  <rect x="615" y="428" width="487" height="58" rx="18" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <circle cx="653" cy="457" r="10" fill="#C2586B"/>
+  <circle cx="685" cy="457" r="10" fill="#0098A6"/>
+  <circle cx="717" cy="457" r="10" fill="#BC5E2A"/>
+  <circle cx="749" cy="457" r="10" fill="#1B509A"/>
+  <text x="790" y="466" fill="#263238" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600">Season-aware shopping UI</text>
+  <rect x="94" y="514" width="1008" height="1" fill="#CFD8DC"/>
+  <text x="96" y="548" fill="#607D8B" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="500">React storefront, product cards, filters, cart, seasonal theme tokens</text>
+</svg>

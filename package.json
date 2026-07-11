@@ -10,6 +10,8 @@
     "predev": "npm run i18n:generate",
     "pretest": "npm run i18n:generate",
     "pretest:coverage": "npm run i18n:generate",
+    "pretest:e2e": "npm run i18n:generate",
+    "pretest:e2e:open": "npm run i18n:generate",
     "pretest:watch": "npm run i18n:generate",
     "build": "vite build",
     "lint": "eslint src --max-warnings 0",
@@ -19,6 +21,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -38,7 +42,6 @@
     "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.18.1",
     "chart.js": "^4.5.1",
-    "client": "file:.",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.4.0",
@@ -60,6 +63,16 @@
     "swiper": "^14.0.5",
     "yup": "^1.7.1"
   },
+  "overrides": {
+    "@material-tailwind/react": {
+      "react": "19.2.7",
+      "react-dom": "19.2.7"
+    }
+  },
+  "resolutions": {
+    "**/react": "19.2.7",
+    "**/react-dom": "19.2.7"
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",
@@ -67,6 +80,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.10",
     "autoprefixer": "^10.5.2",
+    "cypress": "^15.18.1",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",

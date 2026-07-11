@@ -7,19 +7,21 @@ import Tablist from "../shared/list_tab.component";
 import { voucher } from "../../constants/tab.constant";
 import { useGetAvailableVouchersQuery, useGetVouchersQuery } from "../../apis/voucher.api";
 import Loading from "../shared/loading.component";
+import { useI18n } from "../../i18n";
 const Voucher = () => {
   const [tab, setTab] = useState("ALL");
+  const { t } = useI18n();
   const { isLoading: loadingVouchers, isError: errorVouchers } = useGetVouchersQuery();
   const { isLoading: loadingAvailableVoucher, isError: errorAvailableVoucher } =
     useGetAvailableVouchersQuery();
   if (loadingVouchers || loadingAvailableVoucher) return <Loading />;
-  if (errorVouchers || errorAvailableVoucher) return <div>Error</div>;
+  if (errorVouchers || errorAvailableVoucher) return <div>{t("profile.generic_error")}</div>;
   return (
     <>
       <Card className="rounded-b-none">
         <CardBody className="pb-0">
           <Typography variant="h4" color="blue-gray" className="my-5">
-            Mã giảm giá
+            {t("profile.menu_vouchers")}
           </Typography>
         </CardBody>
         <Tablist TABS={voucher} tab={tab} setTab={setTab} />
@@ -40,10 +42,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -53,7 +55,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -71,10 +73,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -84,7 +86,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -102,10 +104,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -115,7 +117,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -133,10 +135,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -146,7 +148,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -170,10 +172,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -183,7 +185,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -201,10 +203,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -214,7 +216,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -232,10 +234,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -245,7 +247,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>
@@ -263,10 +265,10 @@ const Voucher = () => {
                 <div className="col-span-6 grid grid-rows-2">
                   <div>
                     <Typography variant="h6" color="blue-gray">
-                      Giảm 100K
+                      {t("voucher.discount_100k")}
                     </Typography>
                     <Typography variant="small" color="gray" className="mb-2 font-extralight">
-                      Cho sản phẩm bất kì
+                      {t("voucher.any_product")}
                     </Typography>
                   </div>
                   <div></div>
@@ -276,7 +278,7 @@ const Voucher = () => {
                       color="gray"
                       className="mb-2 font-extralight text-right"
                     >
-                      HSD: 12/12/2022
+                      {t("voucher.expiry")}: 12/12/2022
                     </Typography>
                   </div>
                 </div>

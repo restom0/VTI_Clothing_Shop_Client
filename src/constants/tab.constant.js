@@ -1,60 +1,60 @@
 const allorder_tab = [
   {
-    label: "Tất cả",
+    labelKey: "status.all",
     value: "ALL",
   },
   {
-    label: "Chờ thanh toán",
+    labelKey: "order.status_on_hold",
     value: "ON_HOLD",
   },
   {
-    label: "Đang xử lý",
+    labelKey: "order.status_confirmed",
     value: "CONFIRMED",
   },
   {
-    label: "Đang vận chuyển",
+    labelKey: "order.status_delivering",
     value: "DELIVERING",
   },
   {
-    label: "Đã giao",
+    labelKey: "order.status_completed",
     value: "COMPLETED",
   },
   {
-    label: "Đã hủy",
+    labelKey: "order.status_cancelled",
     value: "CANCELLED",
   },
 ];
 const voucher = [
   {
-    label: "Tất cả",
+    labelKey: "status.all",
     value: "ALL",
   },
   {
-    label: "Đã hết hạn",
+    labelKey: "voucher.expired",
     value: "outdate",
   },
 ];
 const rating = [
   {
-    label: "Chờ đánh giá",
+    labelKey: "rating.pending",
     value: "unrate",
   },
   {
-    label: "Đã đánh giá",
+    labelKey: "rating.done",
     value: "rated",
   },
 ];
 const inventory_tab = [
   {
-    label: "Tất cả",
+    labelKey: "status.all",
     value: "ALL",
   },
   {
-    label: "Còn hàng",
+    labelKey: "inventory.available",
     value: "AVAILABLE",
   },
   {
-    label: "Hết hàng",
+    labelKey: "inventory.out_of_stock",
     value: "OUT_OF_STOCK",
   },
 ];

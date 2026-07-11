@@ -12,8 +12,10 @@ import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAvatar, resetAvatar } from "../features/slices/avatar_url.slice";
+import { useI18n } from "../i18n";
 
 const Registerpage = () => {
+  const { t } = useI18n();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [phone_number, setPhone_Number] = useState("");
@@ -46,7 +48,7 @@ const Registerpage = () => {
     if (message.data.statusCode === 201) {
       Toast.fire({
         icon: "success",
-        title: "Đăng ký thành công",
+        title: t("auth.register_success"),
       }).then(() => {
         navigate("/login");
       });
@@ -70,7 +72,7 @@ const Registerpage = () => {
           <span className="text-[#006edc]">VTI</span> Shop
         </h1>
         <Divider>
-          <h3 className="text-center text-xl">Đăng ký</h3>
+          <h3 className="text-center text-xl">{t("auth.register_title")}</h3>
         </Divider>
         <div className="auth-form-grid">
           <div className="w-100 mx-5 my-5">
@@ -78,15 +80,15 @@ const Registerpage = () => {
               <Input
                 size="md"
                 variant="standard"
-                label="Họ"
-                placeholder="Nguyễn"
+                label={t("auth.last_name")}
+                placeholder={t("auth.last_name_placeholder")}
                 onChange={(e) => setLastname(e.target.value)}
                 value={lastname}
               />
 
               <Input
                 variant="standard"
-                label="Tên"
+                label={t("auth.first_name")}
                 placeholder="A"
                 onChange={(e) => setFirstname(e.target.value)}
                 value={firstname}
@@ -96,7 +98,7 @@ const Registerpage = () => {
           <div className="w-100 mx-5 my-5">
             <Input
               variant="standard"
-              label="Tên đăng nhập"
+              label={t("auth.username")}
               placeholder="nguyenvana"
               onChange={(e) => setUsername(e.target.value)}
               value={username}
@@ -105,7 +107,7 @@ const Registerpage = () => {
           <div className="w-100 mx-5 my-5">
             <Input
               variant="standard"
-              label="Email"
+              label={t("auth.email")}
               placeholder="nguyenvana@gmail.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -114,7 +116,7 @@ const Registerpage = () => {
           <div className="w-100 my-5 mx-5">
             <Input
               variant="standard"
-              label="Số điện thoại"
+              label={t("auth.phone")}
               placeholder="0912345678"
               onChange={(e) => setPhone_Number(e.target.value)}
               value={phone_number}
@@ -124,7 +126,7 @@ const Registerpage = () => {
             <div className="w-100 my-5 mx-5">
               <Input
                 variant="standard"
-                label="Ngày sinh"
+                label={t("auth.birthday")}
                 placeholder="01-01-1990"
                 type="date"
                 onChange={(e) => setBirthday(e.target.value)}
@@ -133,18 +135,18 @@ const Registerpage = () => {
             </div>
             <div className="w-100 flex justify-start gap-4 mx-5 my-5">
               <Typography variant="small" color="blue-gray" className="my-auto">
-                Giới tính:
+                {t("auth.gender")}:
               </Typography>
               <Radio
                 size="small"
                 name="gender"
-                label="Nam"
+                label={t("auth.gender_male")}
                 value="MALE"
                 onClick={(e) => setGender(e.target.defaultValue)}
               />
               <Radio
                 name="gender"
-                label="Nữ"
+                label={t("auth.gender_female")}
                 value="FEMALE"
                 onClick={(e) => setGender(e.target.defaultValue)}
               />
@@ -174,10 +176,11 @@ const Registerpage = () => {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
+                      <span className="font-semibold">{t("auth.click_to_upload")}</span>{" "}
+                      {t("auth.drag_drop")}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      {t("auth.upload_formats")}
                     </p>
                   </div>
                   <ImageUpload image="avatar_url" />
@@ -191,7 +194,7 @@ const Registerpage = () => {
                   color="red"
                   className="w-full sm:w-1/3"
                 >
-                  Xóa ảnh
+                  {t("auth.remove_image")}
                 </Button>
               </div>
             )}
@@ -200,7 +203,7 @@ const Registerpage = () => {
           <div className="w-100 my-5 mx-5">
             <Input
               variant="standard"
-              label="Mật khẩu"
+              label={t("auth.password")}
               placeholder=".............."
               type="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -211,7 +214,7 @@ const Registerpage = () => {
           <div className="w-100 my-5 mx-5">
             <Input
               variant="standard"
-              label="Nhắc lại mật khẩu"
+              label={t("auth.repeat_password")}
               placeholder=".............."
               type="password"
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -249,7 +252,7 @@ const Registerpage = () => {
               className="w-full"
               loading={isLoading}
             >
-              Hủy
+              {t("auth.cancel")}
             </Button>
           </div>
           <div className="w-100 my-5 mx-5">
@@ -273,12 +276,12 @@ const Registerpage = () => {
               className="w-full"
               loading={isLoading}
             >
-              Đăng ký
+              {t("common.register")}
             </Button>
           </div>
         </div>
         <Divider className="mt-5 ">
-          <Chip label="OR" size="small" />
+          <Chip label={t("auth.or")} size="small" />
         </Divider>
         <div className="auth-form-grid">
           <div className="w-100 my-5 mx-5">
@@ -288,7 +291,7 @@ const Registerpage = () => {
               className="w-full"
               loading={isLoading}
             >
-              Đã có tài khoản
+              {t("auth.have_account")}
             </Button>
           </div>
           <div className="w-100 my-5 mx-5">
@@ -304,7 +307,7 @@ const Registerpage = () => {
                 alt="metamask"
                 className="h-6 w-6"
               />
-              Continue with Google
+              {t("auth.continue_with_google")}
             </Button>
           </div>
         </div>

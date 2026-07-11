@@ -7,9 +7,11 @@ import { Container, TextField } from "@mui/material";
 import { useLoginMutation } from "../apis/account.api";
 import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "../i18n";
 
 function Loginpage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [input, setInput] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState({});
@@ -50,7 +52,7 @@ function Loginpage() {
       const message = await login(data).unwrap();
       Toast.fire({
         icon: "success",
-        title: "Đăng nhập thành công",
+        title: t("auth.login_success"),
       }).then(() => {
         localStorage.setItem("avatar", message.object.avatar_url);
         localStorage.setItem("name", message.object.name);
@@ -60,7 +62,7 @@ function Loginpage() {
     } catch {
       Toast.fire({
         icon: "error",
-        title: "Đăng nhập thất bại",
+        title: t("auth.login_failed"),
       });
     }
   };
@@ -74,7 +76,7 @@ function Loginpage() {
               <span className="text-[#006edc]">VTI</span> Shop
             </h1>
             <Divider>
-              <h3 className="text-center text-xl">Đăng nhập</h3>
+              <h3 className="text-center text-xl">{t("auth.login_title")}</h3>
             </Divider>
             <form className="max-w-sm mx-auto">
               <div className="mb-5 mt-10">
@@ -82,7 +84,7 @@ function Loginpage() {
                   className="w-full"
                   size="lg"
                   variant="outlined"
-                  label="Tên đăng nhập, email hoặc số điện thoại"
+                  label={t("auth.username_email_phone")}
                   placeholder="nguyenvana@gmail.com"
                   autoComplete="off"
                   required
@@ -95,8 +97,8 @@ function Loginpage() {
                   size="lg"
                   className="w-full"
                   variant="outlined"
-                  label="Mật khẩu"
-                  placeholder="Mật khẩu"
+                  label={t("auth.password")}
+                  placeholder={t("auth.password")}
                   type="password"
                   required
                   onChange={handlePasswordChange}
@@ -106,7 +108,7 @@ function Loginpage() {
               <div className="mb-5 text-right">
                 <div className="h-5">
                   <a href="#" className="text-right">
-                    Quên mật khẩu
+                    {t("auth.forgot_password")}
                   </a>
                 </div>
               </div>
@@ -119,12 +121,12 @@ function Loginpage() {
                   handleLogin();
                 }}
               >
-                Đăng nhập
+                {t("common.login")}
               </Button>
             </form>
             <div className="max-w-sm mx-auto">
               <Divider className="mt-5 ">
-                <Chip label="OR" size="small" />
+                <Chip label={t("auth.or")} size="small" />
               </Divider>
             </div>
             <div className="max-w-sm mx-auto mt-5">
@@ -134,7 +136,7 @@ function Loginpage() {
                 className="w-full mb-5"
                 loading={isLoading}
               >
-                Đăng ký
+                {t("common.register")}
               </Button>
               <Button
                 size="sm"
@@ -148,7 +150,7 @@ function Loginpage() {
                   alt="metamask"
                   className="h-6 w-6"
                 />
-                Continue with Google
+                {t("auth.continue_with_google")}
               </Button>
             </div>
           </div>

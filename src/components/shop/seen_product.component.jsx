@@ -2,11 +2,13 @@ import { Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react
 import { Typography } from "@material-tailwind/react/components/Typography";
 
 import Pagination from "../shared/pagination.component";
+import { useI18n } from "../../i18n";
 const ProductSeen = () => {
+  const { t } = useI18n();
   return (
     <>
       <Typography variant="h4" color="blue-gray" className="my-3">
-        Sản phẩm đã xem
+        {t("profile.menu_seen_products")}
       </Typography>
       <div className="grid grid-cols-3 gap-4">
         <Card className="mt-6">

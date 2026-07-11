@@ -42,8 +42,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: SonarCloud Scan
-        if: ${{ env.SONAR_TOKEN != '' }}
+      - name: SonarCloud Quality Gate
+        if: ${{ env.SONAR_TOKEN != '' && vars.SONAR_ORGANIZATION != '' }}
         uses: SonarSource/sonarqube-scan-action@v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -52,3 +52,5 @@ jobs:
           args: >
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY || 'VTI_Clothing_Shop_Client' }}
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300

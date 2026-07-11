@@ -1,8 +1,31 @@
 import "./loading.css";
+import SkeletonBlock from "./SkeletonBlock";
+import { useI18n } from "../../i18n";
+
+const LoadingSkeleton = () => (
+  <div className="loading-skeleton" aria-hidden="true">
+    <div className="loading-skeleton__header">
+      <SkeletonBlock className="loading-skeleton__brand" />
+      <div className="loading-skeleton__nav">
+        <SkeletonBlock className="loading-skeleton__nav-item" />
+        <SkeletonBlock className="loading-skeleton__nav-item" />
+        <SkeletonBlock className="loading-skeleton__nav-item" />
+      </div>
+    </div>
+    <SkeletonBlock className="loading-skeleton__hero" />
+    <div className="loading-skeleton__grid">
+      <SkeletonBlock className="loading-skeleton__card" />
+      <SkeletonBlock className="loading-skeleton__card" />
+      <SkeletonBlock className="loading-skeleton__card" />
+    </div>
+  </div>
+);
+
 const Loading = () => {
+  const { t } = useI18n();
   return (
     // role="status" + aria-label: screen reader đọc "Đang tải..." (WCAG 4.1.3)
-    <div id="loader-container" role="status" aria-label="Đang tải..." aria-live="polite">
+    <div id="loader-container" role="status" aria-label={t("loading.label")} aria-live="polite">
       <svg
         id="loader"
         width="285"
@@ -73,6 +96,7 @@ const Loading = () => {
           mask="url(#path-1-outside-1_1_6)"
         />
       </svg>
+      <LoadingSkeleton />
     </div>
   );
 };

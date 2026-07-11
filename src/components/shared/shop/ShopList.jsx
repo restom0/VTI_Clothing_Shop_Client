@@ -6,6 +6,7 @@ import Pagination from "../pagination.component";
 import VirtualizedGrid from "../VirtualizedGrid";
 import usePaginatedItems from "../../../hooks/usePaginatedItems.hook";
 import useResponsiveColumns from "../../../hooks/useResponsiveColumns.hook";
+import { useI18n } from "../../../i18n";
 
 const PRODUCT_PAGE_SIZE = 24;
 const VIRTUAL_PRODUCT_ROW_ESTIMATE = 384;
@@ -23,6 +24,7 @@ const VIRTUAL_PRODUCT_ROW_ESTIMATE = 384;
  *  - useCallback: memoize renderItem + getKey
  */
 const ShopList = memo(({ products }) => {
+  const { t } = useI18n();
   const [filter, setFilter] = useState("new");
   const [active, setActive] = useState(1);
   const gridRef = useRef(null);
@@ -41,7 +43,7 @@ const ShopList = memo(({ products }) => {
   const handlePage = useCallback((page) => setActive(page), []);
 
   return (
-    <section className="shop-results" aria-label="Danh sách sản phẩm">
+    <section className="shop-results" aria-label={t("shop.product_list_aria")}>
       {/* Toolbar: kết quả + sort */}
       <div className="shop-list-toolbar">
         {/*
@@ -49,14 +51,14 @@ const ShopList = memo(({ products }) => {
           (WCAG 4.1.3 — Status Messages)
         */}
         <div className="results-count" aria-live="polite" aria-atomic="true">
-          <span className="sr-only">Số sản phẩm tìm thấy: </span>
-          {products.length} kết quả
+          <span className="sr-only">{t("shop.results_count_sr")}: </span>
+          {t("shop.results_count", { count: products.length })}
         </div>
 
         <div className="cluster-sm">
           {/* htmlFor không dùng được với Select của MT, dùng aria-label thay */}
           <label id="sort-label" className="text-sm">
-            Phân loại:
+            {t("shop.sort_label")}:
           </label>
           <span>
             <Select
@@ -64,14 +66,14 @@ const ShopList = memo(({ products }) => {
               onChange={setFilter}
               className="rounded"
               aria-labelledby="sort-label"
-              aria-label="Sắp xếp sản phẩm"
+              aria-label={t("shop.sort_aria")}
             >
-              <Option value="new">Mới nhất</Option>
-              <Option value="old">Cũ nhất</Option>
+              <Option value="new">{t("shop.sort_newest")}</Option>
+              <Option value="old">{t("shop.sort_oldest")}</Option>
               <Option value="A->Z">A → Z</Option>
               <Option value="Z->A">Z → A</Option>
-              <Option value="price-asc">Giá tăng dần</Option>
-              <Option value="price-desc">Giá giảm dần</Option>
+              <Option value="price-asc">{t("shop.sort_price_asc")}</Option>
+              <Option value="price-desc">{t("shop.sort_price_desc")}</Option>
             </Select>
           </span>
         </div>
@@ -86,7 +88,7 @@ const ShopList = memo(({ products }) => {
           getKey={getKey}
           items={pageItems}
           renderItem={renderItem}
-          aria-label={`Trang ${active} — ${pageItems.length} sản phẩm`}
+          aria-label={t("shop.page_aria", { page: active, count: pageItems.length })}
         />
       </div>
 

@@ -12,6 +12,7 @@ import {
   SparklesIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline";
+import { useI18n } from "../i18n";
 
 const PageIcon = ({ icon: Icon }) => (
   <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary-muted text-primary">
@@ -156,220 +157,232 @@ StaticContentPage.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
+const translateStaticPage = (page, t) => ({
+  eyebrow: t(page.eyebrowKey),
+  title: t(page.titleKey),
+  subtitle: t(page.subtitleKey),
+  heroImage: page.heroImage,
+  actions: (page.actions ?? []).map(({ labelKey, ...action }) => ({
+    ...action,
+    label: t(labelKey),
+  })),
+  stats: (page.stats ?? []).map(({ labelKey, valueKey, ...stat }) => ({
+    ...stat,
+    label: t(labelKey),
+    value: valueKey ? t(valueKey) : stat.value,
+  })),
+  sections: (page.sections ?? []).map(({ descriptionKey, titleKey, ...section }) => ({
+    ...section,
+    description: t(descriptionKey),
+    title: t(titleKey),
+  })),
+  faqs: (page.faqs ?? []).map(({ answerKey, questionKey }) => ({
+    answer: t(answerKey),
+    question: t(questionKey),
+  })),
+});
+
+const LocalizedStaticContentPage = ({ page }) => {
+  const { t } = useI18n();
+  return <StaticContentPage {...translateStaticPage(page, t)} />;
+};
+
+LocalizedStaticContentPage.propTypes = {
+  page: PropTypes.object.isRequired,
+};
+
+const helpCenterFaqs = [
+  {
+    questionKey: "static.help.faq_order_q",
+    answerKey: "static.help.faq_order_a",
+  },
+  {
+    questionKey: "static.help.faq_address_q",
+    answerKey: "static.help.faq_address_a",
+  },
+  {
+    questionKey: "static.help.faq_voucher_q",
+    answerKey: "static.help.faq_voucher_a",
+  },
+];
+
 const helpCenterPage = {
-  eyebrow: "Help center",
-  title: "Trung tâm hỗ trợ VTI Shop",
-  subtitle:
-    "Tìm nhanh câu trả lời về đơn hàng, thanh toán, vận chuyển, đổi trả và tài khoản. Nếu cần hỗ trợ thêm, đội chăm sóc khách hàng luôn sẵn sàng tiếp nhận.",
+  eyebrowKey: "static.help.eyebrow",
+  titleKey: "static.help.title",
+  subtitleKey: "static.help.subtitle",
   heroImage: "/dailynews.jpg",
   actions: [
-    { href: "/contact", label: "Liên hệ hỗ trợ", variant: "primary" },
-    { href: "/faqs", label: "Xem FAQs" },
+    { href: "/contact", labelKey: "static.help.action_contact", variant: "primary" },
+    { href: "/faqs", labelKey: "static.help.action_faqs" },
   ],
   sections: [
     {
       icon: TruckIcon,
-      title: "Theo dõi đơn hàng",
-      description:
-        "Kiểm tra trạng thái xử lý, vận chuyển và thời gian giao dự kiến ngay trong trang tài khoản.",
+      titleKey: "static.help.track_title",
+      descriptionKey: "static.help.track_desc",
     },
     {
       icon: ShieldCheckIcon,
-      title: "Đổi trả minh bạch",
-      description:
-        "Sản phẩm còn nguyên tem, chưa qua sử dụng có thể gửi yêu cầu đổi trả theo chính sách cửa hàng.",
+      titleKey: "static.help.returns_title",
+      descriptionKey: "static.help.returns_desc",
     },
     {
       icon: QuestionMarkCircleIcon,
-      title: "Câu hỏi thường gặp",
-      description:
-        "Tổng hợp những vấn đề phổ biến về size, voucher, thanh toán và cập nhật thông tin cá nhân.",
+      titleKey: "static.help.faqs_title",
+      descriptionKey: "static.help.faqs_desc",
     },
   ],
-  faqs: [
-    {
-      question: "Làm sao để kiểm tra đơn hàng?",
-      answer:
-        "Đăng nhập tài khoản, mở trang Hồ sơ và chọn mục Đơn hàng để xem trạng thái mới nhất.",
-    },
-    {
-      question: "Tôi nhập sai địa chỉ giao hàng thì xử lý thế nào?",
-      answer:
-        "Hãy liên hệ bộ phận hỗ trợ càng sớm càng tốt. Nếu đơn chưa bàn giao cho đơn vị vận chuyển, thông tin có thể được cập nhật.",
-    },
-    {
-      question: "Voucher có áp dụng cùng khuyến mãi không?",
-      answer:
-        "Một số voucher có điều kiện riêng. Thông tin áp dụng sẽ hiển thị ở bước thanh toán trước khi xác nhận đơn.",
-    },
-  ],
+  faqs: helpCenterFaqs,
 };
 
 const careerPage = {
-  eyebrow: "Careers",
-  title: "Cùng xây trải nghiệm mua sắm thời trang tốt hơn",
-  subtitle:
-    "VTI Shop tìm kiếm những người thích sản phẩm đẹp, dữ liệu rõ ràng và dịch vụ khách hàng tử tế. Mỗi vai trò đều góp phần làm hành trình mua sắm mượt hơn.",
+  eyebrowKey: "static.careers.eyebrow",
+  titleKey: "static.careers.title",
+  subtitleKey: "static.careers.subtitle",
   heroImage: "/dailynews.jpg",
   actions: [
-    { href: "/contact", label: "Gửi hồ sơ", variant: "primary" },
-    { href: "/about-us", label: "Về VTI Shop" },
+    { href: "/contact", labelKey: "static.careers.action_apply", variant: "primary" },
+    { href: "/about-us", labelKey: "static.careers.action_about" },
   ],
   stats: [
-    { value: "3", label: "Nhóm sản phẩm chính" },
-    { value: "24h", label: "Ưu tiên phản hồi ứng viên" },
-    { value: "Hybrid", label: "Mô hình làm việc linh hoạt" },
+    { value: "3", labelKey: "static.careers.stat_products" },
+    { value: "24h", labelKey: "static.careers.stat_response" },
+    { value: "Hybrid", labelKey: "static.careers.stat_work" },
   ],
   sections: [
     {
       icon: BriefcaseIcon,
-      title: "Retail operations",
-      description:
-        "Tối ưu tồn kho, đơn hàng, khuyến mãi và quy trình vận hành hằng ngày của cửa hàng.",
+      titleKey: "static.careers.ops_title",
+      descriptionKey: "static.careers.ops_desc",
     },
     {
       icon: SparklesIcon,
-      title: "Brand & content",
-      description:
-        "Kể câu chuyện sản phẩm qua hình ảnh, nội dung, bộ sưu tập và chiến dịch theo mùa.",
+      titleKey: "static.careers.content_title",
+      descriptionKey: "static.careers.content_desc",
     },
     {
       icon: ChatBubbleLeftRightIcon,
-      title: "Customer success",
-      description:
-        "Lắng nghe phản hồi, giải quyết vấn đề và biến mỗi lần hỗ trợ thành trải nghiệm dễ chịu.",
+      titleKey: "static.careers.success_title",
+      descriptionKey: "static.careers.success_desc",
     },
   ],
 };
 
 const aboutPage = {
-  eyebrow: "About us",
-  title: "VTI Shop là cửa hàng thời trang dành cho nhịp sống hiện đại",
-  subtitle:
-    "Chúng tôi chọn lọc sản phẩm dễ mặc, dễ phối và bền trong sử dụng hằng ngày. Trải nghiệm mua sắm được thiết kế rõ ràng từ tìm kiếm, chọn size đến thanh toán.",
+  eyebrowKey: "static.about.eyebrow",
+  titleKey: "static.about.title",
+  subtitleKey: "static.about.subtitle",
   heroImage: "/dailynews.jpg",
   stats: [
-    { value: "6", label: "Nhóm danh mục đang phát triển" },
-    { value: "100%", label: "Sản phẩm có thông tin minh bạch" },
-    { value: "7 ngày", label: "Khung hỗ trợ đổi trả tiêu chuẩn" },
+    { value: "6", labelKey: "static.about.stat_categories" },
+    { value: "100%", labelKey: "static.about.stat_transparent" },
+    { valueKey: "static.about.stat_returns_value", labelKey: "static.about.stat_returns" },
   ],
   sections: [
     {
       icon: CheckCircleIcon,
-      title: "Chọn lọc thực tế",
-      description:
-        "Danh mục tập trung vào những sản phẩm có tính ứng dụng cao, phù hợp nhiều bối cảnh mặc.",
+      titleKey: "static.about.practical_title",
+      descriptionKey: "static.about.practical_desc",
     },
     {
       icon: ShieldCheckIcon,
-      title: "Thông tin rõ ràng",
-      description:
-        "Giá, khuyến mãi, hình ảnh và mô tả sản phẩm được trình bày để khách hàng dễ so sánh.",
+      titleKey: "static.about.clear_title",
+      descriptionKey: "static.about.clear_desc",
     },
     {
       icon: TruckIcon,
-      title: "Mua sắm liền mạch",
-      description:
-        "Từ giỏ hàng đến checkout, chúng tôi ưu tiên thao tác nhanh và trạng thái đơn hàng dễ theo dõi.",
+      titleKey: "static.about.seamless_title",
+      descriptionKey: "static.about.seamless_desc",
     },
   ],
 };
 
 const contactPage = {
-  eyebrow: "Contact",
-  title: "Liên hệ VTI Shop",
-  subtitle:
-    "Cần tư vấn size, kiểm tra đơn hàng, hợp tác thương hiệu hoặc hỗ trợ tài khoản? Gửi thông tin cho chúng tôi qua các kênh bên dưới.",
+  eyebrowKey: "static.contact.eyebrow",
+  titleKey: "static.contact.title",
+  subtitleKey: "static.contact.subtitle",
   heroImage: "/dailynews.jpg",
   sections: [
     {
       icon: EnvelopeIcon,
-      title: "Email",
-      description: "support@vtishop.example - phản hồi trong giờ làm việc.",
+      titleKey: "static.contact.email_title",
+      descriptionKey: "static.contact.email_desc",
     },
     {
       icon: PhoneIcon,
-      title: "Hotline",
-      description: "1900 0000 - hỗ trợ đơn hàng, thanh toán và đổi trả.",
+      titleKey: "static.contact.hotline_title",
+      descriptionKey: "static.contact.hotline_desc",
     },
     {
       icon: MapPinIcon,
-      title: "Văn phòng",
-      description: "Tòa nhà VTI, Hà Nội - tiếp nhận lịch hẹn đối tác.",
+      titleKey: "static.contact.office_title",
+      descriptionKey: "static.contact.office_desc",
     },
   ],
 };
 
 const termsPage = {
-  eyebrow: "Terms",
-  title: "Điều khoản sử dụng",
-  subtitle:
-    "Các điều khoản này giúp việc mua sắm tại VTI Shop minh bạch hơn: tài khoản, đơn hàng, thanh toán, vận chuyển và trách nhiệm của mỗi bên.",
+  eyebrowKey: "static.terms.eyebrow",
+  titleKey: "static.terms.title",
+  subtitleKey: "static.terms.subtitle",
   heroImage: "/dailynews.jpg",
   sections: [
     {
       icon: ClipboardDocumentCheckIcon,
-      title: "Tài khoản",
-      description:
-        "Khách hàng chịu trách nhiệm bảo mật thông tin đăng nhập và tính chính xác của dữ liệu đặt hàng.",
+      titleKey: "static.terms.account_title",
+      descriptionKey: "static.terms.account_desc",
     },
     {
       icon: CheckCircleIcon,
-      title: "Đơn hàng",
-      description:
-        "Đơn hàng chỉ được xác nhận sau khi hệ thống ghi nhận đầy đủ thông tin sản phẩm, địa chỉ và phương thức thanh toán.",
+      titleKey: "static.terms.order_title",
+      descriptionKey: "static.terms.order_desc",
     },
     {
       icon: ShieldCheckIcon,
-      title: "Nội dung",
-      description:
-        "Hình ảnh, mô tả và dữ liệu sản phẩm thuộc hệ thống VTI Shop và không được sử dụng sai mục đích.",
+      titleKey: "static.terms.content_title",
+      descriptionKey: "static.terms.content_desc",
     },
   ],
 };
 
 const policyPage = {
-  eyebrow: "Policy",
-  title: "Chính sách mua hàng",
-  subtitle:
-    "Chính sách tổng hợp các nguyên tắc về vận chuyển, đổi trả, hoàn tiền và bảo vệ thông tin khách hàng khi mua sắm tại VTI Shop.",
+  eyebrowKey: "static.policy.eyebrow",
+  titleKey: "static.policy.title",
+  subtitleKey: "static.policy.subtitle",
   heroImage: "/dailynews.jpg",
   sections: [
     {
       icon: TruckIcon,
-      title: "Vận chuyển",
-      description: "Thời gian giao hàng phụ thuộc địa chỉ nhận và tình trạng sản phẩm tại kho.",
+      titleKey: "static.policy.shipping_title",
+      descriptionKey: "static.policy.shipping_desc",
     },
     {
       icon: ShieldCheckIcon,
-      title: "Đổi trả",
-      description:
-        "Yêu cầu đổi trả được tiếp nhận khi sản phẩm đáp ứng điều kiện tem mác, tình trạng và thời hạn chính sách.",
+      titleKey: "static.policy.returns_title",
+      descriptionKey: "static.policy.returns_desc",
     },
     {
       icon: ClipboardDocumentCheckIcon,
-      title: "Dữ liệu cá nhân",
-      description:
-        "Thông tin khách hàng chỉ được dùng cho vận hành đơn hàng, chăm sóc khách hàng và thông báo liên quan.",
+      titleKey: "static.policy.data_title",
+      descriptionKey: "static.policy.data_desc",
     },
   ],
 };
 
 const faqPage = {
-  eyebrow: "FAQs",
-  title: "Câu hỏi thường gặp",
-  subtitle:
-    "Những câu trả lời ngắn gọn cho các tình huống khách hàng hay gặp khi mua sắm tại VTI Shop.",
+  eyebrowKey: "static.faq.eyebrow",
+  titleKey: "static.faq.title",
+  subtitleKey: "static.faq.subtitle",
   heroImage: "/dailynews.jpg",
-  faqs: helpCenterPage.faqs,
+  faqs: helpCenterFaqs,
 };
 
-export const HelpCenterPage = () => <StaticContentPage {...helpCenterPage} />;
-export const CareerPage = () => <StaticContentPage {...careerPage} />;
-export const AboutUsPage = () => <StaticContentPage {...aboutPage} />;
-export const ContactPage = () => <StaticContentPage {...contactPage} />;
-export const TermsPage = () => <StaticContentPage {...termsPage} />;
-export const PolicyPage = () => <StaticContentPage {...policyPage} />;
-export const FaqPage = () => <StaticContentPage {...faqPage} />;
+export const HelpCenterPage = () => <LocalizedStaticContentPage page={helpCenterPage} />;
+export const CareerPage = () => <LocalizedStaticContentPage page={careerPage} />;
+export const AboutUsPage = () => <LocalizedStaticContentPage page={aboutPage} />;
+export const ContactPage = () => <LocalizedStaticContentPage page={contactPage} />;
+export const TermsPage = () => <LocalizedStaticContentPage page={termsPage} />;
+export const PolicyPage = () => <LocalizedStaticContentPage page={policyPage} />;
+export const FaqPage = () => <LocalizedStaticContentPage page={faqPage} />;
 
 export default StaticContentPage;

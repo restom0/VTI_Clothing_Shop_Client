@@ -37,6 +37,7 @@ import Loading from "../shared/loading.component";
 import ImageUpload from "../upload_image.component";
 import { handleDelete } from "../../utils/delete_image.util";
 import { Toast } from "../../configs/sweetalert2.config";
+import { useI18n } from "../../i18n";
 
 const UserInfo = () => {
   const [name, setName] = useState("");
@@ -53,6 +54,7 @@ const UserInfo = () => {
   const [newPassword, setNewPassword] = useState("");
   const [reTypePassword, setReTypePassword] = useState("");
   const [isGoogleLinked] = React.useState(false);
+  const { t } = useI18n();
   const { data: user, isLoading, isError } = useGetUserProfileQuery();
   const handleClose = () => {
     setOpen(false);
@@ -84,7 +86,7 @@ const UserInfo = () => {
     }
   }, [user]);
   if (isLoading) return <Loading />;
-  else if (isError) return <div>Error</div>;
+  else if (isError) return <div>{t("profile.load_failed")}</div>;
   const handleConfirmChange = () => {
     setEmail(user.object.email);
     setPhone(user.object.phone_number);
@@ -95,7 +97,7 @@ const UserInfo = () => {
     if (newPassword !== reTypePassword) {
       Toast.fire({
         icon: "error",
-        title: "Mật khẩu không khớp",
+        title: t("profile.password_mismatch"),
       });
       return;
     }
@@ -108,7 +110,7 @@ const UserInfo = () => {
       if (response.statusCode === 200) {
         Toast.fire({
           icon: "success",
-          title: response.message || "Đổi mật khẩu thành công",
+          title: response.message || t("profile.password_update_success"),
         }).then(() => {
           setPassword("");
           setNewPassword("");
@@ -119,7 +121,7 @@ const UserInfo = () => {
     } catch (error) {
       Toast.fire({
         icon: "error",
-        title: error?.data?.message || "An error occurred",
+        title: error?.data?.message || t("profile.generic_error"),
       });
     }
   };
@@ -138,13 +140,13 @@ const UserInfo = () => {
       if (response.statusCode === 200) {
         Toast.fire({
           icon: "success",
-          title: response.message || "Cập nhật thông tin thành công",
+          title: response.message || t("profile.update_success"),
         });
       }
     } catch (error) {
       Toast.fire({
         icon: "error",
-        title: error?.data?.message || "An error occurred",
+        title: error?.data?.message || t("profile.generic_error"),
       });
     }
   };
@@ -154,24 +156,24 @@ const UserInfo = () => {
         <CardContent>
           <div className="grid grid-cols-12 gap-8">
             <Typography variant="h5" color="blue-gray" className="mb-2 col-span-7">
-              Thông tin cá nhân
+              {t("profile.personal_info")}
             </Typography>
             <Typography variant="h5" color="blue-gray" className="mb-2 col-span-5">
-              Liên kết
+              {t("profile.connections")}
             </Typography>
           </div>
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-7 grid grid-cols-3 mt-5 gap-4">
               <Avatar
                 src={avatar ? avatar : user?.object.avatar_url}
-                alt="avatar"
+                alt={t("profile.avatar")}
                 className="mx-auto my-auto"
                 sx={{ width: 100, height: 100 }}
                 onClick={handleAddClick}
               />
               <div className="col-span-2 grid grid-cols-6 my-auto gap-4">
                 <Typography variant="small" color="gray" className="col-span-2 !my-auto">
-                  Họ và tên
+                  {t("profile.full_name")}
                 </Typography>
                 <div className="col-span-4">
                   <TextField
@@ -185,7 +187,7 @@ const UserInfo = () => {
                 </div>
                 <div className="my-auto col-span-2">
                   <Typography variant="small" color="gray">
-                    Ngày sinh
+                    {t("profile.birthday")}
                   </Typography>
                 </div>
                 <div className="col-span-4">
@@ -202,7 +204,7 @@ const UserInfo = () => {
                 </div>
                 <div className="my-auto col-span-2">
                   <Typography variant="small" color="gray">
-                    Giới tính
+                    {t("profile.gender")}
                   </Typography>
                 </div>
                 <div className="col-span-4">
@@ -214,8 +216,16 @@ const UserInfo = () => {
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                     >
-                      <FormControlLabel value="FEMAlE" control={<Radio />} label="Nữ" />
-                      <FormControlLabel value="MALE" control={<Radio />} label="Nam" />
+                      <FormControlLabel
+                        value="FEMAlE"
+                        control={<Radio />}
+                        label={t("auth.gender_female")}
+                      />
+                      <FormControlLabel
+                        value="MALE"
+                        control={<Radio />}
+                        label={t("auth.gender_male")}
+                      />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -238,7 +248,7 @@ const UserInfo = () => {
 
               <div className="col-span-3 grid grid-cols-12 gap-4">
                 <Typography variant="h5" color="blue-gray" className="col-span-8">
-                  Địa chỉ liên lạc
+                  {t("profile.contact_address")}
                 </Typography>
                 <div className="col-span-4 my-auto">
                   <Button
@@ -248,7 +258,7 @@ const UserInfo = () => {
                     color={confirmChange ? "error" : "primary"}
                     onClick={handleConfirmChange}
                   >
-                    {confirmChange === false ? "Thay đổi" : "Hủy"}
+                    {confirmChange === false ? t("profile.change") : t("profile.cancel")}
                   </Button>
                 </div>
                 <Typography variant="small" className="col-span-4 !my-auto !mx-auto">
@@ -295,10 +305,10 @@ const UserInfo = () => {
                 </div>
                 <div className="mx-auto col-span-12">
                   <Button className="mx-auto" size="large" onClick={handleChangeProfile}>
-                    Lưu thay đổi
+                    {t("profile.save_changes")}
                   </Button>
                   <Button className="mx-auto" color="error" size="large">
-                    Hủy
+                    {t("profile.cancel")}
                   </Button>
                 </div>
               </div>
@@ -311,10 +321,10 @@ const UserInfo = () => {
                 </Typography>
                 <div>
                   {isGoogleLinked ? (
-                    <Chip color="green" value="Đã liên kết" />
+                    <Chip color="green" value={t("profile.linked")} />
                   ) : (
                     <Button className="w-full" variant="outlined">
-                      Liên kết
+                      {t("profile.link")}
                     </Button>
                   )}
                 </div>
@@ -324,16 +334,16 @@ const UserInfo = () => {
                 </Typography>
                 <div>
                   {isGoogleLinked ? (
-                    <Chip color="green" value="Đã liên kết" />
+                    <Chip color="green" value={t("profile.linked")} />
                   ) : (
                     <Button className="w-full" variant="outlined">
-                      Liên kết
+                      {t("profile.link")}
                     </Button>
                   )}
                 </div>
                 <div className="col-span-2">
                   <Typography variant="h5" color="blue-gray" className="mb-2 col-span-5">
-                    Bảo mật
+                    {t("profile.security")}
                   </Typography>
                   <div className="grid grid-cols-12 py-3">
                     <div className="col-span-8 flex items-center gap-4 my-auto">
@@ -344,7 +354,7 @@ const UserInfo = () => {
                           color="gray"
                           className="font-normal w-[160px] break-words"
                         >
-                          Bảo mật 2 lớp
+                          {t("profile.two_factor")}
                         </Typography>
                       </div>
                     </div>
@@ -361,13 +371,13 @@ const UserInfo = () => {
                           color="gray"
                           className="font-normal w-[160px] break-words"
                         >
-                          Đổi mật khẩu
+                          {t("profile.change_password")}
                         </Typography>
                       </div>
                     </div>
                     <div className="col-span-4 my-auto" onClick={handleOpenClick}>
                       <Button color="error" size="sm" variant="outlined" className="w-full">
-                        Thay đổi
+                        {t("profile.change")}
                       </Button>
                     </div>
                   </div>
@@ -380,13 +390,13 @@ const UserInfo = () => {
                           color="gray"
                           className="font-normal w-[160px] break-words"
                         >
-                          Xóa tài khoản
+                          {t("profile.delete_account")}
                         </Typography>
                       </div>
                     </div>
                     <div className="col-span-4 my-auto">
                       <Button color="error" size="sm" variant="outlined" className="w-full">
-                        Xóa
+                        {t("profile.delete")}
                       </Button>
                     </div>
                   </div>
@@ -398,13 +408,13 @@ const UserInfo = () => {
       </Card>
 
       <Dialog onClose={handleCloseAdd} open={openAdd}>
-        <DialogTitle>Chỉnh sửa hình ảnh</DialogTitle>
+        <DialogTitle>{t("profile.edit_image")}</DialogTitle>
         <DialogContent>
           {avatar ? (
             <>
               <Avatar
                 src={avatar}
-                alt="avatar"
+                alt={t("profile.avatar")}
                 className="mx-auto my-auto"
                 sx={{ width: 200, height: 200 }}
                 onClick={handleAddClick}
@@ -417,7 +427,7 @@ const UserInfo = () => {
                   (handleDelete({ publicId }), setAvatar(null));
                 }}
               >
-                Xóa ảnh
+                {t("profile.delete_image")}
               </Button>
             </>
           ) : (
@@ -444,18 +454,19 @@ const UserInfo = () => {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
+                      <span className="font-semibold">{t("auth.click_to_upload")}</span>{" "}
+                      {t("auth.drag_drop")}
                     </p>
 
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      SVG, PNG, JPG or GIF (MAX. 800x400px)
+                      {t("auth.upload_formats")}
                     </p>
                     <Typography
                       as="caption"
                       variant="small"
                       className="mt-2 text-center font-normal"
                     >
-                      Hình đại diện
+                      {t("profile.avatar")}
                     </Typography>
                   </div>
                   <ImageUpload setPublicId={setPublicId} setAvatar={setAvatar} />
@@ -466,13 +477,13 @@ const UserInfo = () => {
         </DialogContent>
       </Dialog>
       <Dialog maxWidth="xl" onClose={handleClose} open={open}>
-        <DialogTitle>Đổi mật khẩu</DialogTitle>
+        <DialogTitle>{t("profile.change_password")}</DialogTitle>
         <DialogContent>
           <div className="flex flex-col gap-4">
             <TextField
               type="password"
               id="standard-basic1"
-              label="Mật khẩu"
+              label={t("auth.password")}
               variant="standard"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -480,7 +491,7 @@ const UserInfo = () => {
             <TextField
               type="password"
               id="standard-basic2"
-              label="Mật khẩu mới"
+              label={t("profile.new_password")}
               variant="standard"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -488,7 +499,7 @@ const UserInfo = () => {
             <TextField
               type="password"
               id="standard-basic3"
-              label="Nhập lại mật khẩu mới"
+              label={t("profile.retype_new_password")}
               variant="standard"
               value={reTypePassword}
               onChange={(e) => setReTypePassword(e.target.value)}
@@ -504,7 +515,7 @@ const UserInfo = () => {
             loading={isUpdatePassword}
             color="primary"
           >
-            Xác nhận
+            {t("profile.confirm")}
           </Button>
         </DialogActions>
       </Dialog>

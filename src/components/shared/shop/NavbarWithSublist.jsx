@@ -210,7 +210,7 @@ export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
         <div key={id} className="grid grid-cols-5 gap-3 items-center">
           <img
             src={imageUrl}
-            alt={title ? `Ảnh sản phẩm: ${title}` : "Ảnh sản phẩm"}
+            alt={title ? `${labels.productImageAlt}: ${title}` : labels.productImageAlt}
             className="w-12 h-12 object-cover rounded mx-auto"
           />
           <span className="text-xs font-medium col-span-1 text-center">{title}</span>
@@ -234,6 +234,7 @@ CartTooltipView.propTypes = {
     cart: PropTypes.string.isRequired,
     itemCount: PropTypes.string.isRequired,
     total: PropTypes.string.isRequired,
+    productImageAlt: PropTypes.string.isRequired,
   }).isRequired,
   rows: PropTypes.arrayOf(
     PropTypes.shape({
@@ -270,9 +271,7 @@ CartTooltip.propTypes = {
 export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) => (
   <Navbar
     className="mx-auto max-w-screen-3xl rounded-none px-4 py-2 sticky top-0 z-50"
-    // role="navigation" đã có trong Navbar component của Material-Tailwind;
-    // thêm aria-label để phân biệt với các nav khác (WCAG 2.4.6)
-    aria-label="Điều hướng chính"
+    aria-label={labels.mainAria}
     as="nav"
   >
     <div className="flex-between">
@@ -330,7 +329,7 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
         onClick={onToggleNav}
         aria-expanded={openNav}
         aria-controls="mobile-nav"
-        aria-label={openNav ? "Đóng menu" : "Mở menu"}
+        aria-label={openNav ? labels.closeMenu : labels.openMenu}
       >
         {openNav ? (
           <XMarkIcon className="h-6 w-6" strokeWidth={2} aria-hidden="true" />
@@ -363,6 +362,9 @@ NavbarView.propTypes = {
     search: PropTypes.string.isRequired,
     cart: PropTypes.string.isRequired,
     login: PropTypes.string.isRequired,
+    mainAria: PropTypes.string.isRequired,
+    openMenu: PropTypes.string.isRequired,
+    closeMenu: PropTypes.string.isRequired,
   }).isRequired,
   onCartClick: PropTypes.func.isRequired,
   onToggleNav: PropTypes.func.isRequired,

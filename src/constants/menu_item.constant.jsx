@@ -120,27 +120,27 @@ const footer_menu = [
 ];
 const profile_menu = [
   {
-    label: "Thông tin tài khoản",
+    labelKey: "profile.menu_account_info",
     link: <UserInfo />,
   },
   {
-    label: "Đơn hàng",
+    labelKey: "profile.menu_orders",
     link: <Order />,
   },
   {
-    label: "Sản phẩm đã xem",
+    labelKey: "profile.menu_seen_products",
     link: <ProductSeen />,
   },
   {
-    label: "Sản phẩm yêu thích",
+    labelKey: "profile.menu_wishlist",
     link: <ProductLove />,
   },
   {
-    label: "Đánh giá của bạn",
+    labelKey: "profile.menu_reviews",
     link: <ProductRating />,
   },
   {
-    label: "Mã giảm giá",
+    labelKey: "profile.menu_vouchers",
     link: <Voucher />,
   },
 ];

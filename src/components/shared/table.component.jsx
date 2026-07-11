@@ -10,6 +10,7 @@ import useSortedRows from "../../hooks/useSortedRows.hook";
 import AdminPagination from "./admin/admin_pagination.component";
 import SettingButton from "./admin/setting_button.component";
 import TableHeader from "./header_table";
+import { useI18n } from "../../i18n";
 
 const ADMIN_TABLE_PAGE_SIZE = 24;
 const ADMIN_TABLE_ROW_ESTIMATE = 64;
@@ -33,6 +34,7 @@ const Table = ({
   isDeleted,
   isUpdated,
 }) => {
+  const { t } = useI18n();
   const active = useSelector((state) => state.active.value);
   const sort = useSelector((state) => state.sort);
   const dispatch = useDispatch();
@@ -112,7 +114,7 @@ const Table = ({
             ) : (
               <tr className="border-b border-gray-200">
                 <td className="p-4" colSpan={totalColSpan}>
-                  Bảng không có phần tử
+                  {t("table.empty")}
                 </td>
               </tr>
             )}
