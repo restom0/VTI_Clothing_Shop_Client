@@ -1,9 +1,12 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { api_routes, SHOP_URL } from "../configs/api.config";
+import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
 
 export const ProductApi = createApi({
   reducerPath: "ProductApi",
-  baseQuery: fetchBaseQuery({ baseUrl: SHOP_URL + api_routes.products }),
+  baseQuery: createBaseQueryWithDummyFallback("product", {
+    baseUrl: SHOP_URL + api_routes.products,
+  }),
   tagTypes: ["Product"],
   endpoints: (builder) => ({
     getProducts: builder.query({

@@ -1,9 +1,10 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import { api_routes, SHOP_URL } from "../configs/api.config";
+import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
 
 export const brandApi = createApi({
   reducerPath: "brandApi",
-  baseQuery: fetchBaseQuery({
+  baseQuery: createBaseQueryWithDummyFallback("brand", {
     baseUrl: SHOP_URL + api_routes.brands,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
