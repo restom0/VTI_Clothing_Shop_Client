@@ -7,12 +7,13 @@ import { Avatar } from "@material-tailwind/react/components/Avatar";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { ChevronDownIcon, Bars2Icon } from "@heroicons/react/24/solid";
 import { account_menu } from "../../../constants/menu_item.constant";
+import { STORAGE_KEYS } from "../../../constants/storage.constant";
 
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
-  if (!localStorage.getItem("token")) {
+  if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) {
     window.location.href = "/login";
   }
   return (
@@ -29,7 +30,7 @@ const ProfileMenu = () => {
             alt="tania andrew"
             className="border border-gray-900 p-0.5"
             src={
-              localStorage.getItem("avatar") ||
+              localStorage.getItem(STORAGE_KEYS.AVATAR) ||
               "https://cdn.fakercloud.com/avatars/brunodesign1206_128.jpg"
             }
           />

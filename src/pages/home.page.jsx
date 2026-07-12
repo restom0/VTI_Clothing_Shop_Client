@@ -111,11 +111,7 @@ const Homepage = () => {
   const { data: products, isLoading, error } = useGetOnSaleProductsQuery();
 
   if (isLoading) {
-    return (
-      <div className="home-hero">
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) return <div>{getHomeErrorMessage(error, t)}</div>;

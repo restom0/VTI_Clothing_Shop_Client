@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
@@ -47,7 +48,7 @@ const Step2Checkout = ({ handleNext, handlePrev }) => {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               {t("checkout.order_details")} #MX2001
             </Typography>
-            <Typography as="a" href="/cart" color="cyan">
+            <Typography as="a" href={ROUTES.CART} color="cyan">
               {t("checkout.edit")}
             </Typography>
           </div>

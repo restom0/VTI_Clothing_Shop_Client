@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { Button } from "@material-tailwind/react/components/Button";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
@@ -139,7 +140,7 @@ const ProductList = () => {
       }).then(() => {
         // if (err.originalStatus === 401) {
         //   localStorage.clear();
-        //   navigate("/login");
+        //   navigate(ROUTES.LOGIN);
         // }
       });
     }
@@ -172,7 +173,7 @@ const ProductList = () => {
     }
   };
   if (isLoading_Brand || isLoading_Category || isLoading_Product) return <Loading />;
-  if (isError_Brand || isError_Category || isError_Product) return navigate("/error");
+  if (isError_Brand || isError_Category || isError_Product) return navigate(ROUTES.ERROR);
   const ListProduct = [];
   products && products.object.length > 0;
   products.object.map((item) => {

@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/components/Menu";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -13,7 +14,7 @@ const Log = () => {
   const { data: logs, isLoading: isLogsLoading, error: logsError } = useGetLogsQuery();
   const [filter, setFilter] = useState("ALL");
   if (isLogsLoading) return <Loading />;
-  if (logsError) return navigate("/error");
+  if (logsError) return navigate(ROUTES.ERROR);
   return (
     <>
       <AdminLayout

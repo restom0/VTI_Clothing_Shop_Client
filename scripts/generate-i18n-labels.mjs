@@ -103,11 +103,13 @@ const formatTranslations = (translations) =>
     .join("\n");
 
 const validateTranslations = (translations) => {
-  const fallbackKeys = Object.keys(translations[FALLBACK_LANGUAGE]).sort();
+  const fallbackKeys = Object.keys(translations[FALLBACK_LANGUAGE]).sort((a, b) =>
+    a.localeCompare(b)
+  );
   const errors = [];
 
   for (const { code } of SUPPORTED_LANGUAGES) {
-    const keys = Object.keys(translations[code]).sort();
+    const keys = Object.keys(translations[code]).sort((a, b) => a.localeCompare(b));
     const missing = fallbackKeys.filter((key) => !keys.includes(key));
     const extra = keys.filter((key) => !fallbackKeys.includes(key));
 

@@ -14,14 +14,15 @@ import { allorder_tab } from "../../constants/tab.constant";
 import TableHeader from "../shared/header_table";
 import { order } from "../../constants/head_table.constant";
 import { useI18n } from "../../i18n";
+import { ORDER_STATUS } from "../../constants/status.constant";
 
 const ORDER_STATUS_LABEL_KEYS = {
   CANCELLED: "order.status_cancelled",
   COMPLETED: "order.status_completed",
   CONFIRMED: "order.status_confirmed",
   DELIVERING: "order.status_delivering",
-  ONHOLD: "order.status_on_hold",
   ON_HOLD: "order.status_on_hold",
+  NOT_CONFIRMED: "order.status_on_hold",
 };
 
 const TABLE_ROWS = [
@@ -126,13 +127,13 @@ const Order = () => {
                         size="sm"
                         value={getOrderStatusLabel(status)}
                         color={
-                          status === "ONHOLD"
+                          status === ORDER_STATUS.ON_HOLD
                             ? "blue-gray"
-                            : status === "CONFIRMED"
+                            : status === ORDER_STATUS.CONFIRMED
                               ? "cyan"
-                              : status === "DELIVERING"
+                              : status === ORDER_STATUS.DELIVERING
                                 ? "blue"
-                                : status === "COMPLETED"
+                                : status === ORDER_STATUS.COMPLETED
                                   ? "green"
                                   : "red"
                         }
@@ -146,7 +147,11 @@ const Order = () => {
                   </td>
                   <td className={classes}>
                     <Tooltip content={t("order.cancel_order")}>
-                      <IconButton variant="text" color="red" disabled={status === "CANCELLED"}>
+                      <IconButton
+                        variant="text"
+                        color="red"
+                        disabled={status === ORDER_STATUS.CANCELLED}
+                      >
                         <DeleteIcon className="h-4 w-4" />
                       </IconButton>
                     </Tooltip>

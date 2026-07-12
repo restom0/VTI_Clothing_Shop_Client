@@ -1,3 +1,4 @@
+import { ROUTES } from "../constants/routes.constant";
 import { useState } from "react";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Input } from "@material-tailwind/react/components/Input";
@@ -50,7 +51,7 @@ const Registerpage = () => {
         icon: "success",
         title: t("auth.register_success"),
       }).then(() => {
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
       });
     } else {
       Toast.fire({
@@ -286,7 +287,7 @@ const Registerpage = () => {
         <div className="auth-form-grid">
           <div className="w-100 my-5 mx-5">
             <Button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate(ROUTES.LOGIN)}
               color="indigo"
               className="w-full"
               loading={isLoading}

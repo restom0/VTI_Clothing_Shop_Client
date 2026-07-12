@@ -64,7 +64,7 @@ const Brand = () => {
       }).then(() => {
         // if (err.originalStatus === 401) {
         //   localStorage.clear();
-        //   navigate("/login");
+        //   navigate(ROUTES.LOGIN);
         // }
       });
     }

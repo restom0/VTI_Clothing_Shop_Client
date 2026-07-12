@@ -1,3 +1,4 @@
+import { ROUTES } from "../../../constants/routes.constant";
 import React, { useEffect } from "react";
 import "./NavbarWithSublist.css";
 import { Navbar } from "@material-tailwind/react/components/Navbar";
@@ -24,6 +25,7 @@ import useDelayedLoading from "../../../hooks/useDelayedLoading.hook";
 import { useCurrency } from "../../../currency";
 import { useI18n } from "../../../i18n";
 import { ACTION_ROW_CLASSNAME } from "../../../styles/classNames";
+import { STORAGE_KEYS } from "../../../constants/storage.constant";
 import {
   NAV_SKELETON_DELAY_MS,
   NAV_SKELETON_WIDTHS,
@@ -36,7 +38,7 @@ import {
   getNavbarLabels,
 } from "./navbar.helpers";
 
-const hasAuthToken = () => Boolean(localStorage.getItem("token"));
+const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
 const SearchSVG = () => (
   <svg width="13" height="14" viewBox="0 0 14 15" fill="none">
@@ -154,15 +156,15 @@ NavListMenu.propTypes = {
 
 export const NavListView = ({ brands, categories, labels }) => (
   <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-    <a href="/product">
+    <a href={ROUTES.PRODUCT}>
       <ListItem className="nav-list-item">{labels.productList}</ListItem>
     </a>
     <NavListMenu name={labels.brands} type="brand" data={brands} />
     <NavListMenu name={labels.categories} type="category" data={categories} />
-    <a href="/about-us">
+    <a href={ROUTES.ABOUT_US}>
       <ListItem className="nav-list-item">{labels.aboutUs}</ListItem>
     </a>
-    <a href="/contact">
+    <a href={ROUTES.CONTACT}>
       <ListItem className="nav-list-item">{labels.contact}</ListItem>
     </a>
   </List>
@@ -189,7 +191,7 @@ const NavList = () => {
   const shouldShowSkeleton = useDelayedLoading(isNavLoading, NAV_SKELETON_DELAY_MS);
 
   if (err1 || err2) {
-    navigate("/error");
+    navigate(ROUTES.ERROR);
     return null;
   }
 
@@ -275,7 +277,7 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
     as="nav"
   >
     <div className="flex-between">
-      <a href="/" className="navbar-brand mr-4 lg:ml-2">
+      <a href={ROUTES.HOME} className="navbar-brand mr-4 lg:ml-2">
         <span className="brand-highlight">VTI</span> Shop
       </a>
 
@@ -346,7 +348,7 @@ export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) 
         <SeasonSwitcher />
         <ThemeSwitcher />
         <LanguageSwitcher />
-        <a href="/login" className="flex-1">
+        <a href={ROUTES.LOGIN} className="flex-1">
           <Button variant="gradient" size="sm" color="blue-gray" fullWidth>
             {labels.login}
           </Button>
@@ -387,7 +389,7 @@ const NavbarWithSublist = () => {
   });
 
   useEffect(() => {
-    if (cart) localStorage.setItem("order_id", cart.object.id);
+    if (cart) localStorage.setItem(STORAGE_KEYS.ORDER_ID, cart.object.id);
   }, [cart]);
 
   const goToCart = () => navigate(getCartRoute(hasAuthToken()));

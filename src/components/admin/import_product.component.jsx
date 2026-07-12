@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { Button } from "@material-tailwind/react/components/Button";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Typography } from "@material-tailwind/react/components/Typography";
@@ -71,6 +72,11 @@ import {
   IMPORT_UPLOAD_STACK_CLASSNAME,
   IMPORT_UPLOAD_TEXT_CLASSNAME,
 } from "../../styles/classNames";
+
+const genderLabel = (gender) => (gender === "MALE" ? "Nam" : gender === "FEMALE" ? "Nữ" : "Unisex");
+
+const clampRange = (raw, min, max) => (isNaN(raw) || raw < min ? min : raw > max ? max : raw);
+const clampFloor = (raw, min) => (isNaN(raw) || raw < min ? min : raw);
 
 const ImportProduct = () => {
   const navigate = useNavigate();
@@ -238,11 +244,11 @@ const ImportProduct = () => {
       }).then(() => {
         if (err && err.status === 401) {
           localStorage.clear();
-          navigate("/login");
+          navigate(ROUTES.LOGIN);
         }
         // if (err.originalStatus === 401) {
         //   localStorage.clear();
-        //   navigate("/login");
+        //   navigate(ROUTES.LOGIN);
         // }
       });
     }
@@ -353,7 +359,15 @@ const ImportProduct = () => {
     }
   }, [product, color_code, size, material, importedProducts?.object]);
   if (isLoading || isLoading_ImportProducts) return <Loading />;
-  if (error || isError_ImportedProducts) return navigate("/error");
+  if (error || isError_ImportedProducts) return navigate(ROUTES.ERROR);
+  // Single accessor for "show the selected imported product's field, else blank".
+  // Replaces the deeply-nested selectedId/importedProducts ternaries below.
+  const selectedImport =
+    selectedId === -1
+      ? null
+      : (importedProducts?.object?.find((row) => row.id === selectedId) ?? null);
+  const importField = (selector, fallback = "") =>
+    selectedImport ? (selector(selectedImport) ?? fallback) : fallback;
   const ListImportProducts = importedProducts.object.map((product) => {
     return {
       id: product.id,
@@ -382,16 +396,7 @@ const ImportProduct = () => {
                 <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                   <figure>
                     <img
-                      src={
-                        selectedId === -1
-                          ? ""
-                          : importedProducts
-                            ? importedProducts.object.length > 0
-                              ? importedProducts.object.find((row) => row.id === selectedId)
-                                  ?.image_url || ""
-                              : ""
-                            : ""
-                      }
+                      src={importField((s) => s.image_url)}
                       alt=""
                       className={IMPORT_DETAIL_MAIN_IMAGE_CLASSNAME}
                     />
@@ -408,16 +413,7 @@ const ImportProduct = () => {
                   <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : importedProducts
-                              ? importedProducts.object.length > 0
-                                ? importedProducts.object.find((row) => row.id === selectedId)
-                                    ?.slider_url_1 || ""
-                                : ""
-                              : ""
-                        }
+                        src={importField((s) => s.slider_url_1)}
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
@@ -433,16 +429,7 @@ const ImportProduct = () => {
                   <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : importedProducts
-                              ? importedProducts.object.length > 0
-                                ? importedProducts.object.find((row) => row.id === selectedId)
-                                    ?.slider_url_2 || ""
-                                : ""
-                              : ""
-                        }
+                        src={importField((s) => s.slider_url_2)}
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
@@ -458,16 +445,7 @@ const ImportProduct = () => {
                   <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : importedProducts
-                              ? importedProducts.object.length > 0
-                                ? importedProducts.object.find((row) => row.id === selectedId)
-                                    ?.slider_url_3 || ""
-                                : ""
-                              : ""
-                        }
+                        src={importField((s) => s.slider_url_3)}
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
@@ -483,16 +461,7 @@ const ImportProduct = () => {
                   <div className={IMPORT_DETAIL_MEDIA_ITEM_CLASSNAME}>
                     <figure>
                       <img
-                        src={
-                          selectedId === -1
-                            ? ""
-                            : importedProducts
-                              ? importedProducts.object.length > 0
-                                ? importedProducts.object.find((row) => row.id === selectedId)
-                                    ?.slider_url_4 || ""
-                                : ""
-                              : ""
-                        }
+                        src={importField((s) => s.slider_url_4)}
                         alt=""
                         className={IMPORT_DETAIL_THUMB_IMAGE_CLASSNAME}
                       />
@@ -510,139 +479,50 @@ const ImportProduct = () => {
               <div className={IMPORT_FORM_GRID_CLASSNAME}>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h5">Sản phẩm: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.product_id
-                              .name || ""
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.product_id.name)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Mã màu: </Typography>
                   <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.color_id
-                              .color_code || ""
-                          : ""
-                        : ""}
+                    {importField((s) => s.color_id.color_code)}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Màu sắc: </Typography>
                   <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.color_id
-                              .color_name || ""
-                          : ""
-                        : ""}
+                    {importField((s) => s.color_id.color_name)}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Kích thước: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
-                              .size || ""
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.size_id.size)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Chiều cao: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
-                              .height || ""
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.size_id.height)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Cân nặng: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.size_id
-                              .weight || ""
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.size_id.weight)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Vật liệu: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)
-                              ?.material_id.name || ""
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.material_id.name)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giới tính </Typography>
                   <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)?.gender ===
-                            "MALE"
-                            ? "Nam"
-                            : importedProducts.object.find((row) => row.id === selectedId)
-                                  ?.gender === "FEMALE"
-                              ? "Nữ"
-                              : "Unisex"
-                          : ""
-                        : ""}
+                    {importField((s) => genderLabel(s.gender))}
                   </Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Số lượng: </Typography>
-                  <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? importedProducts.object.find((row) => row.id === selectedId)
-                              ?.importNumber
-                          : ""
-                        : ""}
-                  </Typography>
+                  <Typography variant="medium">{importField((s) => s.importNumber)}</Typography>
                 </div>
                 <div className={IMPORT_DETAIL_FIELD_CLASSNAME}>
                   <Typography variant="h6">Giá nhập </Typography>
                   <Typography variant="medium">
-                    {selectedId === -1
-                      ? ""
-                      : importedProducts
-                        ? importedProducts.object.length > 0
-                          ? formatOptionalPrice(
-                              importedProducts.object.find((row) => row.id === selectedId)
-                                ?.importPrice
-                            )
-                          : ""
-                        : ""}
+                    {importField((s) => formatOptionalPrice(s.importPrice))}
                   </Typography>
                 </div>
               </div>
@@ -1018,15 +898,7 @@ const ImportProduct = () => {
                     value={updateHeight}
                     id="outlined-adornment-weight"
                     endAdornment={<InputAdornment position="end">cm</InputAdornment>}
-                    onChange={(e) =>
-                      setUpdateHeight(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 300
-                            ? 300
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateHeight(clampRange(e.target.value, 0, 300))}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1036,15 +908,7 @@ const ImportProduct = () => {
                     value={updateWeight}
                     id="outlined-adornment-weight"
                     endAdornment={<InputAdornment position="end">kg</InputAdornment>}
-                    onChange={(e) =>
-                      setUpdateWeight(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 150
-                            ? 150
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateWeight(clampRange(e.target.value, 0, 150))}
                   />
                 </div>
 
@@ -1088,11 +952,7 @@ const ImportProduct = () => {
                   <OutlinedInput
                     size="small"
                     value={updateImportNumber}
-                    onChange={(e) =>
-                      setUpdateImportNumber(
-                        isNaN(e.target.value) || e.target.value < 1 ? 1 : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateImportNumber(clampFloor(e.target.value, 1))}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1101,11 +961,7 @@ const ImportProduct = () => {
                     size="small"
                     value={updateImportPrice}
                     endAdornment={<InputAdornment position="end">đ</InputAdornment>}
-                    onChange={(e) =>
-                      setUpdateImportPrice(
-                        isNaN(e.target.value) || e.target.value < 1000 ? 1000 : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateImportPrice(clampFloor(e.target.value, 1000))}
                   />
                 </div>
               </div>
@@ -1529,15 +1385,7 @@ const ImportProduct = () => {
                     value={height}
                     placeholder="170"
                     endAdornment={<InputAdornment position="end">cm</InputAdornment>}
-                    onChange={(e) =>
-                      setHeight(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 300
-                            ? 300
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setHeight(clampRange(e.target.value, 0, 300))}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1548,15 +1396,7 @@ const ImportProduct = () => {
                     value={weight}
                     placeholder="80"
                     endAdornment={<InputAdornment position="end">kg</InputAdornment>}
-                    onChange={(e) =>
-                      setWeight(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 150
-                            ? 150
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setWeight(clampRange(e.target.value, 0, 150))}
                   />
                 </div>
 

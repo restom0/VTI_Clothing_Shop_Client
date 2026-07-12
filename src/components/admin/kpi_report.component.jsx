@@ -4,6 +4,7 @@ import { Card, CardBody } from "@material-tailwind/react/components/Card";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import PropTypes from "prop-types";
 import { useCurrency } from "../../currency";
+import { useI18n } from "../../i18n";
 
 const KpiCard = ({ title, percentage, price, color, icon }) => {
   return (
@@ -30,117 +31,119 @@ const formatMoney = (money) => {
 };
 const income = [
   {
-    title: "Doanh thu",
+    titleKey: "kpi.revenue",
     percentage: "12%",
     price: formatMoney(10000000),
     color: "red",
     icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
   },
   {
-    title: "Số đơn hàng",
+    titleKey: "kpi.order_count",
     percentage: "16%",
     price: "10,342",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Số đơn giao thành công",
+    titleKey: "kpi.completed_orders",
     percentage: "10%",
     price: "19,720",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Tháng doanh thu cao nhất",
+    titleKey: "report.highest_revenue_month",
     price: "12",
   },
 ];
 const category = [
   {
-    title: "Tổng số danh mục",
+    titleKey: "report.total_categories",
     percentage: "12%",
     price: formatMoney(10000000),
     color: "red",
     icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
   },
   {
-    title: "Bán nhiều nhất",
+    titleKey: "report.best_selling",
     percentage: "16%",
     price: "10,342",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Doanh thu cao nhất",
+    titleKey: "report.highest_revenue",
     percentage: "10%",
     price: "19,720",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Được yêu thích nhất",
+    titleKey: "report.most_favorited",
     price: "12",
   },
 ];
 const brand = [
   {
-    title: "Tổng số thương hiệu",
+    titleKey: "report.total_brands",
     percentage: "12%",
     price: formatMoney(10000000),
     color: "red",
     icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
   },
   {
-    title: "Bán nhiều nhất",
+    titleKey: "report.best_selling",
     percentage: "16%",
     price: "10,342",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Doanh thu cao nhất",
+    titleKey: "report.highest_revenue",
     percentage: "10%",
     price: "19,720",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Được yêu thích nhất",
+    titleKey: "report.most_favorited",
     price: "12",
   },
 ];
 const product = [
   {
-    title: "Tồn kho",
+    titleKey: "report.stock",
     percentage: "12%",
     price: formatMoney(10000000),
     color: "red",
     icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
   },
   {
-    title: "Số sản phẩm bán ra",
+    titleKey: "kpi.products_sold",
     percentage: "16%",
     price: "10,342",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Bán chạy nhất",
+    titleKey: "report.top_seller",
     percentage: "10%",
     price: "19,720",
     color: "green",
     icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
   },
   {
-    title: "Được yêu thích nhât",
+    titleKey: "report.most_favorited",
     price: "12",
   },
 ];
 const KpiReport = ({ tab }) => {
+  const { t } = useI18n();
   const { formatPrice } = useCurrency();
   const getDisplayCards = (cards) =>
     cards.map((card) => ({
       ...card,
+      title: t(card.titleKey),
       price:
         card.price?.currencyAmount == null ? card.price : formatPrice(card.price.currencyAmount),
     }));
@@ -148,13 +151,13 @@ const KpiReport = ({ tab }) => {
   return (
     <section className="container mx-auto py-5 px-8">
       <div className="mt-6 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-center md:gap-2.5 gap-4">
-        {tab === "doanh thu" &&
+        {tab === "revenue" &&
           getDisplayCards(income).map((props, key) => <KpiCard key={key} {...props} />)}
-        {tab === "thương hiệu" &&
+        {tab === "brand" &&
           getDisplayCards(brand).map((props, key) => <KpiCard key={key} {...props} />)}
-        {tab === "danh mục" &&
+        {tab === "category" &&
           getDisplayCards(category).map((props, key) => <KpiCard key={key} {...props} />)}
-        {tab === "sản phẩm" &&
+        {tab === "product" &&
           getDisplayCards(product).map((props, key) => <KpiCard key={key} {...props} />)}
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import PropTypes from "prop-types"; // Import PropTypes
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { Button } from "@material-tailwind/react/components/Button";
@@ -30,7 +31,11 @@ export function NotificationLayout({ notification, noti }) {
         <Typography className="mt-8 mb-14 text-[18px] font-normal text-gray-500 mx-auto md:max-w-lg">
           {t(activeNotification.subtitleKey)}
         </Typography>
-        <Button color="gray" className="w-full px-4 md:w-[8rem]" onClick={() => navigate("/")}>
+        <Button
+          color="gray"
+          className="w-full px-4 md:w-[8rem]"
+          onClick={() => navigate(ROUTES.HOME)}
+        >
           {t("common.back_home")}
         </Button>
       </div>

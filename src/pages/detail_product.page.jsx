@@ -1,4 +1,6 @@
+import { ROUTES } from "../constants/routes.constant";
 import React, { useEffect, useState } from "react";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 import {
   Accordion,
   AccordionBody,
@@ -188,7 +190,7 @@ const ProductDetailpage = () => {
       </div>
     );
   if (error) {
-    navigate("/error");
+    navigate(ROUTES.ERROR);
     return null;
   }
 
@@ -196,10 +198,10 @@ const ProductDetailpage = () => {
   if (!firstItem) return null;
 
   const handleAddCart = async () => {
-    if (!localStorage.getItem("token")) return navigate("/login");
+    if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {
       await createOrderItem({
-        order_id: Number(localStorage.getItem("order_id")),
+        order_id: Number(localStorage.getItem(STORAGE_KEYS.ORDER_ID)),
         product_id: firstItem.id,
         quantity: 1,
       }).unwrap();
@@ -210,10 +212,10 @@ const ProductDetailpage = () => {
   };
 
   const handleAddCarts = async () => {
-    if (!localStorage.getItem("token")) return navigate("/login");
+    if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {
       await createOrderItem({
-        order_id: Number(localStorage.getItem("order_id")),
+        order_id: Number(localStorage.getItem(STORAGE_KEYS.ORDER_ID)),
         product_id: firstItem.id,
         quantity: amount,
       }).unwrap();

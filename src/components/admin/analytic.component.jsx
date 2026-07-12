@@ -9,8 +9,10 @@ import { Container } from "@mui/material";
 import { useGetStatQuery } from "../../apis/statistic.api";
 import { getChartDatasetTheme } from "../../constants/chart_theme.constant";
 import Loading from "../shared/loading.component";
+import { useI18n } from "../../i18n";
 
 const Analytic = () => {
+  const { t } = useI18n();
   const { data: datas, isLoading, error } = useGetStatQuery();
   if (isLoading) return <Loading />;
   if (error) return <div>Error: {error?.message ?? "Unable to load stats"}</div>;
@@ -25,18 +27,18 @@ const Analytic = () => {
 
   const data = {
     labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      t("month.1"),
+      t("month.2"),
+      t("month.3"),
+      t("month.4"),
+      t("month.5"),
+      t("month.6"),
+      t("month.7"),
+      t("month.8"),
+      t("month.9"),
+      t("month.10"),
+      t("month.11"),
+      t("month.12"),
     ],
     datasets: datasets,
   };
@@ -53,7 +55,7 @@ const Analytic = () => {
       <Container className="mt-5">
         <div className="flex justify-between my-auto">
           <Typography variant="h3" className="font-bold ">
-            Thống kê
+            {t("analytics.title")}
           </Typography>
           {/* <div className="shrink-0">
             <Menu>
@@ -138,13 +140,13 @@ const Analytic = () => {
             <CardFooter className="flex gap-6 flex-wrap items-center justify-between">
               <div>
                 <Typography variant="h6" color="blue-gray">
-                  Doanh thu hàng năm
+                  {t("analytics.annual_revenue")}
                 </Typography>
                 <Typography variant="small" className="font-normal text-gray-600 mt-1">
-                  So sánh doanh thu các tháng với năm gần nhất
+                  {t("analytics.annual_revenue_desc")}
                 </Typography>
               </div>
-              <Button variant="outlined">Xem báo cáo</Button>
+              <Button variant="outlined">{t("analytics.view_report")}</Button>
             </CardFooter>
           </Card>
         </section>

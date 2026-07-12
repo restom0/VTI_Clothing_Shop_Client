@@ -68,6 +68,7 @@ describe("navbar helpers", () => {
       cart: "common.cart",
       itemCount: "common.items:4",
       total: "common.total",
+      productImageAlt: "nav.cart_product_image_alt",
     });
   });
 

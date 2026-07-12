@@ -1,3 +1,4 @@
+import { ROUTES } from "../../../constants/routes.constant";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -21,7 +22,7 @@ const HomeProductList = ({ title, products }) => {
         <h2 className="section-title">{title}</h2>
         <button
           className="flex items-center justify-end gap-1 btn-ghost text-sm ml-auto"
-          onClick={() => navigate("/product")}
+          onClick={() => navigate(ROUTES.PRODUCT)}
         >
           {t("common.view_more")} <EastIcon fontSize="small" />
         </button>

@@ -1,13 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { api_routes, SHOP_URL } from "../configs/api.config";
 import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 export const InputSaleApi = createApi({
   reducerPath: "InputSaleApi",
   baseQuery: createBaseQueryWithDummyFallback("inputSale", {
     baseUrl: SHOP_URL + api_routes.input_sales,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },

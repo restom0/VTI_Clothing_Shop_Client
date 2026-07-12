@@ -1,3 +1,4 @@
+import { ROUTES } from "../../../constants/routes.constant";
 import PropTypes from "prop-types";
 import { useI18n } from "../../../i18n";
 import { FOOTER_MENU, SOCIAL_LINKS } from "./footer.config";
@@ -32,7 +33,7 @@ export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
       <div className="footer-bottom">
         <p className="footer-copyright">
           &copy; {year}{" "}
-          <a href="/" className="footer-home-link">
+          <a href={ROUTES.HOME} className="footer-home-link">
             VTI Corporation
           </a>
           . {t("common.all_rights_reserved")}

@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { api_routes, SHOP_URL } from "../configs/api.config";
 import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 export const OrderItemApi = createApi({
   reducerPath: "OrderItemApi",
@@ -28,7 +29,7 @@ export const OrderItemApi = createApi({
         body: { order_id, product_id, quantity },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
         },
       }),
       invalidatesTags: ["OrderItem"],

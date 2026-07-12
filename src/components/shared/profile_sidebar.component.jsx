@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { Card } from "@material-tailwind/react/components/Card";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { List, ListItem, ListItemPrefix } from "@material-tailwind/react/components/List";
@@ -7,6 +8,7 @@ import PropTypes from "prop-types";
 import { profile_menu } from "../../constants/menu_item.constant";
 import { Avatar } from "@mui/material";
 import { useI18n } from "../../i18n";
+import { STORAGE_KEYS } from "../../constants/storage.constant";
 const ProfileSidebar = ({ tab, setTab }) => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -23,7 +25,7 @@ const ProfileSidebar = ({ tab, setTab }) => {
         <div className="p-10">
           <div className="flex items-center gap-4">
             <Avatar
-              src={localStorage.getItem("avatar")}
+              src={localStorage.getItem(STORAGE_KEYS.AVATAR)}
               alt="avatar"
               sx={{ width: 80, height: 80 }}
             />
@@ -31,7 +33,7 @@ const ProfileSidebar = ({ tab, setTab }) => {
               <Typography variant="small" color="gray" className="font-normal">
                 {t("profile.account_of")}
               </Typography>
-              <Typography variant="h6">{localStorage.getItem("name")}</Typography>
+              <Typography variant="h6">{localStorage.getItem(STORAGE_KEYS.NAME)}</Typography>
             </div>
           </div>
         </div>
@@ -46,8 +48,8 @@ const ProfileSidebar = ({ tab, setTab }) => {
           ))}
           <ListItem
             onClick={() => {
-              localStorage.removeItem("token");
-              navigate("/login");
+              localStorage.removeItem(STORAGE_KEYS.TOKEN);
+              navigate(ROUTES.LOGIN);
             }}
           >
             <ListItemPrefix>

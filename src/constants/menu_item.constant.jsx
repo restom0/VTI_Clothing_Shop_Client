@@ -144,7 +144,12 @@ const profile_menu = [
     link: <Voucher />,
   },
 ];
-const report_items = ["doanh thu", "thương hiệu", "danh mục", "sản phẩm"];
+const report_items = [
+  { id: "revenue", labelKey: "report.tab_revenue" },
+  { id: "brand", labelKey: "report.tab_brand" },
+  { id: "category", labelKey: "report.tab_category" },
+  { id: "product", labelKey: "report.tab_product" },
+];
 const filter_items = [
   { value: "ALL", label: "Tất cả" },
   { value: "PRODUCT", label: "Sản phẩm" },

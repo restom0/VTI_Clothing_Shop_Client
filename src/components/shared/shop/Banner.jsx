@@ -1,3 +1,4 @@
+import { ROUTES } from "../../../constants/routes.constant";
 import React from "react";
 import { Navbar } from "@material-tailwind/react/components/Navbar";
 import { Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react/components/Menu";
@@ -9,8 +10,9 @@ import PropTypes from "prop-types";
 import { account_menu } from "../../../constants/menu_item.constant";
 import { useI18n } from "../../../i18n";
 import { getAccountMenuItems, getBannerLabels } from "./banner.helpers";
+import { STORAGE_KEYS } from "../../../constants/storage.constant";
 
-const hasAuthToken = () => Boolean(localStorage.getItem("token"));
+const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
 export const ProfileMenuView = ({ accountItems, avatarUrl, isMenuOpen, onMenuOpenChange }) => (
   <Menu open={isMenuOpen} handler={onMenuOpenChange} placement="bottom-end">
@@ -77,7 +79,7 @@ const ProfileMenu = () => {
   return (
     <ProfileMenuView
       accountItems={getAccountMenuItems(account_menu, t)}
-      avatarUrl={localStorage.getItem("avatar")}
+      avatarUrl={localStorage.getItem(STORAGE_KEYS.AVATAR)}
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
     />
@@ -133,8 +135,8 @@ const Banner = () => {
     <BannerView
       isAuthenticated={hasAuthToken()}
       labels={getBannerLabels(t)}
-      onLoginClick={() => navigate("/login")}
-      onRegisterClick={() => navigate("/register")}
+      onLoginClick={() => navigate(ROUTES.LOGIN)}
+      onRegisterClick={() => navigate(ROUTES.REGISTER)}
     />
   );
 };

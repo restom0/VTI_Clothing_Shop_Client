@@ -11,23 +11,27 @@ import KpiReport from "./kpi_report.component";
 import { report_items } from "../../constants/menu_item.constant";
 import Table from "../shared/table.component";
 import { CHART_TITLE_FONT_SIZE, getChartDatasetTheme } from "../../constants/chart_theme.constant";
+import { useI18n } from "../../i18n";
 
 const Report = () => {
-  const [tab, setTab] = React.useState("doanh thu");
+  const { t } = useI18n();
+  const [tab, setTab] = React.useState("revenue");
+  const activeTab = report_items.find((item) => item.id === tab);
+  const tabLabel = activeTab ? t(activeTab.labelKey) : tab;
   const lineData = {
     labels: [
-      "Tháng 1",
-      "Tháng 2",
-      "Tháng 3",
-      "Tháng 4",
-      "Tháng 5",
-      "Tháng 6",
-      "Tháng 7",
-      "Tháng 8",
-      "Tháng 9",
-      "Tháng 10",
-      "Tháng 11",
-      "Tháng 12",
+      t("month.1"),
+      t("month.2"),
+      t("month.3"),
+      t("month.4"),
+      t("month.5"),
+      t("month.6"),
+      t("month.7"),
+      t("month.8"),
+      t("month.9"),
+      t("month.10"),
+      t("month.11"),
+      t("month.12"),
     ],
     datasets: [
       {
@@ -64,18 +68,18 @@ const Report = () => {
   };
   const barData = {
     labels: [
-      "Tháng 1",
-      "Tháng 2",
-      "Tháng 3",
-      "Tháng 4",
-      "Tháng 5",
-      "Tháng 6",
-      "Tháng 7",
-      "Tháng 8",
-      "Tháng 9",
-      "Tháng 10",
-      "Tháng 11",
-      "Tháng 12",
+      t("month.1"),
+      t("month.2"),
+      t("month.3"),
+      t("month.4"),
+      t("month.5"),
+      t("month.6"),
+      t("month.7"),
+      t("month.8"),
+      t("month.9"),
+      t("month.10"),
+      t("month.11"),
+      t("month.12"),
     ],
     datasets: [
       {
@@ -95,7 +99,7 @@ const Report = () => {
     plugins: {
       title: {
         display: true,
-        text: `Biểu đồ Top 5 ` + tab + ` các tháng năm ` + new Date().getFullYear(),
+        text: t("report.chart_top5", { tab: tabLabel, year: new Date().getFullYear() }),
         font: {
           size: CHART_TITLE_FONT_SIZE,
         },
@@ -111,7 +115,7 @@ const Report = () => {
     plugins: {
       title: {
         display: true,
-        text: `Biểu đồ ` + tab + ` 2024`,
+        text: t("report.chart_bar", { tab: tabLabel }),
         font: {
           size: CHART_TITLE_FONT_SIZE,
         },
@@ -119,10 +123,10 @@ const Report = () => {
     },
   };
   const TABLE_HEAD = [
-    { label: "Tên", col: 1 },
-    { label: "Số lượng bán ra", col: 1 },
-    { label: "Doanh thu", col: 1 },
-    { label: "Đánh giá", col: 1 },
+    { label: t("report.col_name"), col: 1 },
+    { label: t("report.col_quantity_sold"), col: 1 },
+    { label: t("kpi.revenue"), col: 1 },
+    { label: t("report.col_rating"), col: 1 },
   ];
   const TABLE_ROWS = [
     {
@@ -186,13 +190,12 @@ const Report = () => {
       rating: 1,
     },
   ];
-  const handleTab = (e) => setTab(e.target.value);
   return (
     <>
       <Container className="mt-5">
         <div className="flex justify-between my-auto">
           <Typography variant="h3" className="font-bold ">
-            Báo cáo
+            {t("report.title")}
           </Typography>
           <div className="flex items-center justify-between gap-4">
             <div className="shrink-0">
@@ -203,21 +206,26 @@ const Report = () => {
                     variant="outlined"
                     className="flex items-center gap-1 !border-gray-300"
                   >
-                    {tab}
+                    {tabLabel}
                     <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-gray-900" />
                   </Button>
                 </MenuHandler>
                 <MenuList>
                   {report_items.map((item) => (
-                    <MenuItem key={item} value={item} onClick={handleTab} className="uppercase">
-                      {item}
+                    <MenuItem
+                      key={item.id}
+                      value={item.id}
+                      onClick={() => setTab(item.id)}
+                      className="uppercase"
+                    >
+                      {t(item.labelKey)}
                     </MenuItem>
                   ))}
                 </MenuList>
               </Menu>
             </div>
             <Button className=" !border-gray-300" color="gray" variant="outlined">
-              Export
+              {t("report.export")}
             </Button>
           </div>
         </div>

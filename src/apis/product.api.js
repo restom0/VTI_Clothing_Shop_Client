@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { api_routes, SHOP_URL } from "../configs/api.config";
 import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 export const ProductApi = createApi({
   reducerPath: "ProductApi",
@@ -23,7 +24,7 @@ export const ProductApi = createApi({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
         },
         body: { name, short_description, brand_id, category_id },
       }),
@@ -35,7 +36,7 @@ export const ProductApi = createApi({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
         },
         body: { name, short_description, brand_id, category_id },
       }),
@@ -48,7 +49,7 @@ export const ProductApi = createApi({
       }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
       },
       invalidatesTags: ["Product"],
     }),

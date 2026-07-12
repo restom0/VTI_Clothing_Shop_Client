@@ -24,7 +24,9 @@ describe("i18n translations", () => {
 
     SUPPORTED_LANGUAGES.forEach(({ code }) => {
       expect(translations[code]).toBeDefined();
-      expect(Object.keys(translations[code]).sort()).toEqual(fallbackKeys.sort());
+      expect(Object.keys(translations[code]).sort((a, b) => a.localeCompare(b))).toEqual(
+        fallbackKeys.sort((a, b) => a.localeCompare(b))
+      );
     });
   });
 

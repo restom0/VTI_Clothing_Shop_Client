@@ -1,3 +1,4 @@
+import { ROUTES } from "../constants/routes.constant";
 import { Checkbox } from "@material-tailwind/react/components/Checkbox";
 import { IconButton } from "@material-tailwind/react/components/IconButton";
 import { Tooltip } from "@material-tailwind/react/components/Tooltip";
@@ -11,6 +12,7 @@ import { useUpdateOrderItemMutation } from "../apis/order_item.api";
 import { Toast } from "../configs/sweetalert2.config";
 import { useCurrency } from "../currency";
 import { useI18n } from "../i18n";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 // ─── SVG icons for quantity stepper ───────────────────────────────
 const MinusSVG = () => (
@@ -56,7 +58,7 @@ const CartPage = () => {
   const { t } = useI18n();
 
   // ── All hooks MUST be called unconditionally (Rules of Hooks) ──
-  const hasToken = Boolean(localStorage.getItem("token"));
+  const hasToken = Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
   const { data: cart, isLoading, error } = useGetCartQuery(undefined, { skip: !hasToken });
 
@@ -64,7 +66,7 @@ const CartPage = () => {
 
   // Redirect unauthenticated users AFTER hooks
   useEffect(() => {
-    if (!hasToken) navigate("/login", { replace: true });
+    if (!hasToken) navigate(ROUTES.LOGIN, { replace: true });
   }, [hasToken, navigate]);
 
   // ── Quantity update handler ────────────────────────────────────
@@ -73,7 +75,7 @@ const CartPage = () => {
     if (newQty < 1) return;
     try {
       await updateOrderItem({
-        id: localStorage.getItem("order_id"),
+        id: localStorage.getItem(STORAGE_KEYS.ORDER_ID),
         product_id: item.product_id?.id,
         quantity: newQty,
       });
@@ -219,7 +221,7 @@ const CartPage = () => {
           </div>
           <button
             className="btn-primary w-full mt-4"
-            onClick={() => navigate("/checkout")}
+            onClick={() => navigate(ROUTES.CHECKOUT)}
             disabled={items.length === 0}
           >
             {t("checkout.pay")}

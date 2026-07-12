@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { STORAGE_KEYS } from "../../constants/storage.constant";
 
 const initialState = {
-  value: localStorage.getItem("sidebar_item") || "Thống kê",
+  value: localStorage.getItem(STORAGE_KEYS.SIDEBAR_ITEM) || "Thống kê",
 };
 
 export const sidebar_itemSlice = createSlice({
@@ -10,7 +11,7 @@ export const sidebar_itemSlice = createSlice({
   reducers: {
     setSidebarItem: (state, action) => {
       state.value = action.payload.label;
-      localStorage.setItem("sidebar_item", action.payload.label);
+      localStorage.setItem(STORAGE_KEYS.SIDEBAR_ITEM, action.payload.label);
     },
   },
 });

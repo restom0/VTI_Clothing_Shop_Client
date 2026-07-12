@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import React from "react";
 import { Button } from "@material-tailwind/react/components/Button";
 import { Card, CardBody, CardFooter } from "@material-tailwind/react/components/Card";
@@ -11,10 +12,11 @@ import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useCurrency } from "../../currency";
 import { useI18n } from "../../i18n";
+import { STORAGE_KEYS } from "../../constants/storage.constant";
 
 const Step1Checkout = ({ handleNext }) => {
   const { t } = useI18n();
-  const [check, setCheck] = React.useState(localStorage.getItem("token") ? true : false);
+  const [check, setCheck] = React.useState(localStorage.getItem(STORAGE_KEYS.TOKEN) ? true : false);
 
   const [check1, setCheck1] = React.useState(false);
   const [check2, setCheck2] = React.useState(false);
@@ -28,7 +30,7 @@ const Step1Checkout = ({ handleNext }) => {
             1. {t("checkout.shipping_address")}
           </Typography>
           <List>
-            {localStorage.getItem("token") ? (
+            {localStorage.getItem(STORAGE_KEYS.TOKEN) ? (
               <ListItem onClick={() => setCheck(true)}>
                 <div className="flex items-center">
                   <Radio
@@ -56,7 +58,7 @@ const Step1Checkout = ({ handleNext }) => {
                 </div>
               </ListItem>
             ) : (
-              <ListItem onClick={() => navigate("/login")}>
+              <ListItem onClick={() => navigate(ROUTES.LOGIN)}>
                 <div className="flex items-center">
                   <Radio
                     name="address"
@@ -223,7 +225,7 @@ const Step1Checkout = ({ handleNext }) => {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               {t("checkout.confirm_order")}
             </Typography>
-            <Typography as="a" href="/cart" color="cyan">
+            <Typography as="a" href={ROUTES.CART} color="cyan">
               {t("checkout.edit")}
             </Typography>
           </div>

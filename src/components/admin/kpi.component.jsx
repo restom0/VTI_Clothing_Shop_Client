@@ -3,6 +3,7 @@ import { Card, CardBody } from "@material-tailwind/react/components/Card";
 
 import PropTypes from "prop-types";
 import { useCurrency } from "../../currency";
+import { useI18n } from "../../i18n";
 
 const KpiCard = ({ title, price }) => {
   return (
@@ -25,47 +26,18 @@ const KpiCard = ({ title, price }) => {
   );
 };
 const data = [
-  {
-    title: "Doanh thu",
-    // percentage: "12%",
-    // price: formatMoney(10000000),
-    // color: "red",
-    // icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
-  },
-  {
-    title: "Số đơn hàng",
-    // percentage: "16%",
-    // price: "10,342",
-    // color: "green",
-    // icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
-  },
-  {
-    title: "Số đơn giao thành công",
-    // percentage: "10%",
-    // price: "19,720",
-    // color: "green",
-    // icon: <ChevronUpIcon strokeWidth={4} className="w-3 h-3 text-green-500" />,
-  },
-  {
-    title: "Số người dùng",
-    // percentage: "10%",
-    // price: "20,000",
-    // color: "red",
-    // icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
-  },
-  {
-    title: "Số sản phẩm bán ra",
-    // percentage: "10%",
-    // price: "20,000",
-    // color: "red",
-    // icon: <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-red-500" />,
-  },
+  { titleKey: "kpi.revenue" },
+  { titleKey: "kpi.order_count" },
+  { titleKey: "kpi.completed_orders" },
+  { titleKey: "kpi.user_count" },
+  { titleKey: "kpi.products_sold" },
 ];
 
 const Kpi = ({ stat }) => {
+  const { t } = useI18n();
   const { formatPrice, locale } = useCurrency();
   const numberFormatter = new Intl.NumberFormat(locale);
-  const orderUnit = `${String.fromCharCode(273)}${String.fromCharCode(417)}n`;
+  const orderUnit = t("kpi.order_unit");
   const rows = data.map((item, index) => {
     const values = [
       formatPrice(stat.income),
@@ -75,7 +47,7 @@ const Kpi = ({ stat }) => {
       numberFormatter.format(stat.product ?? stat.soldProduct ?? 0),
     ];
 
-    return { ...item, price: values[index] };
+    return { title: t(item.titleKey), price: values[index] };
   });
 
   return (

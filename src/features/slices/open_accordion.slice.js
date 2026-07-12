@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { STORAGE_KEYS } from "../../constants/storage.constant";
 
 const initialState = {
-  value: Number(localStorage.getItem("open_accordion")) || 0,
+  value: Number(localStorage.getItem(STORAGE_KEYS.OPEN_ACCORDION)) || 0,
 };
 
 export const openAccordionSlice = createSlice({
@@ -10,7 +11,7 @@ export const openAccordionSlice = createSlice({
   reducers: {
     setOpenAccordion: (state, action) => {
       state.value = action.payload === state.value ? -1 : action.payload;
-      localStorage.setItem("open_accordion", action.payload);
+      localStorage.setItem(STORAGE_KEYS.OPEN_ACCORDION, action.payload);
     },
   },
 });

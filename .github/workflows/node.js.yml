@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -37,14 +39,31 @@ jobs:
         run: yarn format:check
 
       - name: Test with coverage
-        run: yarn test:coverage
+        run: yarn test:coverage # enforces coverage thresholds (vite.config.js)
+
+      - name: Publish test results
+        if: ${{ always() }}
+        uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
+        with:
+          report_paths: test-report.junit.xml
+          check_name: Client test results
+          fail_on_failure: false
+
+      - name: Upload coverage report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-coverage
+          path: coverage/
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Build
         run: yarn build
 
       - name: SonarCloud Quality Gate
         if: ${{ env.SONAR_TOKEN != '' && vars.SONAR_ORGANIZATION != '' }}
-        uses: SonarSource/sonarqube-scan-action@v8
+        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL || 'https://sonarcloud.io' }}

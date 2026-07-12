@@ -1,13 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { SHOP_URL, api_routes } from "../configs/api.config";
 import { createBaseQueryWithDummyFallback } from "./dummyFallback.api";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 export const accountApi = createApi({
   reducerPath: "AccountApi",
   baseQuery: createBaseQueryWithDummyFallback("account", {
     baseUrl: SHOP_URL + api_routes.users,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
       return headers;
     },

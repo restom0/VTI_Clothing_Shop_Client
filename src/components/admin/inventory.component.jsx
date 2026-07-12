@@ -36,8 +36,9 @@ import {
   PRODUCT_VARIANT_GRID_CLASSNAME,
 } from "../../styles/classNames";
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
+import { INVENTORY_FILTER } from "../../constants/status.constant";
 const Inventory = () => {
-  const [tab1, setTab1] = useState("ALL");
+  const [tab1, setTab1] = useState(INVENTORY_FILTER.ALL);
   const { formatPrice } = useCurrency();
   const [open, setOpen] = React.useState(false);
   const [importProducts, setImportProducts] = React.useState(null);
@@ -66,13 +67,13 @@ const Inventory = () => {
     error: importProductError,
   } = useGetImportedProductsQuery();
   useEffect(() => {
-    if (tab1 === "AVAILABLE") {
+    if (tab1 === INVENTORY_FILTER.AVAILABLE) {
       setImportProducts(importProduct?.object.filter((product) => product.stock > 0));
     }
-    if (tab1 === "OUT_OF_STOCK") {
+    if (tab1 === INVENTORY_FILTER.OUT_OF_STOCK) {
       setImportProducts(importProduct?.object.filter((product) => product.stock === 0));
     }
-    if (tab1 === "ALL") {
+    if (tab1 === INVENTORY_FILTER.ALL) {
       setImportProducts(importProduct?.object);
     }
   }, [tab1, importProduct]);

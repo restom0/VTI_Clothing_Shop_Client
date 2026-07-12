@@ -1,3 +1,4 @@
+import { ROUTES } from "../constants/routes.constant";
 import React from "react";
 import { Button } from "@material-tailwind/react/components/Button";
 import Divider from "@mui/material/Divider";
@@ -8,6 +9,7 @@ import { useLoginMutation } from "../apis/account.api";
 import { Toast } from "../configs/sweetalert2.config";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { STORAGE_KEYS } from "../constants/storage.constant";
 
 function Loginpage() {
   const navigate = useNavigate();
@@ -54,9 +56,9 @@ function Loginpage() {
         icon: "success",
         title: t("auth.login_success"),
       }).then(() => {
-        localStorage.setItem("avatar", message.object.avatar_url);
-        localStorage.setItem("name", message.object.name);
-        localStorage.setItem("token", message.object.token);
+        localStorage.setItem(STORAGE_KEYS.AVATAR, message.object.avatar_url);
+        localStorage.setItem(STORAGE_KEYS.NAME, message.object.name);
+        localStorage.setItem(STORAGE_KEYS.TOKEN, message.object.token);
         navigate(message.object.url);
       });
     } catch {
@@ -131,7 +133,7 @@ function Loginpage() {
             </div>
             <div className="max-w-sm mx-auto mt-5">
               <Button
-                onClick={() => navigate("/register")}
+                onClick={() => navigate(ROUTES.REGISTER)}
                 color="indigo"
                 className="w-full mb-5"
                 loading={isLoading}

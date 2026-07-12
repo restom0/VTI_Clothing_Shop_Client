@@ -1,3 +1,4 @@
+import { ROUTES } from "../../constants/routes.constant";
 import { useLocation } from "react-router-dom";
 import { Breadcrumbs } from "@material-tailwind/react/components/Breadcrumbs";
 
@@ -10,7 +11,7 @@ const BreadcrumbsWithIcon = () => {
   const last = pathname.pop();
   return (
     <Breadcrumbs>
-      <a href="/" className="opacity-60">
+      <a href={ROUTES.HOME} className="opacity-60">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"
