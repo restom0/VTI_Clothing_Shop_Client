@@ -5,17 +5,17 @@ import { Typography } from "@material-tailwind/react/components/Typography";
 import { Input } from "@material-tailwind/react/components/Input";
 import { Radio } from "@material-tailwind/react/components/Radio";
 import {
-  Select,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  DialogTitle,
   Container,
-  TextField,
-  InputAdornment,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
-  OutlinedInput,
+  InputAdornment,
   MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/admin.layout";
@@ -75,8 +75,82 @@ import {
 
 const genderLabel = (gender) => (gender === "MALE" ? "Nam" : gender === "FEMALE" ? "Nữ" : "Unisex");
 
-const clampRange = (raw, min, max) => (isNaN(raw) || raw < min ? min : raw > max ? max : raw);
-const clampFloor = (raw, min) => (isNaN(raw) || raw < min ? min : raw);
+const clampRange = (raw, min, max) => (Number.isNaN(raw) || raw < min ? min : Math.min(raw, max));
+const clampFloor = (raw, min) => (Number.isNaN(raw) || raw < min ? min : raw);
+
+const findOldVariant = (importedProducts, productId, colorCode, size, material) =>
+  importedProducts?.object?.find(
+    (item) =>
+      item.product_id.id === productId &&
+      item.color_id.color_code === colorCode &&
+      item.size_id.size === size &&
+      item.material_id.name === material
+  );
+
+// Upload dropzone (empty) or image preview (filled). Keeping the empty/filled
+// choice here removes ~15 conditionals from ImportProduct. `upload`/`deleteButton`
+// are passed as elements so each call site keeps its exact wiring.
+const ImageSlot = ({
+  value,
+  imageKey,
+  caption,
+  isAvatar,
+  previewSrc,
+  previewWrapClassName,
+  previewImgClassName,
+  upload,
+  deleteButton,
+}) =>
+  value === "" ? (
+    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
+      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
+        <label htmlFor={imageKey} className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
+          <div
+            className={
+              isAvatar ? IMPORT_UPLOAD_BODY_PADDED_CLASSNAME : IMPORT_UPLOAD_BODY_CLASSNAME
+            }
+          >
+            <svg
+              className={
+                isAvatar ? IMPORT_UPLOAD_ICON_SPACED_CLASSNAME : IMPORT_UPLOAD_ICON_CLASSNAME
+              }
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p
+              className={
+                isAvatar ? IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME : IMPORT_UPLOAD_TEXT_CLASSNAME
+              }
+            >
+              <strong>Click to upload</strong> or drag and drop
+            </p>
+            {isAvatar && (
+              <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            )}
+            <Typography as="caption" variant="small" className={IMPORT_UPLOAD_CAPTION_CLASSNAME}>
+              {caption}
+            </Typography>
+          </div>
+          {upload}
+        </label>
+      </div>
+    </figure>
+  ) : (
+    <div className={previewWrapClassName}>
+      <img src={previewSrc} alt="avatar" className={previewImgClassName} />
+      {deleteButton}
+    </div>
+  );
 
 const ImportProduct = () => {
   const navigate = useNavigate();
@@ -149,113 +223,70 @@ const ImportProduct = () => {
   const [addImportedProduct, { isLoading: isAdded }] = useAddImportedProductMutation();
   const [updateImportedProduct, { isLoading: isUpdated }] = useUpdateImportedProductMutation();
   const [deleteImportedProduct, { isLoading: isDeleted }] = useDeleteImportedProductMutation();
+  const importPayload = () => ({
+    product_id: product,
+    color_code: color_code,
+    color_name: color_name,
+    size: size,
+    height: height,
+    weight: weight,
+    material: material,
+    gender: gender,
+    importPrice: Number(importPrice),
+    image_url: avatar_url,
+    slider_url_1: slider1,
+    slider_url_2: slider2,
+    slider_url_3: slider3,
+    slider_url_4: slider4,
+    public_id_url: publicIdAvatar,
+    public_id_slider_url_1: publicIdSlider1,
+    public_id_slider_url_2: publicIdSlider2,
+    public_id_slider_url_3: publicIdSlider3,
+    public_id_slider_url_4: publicIdSlider4,
+    importNumber: Number(importNumber),
+  });
+  const resetNewForm = () => {
+    handleNewClose();
+    setAvatar_Url("");
+    setSlider1("");
+    setSlider2("");
+    setSlider3("");
+    setSlider4("");
+    setPublicIdAvatar("");
+    setPublicIdSlider1("");
+    setPublicIdSlider2("");
+    setPublicIdSlider3("");
+    setPublicIdSlider4("");
+    setProduct(null);
+    setColorCode("");
+    setColorName("");
+    setSize("");
+    setHeight(0);
+    setWeight(0);
+    setMaterial("");
+    setGender("");
+    setImportPrice(1000);
+    setImportNumber(1);
+  };
   const handleAddSubmit = async () => {
+    if (!oldOpen && !newOpen) return;
     try {
-      if (oldOpen) {
-        await addImportedProduct({
-          product_id: product,
-          color_code: color_code,
-          color_name: color_name,
-          size: size,
-          height: height,
-          weight: weight,
-          material: material,
-          gender: gender,
-          importPrice: Number(importPrice),
-          image_url: avatar_url,
-          slider_url_1: slider1,
-          slider_url_2: slider2,
-          slider_url_3: slider3,
-          slider_url_4: slider4,
-          public_id_url: publicIdAvatar,
-          public_id_slider_url_1: publicIdSlider1,
-          public_id_slider_url_2: publicIdSlider2,
-          public_id_slider_url_3: publicIdSlider3,
-          public_id_slider_url_4: publicIdSlider4,
-          importNumber: Number(importNumber),
-        })
-          .unwrap()
-          .then(() => {
-            Toast.fire({
-              icon: "success",
-              title: "Thêm thương hiệu thành công",
-            }).then(() => {
-              handleOldOpen();
-            });
-          });
-      } else if (newOpen) {
-        await addImportedProduct({
-          product_id: product,
-          color_code: color_code,
-          color_name: color_name,
-          size: size,
-          height: height,
-          weight: weight,
-          material: material,
-          gender: gender,
-          importPrice: Number(importPrice),
-          image_url: avatar_url,
-          slider_url_1: slider1,
-          slider_url_2: slider2,
-          slider_url_3: slider3,
-          slider_url_4: slider4,
-          public_id_url: publicIdAvatar,
-          public_id_slider_url_1: publicIdSlider1,
-          public_id_slider_url_2: publicIdSlider2,
-          public_id_slider_url_3: publicIdSlider3,
-          public_id_slider_url_4: publicIdSlider4,
-          importNumber: Number(importNumber),
-        })
-          .unwrap()
-          .then(() => {
-            Toast.fire({
-              icon: "success",
-              title: "Thêm thương hiệu thành công",
-            }).then(() => {
-              handleNewClose();
-              setAvatar_Url("");
-              setSlider1("");
-              setSlider2("");
-              setSlider3("");
-              setSlider4("");
-              setPublicIdAvatar("");
-              setPublicIdSlider1("");
-              setPublicIdSlider2("");
-              setPublicIdSlider3("");
-              setPublicIdSlider4("");
-              setProduct(null);
-              setColorCode("");
-              setColorName("");
-              setSize("");
-              setHeight(0);
-              setWeight(0);
-              setMaterial("");
-              setGender("");
-              setImportPrice(1000);
-              setImportNumber(1);
-            });
-          });
-      }
+      await addImportedProduct(importPayload()).unwrap();
+      await Toast.fire({ icon: "success", title: "Thêm thương hiệu thành công" });
+      if (oldOpen) handleOldOpen();
+      else resetNewForm();
     } catch (err) {
       console.error(err);
-      Toast.fire({
-        icon: "error",
-        title: "Thêm thương hiệu thất bại",
-      }).then(() => {
-        if (err && err.status === 401) {
-          localStorage.clear();
-          navigate(ROUTES.LOGIN);
-        }
-        // if (err.originalStatus === 401) {
-        //   localStorage.clear();
-        //   navigate(ROUTES.LOGIN);
-        // }
-      });
+      await Toast.fire({ icon: "error", title: "Thêm thương hiệu thất bại" });
+      if (err && err.status === 401) {
+        localStorage.clear();
+        navigate(ROUTES.LOGIN);
+      }
     }
   };
   const updateSubmit = async () => {
     const search = importedProducts.object.find((row) => row.id === selectedId);
-    const message = await updateImportedProduct({
+    return await updateImportedProduct({
       id: selectedId,
       product_id: search?.product_id.id || "",
       color_id: search?.color_id.id || "",
@@ -281,8 +312,6 @@ const ImportProduct = () => {
       public_id_slider_url_4: updatePublicIdSlider4,
       importNumber: updateImportNumber,
     });
-
-    return message;
   };
   const handleDeleteSubmit = async () => {
     try {
@@ -368,6 +397,7 @@ const ImportProduct = () => {
       : (importedProducts?.object?.find((row) => row.id === selectedId) ?? null);
   const importField = (selector, fallback = "") =>
     selectedImport ? (selector(selectedImport) ?? fallback) : fallback;
+  const oldVariant = findOldVariant(importedProducts, product, color_code, size, material);
   const ListImportProducts = importedProducts.object.map((product) => {
     return {
       id: product.id,
@@ -535,56 +565,22 @@ const ImportProduct = () => {
           <Container>
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
-                {updateAvatar_Url === "" ? (
-                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
-                          <svg
-                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 16"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                            />
-                          </svg>
-                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong> or drag and drop
-                          </p>
-
-                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
-                            SVG, PNG, JPG or GIF (MAX. 800x400px)
-                          </p>
-                          <Typography
-                            as="caption"
-                            variant="small"
-                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                          >
-                            Hình đại diện
-                          </Typography>
-                        </div>
-                        <ImageUpload
-                          image="avatar_url"
-                          setAvatar={setUpdateAvatar_Url}
-                          setPublicId={setUpdatePublicIdAvatar}
-                        />
-                      </label>
-                    </div>
-                  </figure>
-                ) : (
-                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
-                    <img
-                      src={updateAvatar_Url}
-                      alt="avatar"
-                      className={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
+                <ImageSlot
+                  value={updateAvatar_Url}
+                  imageKey="avatar_url"
+                  caption="Hình đại diện"
+                  isAvatar
+                  previewSrc={updateAvatar_Url}
+                  previewWrapClassName={IMPORT_AVATAR_PREVIEW_CLASSNAME}
+                  previewImgClassName={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
+                  upload={
+                    <ImageUpload
+                      image="avatar_url"
+                      setAvatar={setUpdateAvatar_Url}
+                      setPublicId={setUpdatePublicIdAvatar}
                     />
+                  }
+                  deleteButton={
                     <Button
                       onClick={() => {
                         handleDelete(publicIdAvatar);
@@ -596,56 +592,25 @@ const ImportProduct = () => {
                     >
                       Xóa ảnh đại diện
                     </Button>
-                  </div>
-                )}
+                  }
+                />
 
                 <div className={IMPORT_FORM_GRID_CLASSNAME}>
-                  {updateSlider1 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 1
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_1"
-                            setAvatar={setUpdateSlider1}
-                            setPublicId={setUpdatePublicIdSlider1}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={updateSlider1}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={updateSlider1}
+                    imageKey="slider_url_1"
+                    caption="Hình 1"
+                    previewSrc={updateSlider1}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_1"
+                        setAvatar={setUpdateSlider1}
+                        setPublicId={setUpdatePublicIdSlider1}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(updatePublicIdSlider1);
@@ -657,55 +622,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 1
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {updateSlider2 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 2
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_2"
-                            setAvatar={setUpdateSlider2}
-                            setPublicId={setUpdatePublicIdSlider2}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={updateSlider2}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={updateSlider2}
+                    imageKey="slider_url_2"
+                    caption="Hình 2"
+                    previewSrc={updateSlider2}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_2"
+                        setAvatar={setUpdateSlider2}
+                        setPublicId={setUpdatePublicIdSlider2}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(updatePublicIdSlider2);
@@ -717,55 +651,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 2
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {updateSlider3 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 3
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_3"
-                            setAvatar={setUpdateSlider3}
-                            setPublicId={setUpdatePublicIdSlider3}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={updateSlider3}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={updateSlider3}
+                    imageKey="slider_url_3"
+                    caption="Hình 3"
+                    previewSrc={updateSlider3}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_3"
+                        setAvatar={setUpdateSlider3}
+                        setPublicId={setUpdatePublicIdSlider3}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(updatePublicIdSlider3);
@@ -777,55 +680,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 3
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {updateSlider4 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 4
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_4"
-                            setAvatar={setUpdateSlider4}
-                            setPublicId={setUpdatePublicIdSlider4}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={updateSlider4}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={updateSlider4}
+                    imageKey="slider_url_4"
+                    caption="Hình 4"
+                    previewSrc={updateSlider4}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_4"
+                        setAvatar={setUpdateSlider4}
+                        setPublicId={setUpdatePublicIdSlider4}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(updatePublicIdSlider4);
@@ -837,8 +709,8 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 4
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
                 </div>
               </div>
               <div className={IMPORT_FORM_GRID_CLASSNAME}>
@@ -1020,56 +892,22 @@ const ImportProduct = () => {
           <Container>
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
-                {avatar_url === "" ? (
-                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
-                          <svg
-                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 16"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                            />
-                          </svg>
-                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong> or drag and drop
-                          </p>
-
-                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
-                            SVG, PNG, JPG or GIF (MAX. 800x400px)
-                          </p>
-                          <Typography
-                            as="caption"
-                            variant="small"
-                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                          >
-                            Hình đại diện
-                          </Typography>
-                        </div>
-                        <ImageUpload
-                          image="avatar_url"
-                          setAvatar={setAvatar_Url}
-                          setPublicId={setPublicIdAvatar}
-                        />
-                      </label>
-                    </div>
-                  </figure>
-                ) : (
-                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
-                    <img
-                      src={avatar_url}
-                      alt="avatar"
-                      className={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
+                <ImageSlot
+                  value={avatar_url}
+                  imageKey="avatar_url"
+                  caption="Hình đại diện"
+                  isAvatar
+                  previewSrc={avatar_url}
+                  previewWrapClassName={IMPORT_AVATAR_PREVIEW_CLASSNAME}
+                  previewImgClassName={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
+                  upload={
+                    <ImageUpload
+                      image="avatar_url"
+                      setAvatar={setAvatar_Url}
+                      setPublicId={setPublicIdAvatar}
                     />
+                  }
+                  deleteButton={
                     <Button
                       onClick={() => {
                         handleDelete(publicIdAvatar);
@@ -1081,56 +919,25 @@ const ImportProduct = () => {
                     >
                       Xóa ảnh đại diện
                     </Button>
-                  </div>
-                )}
+                  }
+                />
 
                 <div className={IMPORT_FORM_GRID_CLASSNAME}>
-                  {slider1 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 1
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_1"
-                            setAvatar={setSlider1}
-                            setPublicId={setPublicIdSlider1}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={slider1}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={slider1}
+                    imageKey="slider_url_1"
+                    caption="Hình 1"
+                    previewSrc={slider1}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_1"
+                        setAvatar={setSlider1}
+                        setPublicId={setPublicIdSlider1}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(publicIdSlider1);
@@ -1142,55 +949,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 1
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {slider2 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 2
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_2"
-                            setAvatar={setSlider2}
-                            setPublicId={setPublicIdSlider2}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={slider2}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={slider2}
+                    imageKey="slider_url_2"
+                    caption="Hình 2"
+                    previewSrc={slider2}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_2"
+                        setAvatar={setSlider2}
+                        setPublicId={setPublicIdSlider2}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(publicIdSlider2);
@@ -1202,55 +978,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 2
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {slider3 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 3
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_3"
-                            setAvatar={setSlider3}
-                            setPublicId={setPublicIdSlider3}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={slider3}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={slider3}
+                    imageKey="slider_url_3"
+                    caption="Hình 3"
+                    previewSrc={slider3}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_3"
+                        setAvatar={setSlider3}
+                        setPublicId={setPublicIdSlider3}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(publicIdSlider3);
@@ -1262,55 +1007,24 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 3
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
 
-                  {slider4 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 4
-                            </Typography>
-                          </div>
-                          <ImageUpload
-                            image="slider_url_4"
-                            setAvatar={setSlider4}
-                            setPublicId={setPublicIdSlider4}
-                          />
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_FULL_CLASSNAME}>
-                      <img
-                        src={slider4}
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                  <ImageSlot
+                    value={slider4}
+                    imageKey="slider_url_4"
+                    caption="Hình 4"
+                    previewSrc={slider4}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_FULL_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_CLASSNAME}
+                    upload={
+                      <ImageUpload
+                        image="slider_url_4"
+                        setAvatar={setSlider4}
+                        setPublicId={setPublicIdSlider4}
                       />
+                    }
+                    deleteButton={
                       <Button
                         onClick={() => {
                           handleDelete(publicIdSlider4);
@@ -1322,8 +1036,8 @@ const ImportProduct = () => {
                       >
                         Xóa ảnh 4
                       </Button>
-                    </div>
-                  )}
+                    }
+                  />
                 </div>
               </div>
               <div className={IMPORT_FORM_GRID_CLASSNAME}>
@@ -1475,308 +1189,50 @@ const ImportProduct = () => {
           <Container>
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
-                {avatar_url === "" ? (
-                  <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                    <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                      <label htmlFor="avatar_url" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                        <div className={IMPORT_UPLOAD_BODY_PADDED_CLASSNAME}>
-                          <svg
-                            className={IMPORT_UPLOAD_ICON_SPACED_CLASSNAME}
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 16"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                            />
-                          </svg>
-                          <p className={IMPORT_UPLOAD_HELPER_TEXT_CLASSNAME}>
-                            <strong>Click to upload</strong> or drag and drop
-                          </p>
-
-                          <p className={IMPORT_UPLOAD_HINT_CLASSNAME}>
-                            SVG, PNG, JPG or GIF (MAX. 800x400px)
-                          </p>
-                          <Typography
-                            as="caption"
-                            variant="small"
-                            className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                          >
-                            Hình đại diện
-                          </Typography>
-                        </div>
-                        {/* <ImageUpload image="avatar_url" /> */}
-                      </label>
-                    </div>
-                  </figure>
-                ) : (
-                  <div className={IMPORT_AVATAR_PREVIEW_CLASSNAME}>
-                    <img
-                      src={
-                        importedProducts.object?.find(
-                          (item) =>
-                            item.product_id.id === product &&
-                            item.color_id.color_code === color_code &&
-                            item.size_id.size === size &&
-                            item.material_id.name === material
-                        )?.image_url
-                      }
-                      alt="avatar"
-                      className={IMPORT_AVATAR_PREVIEW_IMAGE_FULL_CLASSNAME}
-                    />
-                    {/* <Button
-                      onClick={() => dispatch(deleteAvatar())}
-                      color="red"
-                      className={IMPORT_AVATAR_DELETE_BUTTON_CLASSNAME}
-                    >
-                      Xóa ảnh đại diện
-                    </Button> */}
-                  </div>
-                )}
+                <ImageSlot
+                  value={avatar_url}
+                  imageKey="avatar_url"
+                  caption="Hình đại diện"
+                  isAvatar
+                  previewSrc={oldVariant?.image_url}
+                  previewWrapClassName={IMPORT_AVATAR_PREVIEW_CLASSNAME}
+                  previewImgClassName={IMPORT_AVATAR_PREVIEW_IMAGE_FULL_CLASSNAME}
+                />
 
                 <div className={IMPORT_FORM_GRID_CLASSNAME}>
-                  {slider1 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_1" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 1
-                            </Typography>
-                          </div>
-                          {/* <ImageUpload image="slider_url_1" /> */}
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={
-                          importedProducts.object?.find(
-                            (item) =>
-                              item.product_id.id === product &&
-                              item.color_id.color_code === color_code &&
-                              item.size_id.size === size &&
-                              item.material_id.name === material
-                          )?.slider_url_1
-                        }
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
-                      />
-                      {/* <Button
-                        onClick={() => dispatch(deleteSlider1())}
-                        color="red"
-                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
-                      >
-                        Xóa ảnh 1
-                      </Button> */}
-                    </div>
-                  )}
+                  <ImageSlot
+                    value={slider1}
+                    imageKey="slider_url_1"
+                    caption="Hình 1"
+                    previewSrc={oldVariant?.slider_url_1}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
+                  />
 
-                  {slider2 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_2" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 2
-                            </Typography>
-                          </div>
-                          {/* <ImageUpload image="slider_url_2" /> */}
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={
-                          importedProducts.object?.find(
-                            (item) =>
-                              item.product_id.id === product &&
-                              item.color_id.color_code === color_code &&
-                              item.size_id.size === size &&
-                              item.material_id.name === material
-                          )?.slider_url_2
-                        }
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
-                      />
-                      {/* <Button
-                        onClick={() => dispatch(deleteSlider2())}
-                        color="red"
-                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
-                      >
-                        Xóa ảnh 2
-                      </Button> */}
-                    </div>
-                  )}
-                  {slider3 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_3" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 3
-                            </Typography>
-                          </div>
-                          {/* <ImageUpload image="slider_url_3" /> */}
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={
-                          importedProducts.object?.find(
-                            (item) =>
-                              item.product_id.id === product &&
-                              item.color_id.color_code === color_code &&
-                              item.size_id.size === size &&
-                              item.material_id.name === material
-                          )?.slider_url_3
-                        }
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
-                      />
-                      {/* <Button
-                        onClick={() => dispatch(deleteSlider3())}
-                        color="red"
-                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
-                      >
-                        Xóa ảnh 3
-                      </Button> */}
-                    </div>
-                  )}
-                  {slider4 === "" ? (
-                    <figure className={IMPORT_UPLOAD_FIGURE_CLASSNAME}>
-                      <div className={IMPORT_UPLOAD_CENTER_CLASSNAME}>
-                        <label htmlFor="slider_url_4" className={IMPORT_UPLOAD_DROPZONE_CLASSNAME}>
-                          <div className={IMPORT_UPLOAD_BODY_CLASSNAME}>
-                            <svg
-                              className={IMPORT_UPLOAD_ICON_CLASSNAME}
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 20 16"
-                            >
-                              <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                              />
-                            </svg>
-                            <p className={IMPORT_UPLOAD_TEXT_CLASSNAME}>
-                              <strong>Click to upload</strong> or drag and drop
-                            </p>
-                            <Typography
-                              as="caption"
-                              variant="small"
-                              className={IMPORT_UPLOAD_CAPTION_CLASSNAME}
-                            >
-                              Hình 4
-                            </Typography>
-                          </div>
-                          {/* <ImageUpload image="slider_url_4" /> */}
-                        </label>
-                      </div>
-                    </figure>
-                  ) : (
-                    <div className={IMPORT_SLIDER_PREVIEW_CLASSNAME}>
-                      <img
-                        src={
-                          importedProducts.object?.find(
-                            (item) =>
-                              item.product_id.id === product &&
-                              item.color_id.color_code === color_code &&
-                              item.size_id.size === size &&
-                              item.material_id.name === material
-                          )?.slider_url_4
-                        }
-                        alt="avatar"
-                        className={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
-                      />
-                      {/* <Button
-                        onClick={() => dispatch(deleteSlider4())}
-                        color="red"
-                        className={IMPORT_SLIDER_DELETE_BUTTON_CLASSNAME}
-                      >
-                        Xóa ảnh 4
-                      </Button> */}
-                    </div>
-                  )}
+                  <ImageSlot
+                    value={slider2}
+                    imageKey="slider_url_2"
+                    caption="Hình 2"
+                    previewSrc={oldVariant?.slider_url_2}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
+                  />
+                  <ImageSlot
+                    value={slider3}
+                    imageKey="slider_url_3"
+                    caption="Hình 3"
+                    previewSrc={oldVariant?.slider_url_3}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
+                  />
+                  <ImageSlot
+                    value={slider4}
+                    imageKey="slider_url_4"
+                    caption="Hình 4"
+                    previewSrc={oldVariant?.slider_url_4}
+                    previewWrapClassName={IMPORT_SLIDER_PREVIEW_CLASSNAME}
+                    previewImgClassName={IMPORT_SLIDER_PREVIEW_IMAGE_TALL_CLASSNAME}
+                  />
                 </div>
               </div>
               <div className={IMPORT_FORM_GRID_CLASSNAME}>

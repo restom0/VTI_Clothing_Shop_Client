@@ -61,7 +61,7 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: SonarCloud Quality Gate
+      - name: SonarCloud Scan
         if: ${{ env.SONAR_TOKEN != '' && vars.SONAR_ORGANIZATION != '' }}
         uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8
         env:
@@ -71,5 +71,13 @@ jobs:
           args: >
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY || 'VTI_Clothing_Shop_Client' }}
-            -Dsonar.qualitygate.wait=true
-            -Dsonar.qualitygate.timeout=300
+
+      - name: SonarQube Quality Gate
+        if: ${{ env.SONAR_TOKEN != '' && vars.SONAR_ORGANIZATION != '' }}
+        uses: SonarSource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL || 'https://sonarcloud.io' }}
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
