@@ -40,6 +40,63 @@ support/company pages, and an admin dashboard.
 - Vitest
 - SonarQube / SonarCloud compatible LCOV config
 
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph browser ["Browser"]
+        routes["React Router Pages"]
+        ui["Shop/Admin UI Components"]
+        providers["I18n + Currency Providers"]
+        store["Redux Toolkit Store"]
+        rtkApis["RTK Query API Slices"]
+        dummyData["Dummy Fallback Data"]
+    end
+    subgraph backend ["Backend"]
+        api["Spring Boot REST API"]
+        oauth["OAuth2 Redirects"]
+        payments["Checkout + Payment APIs"]
+    end
+    subgraph data ["Server Data Layer"]
+        postgres["PostgreSQL Write Model"]
+        mongo["MongoDB Read Model"]
+        cache["Valkey/Redis Cache"]
+    end
+    subgraph external ["External Services"]
+        fxRates["Exchange Rate API"]
+        providersExt["Google, Facebook, Twitter/X"]
+        payExt["PayOS, Stripe, ZaloPay"]
+    end
+
+    routes -->|"Renders"| ui
+    ui -->|"Reads/writes UI state"| store
+    providers -->|"Locale + currency context"| ui
+    store -->|"Registers reducers/middleware"| rtkApis
+    rtkApis -->|"HTTPS + Bearer JWT"| api
+    rtkApis -->|"Fallback when request fails"| dummyData
+    providers -.->|"Fetches rates"| fxRates
+    api -->|"Domain reads/writes"| postgres
+    api -->|"Read model queries"| mongo
+    api -->|"Cached reads"| cache
+    api -.->|"Social login"| oauth
+    oauth -.->|"Provider auth"| providersExt
+    api -.->|"Checkout"| payments
+    payments -.->|"Payment provider calls"| payExt
+```
+
+Client request flow:
+
+- Route pages lazy-load through `src/apps/App.jsx` and render shop, account,
+  checkout, static content, and dashboard screens.
+- Feature components use Redux slices for UI/form state and RTK Query for
+  server state.
+- RTK Query modules add a Bearer JWT from local storage when present and call
+  the Spring Boot API configured in `src/configs/api.config.js`.
+- Dummy fallback data keeps core UI screens populated when a read request
+  cannot fetch live data.
+- OAuth2 social login starts on the backend and returns the JWT to the client
+  through the configured success redirect URL.
+
 ## Project Structure
 
 ```text
