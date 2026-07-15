@@ -93,5 +93,12 @@ jobs:
             -Dsonar.tests=src
             -Dsonar.exclusions=coverage/**,dist/**,node_modules/**,public/**,src/i18n/generated/**
             -Dsonar.coverage.exclusions=src/main.jsx,src/**/*.test.js,src/**/*.test.jsx,src/**/*.spec.js,src/**/*.spec.jsx,src/i18n/generated/**
-            -Dsonar.qualitygate.wait=true
-            -Dsonar.qualitygate.timeout=300
+
+      - name: SonarQube Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
