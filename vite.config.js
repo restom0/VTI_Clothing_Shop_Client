@@ -86,6 +86,9 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 500,
     rolldownOptions: {
+      checks: {
+        pluginTimings: false,
+      },
       output: {
         manualChunks: getVendorChunk,
       },
