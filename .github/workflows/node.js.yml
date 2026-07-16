@@ -91,8 +91,8 @@ jobs:
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
             -Dsonar.sources=src
             -Dsonar.tests=src
-            -Dsonar.exclusions=coverage/**,dist/**,node_modules/**,public/**,src/i18n/generated/**
-            -Dsonar.coverage.exclusions=src/main.jsx,src/**/*.test.js,src/**/*.test.jsx,src/**/*.spec.js,src/**/*.spec.jsx,src/i18n/generated/**
+            -Dsonar.exclusions=coverage/**,**/coverage/**,dist/**,node_modules/**,public/**,src/i18n/generated/**
+            -Dsonar.coverage.exclusions=coverage/**,**/coverage/**,src/main.jsx,src/**/*.test.js,src/**/*.test.jsx,src/**/*.spec.js,src/**/*.spec.jsx,src/i18n/generated/**
 
       - name: SonarQube Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0

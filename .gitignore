@@ -29,5 +29,6 @@ cypress/downloads
 .vercel
 
 # Test / coverage output
-coverage
+coverage/
+**/coverage/
 test-report.junit.xml

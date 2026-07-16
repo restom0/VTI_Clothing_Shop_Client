@@ -8,5 +8,6 @@ exclude:
     paths:
       - dist
       - coverage
+      - "**/coverage"
       - node_modules
       - public
