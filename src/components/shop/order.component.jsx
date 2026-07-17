@@ -73,9 +73,11 @@ const TABLE_ROWS = [
   },
 ];
 
+/** Handles order. */
 const Order = () => {
   const [tab, setTab] = React.useState("ALL");
   const { t } = useI18n();
+  /** Gets order status label. */
   const getOrderStatusLabel = (status) =>
     t(ORDER_STATUS_LABEL_KEYS[status] ?? "order.status_unknown");
   return (

@@ -39,6 +39,7 @@ import { handleDelete } from "../../utils/delete_image.util";
 import { Toast } from "../../configs/sweetalert2.config";
 import { useI18n } from "../../i18n";
 
+/** Handles user info. */
 const UserInfo = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -56,17 +57,21 @@ const UserInfo = () => {
   const [isGoogleLinked] = React.useState(false);
   const { t } = useI18n();
   const { data: user, isLoading, isError } = useGetUserProfileQuery();
+  /** Handles close. */
   const handleClose = () => {
     setOpen(false);
   };
 
+  /** Handles open click. */
   const handleOpenClick = () => {
     setOpen(true);
   };
   const [openAdd, setOpenAdd] = useState(false);
+  /** Handles close add. */
   const handleCloseAdd = () => {
     setOpenAdd(false);
   };
+  /** Handles add click. */
   const handleAddClick = () => {
     setOpenAdd(true);
   };
@@ -87,12 +92,14 @@ const UserInfo = () => {
   }, [user]);
   if (isLoading) return <Loading />;
   else if (isError) return <div>{t("profile.load_failed")}</div>;
+  /** Handles confirm change. */
   const handleConfirmChange = () => {
     setEmail(user.object.email);
     setPhone(user.object.phone_number);
     setAddress(user.object.address);
     setConfirmChange(!confirmChange);
   };
+  /** Handles change password. */
   const handleChangePassword = async () => {
     if (newPassword !== reTypePassword) {
       Toast.fire({
@@ -125,6 +132,7 @@ const UserInfo = () => {
       });
     }
   };
+  /** Handles change profile. */
   const handleChangeProfile = async () => {
     try {
       const response = await updateProfile({

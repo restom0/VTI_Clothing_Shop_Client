@@ -77,6 +77,7 @@ export const store = configureStore({
     // RTK Query API reducers
     ...Object.fromEntries(rtkQueryApis.map((api) => [api.reducerPath, api.reducer])),
   },
+  /** Handles middleware. */
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -92,6 +93,7 @@ export const store = configureStore({
       }
     : false,
   duplicateMiddlewareCheck: true,
+  /** Handles enhancers. */
   enhancers: (getDefaultEnhancers) =>
     getDefaultEnhancers({ autoBatch: false }).concat(autoBatchEnhancer({ type: "raf" })),
 });

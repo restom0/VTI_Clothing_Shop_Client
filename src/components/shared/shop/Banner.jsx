@@ -12,8 +12,10 @@ import { useI18n } from "../../../i18n";
 import { getAccountMenuItems, getBannerLabels } from "./banner.helpers";
 import { STORAGE_KEYS } from "../../../constants/storage.constant";
 
+/** Checks whether auth token. */
 const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
+/** Handles profile menu view. */
 export const ProfileMenuView = ({ accountItems, avatarUrl, isMenuOpen, onMenuOpenChange }) => (
   <Menu open={isMenuOpen} handler={onMenuOpenChange} placement="bottom-end">
     <MenuHandler>
@@ -72,6 +74,7 @@ ProfileMenuView.propTypes = {
   onMenuOpenChange: PropTypes.func.isRequired,
 };
 
+/** Handles profile menu. */
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { t } = useI18n();
@@ -86,6 +89,7 @@ const ProfileMenu = () => {
   );
 };
 
+/** Handles banner view. */
 export const BannerView = ({ isAuthenticated, labels, onLoginClick, onRegisterClick }) => (
   <Navbar className="mx-auto max-w-screen-3xl rounded-none p-0">
     <div className="shop-banner-bar text-blue-gray-900">
@@ -121,11 +125,13 @@ BannerView.propTypes = {
   onRegisterClick: PropTypes.func.isRequired,
 };
 
+/** Handles banner. */
 const Banner = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
 
   React.useEffect(() => {
+    /** Closes value. */
     const close = () => window.innerWidth >= 960;
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);

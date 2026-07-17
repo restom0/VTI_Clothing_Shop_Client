@@ -11,17 +11,21 @@ import {
   toggleReactMetricsPanel,
 } from "../../features/slices/react_metrics.slice";
 
+/** Formats ms. */
 const formatMs = (value) => `${Number(value ?? 0).toFixed(1)}ms`;
 
+/** Formats bytes. */
 const formatBytes = (value) => {
   if (!Number.isFinite(value)) return "n/a";
 
   return `${(value / 1024 / 1024).toFixed(1)} MB`;
 };
 
+/** Gets metric value. */
 const getMetricValue = (metric) =>
   metric ? Number(metric.value ?? 0).toFixed(metric.value > 100 ? 0 : 2) : "n/a";
 
+/** Uses browser performance metrics. */
 const useBrowserPerformanceMetrics = (enabled) => {
   const dispatch = useDispatch();
 
@@ -30,6 +34,7 @@ const useBrowserPerformanceMetrics = (enabled) => {
       return undefined;
     }
 
+    /** Records performance entry. */
     const recordPerformanceEntry = (entry, name = entry.name) => {
       dispatch(
         recordWebMetric({
@@ -59,6 +64,7 @@ const useBrowserPerformanceMetrics = (enabled) => {
     }
 
     const observers = [];
+    /** Handles observe. */
     const observe = (type, handler) => {
       try {
         const observer = new window.PerformanceObserver((list) => {
@@ -93,6 +99,7 @@ const useBrowserPerformanceMetrics = (enabled) => {
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return undefined;
 
+    /** Records memory. */
     const recordMemory = () => {
       const memory = window.performance?.memory;
       if (!memory) return;
@@ -115,6 +122,7 @@ const useBrowserPerformanceMetrics = (enabled) => {
   }, [dispatch, enabled]);
 };
 
+/** Handles metric line. */
 const MetricLine = ({ label, value }) => (
   <div className="flex items-center justify-between gap-4 text-xs">
     <span className="text-text-muted">{label}</span>
@@ -127,6 +135,7 @@ MetricLine.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
+/** Handles react metrics panel. */
 const ReactMetricsPanel = () => {
   const dispatch = useDispatch();
   const panelOpen = useSelector((state) => state.reactMetrics.panelOpen);
@@ -196,6 +205,7 @@ const ReactMetricsPanel = () => {
   );
 };
 
+/** Handles react metrics monitor. */
 const ReactMetricsMonitor = ({ children }) => {
   const dispatch = useDispatch();
   const enabled = useSelector((state) => state.reactMetrics.enabled);
@@ -205,6 +215,7 @@ const ReactMetricsMonitor = ({ children }) => {
 
   if (!shouldMonitor) return children;
 
+  /** Handles render. */
   const onRender = (id, phase, actualDuration, baseDuration, startTime, commitTime) => {
     if (!enabled) return;
 

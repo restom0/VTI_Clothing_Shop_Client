@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+/** Handles country select. */
 export default function CountrySelect() {
   return (
     <Autocomplete

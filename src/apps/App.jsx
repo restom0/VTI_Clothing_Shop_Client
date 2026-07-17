@@ -3,60 +3,84 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "../layouts/shop/shop.layout";
 import Loading from "../components/shared/loading.component";
 
+/** Handles adminpage. */
 const Adminpage = lazy(() => import("../pages/admin.page"));
+/** Handles brandpage. */
 const Brandpage = lazy(() => import("../pages/brand.page"));
+/** Handles cartpage. */
 const Cartpage = lazy(() => import("../pages/cart.page"));
+/** Handles catepage. */
 const Catepage = lazy(() => import("../pages/category.page"));
+/** Handles checkoutpage. */
 const Checkoutpage = lazy(() => import("../pages/checkout.page"));
+/** Handles errorpage. */
 const Errorpage = lazy(() => import("../pages/error.page"));
+/** Handles forbiddenpage. */
 const Forbiddenpage = lazy(() => import("../pages/forbidden.page"));
+/** Handles homepage. */
 const Homepage = lazy(() => import("../pages/home.page"));
+/** Handles loginpage. */
 const Loginpage = lazy(() => import("../pages/login.page"));
+/** Handles not foundpage. */
 const NotFoundpage = lazy(() => import("../pages/not_found.page"));
+/** Handles product detailpage. */
 const ProductDetailpage = lazy(() => import("../pages/detail_product.page"));
+/** Handles productpage. */
 const Productpage = lazy(() => import("../pages/list_product.page"));
+/** Handles profilepage. */
 const Profilepage = lazy(() => import("../pages/profile.page"));
+/** Handles registerpage. */
 const Registerpage = lazy(() => import("../pages/register.page"));
+/** Handles career layout. */
 const CareerLayout = lazy(() => import("../layouts/career/career.layout"));
+/** Handles help center layout. */
 const HelpCenterLayout = lazy(() => import("../layouts/helpcenter/help_center.layout"));
+/** Handles about us page. */
 const AboutUsPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.AboutUsPage,
   }))
 );
+/** Handles contact page. */
 const ContactPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.ContactPage,
   }))
 );
+/** Handles faq page. */
 const FaqPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.FaqPage,
   }))
 );
+/** Handles policy page. */
 const PolicyPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.PolicyPage,
   }))
 );
+/** Handles terms page. */
 const TermsPage = lazy(() =>
   import("../pages/static_content.page").then((module) => ({
     default: module.TermsPage,
   }))
 );
 
+/** Handles route fallback. */
 const RouteFallback = () => (
   <div className="route-fallback">
     <Loading />
   </div>
 );
 
+/** Handles lazy route. */
 const lazyRoute = (Component) => (
   <Suspense fallback={<RouteFallback />}>
     <Component />
   </Suspense>
 );
 
+/** Handles app. */
 const App = () => {
   return (
     <BrowserRouter>

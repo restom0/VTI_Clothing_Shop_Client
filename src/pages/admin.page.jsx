@@ -5,8 +5,10 @@ import Loading from "../components/shared/loading.component";
 import { getSidebarItemByLabel } from "../constants/sidebar_search.constant";
 import { useSelector } from "react-redux";
 
+/** Handles adminpage. */
 const Adminpage = () => {
   const sidebar_item = useSelector((state) => state.sidebar_item.value);
+  /** Handles active sidebar item. */
   const activeSidebarItem = useMemo(() => getSidebarItemByLabel(sidebar_item), [sidebar_item]);
   const ActivePanel = activeSidebarItem.Component;
 

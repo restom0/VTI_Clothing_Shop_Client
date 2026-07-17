@@ -9,16 +9,24 @@ export const ProductApi = createApi({
     baseUrl: SHOP_URL + api_routes.products,
   }),
   tagTypes: ["Product"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets products. */
     getProducts: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Product"],
     }),
+    /** Gets product. */
     getProduct: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "Product", id }],
     }),
+    /** Creates product. */
     createProduct: builder.mutation({
+      /** Handles query. */
       query: ({ name, short_description, brand_id, category_id }) => ({
         url: "",
         method: "POST",
@@ -30,7 +38,9 @@ export const ProductApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    /** Updates product. */
     updateProduct: builder.mutation({
+      /** Handles query. */
       query: ({ id, name, short_description, brand_id, category_id }) => ({
         url: `${id}`,
         method: "PUT",
@@ -42,7 +52,9 @@ export const ProductApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    /** Deletes product. */
     deleteProduct: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

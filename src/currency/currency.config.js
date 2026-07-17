@@ -15,9 +15,11 @@ export const LOCALE_CURRENCY_CONFIG = {
 
 const ZERO_FRACTION_CURRENCIES = new Set(["VND", "JPY", "KRW"]);
 
+/** Gets currency config for language. */
 export const getCurrencyConfigForLanguage = (language) =>
   LOCALE_CURRENCY_CONFIG[language] ?? LOCALE_CURRENCY_CONFIG.en;
 
+/** Gets locale for currency. */
 export const getLocaleForCurrency = (currency, fallbackLocale = BASE_CURRENCY_LOCALE) => {
   if (currency === BASE_CURRENCY) return BASE_CURRENCY_LOCALE;
 
@@ -28,9 +30,11 @@ export const getLocaleForCurrency = (currency, fallbackLocale = BASE_CURRENCY_LO
   );
 };
 
+/** Gets currency fraction digits. */
 export const getCurrencyFractionDigits = (currency) =>
   ZERO_FRACTION_CURRENCIES.has(currency) ? 0 : 2;
 
+/** Normalizes exchange rates. */
 export const normalizeExchangeRates = (payload) => {
   if (!payload || payload.base !== BASE_CURRENCY || !payload.rates) {
     return null;
@@ -42,6 +46,7 @@ export const normalizeExchangeRates = (payload) => {
   };
 };
 
+/** Gets currency rate. */
 export const getCurrencyRate = (rates, currency) => {
   if (currency === BASE_CURRENCY) return 1;
 
@@ -49,6 +54,7 @@ export const getCurrencyRate = (rates, currency) => {
   return Number.isFinite(rate) && rate > 0 ? rate : null;
 };
 
+/** Handles convert from base currency. */
 export const convertFromBaseCurrency = (amount, rates, currency) => {
   const numericAmount = Number(amount ?? 0);
   const rate = getCurrencyRate(rates, currency) ?? 1;
@@ -56,6 +62,7 @@ export const convertFromBaseCurrency = (amount, rates, currency) => {
   return numericAmount * rate;
 };
 
+/** Formats currency amount. */
 export const formatCurrencyAmount = (amount, locale, currency) => {
   const fractionDigits = getCurrencyFractionDigits(currency);
 

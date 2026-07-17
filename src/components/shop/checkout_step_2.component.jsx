@@ -8,6 +8,7 @@ import { Divider } from "@mui/material";
 import { useCurrency } from "../../currency";
 import { useI18n } from "../../i18n";
 
+/** Handles step2 checkout. */
 const Step2Checkout = ({ handleNext, handlePrev }) => {
   const { formatPrice } = useCurrency();
   const { t } = useI18n();

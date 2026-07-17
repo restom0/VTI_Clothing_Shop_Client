@@ -9,9 +9,11 @@ import { ChevronDownIcon, Bars2Icon } from "@heroicons/react/24/solid";
 import { account_menu } from "../../../constants/menu_item.constant";
 import { STORAGE_KEYS } from "../../../constants/storage.constant";
 
+/** Handles profile menu. */
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+  /** Closes menu. */
   const closeMenu = () => setIsMenuOpen(false);
   if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) {
     window.location.href = "/login";
@@ -71,9 +73,11 @@ const ProfileMenu = () => {
   );
 };
 
+/** Handles admin navbar. */
 const AdminNavbar = () => {
   const [, setIsNavOpen] = React.useState(false);
 
+  /** Toggles is nav open. */
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   React.useEffect(() => {

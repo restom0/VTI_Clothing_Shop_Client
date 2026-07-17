@@ -8,6 +8,7 @@ export const SHOP_PRODUCT_COLORS = PRODUCT_COLOR_SWATCHES.map(({ color, label })
   label,
 }));
 
+/** Creates shop mock products. */
 export const createShopMockProducts = (count = 7) =>
   Array.from({ length: count }, (_, id) => ({
     id,

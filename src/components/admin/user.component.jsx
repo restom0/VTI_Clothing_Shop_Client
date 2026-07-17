@@ -9,6 +9,7 @@ import { user } from "../../constants/head_table.constant";
 import { useGetUsersQuery } from "../../apis/user.api";
 import Loading from "../shared/loading.component";
 
+/** Handles user. */
 const User = () => {
   const [active, setActive] = useState(1);
   const { detailOpen, handleDetailOpen, handleDetailClose } = useOpen();

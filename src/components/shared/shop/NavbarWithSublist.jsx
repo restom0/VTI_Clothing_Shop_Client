@@ -38,8 +38,10 @@ import {
   getNavbarLabels,
 } from "./navbar.helpers";
 
+/** Checks whether auth token. */
 const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
+/** Handles search SVG. */
 const SearchSVG = () => (
   <svg width="13" height="14" viewBox="0 0 14 15" fill="none">
     <path
@@ -56,6 +58,7 @@ const SearchSVG = () => (
   </svg>
 );
 
+/** Handles nav skeleton. */
 export const NavSkeleton = () => (
   <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
     {NAV_SKELETON_WIDTHS.map((width, index) => (
@@ -69,6 +72,7 @@ export const NavSkeleton = () => (
   </List>
 );
 
+/** Handles nav menu items. */
 const NavMenuItems = ({ items, type }) =>
   items.map(({ name: itemName, id }) => (
     <a href={`/${type}/${id}`} key={id}>
@@ -88,6 +92,7 @@ NavMenuItems.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
+/** Handles nav list menu. */
 export const NavListMenu = ({ name, type, data }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -97,6 +102,7 @@ export const NavListMenu = ({ name, type, data }) => {
   if (!items.length) return null;
 
   const cols = getDropdownColumnCount(items);
+  /** Renders items. */
   const renderItems = () => <NavMenuItems items={items} type={type} />;
 
   return (
@@ -154,6 +160,7 @@ NavListMenu.propTypes = {
   }),
 };
 
+/** Handles nav list view. */
 export const NavListView = ({ brands, categories, labels }) => (
   <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
     <a href={ROUTES.PRODUCT}>
@@ -182,6 +189,7 @@ NavListView.propTypes = {
   }).isRequired,
 };
 
+/** Handles nav list. */
 const NavList = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -200,6 +208,7 @@ const NavList = () => {
   return <NavListView brands={brands} categories={categories} labels={getNavbarLabels(t)} />;
 };
 
+/** Handles cart tooltip view. */
 export const CartTooltipView = ({ formatPrice, labels, rows, total }) => (
   <div className="nav-tooltip-panel">
     <div className="flex-between mb-3">
@@ -251,6 +260,7 @@ CartTooltipView.propTypes = {
   total: PropTypes.number.isRequired,
 };
 
+/** Handles cart tooltip. */
 const CartTooltip = ({ cart }) => {
   const { t } = useI18n();
   const { formatPrice } = useCurrency();
@@ -270,6 +280,7 @@ CartTooltip.propTypes = {
   cart: PropTypes.object,
 };
 
+/** Handles navbar view. */
 export const NavbarView = ({ cart, labels, onCartClick, onToggleNav, openNav }) => (
   <Navbar
     className="mx-auto max-w-screen-3xl rounded-none px-4 py-2 sticky top-0 z-50"
@@ -373,12 +384,14 @@ NavbarView.propTypes = {
   openNav: PropTypes.bool.isRequired,
 };
 
+/** Handles navbar with sublist. */
 const NavbarWithSublist = () => {
   const [openNav, setOpenNav] = React.useState(false);
   const navigate = useNavigate();
   const { t } = useI18n();
 
   React.useEffect(() => {
+    /** Closes value. */
     const close = () => window.innerWidth >= 960 && setOpenNav(false);
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
@@ -392,6 +405,7 @@ const NavbarWithSublist = () => {
     if (cart) localStorage.setItem(STORAGE_KEYS.ORDER_ID, cart.object.id);
   }, [cart]);
 
+  /** Handles go to cart. */
   const goToCart = () => navigate(getCartRoute(hasAuthToken()));
 
   return (

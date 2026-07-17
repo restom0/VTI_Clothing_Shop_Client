@@ -10,18 +10,21 @@ import {
 
 const ThemeContext = createContext(null);
 
+/** Gets initial theme. */
 const getInitialTheme = () => {
   if (typeof window === "undefined") return DEFAULT_THEME;
 
   return normalizeTheme(window.localStorage.getItem(THEME_STORAGE_KEY));
 };
 
+/** Gets prefers dark. */
 const getPrefersDark = () => {
   if (typeof window === "undefined") return false;
 
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
 };
 
+/** Handles apply theme to document. */
 const applyThemeToDocument = (activeTheme) => {
   if (typeof document === "undefined") return;
 
@@ -30,10 +33,12 @@ const applyThemeToDocument = (activeTheme) => {
   document.documentElement.style.colorScheme = activeTheme;
 };
 
+/** Handles app theme provider. */
 export const AppThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(getInitialTheme);
   const [prefersDark, setPrefersDark] = useState(getPrefersDark);
 
+  /** Sets theme. */
   const setTheme = useCallback((nextTheme) => {
     setThemeState(normalizeTheme(nextTheme));
   }, []);
@@ -54,6 +59,7 @@ export const AppThemeProvider = ({ children }) => {
     }
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    /** Updates preference. */
     const updatePreference = (event) => setPrefersDark(event.matches);
 
     mediaQuery.addEventListener?.("change", updatePreference);
@@ -61,6 +67,7 @@ export const AppThemeProvider = ({ children }) => {
     return () => mediaQuery.removeEventListener?.("change", updatePreference);
   }, []);
 
+  /** Handles value. */
   const value = useMemo(
     () => ({
       activeTheme,
@@ -78,6 +85,7 @@ AppThemeProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+/** Uses theme mode. */
 export const useThemeMode = () => {
   const context = useContext(ThemeContext);
 

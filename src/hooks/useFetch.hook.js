@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { SHOP_URL } from "../configs/api.config";
 
+/** Uses fetch. */
 const useFetch = (resources) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

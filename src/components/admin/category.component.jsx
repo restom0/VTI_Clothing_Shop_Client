@@ -23,8 +23,10 @@ import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
 import { Toast } from "../../configs/sweetalert2.config";
 
+/** Handles category. */
 const Category = () => {
   const [addOpen, setAddOpen] = useState(false);
+  /** Handles add open. */
   const handleAddOpen = () => setAddOpen(!addOpen);
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -44,6 +46,7 @@ const Category = () => {
       setUpdateDescription(categories?.object.find((row) => row.id === selectedId)?.description);
     }
   }, [selectedId, categories]);
+  /** Handles add submit. */
   const handleAddSubmit = async () => {
     try {
       await addCategory({ name, description })
@@ -68,6 +71,7 @@ const Category = () => {
       });
     }
   };
+  /** Updates submit. */
   const updateSubmit = async () => {
     const message = await updateCategory({
       id: categories.object.find((category) => category.id === selectedId).id,
@@ -77,6 +81,7 @@ const Category = () => {
     return message;
   };
 
+  /** Handles delete submit. */
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteCategory(categories.object[selectedId].id);

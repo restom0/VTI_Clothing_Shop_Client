@@ -38,8 +38,11 @@ const ShopList = memo(({ products }) => {
   }, [active]);
 
   // Memoize callbacks để tránh VirtualizedGrid re-render không cần thiết
+  /** Renders item. */
   const renderItem = useCallback((product) => <ProductCard {...product} />, []);
+  /** Gets key. */
   const getKey = useCallback((product) => product.id, []);
+  /** Handles page. */
   const handlePage = useCallback((page) => setActive(page), []);
 
   return (

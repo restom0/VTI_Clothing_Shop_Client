@@ -8,9 +8,11 @@ export const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
+    /** Sets category. */
     setCategory: (state, action) => {
       state.value = action.payload;
     },
+    /** Resets category. */
     resetCategory: (state) => {
       state.value = {};
     },

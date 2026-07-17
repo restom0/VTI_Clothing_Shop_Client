@@ -2,15 +2,18 @@ import { useMemo } from "react";
 
 const DEFAULT_PAGE_SIZE = 6;
 
+/** Gets page count. */
 export const getPageCount = (itemCount, pageSize = DEFAULT_PAGE_SIZE) =>
   Math.max(1, Math.ceil(itemCount / pageSize));
 
+/** Gets page items. */
 export const getPageItems = (items, page, pageSize = DEFAULT_PAGE_SIZE) => {
   const start = (page - 1) * pageSize;
 
   return items.slice(start, start + pageSize);
 };
 
+/** Uses paginated items. */
 const usePaginatedItems = (items, page, pageSize = DEFAULT_PAGE_SIZE) =>
   useMemo(() => {
     const pageCount = getPageCount(items.length, pageSize);

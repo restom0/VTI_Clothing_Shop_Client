@@ -10,19 +10,23 @@ import {
 
 const SeasonContext = createContext(null);
 
+/** Gets initial season. */
 const getInitialSeason = () => {
   if (typeof window === "undefined") return DEFAULT_SEASON;
   return normalizeSeason(window.localStorage.getItem(SEASON_STORAGE_KEY));
 };
 
+/** Handles apply season to document. */
 const applySeasonToDocument = (activeSeason) => {
   if (typeof document === "undefined") return;
   document.documentElement.dataset.season = activeSeason;
 };
 
+/** Handles app season provider. */
 export const AppSeasonProvider = ({ children }) => {
   const [season, setSeasonState] = useState(getInitialSeason);
 
+  /** Sets season. */
   const setSeason = useCallback((next) => {
     setSeasonState(normalizeSeason(next));
   }, []);
@@ -40,6 +44,7 @@ export const AppSeasonProvider = ({ children }) => {
     applySeasonToDocument(activeSeason);
   }, [activeSeason]);
 
+  /** Handles value. */
   const value = useMemo(
     () => ({
       activeSeason, // resolved: "spring" | "summer" | "autumn" | "winter"
@@ -57,6 +62,7 @@ AppSeasonProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+/** Uses season mode. */
 export const useSeasonMode = () => {
   const context = useContext(SeasonContext);
   if (!context) {

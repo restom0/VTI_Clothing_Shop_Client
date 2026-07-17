@@ -37,11 +37,13 @@ import {
 } from "../../styles/classNames";
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
 import { INVENTORY_FILTER } from "../../constants/status.constant";
+/** Handles inventory. */
 const Inventory = () => {
   const [tab1, setTab1] = useState(INVENTORY_FILTER.ALL);
   const { formatPrice } = useCurrency();
   const [open, setOpen] = React.useState(false);
   const [importProducts, setImportProducts] = React.useState(null);
+  /** Handles open. */
   const handleOpen = () => setOpen(!open);
 
   const product = {

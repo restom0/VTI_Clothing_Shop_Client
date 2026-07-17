@@ -9,20 +9,31 @@ export const OrderItemApi = createApi({
     baseUrl: SHOP_URL + api_routes.order_items,
   }),
   tagTypes: ["OrderItem"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets order items. */
     getOrderItems: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["OrderItem"],
     }),
+    /** Gets order items by order. */
     getOrderItemsByOrder: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "OrderItem", id }],
     }),
+    /** Gets order item by order. */
     getOrderItemByOrder: builder.query({
+      /** Handles query. */
       query: (orderId, id) => `${orderId}/${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, orderId, id) => [{ type: "OrderItem", id }],
     }),
+    /** Creates order item. */
     createOrderItem: builder.mutation({
+      /** Handles query. */
       query: ({ order_id, product_id, quantity }) => ({
         url: "",
         method: "POST",
@@ -34,7 +45,9 @@ export const OrderItemApi = createApi({
       }),
       invalidatesTags: ["OrderItem"],
     }),
+    /** Updates order item. */
     updateOrderItem: builder.mutation({
+      /** Handles query. */
       query: ({ id, product_id, quantity }) => ({
         url: `${id}`,
         method: "PUT",
@@ -42,7 +55,9 @@ export const OrderItemApi = createApi({
       }),
       invalidatesTags: ["OrderItem"],
     }),
+    /** Deletes order item. */
     deleteOrderItem: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

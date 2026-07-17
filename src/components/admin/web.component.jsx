@@ -6,6 +6,7 @@ import useOpen from "../../hooks/useOpen.hook";
 import { Toast } from "../../configs/sweetalert2.config";
 import Table from "../shared/table.component";
 import { web } from "../../constants/head_table.constant";
+/** Handles web. */
 const Web = () => {
   const { handleDetailOpen, updateOpen, handleUpdateOpen, deleteOpen, handleDeleteOpen } =
     useOpen();

@@ -102,6 +102,7 @@ const reviews = [
   },
 ];
 
+/** Gets rating label key. */
 const getRatingLabelKey = (rating) => {
   switch (rating) {
     case 5:
@@ -119,6 +120,7 @@ const getRatingLabelKey = (rating) => {
   }
 };
 
+/** Handles product detailpage. */
 const ProductDetailpage = () => {
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(1);
@@ -129,6 +131,7 @@ const ProductDetailpage = () => {
   const [stock, setStock] = useState(0);
   const [amount, setAmount] = useState(1);
   const [select] = useState(-1);
+  /** Handles open. */
   const handleOpen = () => setOpen(!open);
   const [description, setDescription] = React.useState(false);
   const [star, setStar] = React.useState(false);
@@ -197,6 +200,7 @@ const ProductDetailpage = () => {
   const firstItem = product?.object?.[0];
   if (!firstItem) return null;
 
+  /** Handles add cart. */
   const handleAddCart = async () => {
     if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {
@@ -211,6 +215,7 @@ const ProductDetailpage = () => {
     }
   };
 
+  /** Handles add carts. */
   const handleAddCarts = async () => {
     if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {

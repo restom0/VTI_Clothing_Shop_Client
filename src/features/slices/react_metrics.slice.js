@@ -5,15 +5,18 @@ const MAX_MEMORY_SAMPLES = 60;
 const MAX_EVENTS = 80;
 
 const renderSamplesAdapter = createEntityAdapter({
+  /** Sorts comparer. */
   sortComparer: (a, b) => b.timestamp - a.timestamp,
 });
 
+/** Clamps samples. */
 const clampSamples = (state) => {
   if (state.ids.length <= state.maxRenderSamples) return;
 
   renderSamplesAdapter.removeMany(state, state.ids.slice(state.maxRenderSamples));
 };
 
+/** Pushes limited. */
 const pushLimited = (items, item, limit) => {
   items.unshift(item);
   if (items.length > limit) items.length = limit;
@@ -34,6 +37,7 @@ export const reactMetricsSlice = createSlice({
   name: "reactMetrics",
   initialState,
   reducers: {
+    /** Clears react metrics. */
     clearReactMetrics: (state) => {
       renderSamplesAdapter.removeAll(state);
       state.memorySamples = [];
@@ -42,10 +46,12 @@ export const reactMetricsSlice = createSlice({
       state.renderSequence = 0;
       state.lastUpdatedAt = Date.now();
     },
+    /** Records memory sample. */
     recordMemorySample: (state, action) => {
       pushLimited(state.memorySamples, action.payload, MAX_MEMORY_SAMPLES);
       state.lastUpdatedAt = action.payload.timestamp;
     },
+    /** Records react render. */
     recordReactRender: (state, action) => {
       state.renderSequence += 1;
       renderSamplesAdapter.addOne(state, {
@@ -55,15 +61,18 @@ export const reactMetricsSlice = createSlice({
       clampSamples(state);
       state.lastUpdatedAt = action.payload.timestamp;
     },
+    /** Records web metric. */
     recordWebMetric: (state, action) => {
       const metric = action.payload;
       state.webMetrics[metric.name] = metric;
       pushLimited(state.events, metric, MAX_EVENTS);
       state.lastUpdatedAt = metric.timestamp;
     },
+    /** Sets react metrics enabled. */
     setReactMetricsEnabled: (state, action) => {
       state.enabled = action.payload;
     },
+    /** Toggles react metrics panel. */
     toggleReactMetricsPanel: (state) => {
       state.panelOpen = !state.panelOpen;
     },
@@ -81,9 +90,12 @@ export const {
 
 const renderSelectors = renderSamplesAdapter.getSelectors((state) => state.reactMetrics);
 
+/** Selects react metrics state. */
 export const selectReactMetricsState = (state) => state.reactMetrics;
 export const selectRenderSamples = renderSelectors.selectAll;
+/** Selects latest memory sample. */
 export const selectLatestMemorySample = (state) => state.reactMetrics.memorySamples[0] ?? null;
+/** Selects web metrics. */
 export const selectWebMetrics = (state) => state.reactMetrics.webMetrics;
 
 export const selectReactMetricsSummary = createSelector(

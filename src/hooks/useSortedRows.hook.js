@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+/** Sorts rows. */
 export const sortRows = (rows, sort) => {
   const sortIndex = sort?.id ?? 0;
   const direction = sort?.type === "DESC" ? -1 : 1;
@@ -14,6 +15,7 @@ export const sortRows = (rows, sort) => {
   });
 };
 
+/** Uses sorted rows. */
 const useSortedRows = (rows, sort) => useMemo(() => sortRows(rows, sort), [rows, sort]);
 
 export default useSortedRows;

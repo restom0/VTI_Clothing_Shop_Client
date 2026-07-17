@@ -9,6 +9,7 @@ export const openAccordionSlice = createSlice({
   name: "openAccordion",
   initialState,
   reducers: {
+    /** Sets open accordion. */
     setOpenAccordion: (state, action) => {
       state.value = action.payload === state.value ? -1 : action.payload;
       localStorage.setItem(STORAGE_KEYS.OPEN_ACCORDION, action.payload);

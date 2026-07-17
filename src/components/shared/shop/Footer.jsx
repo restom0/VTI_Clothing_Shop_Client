@@ -8,6 +8,7 @@ const currentYear = new Date().getFullYear();
 // Social icon size — developer-icons accepts a `size` number prop
 const SOCIAL_ICON_SIZE = 22;
 
+/** Handles footer view. */
 export const FooterView = ({ footerMenu, socialLinks, t, year }) => (
   <footer className="footer-root">
     <div className="page-container mt-5">
@@ -82,6 +83,7 @@ FooterView.propTypes = {
   year: PropTypes.number.isRequired,
 };
 
+/** Handles footer. */
 const Footer = () => {
   const { t } = useI18n();
 

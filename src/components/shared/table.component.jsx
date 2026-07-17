@@ -15,12 +15,14 @@ import { useI18n } from "../../i18n";
 const ADMIN_TABLE_PAGE_SIZE = 24;
 const ADMIN_TABLE_ROW_ESTIMATE = 64;
 
+/** Gets total col span. */
 const getTotalColSpan = (tableHead, noDelete, noUpdate) =>
   tableHead.reduce(
     (accumulator, currentValue) => accumulator + currentValue.col,
     !noDelete || !noUpdate ? 2 : 1
   );
 
+/** Handles table. */
 const Table = ({
   TABLE_HEAD,
   TABLE_ROWS,
@@ -43,7 +45,9 @@ const Table = ({
   const { pageCount, pageItems } = usePaginatedItems(sortedRows, active, ADMIN_TABLE_PAGE_SIZE);
   const rowVirtualizer = useVirtualizer({
     count: pageItems.length,
+    /** Handles estimate size. */
     estimateSize: () => ADMIN_TABLE_ROW_ESTIMATE,
+    /** Gets scroll element. */
     getScrollElement: () => tableScrollRef.current,
     overscan: 5,
   });
@@ -52,6 +56,7 @@ const Table = ({
   const bottomPadding =
     virtualRows.length > 0 ? rowVirtualizer.getTotalSize() - virtualRows.at(-1).end : 0;
   const totalColSpan = getTotalColSpan(TABLE_HEAD, noDelete, noUpdate);
+  /** Selects row. */
   const selectRow = (rowId) => {
     dispatch(setSelectedId(rowId));
     handleDetailOpen?.();

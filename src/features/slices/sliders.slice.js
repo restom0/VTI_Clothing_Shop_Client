@@ -14,18 +14,22 @@ export const slidersSlice = createSlice({
   name: "sliders",
   initialState,
   reducers: {
+    /** Sets slider. */
     setSlider: (state, action) => {
       const { index, value, publicId } = action.payload;
       state[`slider${index}`] = { value, publicId };
     },
+    /** Deletes slider. */
     deleteSlider: (state, action) => {
       const key = `slider${action.payload}`;
       handleDelete(state[key]);
       state[key] = { ...initialImageState };
     },
+    /** Resets slider. */
     resetSlider: (state, action) => {
       state[`slider${action.payload}`] = { ...initialImageState };
     },
+    /** Resets all sliders. */
     resetAllSliders: (state) => {
       state.slider1 = { ...initialImageState };
       state.slider2 = { ...initialImageState };

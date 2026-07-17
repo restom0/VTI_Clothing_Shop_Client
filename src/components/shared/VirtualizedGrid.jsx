@@ -32,6 +32,7 @@ const VirtualizedGrid = memo(
     const rowCount = Math.ceil(items.length / columns);
 
     // Slice items vào rows — chỉ tính lại khi items / columns đổi
+    /** Handles rows. */
     const rows = useMemo(
       () =>
         Array.from({ length: rowCount }, (_, rowIndex) =>
@@ -41,11 +42,13 @@ const VirtualizedGrid = memo(
     );
 
     // Memoize estimateSize tránh tạo function mới mỗi render
+    /** Handles estimate size. */
     const estimateSize = useCallback(() => estimateRowHeight, [estimateRowHeight]);
 
     const rowVirtualizer = useVirtualizer({
       count: rowCount,
       estimateSize,
+      /** Gets scroll element. */
       getScrollElement: () => parentRef.current,
       overscan,
       // measureElement: DOM node → đo chiều cao thực sau khi render

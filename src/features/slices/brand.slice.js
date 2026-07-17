@@ -8,9 +8,11 @@ export const brandSlice = createSlice({
   name: "brand",
   initialState,
   reducers: {
+    /** Sets brand. */
     setBrand: (state, action) => {
       state.value = action.payload;
     },
+    /** Resets brand. */
     resetBrand: (state) => {
       state.value = {};
     },

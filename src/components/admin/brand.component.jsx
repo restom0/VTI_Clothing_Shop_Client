@@ -23,6 +23,7 @@ import { Toast } from "../../configs/sweetalert2.config";
 import { resetSelectedId } from "../../features/slices/select_id.slice";
 import Loading from "../shared/loading.component";
 
+/** Handles brand. */
 const Brand = () => {
   const { data: brands, error, isLoading } = useGetBrandsQuery();
   const selectedId = useSelector((state) => state.selectedId.value);
@@ -39,10 +40,12 @@ const Brand = () => {
     }
   }, [selectedId, brands]);
   const [addOpen, setAddOpen] = React.useState(false);
+  /** Handles add open. */
   const handleAddOpen = () => setAddOpen(!addOpen);
 
   const [addBrand, { isLoading: isAdded }] = useAddBrandMutation();
   const [updateBrand] = useUpdateBrandMutation();
+  /** Handles add submit. */
   const handleAddSubmit = async () => {
     try {
       await addBrand({ name, description })
@@ -69,6 +72,7 @@ const Brand = () => {
       });
     }
   };
+  /** Updates submit. */
   const updateSubmit = async () => {
     const message = await updateBrand({
       id: brands.object.find((brand) => brand.id === selectedId).id,
@@ -78,6 +82,7 @@ const Brand = () => {
     return message;
   };
   const [deleteBrand] = useDeleteBrandMutation();
+  /** Handles delete submit. */
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteBrand(brands.object[selectedId].id);

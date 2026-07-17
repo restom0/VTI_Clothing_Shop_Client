@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export const DEFAULT_SKELETON_DELAY_MS = 400;
 
+/** Uses delayed loading. */
 const useDelayedLoading = (isLoading, delayMs = DEFAULT_SKELETON_DELAY_MS) => {
   const [shouldShowSkeleton, setShouldShowSkeleton] = useState(false);
 

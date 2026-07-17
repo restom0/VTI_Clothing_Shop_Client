@@ -3,6 +3,7 @@ import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react/
 import { ChevronDownIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
 import { useI18n } from "../../i18n";
 
+/** Handles language switcher. */
 const LanguageSwitcher = () => {
   const { language, setLanguage, supportedLanguages, t } = useI18n();
 

@@ -1,4 +1,6 @@
+/** Handles image upload. */
 const ImageUpload = ({ image, setPublicId, setAvatar }) => {
+  /** Handles upload image. */
   const uploadImage = async (e) => {
     const files = e.target.files;
     const data = new FormData();

@@ -7,6 +7,7 @@ export const accountApi = createApi({
   reducerPath: "AccountApi",
   baseQuery: createBaseQueryWithDummyFallback("account", {
     baseUrl: SHOP_URL + api_routes.users,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,8 +15,11 @@ export const accountApi = createApi({
     },
   }),
   tagTypes: ["Account"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Logs in value. */
     login: builder.mutation({
+      /** Handles query. */
       query: ({ email, username, phoneNumber, password }) => ({
         url: "login",
         method: "POST",
@@ -23,7 +27,9 @@ export const accountApi = createApi({
       }),
       invalidatesTags: ["Account"],
     }),
+    /** Registers value. */
     register: builder.mutation({
+      /** Handles query. */
       query: ({
         name,
         username,
@@ -53,11 +59,15 @@ export const accountApi = createApi({
       }),
       invalidatesTags: ["Account"],
     }),
+    /** Gets account. */
     getAccount: builder.query({
+      /** Handles query. */
       query: () => "profile",
       providesTags: ["Account"],
     }),
+    /** Updates account. */
     updateAccount: builder.mutation({
+      /** Handles query. */
       query: ({ email, username, phoneNumber, password }) => ({
         url: "",
         method: "PUT",
@@ -65,7 +75,9 @@ export const accountApi = createApi({
       }),
       invalidatesTags: ["Account"],
     }),
+    /** Updates password. */
     updatePassword: builder.mutation({
+      /** Handles query. */
       query: ({ oldPassword, newPassword }) => ({
         url: "password",
         method: "PUT",
@@ -73,7 +85,9 @@ export const accountApi = createApi({
       }),
       invalidatesTags: ["Account"],
     }),
+    /** Deletes account. */
     deleteAccount: builder.mutation({
+      /** Handles query. */
       query: () => ({
         url: "",
         method: "DELETE",

@@ -1,5 +1,7 @@
+/** Gets product id. */
 export const getProductId = (product) => product?.product_id?.product_id?.id;
 
+/** Gets unique products. */
 export const getUniqueProducts = (productsResponse) => {
   const products = Array.isArray(productsResponse?.object) ? productsResponse.object : [];
   const seenIds = new Set();
@@ -20,6 +22,7 @@ export const getUniqueProducts = (productsResponse) => {
   });
 };
 
+/** Gets home labels. */
 export const getHomeLabels = (t) => ({
   newProducts: t("home.new_products"),
   styleQuote: t("home.style_quote"),
@@ -28,5 +31,6 @@ export const getHomeLabels = (t) => ({
   emailLabel: t("home.email_label"),
 });
 
+/** Gets home error message. */
 export const getHomeErrorMessage = (error, t) =>
   error ? t("common.error", { message: error.message ?? "" }) : "";

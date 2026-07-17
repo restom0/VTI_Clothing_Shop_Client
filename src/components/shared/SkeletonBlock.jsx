@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 
+/** Handles skeleton block. */
 const SkeletonBlock = ({
   as: Component = "div",
   className = "",

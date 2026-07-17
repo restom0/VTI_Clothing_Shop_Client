@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Notificationpage from "../../layouts/shop/notification.layout";
 import { fail_checkout, success_checkout } from "../../constants/notification.constant";
+/** Handles step3 checkout. */
 const Step3Checkout = () => {
   const [check] = useState(true);
   return <Notificationpage notification={check ? success_checkout : fail_checkout} />;

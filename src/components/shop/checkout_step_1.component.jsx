@@ -14,6 +14,7 @@ import { useCurrency } from "../../currency";
 import { useI18n } from "../../i18n";
 import { STORAGE_KEYS } from "../../constants/storage.constant";
 
+/** Handles step1 checkout. */
 const Step1Checkout = ({ handleNext }) => {
   const { t } = useI18n();
   const [check, setCheck] = React.useState(localStorage.getItem(STORAGE_KEYS.TOKEN) ? true : false);

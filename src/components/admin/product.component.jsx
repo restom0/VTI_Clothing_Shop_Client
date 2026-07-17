@@ -50,6 +50,7 @@ import {
   PRODUCT_VARIANT_GRID_CLASSNAME,
 } from "../../styles/classNames";
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
+/** Handles product list. */
 const ProductList = () => {
   const [open] = React.useState(false);
 
@@ -110,8 +111,11 @@ const ProductList = () => {
       setUpdateCategory(selectedProduct?.category_id.id);
     }
   }, [selectedId, products]);
+  /** Handles add open. */
   const handleAddOpen = () => setAddOpen(true);
+  /** Handles close. */
   const handleClose = () => setAddOpen(false);
+  /** Handles add submit. */
   const handleAddSubmit = async () => {
     try {
       await addProduct({
@@ -146,6 +150,7 @@ const ProductList = () => {
     }
   };
 
+  /** Updates submit. */
   const updateSubmit = async () => {
     const message = await updateProduct({
       id: selectedId,
@@ -156,6 +161,7 @@ const ProductList = () => {
     });
     return message;
   };
+  /** Handles delete submit. */
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteProduct(selectedId);

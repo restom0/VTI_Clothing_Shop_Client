@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { setSelectedId } from "../../../features/slices/select_id.slice";
 
+/** Handles setting button. */
 const SettingButton = ({
   handleUpdateOpen,
   handleDeleteOpen,

@@ -7,6 +7,7 @@ export const logApi = createApi({
   reducerPath: "logApi",
   baseQuery: createBaseQueryWithDummyFallback("log", {
     baseUrl: SHOP_URL + api_routes.log,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,8 +15,11 @@ export const logApi = createApi({
     },
   }),
   tagTypes: ["Log"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets logs. */
     getLogs: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Log"],
     }),

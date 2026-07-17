@@ -1,15 +1,18 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
 
+/** Handles generate SHA1. */
 const generateSHA1 = (data) => {
   return CryptoJS.SHA1(data).toString(CryptoJS.enc.Hex);
 };
 
+/** Handles generate signature. */
 const generateSignature = (publicId, apiSecret) => {
   const timestamp = new Date().getTime();
   return `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
 };
 
+/** Handles delete. */
 export const handleDelete = (avatar_url) => {
   const cloudName = import.meta.env.VITE_REACT_APP_CLOUD_NAME;
   const apiKey = import.meta.env.VITE_REACT_APP_APIKEY;

@@ -1,4 +1,5 @@
 import "./Icon2.css";
+/** Handles icon2. */
 const Icon2 = () => {
   return (
     <svg

@@ -3,6 +3,7 @@ import { Typography } from "@material-tailwind/react/components/Typography";
 
 import Pagination from "../shared/pagination.component";
 import { useI18n } from "../../i18n";
+/** Handles product seen. */
 const ProductSeen = () => {
   const { t } = useI18n();
   return (

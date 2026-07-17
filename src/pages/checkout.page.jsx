@@ -7,12 +7,15 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Step1Checkout from "../components/shop/checkout_step_1.component";
 import Step2Checkout from "../components/shop/checkout_step_2.component";
 import Step3Checkout from "../components/shop/checkout_step_3.component";
+/** Handles checkoutpage. */
 const Checkoutpage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isLastStep, setIsLastStep] = React.useState(false);
   const [isFirstStep, setIsFirstStep] = React.useState(false);
 
+  /** Handles next. */
   const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
+  /** Handles prev. */
   const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
   return (

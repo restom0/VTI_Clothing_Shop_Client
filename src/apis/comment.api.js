@@ -8,16 +8,24 @@ export const commentApi = createApi({
     baseUrl: SHOP_URL + api_routes.comments,
   }),
   tagTypes: ["Comment"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets comments. */
     getComments: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Comment"],
     }),
+    /** Gets comment. */
     getComment: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "Comment", id }],
     }),
+    /** Adds comment. */
     addComment: builder.mutation({
+      /** Handles query. */
       query: ({ product_id, content, star }) => ({
         url: "",
         method: "POST",
@@ -25,7 +33,9 @@ export const commentApi = createApi({
       }),
       invalidatesTags: ["Comment"],
     }),
+    /** Updates comment. */
     updateComment: builder.mutation({
+      /** Handles query. */
       query: ({ id, content }) => ({
         url: `${id}`,
         method: "PUT",
@@ -33,7 +43,9 @@ export const commentApi = createApi({
       }),
       invalidatesTags: ["Comment"],
     }),
+    /** Deletes comment. */
     deleteComment: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

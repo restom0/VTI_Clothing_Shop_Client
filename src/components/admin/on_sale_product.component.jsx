@@ -122,6 +122,7 @@ const TABLE_ROWS = [
     date: "23/04/18",
   },
 ];
+/** Handles onsale product. */
 const OnsaleProduct = () => {
   const [filters, setFilters] = React.useState("ALL");
   const [values, setValues] = React.useState(null);
@@ -145,10 +146,12 @@ const OnsaleProduct = () => {
   const [subActive, setSubActive] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [opens, setOpens] = React.useState(false);
+  /** Handles open. */
   const handleOpen = () => {
     setFilters("PRODUCT");
     setOpen(true);
   };
+  /** Handles opens. */
   const handleOpens = () => setOpens(true);
   const selectedId = useSelector((state) => state.selectedId.value);
   const { formatPrice } = useCurrency();
@@ -265,12 +268,15 @@ const OnsaleProduct = () => {
     import_productsError
   )
     return <div>Error: {error.message}</div>;
+  /** Handles close opens. */
   const handleCloseOpens = () => {
     setOpens(false);
   };
+  /** Handles close open. */
   const handleCloseOpen = () => {
     setOpen(false);
   };
+  /** Handles add imported product. */
   const handleAddImportedProduct = async () => {
     try {
       await createInputSale({
@@ -292,6 +298,7 @@ const OnsaleProduct = () => {
       });
     }
   };
+  /** Handles add imported products. */
   const handleAddImportedProducts = async () => {
     try {
       await createInputSale({
@@ -316,6 +323,7 @@ const OnsaleProduct = () => {
       });
     }
   };
+  /** Handles reset add imported product. */
   const handleResetAddImportedProduct = async () => {
     setPrice(100);
     setDiscount(0);
@@ -323,6 +331,7 @@ const OnsaleProduct = () => {
     setStartDate(null);
     setEndDate(null);
   };
+  /** Handles reset add imported products. */
   const handleResetAddImportedProducts = async () => {
     setFilters("ALL");
     setPrices(100);
@@ -342,6 +351,7 @@ const OnsaleProduct = () => {
       end_date: item.end_date ? new Date(item.end_date).toLocaleDateString("en-GB") : "Không có",
     };
   });
+  /** Handles update input sales. */
   const handleUpdateInputSales = async () => {
     try {
       const message = await updateInputSale({
@@ -359,6 +369,7 @@ const OnsaleProduct = () => {
       });
     }
   };
+  /** Handles delete submit. */
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteInputSale(selectedId);

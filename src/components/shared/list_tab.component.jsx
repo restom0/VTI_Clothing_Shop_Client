@@ -2,8 +2,10 @@ import { Tab, Tabs, TabsHeader } from "@material-tailwind/react/components/Tabs"
 import PropTypes from "prop-types";
 import { useI18n } from "../../i18n";
 
+/** Handles tablist. */
 const Tablist = ({ TABS, tab, setTab }) => {
   const { t } = useI18n();
+  /** Handles tab. */
   const handleTab = (value) => setTab(value);
   return (
     <div className="flex flex-col items-center justify-between gap-4 md:flex-row mb-3">

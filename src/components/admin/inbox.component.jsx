@@ -11,6 +11,7 @@ const TABLE_ROWS = [
     date: "23/04/18",
   },
 ];
+/** Handles inbox. */
 const Inbox = () => {
   return (
     <>

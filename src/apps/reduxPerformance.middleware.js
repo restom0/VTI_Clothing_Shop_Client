@@ -5,6 +5,7 @@ export const reduxPerformanceListener = createListenerMiddleware();
 
 reduxPerformanceListener.startListening({
   matcher: isRejectedWithValue,
+  /** Handles effect. */
   effect: async (action, listenerApi) => {
     listenerApi.dispatch(
       recordWebMetric({

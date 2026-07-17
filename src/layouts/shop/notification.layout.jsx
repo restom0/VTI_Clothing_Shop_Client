@@ -5,6 +5,7 @@ import { Button } from "@material-tailwind/react/components/Button";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "../../i18n";
 
+/** Handles notification layout. */
 export function NotificationLayout({ notification, noti }) {
   const navigate = useNavigate();
   const { t } = useI18n();

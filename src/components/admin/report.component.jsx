@@ -13,6 +13,7 @@ import Table from "../shared/table.component";
 import { CHART_TITLE_FONT_SIZE, getChartDatasetTheme } from "../../constants/chart_theme.constant";
 import { useI18n } from "../../i18n";
 
+/** Handles report. */
 const Report = () => {
   const { t } = useI18n();
   const [tab, setTab] = React.useState("revenue");

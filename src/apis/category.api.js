@@ -7,6 +7,7 @@ export const categoryApi = createApi({
   reducerPath: "categoryApi",
   baseQuery: createBaseQueryWithDummyFallback("category", {
     baseUrl: SHOP_URL + api_routes.categories,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,16 +15,24 @@ export const categoryApi = createApi({
     },
   }),
   tagTypes: ["Category"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets categories. */
     getCategories: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Category"],
     }),
+    /** Gets category. */
     getCategory: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "Category", id }],
     }),
+    /** Adds category. */
     addCategory: builder.mutation({
+      /** Handles query. */
       query: ({ name, description }) => ({
         url: "",
         method: "POST",
@@ -31,7 +40,9 @@ export const categoryApi = createApi({
       }),
       invalidatesTags: ["Category"],
     }),
+    /** Updates category. */
     updateCategory: builder.mutation({
+      /** Handles query. */
       query: ({ id, name, description }) => ({
         url: `${id}`,
         method: "PUT",
@@ -39,7 +50,9 @@ export const categoryApi = createApi({
       }),
       invalidatesTags: ["Category"],
     }),
+    /** Deletes category. */
     deleteCategory: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

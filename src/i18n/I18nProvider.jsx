@@ -10,6 +10,7 @@ import {
 
 const I18nContext = createContext(null);
 
+/** Handles detect browser language. */
 const detectBrowserLanguage = () => {
   if (typeof navigator === "undefined") return null;
 
@@ -18,6 +19,7 @@ const detectBrowserLanguage = () => {
   return languages.map(normalizeLanguage).find(Boolean) ?? null;
 };
 
+/** Gets initial language. */
 const getInitialLanguage = () => {
   if (typeof window === "undefined") return FALLBACK_LANGUAGE;
 
@@ -26,9 +28,11 @@ const getInitialLanguage = () => {
   return storedLanguage ?? detectBrowserLanguage() ?? FALLBACK_LANGUAGE;
 };
 
+/** Handles i18n provider. */
 export const I18nProvider = ({ children }) => {
   const [language, setLanguageState] = useState(getInitialLanguage);
 
+  /** Sets language. */
   const setLanguage = useCallback((nextLanguage) => {
     setLanguageState(normalizeLanguage(nextLanguage) ?? FALLBACK_LANGUAGE);
   }, []);
@@ -38,7 +42,9 @@ export const I18nProvider = ({ children }) => {
     document.documentElement.lang = language;
   }, [language]);
 
+  /** Handles value. */
   const value = useMemo(() => {
+    /** Handles t. */
     const t = (key, params) => translate(language, key, params);
 
     return {
@@ -56,6 +62,7 @@ I18nProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+/** Uses i18n. */
 export const useI18n = () => {
   const context = useContext(I18nContext);
 

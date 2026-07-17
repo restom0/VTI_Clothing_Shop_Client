@@ -9,6 +9,7 @@ import { profile_menu } from "../../constants/menu_item.constant";
 import { Avatar } from "@mui/material";
 import { useI18n } from "../../i18n";
 import { STORAGE_KEYS } from "../../constants/storage.constant";
+/** Handles profile sidebar. */
 const ProfileSidebar = ({ tab, setTab }) => {
   const navigate = useNavigate();
   const { t } = useI18n();

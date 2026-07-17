@@ -3,6 +3,7 @@ import NavbarWithSublist from "../../components/shared/shop/NavbarWithSublist";
 import Footer from "../../components/shared/shop/Footer";
 import { Outlet } from "react-router-dom";
 
+/** Handles layout. */
 const Layout = () => {
   return (
     <>

@@ -9,6 +9,7 @@ export const sidebar_itemSlice = createSlice({
   name: "sidebar_item",
   initialState,
   reducers: {
+    /** Sets sidebar item. */
     setSidebarItem: (state, action) => {
       state.value = action.payload.label;
       localStorage.setItem(STORAGE_KEYS.SIDEBAR_ITEM, action.payload.label);

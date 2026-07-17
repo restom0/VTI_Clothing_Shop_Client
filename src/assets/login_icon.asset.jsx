@@ -1,4 +1,5 @@
 import "./login_icon.css";
+/** Handles icon. */
 const Icon = () => {
   return (
     <svg

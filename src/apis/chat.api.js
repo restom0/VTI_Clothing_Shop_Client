@@ -7,6 +7,7 @@ export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: createBaseQueryWithDummyFallback("chat", {
     baseUrl: SHOP_URL + api_routes.chat,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,16 +15,24 @@ export const chatApi = createApi({
     },
   }),
   tagTypes: ["Chat"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets chats. */
     getChats: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Chat"],
     }),
+    /** Gets chat. */
     getChat: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "Chat", id }],
     }),
+    /** Creates chat. */
     createChat: builder.mutation({
+      /** Handles query. */
       query: ({ receiver_id, message }) => ({
         url: "",
         method: "POST",
@@ -31,7 +40,9 @@ export const chatApi = createApi({
       }),
       invalidatesTags: ["Chat"],
     }),
+    /** Updates chat. */
     updateChat: builder.mutation({
+      /** Handles query. */
       query: ({ id, receiver_id, message }) => ({
         url: `${id}`,
         method: "PUT",
@@ -39,7 +50,9 @@ export const chatApi = createApi({
       }),
       invalidatesTags: ["Chat"],
     }),
+    /** Handles reply chat. */
     replyChat: builder.mutation({
+      /** Handles query. */
       query: ({ id, message }) => ({
         url: `reply/${id}`,
         method: "POST",
@@ -47,7 +60,9 @@ export const chatApi = createApi({
       }),
       invalidatesTags: ["Chat"],
     }),
+    /** Deletes chat. */
     deleteChat: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

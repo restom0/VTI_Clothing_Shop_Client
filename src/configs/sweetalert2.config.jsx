@@ -10,6 +10,7 @@ const Toast = withReactContent(Swal).mixin({
   customClass: {
     container: "!z-[10000]",
   },
+  /** Handles did open. */
   didOpen: (toast) => {
     toast.onmouseenter = Swal.stopTimer;
     toast.onmouseleave = Swal.resumeTimer;

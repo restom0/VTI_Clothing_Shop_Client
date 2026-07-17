@@ -7,6 +7,7 @@ export const voucherApi = createApi({
   reducerPath: "voucherApi",
   baseQuery: createBaseQueryWithDummyFallback("voucher", {
     baseUrl: SHOP_URL + api_routes.vouchers,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,24 +15,37 @@ export const voucherApi = createApi({
     },
   }),
   tagTypes: ["Voucher"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets vouchers. */
     getVouchers: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["Voucher"],
     }),
+    /** Gets voucher. */
     getVoucher: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "Voucher", id }],
     }),
+    /** Gets voucher by code. */
     getVoucherByCode: builder.query({
+      /** Handles query. */
       query: (code) => `code/${code}`,
+      /** Handles provides tags. */
       providesTags: (result, error, code) => [{ type: "Voucher", code }],
     }),
+    /** Gets available vouchers. */
     getAvailableVouchers: builder.query({
+      /** Handles query. */
       query: () => "available",
       providesTags: ["Voucher"],
     }),
+    /** Adds voucher. */
     addVoucher: builder.mutation({
+      /** Handles query. */
       query: ({ code, input_stock, value, available_date, expired_date }) => ({
         url: "",
         method: "POST",
@@ -39,7 +53,9 @@ export const voucherApi = createApi({
       }),
       invalidatesTags: ["Voucher"],
     }),
+    /** Updates voucher. */
     updateVoucher: builder.mutation({
+      /** Handles query. */
       query: ({ id, code, input_stock, value, available_date, expired_date }) => ({
         url: `${id}`,
         method: "PUT",
@@ -47,7 +63,9 @@ export const voucherApi = createApi({
       }),
       invalidatesTags: ["Voucher"],
     }),
+    /** Deletes voucher. */
     deleteVoucher: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",

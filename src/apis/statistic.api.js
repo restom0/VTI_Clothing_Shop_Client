@@ -7,6 +7,7 @@ export const StatApi = createApi({
   reducerPath: "StatApi",
   baseQuery: createBaseQueryWithDummyFallback("stat", {
     baseUrl: SHOP_URL,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,8 +15,11 @@ export const StatApi = createApi({
     },
   }),
   tagTypes: ["Stat"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets stat. */
     getStat: builder.query({
+      /** Handles query. */
       query: () => "stat/analysis",
       providesTags: ["Stat"],
     }),

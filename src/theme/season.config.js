@@ -50,6 +50,7 @@ export const SEASON_OPTIONS = [
  * Detect the current season from the calendar month.
  * @returns {"spring"|"summer"|"autumn"|"winter"}
  */
+/** Handles detect season by month. */
 export const detectSeasonByMonth = () => {
   const month = new Date().getMonth() + 1; // 1–12
   const season = SEASON_OPTIONS.find((opt) => opt.months && opt.months.includes(month));
@@ -60,6 +61,7 @@ export const detectSeasonByMonth = () => {
  * Validate and normalize a stored season value.
  * Falls back to DEFAULT_SEASON if unknown.
  */
+/** Normalizes season. */
 export const normalizeSeason = (season) => {
   const valid = SEASON_OPTIONS.some(({ value }) => value === season);
   return valid ? season : DEFAULT_SEASON;
@@ -68,6 +70,7 @@ export const normalizeSeason = (season) => {
 /**
  * Resolve the effective season (i.e. expand "auto" → actual season name).
  */
+/** Resolves season. */
 export const resolveSeason = (season) => {
   const normalized = normalizeSeason(season);
   return normalized === "auto" ? detectSeasonByMonth() : normalized;

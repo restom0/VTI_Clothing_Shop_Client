@@ -13,8 +13,10 @@ import { SIDEBAR_SEARCH } from "../../constants/sidebar_search.constant";
 import { setOpenAccordion } from "../../features/slices/open_accordion.slice";
 import { setSidebarItem } from "../../features/slices/sidebar_item.slice";
 
+/** Gets sidebar item class name. */
 const getSidebarItemClassName = (isActive) => (isActive ? "sidebar-item-active" : "");
 
+/** Handles sidebar with search. */
 const SidebarWithSearch = () => {
   const sidebarItem = useSelector((state) => state.sidebar_item.value);
   const openAccordion = useSelector((state) => state.openAccordion.value);

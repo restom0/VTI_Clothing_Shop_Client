@@ -11,6 +11,7 @@ import { getChartDatasetTheme } from "../../constants/chart_theme.constant";
 import Loading from "../shared/loading.component";
 import { useI18n } from "../../i18n";
 
+/** Handles analytic. */
 const Analytic = () => {
   const { t } = useI18n();
   const { data: datas, isLoading, error } = useGetStatQuery();

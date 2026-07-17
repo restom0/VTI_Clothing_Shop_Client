@@ -8,13 +8,19 @@ export const onSaleProductApi = createApi({
     baseUrl: SHOP_URL + api_routes.on_sale_products,
   }),
   tagTypes: ["onSaleProduct"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets on sale products. */
     getOnSaleProducts: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["onSaleProduct"],
     }),
+    /** Gets on sale product. */
     getOnSaleProduct: builder.query({
+      /** Handles query. */
       query: (id) => `${id}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "onSaleProduct", id }],
     }),
   }),

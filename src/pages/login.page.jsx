@@ -11,24 +11,28 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { STORAGE_KEYS } from "../constants/storage.constant";
 
+/** Handles loginpage. */
 function Loginpage() {
   const navigate = useNavigate();
   const { t } = useI18n();
   const [input, setInput] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [data, setData] = React.useState({});
+  /** Handles input change. */
   const handleInputChange = (e) => {
     setInput(e.target.value);
     if (password !== "") {
       handleSetData(e.target.value, password);
     }
   };
+  /** Handles password change. */
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     if (input !== "") {
       handleSetData(input, e.target.value);
     }
   };
+  /** Handles set data. */
   const handleSetData = (input, password) => {
     const emailRegExp = new RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
     const phoneNumberRegExp = new RegExp(/^[0-9]{10,11}$/);
@@ -49,6 +53,7 @@ function Loginpage() {
       });
     }
   };
+  /** Handles login. */
   const handleLogin = async () => {
     try {
       const message = await login(data).unwrap();

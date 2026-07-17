@@ -62,4 +62,5 @@ export const SOCIAL_LINKS = [
   },
 ];
 
+/** Gets footer copyright. */
 export const getFooterCopyright = (year, owner, rightsText) => `© ${year} ${owner}. ${rightsText}`;

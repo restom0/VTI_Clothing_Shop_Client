@@ -9,6 +9,7 @@ import { useGetLogsQuery } from "../../apis/log.api";
 import Loading from "../shared/loading.component";
 import { useNavigate } from "react-router-dom";
 
+/** Handles log. */
 const Log = () => {
   const navigate = useNavigate();
   const { data: logs, isLoading: isLogsLoading, error: logsError } = useGetLogsQuery();

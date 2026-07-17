@@ -10,6 +10,7 @@ import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRig
 import Tablist from "../shared/list_tab.component";
 import { rating } from "../../constants/tab.constant";
 import { useI18n } from "../../i18n";
+/** Handles product rating. */
 const ProductRating = () => {
   const [tab, setTab] = useState("unrate");
   const { t } = useI18n();

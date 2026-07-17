@@ -5,6 +5,7 @@ import { comment } from "../../constants/head_table.constant";
 import { useDeleteCommentMutation, useGetCommentsQuery } from "../../apis/comment.api";
 import Loading from "../shared/loading.component";
 
+/** Handles comment. */
 const Comment = () => {
   const { data: comments, error, isLoading } = useGetCommentsQuery();
   const [deleteComment] = useDeleteCommentMutation();
@@ -14,6 +15,7 @@ const Comment = () => {
   //   useAddCommentMutation();
   if (isLoading) return <Loading />;
   if (error) return <div>error</div>;
+  /** Handles delete comment. */
   const handleDeleteComment = async (id) => {
     try {
       const message = await deleteComment(id);

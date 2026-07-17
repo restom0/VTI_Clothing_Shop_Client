@@ -73,11 +73,15 @@ import {
   IMPORT_UPLOAD_TEXT_CLASSNAME,
 } from "../../styles/classNames";
 
+/** Handles gender label. */
 const genderLabel = (gender) => (gender === "MALE" ? "Nam" : gender === "FEMALE" ? "Nữ" : "Unisex");
 
+/** Clamps range. */
 const clampRange = (raw, min, max) => (Number.isNaN(raw) || raw < min ? min : Math.min(raw, max));
+/** Clamps floor. */
 const clampFloor = (raw, min) => (Number.isNaN(raw) || raw < min ? min : raw);
 
+/** Finds old variant. */
 const findOldVariant = (importedProducts, productId, colorCode, size, material) =>
   importedProducts?.object?.find(
     (item) =>
@@ -90,6 +94,7 @@ const findOldVariant = (importedProducts, productId, colorCode, size, material) 
 // Upload dropzone (empty) or image preview (filled). Keeping the empty/filled
 // choice here removes ~15 conditionals from ImportProduct. `upload`/`deleteButton`
 // are passed as elements so each call site keeps its exact wiring.
+/** Handles image slot. */
 const ImageSlot = ({
   value,
   imageKey,
@@ -152,10 +157,12 @@ const ImageSlot = ({
     </div>
   );
 
+/** Handles import product. */
 const ImportProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { formatPrice } = useCurrency();
+  /** Formats optional price. */
   const formatOptionalPrice = (price) => (price == null ? "" : formatPrice(price));
   // const avatar_url = useSelector((state) => state.avatar_url);
   // const slider1 = useSelector((state) => state.slider1);
@@ -206,12 +213,16 @@ const ImportProduct = () => {
   const [updateGender, setUpdateGender] = useState("");
   const [updateImportPrice, setUpdateImportPrice] = useState(1000);
   const [updateImportNumber, setUpdateImportNumber] = useState(1);
+  /** Handles new open. */
   const handleNewOpen = () => setNewOpen(true);
 
+  /** Handles old open. */
   const handleOldOpen = () => setOldOpen(true);
 
+  /** Handles new close. */
   const handleNewClose = () => setNewOpen(false);
 
+  /** Handles old close. */
   const handleOldClose = () => setOldOpen(false);
 
   const { data: products, error, isLoading } = useGetProductsQuery();
@@ -223,6 +234,7 @@ const ImportProduct = () => {
   const [addImportedProduct, { isLoading: isAdded }] = useAddImportedProductMutation();
   const [updateImportedProduct, { isLoading: isUpdated }] = useUpdateImportedProductMutation();
   const [deleteImportedProduct, { isLoading: isDeleted }] = useDeleteImportedProductMutation();
+  /** Handles import payload. */
   const importPayload = () => ({
     product_id: product,
     color_code: color_code,
@@ -245,6 +257,7 @@ const ImportProduct = () => {
     public_id_slider_url_4: publicIdSlider4,
     importNumber: Number(importNumber),
   });
+  /** Resets new form. */
   const resetNewForm = () => {
     handleNewClose();
     setAvatar_Url("");
@@ -268,6 +281,7 @@ const ImportProduct = () => {
     setImportPrice(1000);
     setImportNumber(1);
   };
+  /** Handles add submit. */
   const handleAddSubmit = async () => {
     if (!oldOpen && !newOpen) return;
     try {
@@ -284,6 +298,7 @@ const ImportProduct = () => {
       }
     }
   };
+  /** Updates submit. */
   const updateSubmit = async () => {
     const search = importedProducts.object.find((row) => row.id === selectedId);
     return await updateImportedProduct({
@@ -313,6 +328,7 @@ const ImportProduct = () => {
       importNumber: updateImportNumber,
     });
   };
+  /** Handles delete submit. */
   const handleDeleteSubmit = async () => {
     try {
       const message = await deleteImportedProduct(
@@ -395,6 +411,7 @@ const ImportProduct = () => {
     selectedId === -1
       ? null
       : (importedProducts?.object?.find((row) => row.id === selectedId) ?? null);
+  /** Handles import field. */
   const importField = (selector, fallback = "") =>
     selectedImport ? (selector(selectedImport) ?? fallback) : fallback;
   const oldVariant = findOldVariant(importedProducts, product, color_code, size, material);

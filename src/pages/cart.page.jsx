@@ -15,6 +15,7 @@ import { useI18n } from "../i18n";
 import { STORAGE_KEYS } from "../constants/storage.constant";
 
 // ─── SVG icons for quantity stepper ───────────────────────────────
+/** Handles minus SVG. */
 const MinusSVG = () => (
   <svg
     className="w-2.5 h-2.5"
@@ -33,6 +34,7 @@ const MinusSVG = () => (
   </svg>
 );
 
+/** Handles plus SVG. */
 const PlusSVG = () => (
   <svg
     className="w-2.5 h-2.5"
@@ -52,6 +54,7 @@ const PlusSVG = () => (
 );
 
 // ─── Cart page ─────────────────────────────────────────────────────
+/** Handles cart page. */
 const CartPage = () => {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
@@ -70,6 +73,7 @@ const CartPage = () => {
   }, [hasToken, navigate]);
 
   // ── Quantity update handler ────────────────────────────────────
+  /** Handles update quantity. */
   const handleUpdateQuantity = async (item, delta) => {
     const newQty = (item.quantity ?? 0) + delta;
     if (newQty < 1) return;

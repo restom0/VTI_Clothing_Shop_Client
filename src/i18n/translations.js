@@ -7,6 +7,7 @@ import {
 
 export { FALLBACK_LANGUAGE, LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, translations };
 
+/** Normalizes language. */
 export const normalizeLanguage = (language) => {
   if (!language) return null;
 
@@ -14,12 +15,14 @@ export const normalizeLanguage = (language) => {
   return SUPPORTED_LANGUAGES.some(({ code }) => code === languageCode) ? languageCode : null;
 };
 
+/** Handles interpolate message. */
 export const interpolateMessage = (template, params = {}) =>
   Object.entries(params).reduce(
     (message, [key, value]) => message.replace(new RegExp(`\\{${key}\\}`, "g"), String(value)),
     template
   );
 
+/** Handles translate. */
 export const translate = (language, key, params) => {
   const normalizedLanguage = normalizeLanguage(language) ?? FALLBACK_LANGUAGE;
   const labels = translations[normalizedLanguage] ?? translations[FALLBACK_LANGUAGE];

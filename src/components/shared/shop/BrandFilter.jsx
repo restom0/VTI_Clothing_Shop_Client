@@ -2,6 +2,7 @@ import { Radio } from "@material-tailwind/react/components/Radio";
 import { Typography } from "@material-tailwind/react/components/Typography";
 import { useI18n } from "../../../i18n";
 
+/** Handles brand filter. */
 const BrandFilter = () => {
   const { t } = useI18n();
   const brands = [

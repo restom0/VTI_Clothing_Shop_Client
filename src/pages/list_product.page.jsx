@@ -5,6 +5,7 @@ import ProductFilter from "../components/shared/shop/ProductFilter";
 import ShopList from "../components/shared/shop/ShopList";
 import { SHOP_MOCK_PRODUCTS } from "../mocks/shop_products.mock";
 
+/** Handles productpage. */
 const Productpage = () => {
   const products = SHOP_MOCK_PRODUCTS;
 

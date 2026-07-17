@@ -5,9 +5,11 @@ import PropTypes from "prop-types";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { setSort } from "../../features/slices/sort.slice";
+/** Handles table header. */
 const TableHeader = ({ TABLE_HEAD, noUpdate, noDelete }) => {
   const sort = useSelector((state) => state.sort);
   const dispatch = useDispatch();
+  /** Handles header click. */
   const handleHeaderClick = (column) => {
     const order = column === sort.id && sort.type === "ASC" ? "DESC" : "ASC";
     dispatch(setSort({ column, order }));

@@ -2,6 +2,7 @@ import "./loading.css";
 import SkeletonBlock from "./SkeletonBlock";
 import { useI18n } from "../../i18n";
 
+/** Handles loading rail. */
 const LoadingRail = () => (
   <div className="loading-rail" aria-hidden="true">
     <span className="loading-rail__track" />
@@ -11,6 +12,7 @@ const LoadingRail = () => (
   </div>
 );
 
+/** Handles loading skeleton. */
 const LoadingSkeleton = () => (
   <div className="loading-skeleton" aria-hidden="true">
     <div className="loading-skeleton__header">
@@ -30,6 +32,7 @@ const LoadingSkeleton = () => (
   </div>
 );
 
+/** Handles loading. */
 const Loading = () => {
   const { t } = useI18n();
   const loadingLabel = t("loading.label");

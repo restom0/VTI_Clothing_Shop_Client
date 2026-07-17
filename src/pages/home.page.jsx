@@ -23,12 +23,14 @@ import { getHomeErrorMessage, getHomeLabels, getUniqueProducts } from "./home.pa
 // Background for the parallax break between sections
 const PARALLAX_IMAGE = "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80";
 
+/** Renders slide. */
 const renderSlide = (slide, index) => (
   <SwiperSlide key={index}>
     <img src={slide} alt={`Slide ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
   </SwiperSlide>
 );
 
+/** Handles homepage view. */
 export const HomepageView = ({ labels, products, slides }) => (
   <>
     {/* ── Hero carousel ─────────────────────────────────── */}
@@ -106,6 +108,7 @@ HomepageView.propTypes = {
   slides: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
+/** Handles homepage. */
 const Homepage = () => {
   const { t } = useI18n();
   const { data: products, isLoading, error } = useGetOnSaleProductsQuery();

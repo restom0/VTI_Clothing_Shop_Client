@@ -11,6 +11,7 @@ import { useGetOrdersQuery } from "../../apis/order.api";
 import Loading from "../shared/loading.component";
 import { useSelector } from "react-redux";
 import { useCurrency } from "../../currency";
+/** Handles all order. */
 const AllOrder = () => {
   const [tab, setTab] = useState("ALL");
   const selectedId = useSelector((state) => state.selectedId.value);

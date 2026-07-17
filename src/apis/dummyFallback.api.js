@@ -7,6 +7,7 @@ const DEFAULT_RESPONSE = {
   statusCode: 200,
 };
 
+/** Handles with object. */
 const withObject = (object) => ({
   ...DEFAULT_RESPONSE,
   object,
@@ -156,6 +157,7 @@ const CART_ITEMS = [
   { id: 2, product_id: ON_SALE_PRODUCTS[2], quantity: 1 },
 ];
 
+/** Gets line total. */
 const getLineTotal = ({ product_id: product, quantity }) =>
   product.sale_price * (1 - product.discount / 100) * quantity;
 
@@ -305,18 +307,22 @@ const STATS = {
   },
 };
 
+/** Gets path. */
 const getPath = (args) => {
   if (typeof args === "string") return args;
   return args?.url ?? "";
 };
 
+/** Gets id from args. */
 const getIdFromArgs = (args) => {
   const id = Number(getPath(args).split("/").filter(Boolean).at(-1));
   return Number.isNaN(id) ? null : id;
 };
 
+/** Finds by id. */
 const findById = (items, args) => items.find((item) => item.id === getIdFromArgs(args)) ?? items[0];
 
+/** Filters imported products. */
 const filterImportedProducts = (args) => {
   const [filter = "ALL", rawId] = getPath(args).split("/");
   const id = Number(rawId);
@@ -333,6 +339,7 @@ const filterImportedProducts = (args) => {
   return IMPORTED_PRODUCTS;
 };
 
+/** Gets on sale product detail. */
 const getOnSaleProductDetail = (args) => {
   const selected = findById(ON_SALE_PRODUCTS, args);
   const productId = selected?.product_id?.product_id?.id;
@@ -342,78 +349,115 @@ const getOnSaleProductDetail = (args) => {
 
 const FALLBACKS = {
   account: {
+    /** Gets account. */
     getAccount: () => withObject(USER_PROFILE),
   },
   brand: {
+    /** Gets brands. */
     getBrands: () => withObject(BRANDS),
+    /** Gets brand. */
     getBrand: (args) => withObject(findById(BRANDS, args)),
   },
   category: {
+    /** Gets categories. */
     getCategories: () => withObject(CATEGORIES),
+    /** Gets category. */
     getCategory: (args) => withObject(findById(CATEGORIES, args)),
   },
   chat: {
+    /** Gets chats. */
     getChats: () => withObject(CHATS),
+    /** Gets chat. */
     getChat: (args) => withObject(findById(CHATS, args)),
   },
   comment: {
+    /** Gets comments. */
     getComments: () => COMMENTS,
+    /** Gets comment. */
     getComment: (args) => findById(COMMENTS, args),
   },
   importedProduct: {
+    /** Gets imported products. */
     getImportedProducts: () => withObject(IMPORTED_PRODUCTS),
+    /** Gets imported product. */
     getImportedProduct: (args) => withObject(filterImportedProducts(args)),
+    /** Gets colors. */
     getColors: () => withObject(COLORS),
+    /** Gets sizes. */
     getSizes: () => withObject(SIZES),
+    /** Gets materials. */
     getMaterials: () => withObject(MATERIALS),
   },
   inputSale: {
+    /** Gets input sales. */
     getInputSales: () => withObject(INPUT_SALES),
+    /** Gets input sale. */
     getInputSale: (args) => withObject(findById(INPUT_SALES, args)),
   },
   log: {
+    /** Gets logs. */
     getLogs: () => ({ ...DEFAULT_RESPONSE, objects: LOGS }),
   },
   onSaleProduct: {
+    /** Gets on sale products. */
     getOnSaleProducts: () => withObject(ON_SALE_PRODUCTS),
+    /** Gets on sale product. */
     getOnSaleProduct: (args) => withObject(getOnSaleProductDetail(args)),
   },
   order: {
+    /** Gets orders. */
     getOrders: () => withObject(ORDERS),
+    /** Gets orders by user. */
     getOrdersByUser: () => withObject(ORDERS),
+    /** Gets cart. */
     getCart: () => withObject(DUMMY_CART),
   },
   orderItem: {
+    /** Gets order items. */
     getOrderItems: () => withObject(CART_ITEMS),
+    /** Gets order items by order. */
     getOrderItemsByOrder: () => withObject(CART_ITEMS),
+    /** Gets order item by order. */
     getOrderItemByOrder: (args) => withObject(findById(CART_ITEMS, args)),
   },
   product: {
+    /** Gets products. */
     getProducts: () => withObject(PRODUCTS),
+    /** Gets product. */
     getProduct: (args) => withObject(findById(PRODUCTS, args)),
   },
   stat: {
+    /** Gets stat. */
     getStat: () => withObject(STATS),
   },
   user: {
+    /** Gets users. */
     getUsers: () => withObject(USERS),
+    /** Gets user profile. */
     getUserProfile: () => withObject(USER_PROFILE),
   },
   voucher: {
+    /** Gets vouchers. */
     getVouchers: () => withObject(VOUCHERS),
+    /** Gets voucher. */
     getVoucher: (args) => withObject(findById(VOUCHERS, args)),
+    /** Gets voucher by code. */
     getVoucherByCode: () => withObject(VOUCHERS[0]),
+    /** Gets available vouchers. */
     getAvailableVouchers: () => withObject(VOUCHERS),
   },
 };
 
+/** Handles clone. */
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
+/** Checks whether read request. */
 const isReadRequest = (args) => {
   if (typeof args === "string") return true;
   return !args?.method || String(args.method).toUpperCase() === "GET";
 };
 
+/** Creates base query with dummy fallback. */
 export const createBaseQueryWithDummyFallback = (resource, options) => {
   const rawBaseQuery = fetchBaseQuery(options);
 

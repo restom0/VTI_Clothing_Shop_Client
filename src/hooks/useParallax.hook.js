@@ -28,6 +28,7 @@ const useParallax = ({ speed = 0.35, clamp = 60 } = {}) => {
     const el = ref.current;
     if (!el) return;
 
+    /** Calculates value. */
     const calculate = () => {
       const rect = el.getBoundingClientRect();
       const viewH = window.innerHeight;
@@ -45,6 +46,7 @@ const useParallax = ({ speed = 0.35, clamp = 60 } = {}) => {
       setOffsetY(clamped);
     };
 
+    /** Handles scroll. */
     const onScroll = () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       rafId.current = requestAnimationFrame(calculate);

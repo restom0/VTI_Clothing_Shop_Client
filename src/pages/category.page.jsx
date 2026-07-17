@@ -5,6 +5,7 @@ import BrandFilter from "../components/shared/shop/BrandFilter";
 import ProductFilter from "../components/shared/shop/ProductFilter";
 import ShopList from "../components/shared/shop/ShopList";
 import { SHOP_MOCK_PRODUCTS } from "../mocks/shop_products.mock";
+/** Handles catepage. */
 const Catepage = () => {
   const { id } = useParams();
   const products = SHOP_MOCK_PRODUCTS;

@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useI18n } from "../i18n";
 
+/** Handles page icon. */
 const PageIcon = ({ icon: Icon }) => (
   <span className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary-muted text-primary">
     <Icon className="h-6 w-6" strokeWidth={2} />
@@ -24,6 +25,7 @@ PageIcon.propTypes = {
   icon: PropTypes.elementType.isRequired,
 };
 
+/** Handles info card. */
 const InfoCard = ({ description, icon, title }) => (
   <article className="rounded-lg border border-border bg-white p-5 shadow-card">
     <PageIcon icon={icon} />
@@ -38,6 +40,7 @@ InfoCard.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
+/** Handles faq row. */
 const FaqRow = ({ answer, question }) => (
   <details className="group border-b border-border py-5">
     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-text-base">
@@ -53,6 +56,7 @@ FaqRow.propTypes = {
   question: PropTypes.string.isRequired,
 };
 
+/** Handles static content page. */
 const StaticContentPage = ({
   actions = [],
   eyebrow,
@@ -157,6 +161,7 @@ StaticContentPage.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
+/** Handles translate static page. */
 const translateStaticPage = (page, t) => ({
   eyebrow: t(page.eyebrowKey),
   title: t(page.titleKey),
@@ -182,6 +187,7 @@ const translateStaticPage = (page, t) => ({
   })),
 });
 
+/** Handles localized static content page. */
 const LocalizedStaticContentPage = ({ page }) => {
   const { t } = useI18n();
   return <StaticContentPage {...translateStaticPage(page, t)} />;
@@ -377,12 +383,19 @@ const faqPage = {
   faqs: helpCenterFaqs,
 };
 
+/** Handles help center page. */
 export const HelpCenterPage = () => <LocalizedStaticContentPage page={helpCenterPage} />;
+/** Handles career page. */
 export const CareerPage = () => <LocalizedStaticContentPage page={careerPage} />;
+/** Handles about us page. */
 export const AboutUsPage = () => <LocalizedStaticContentPage page={aboutPage} />;
+/** Handles contact page. */
 export const ContactPage = () => <LocalizedStaticContentPage page={contactPage} />;
+/** Handles terms page. */
 export const TermsPage = () => <LocalizedStaticContentPage page={termsPage} />;
+/** Handles policy page. */
 export const PolicyPage = () => <LocalizedStaticContentPage page={policyPage} />;
+/** Handles faq page. */
 export const FaqPage = () => <LocalizedStaticContentPage page={faqPage} />;
 
 export default StaticContentPage;

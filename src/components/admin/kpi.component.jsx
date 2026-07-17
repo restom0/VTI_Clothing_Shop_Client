@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { useCurrency } from "../../currency";
 import { useI18n } from "../../i18n";
 
+/** Handles kpi card. */
 const KpiCard = ({ title, price }) => {
   return (
     <Card className="shadow-sm border border-gray-200 !rounded-lg mb-7">
@@ -33,6 +34,7 @@ const data = [
   { titleKey: "kpi.products_sold" },
 ];
 
+/** Handles kpi. */
 const Kpi = ({ stat }) => {
   const { t } = useI18n();
   const { formatPrice, locale } = useCurrency();

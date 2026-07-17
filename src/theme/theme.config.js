@@ -7,9 +7,11 @@ export const THEME_OPTIONS = [
   { value: "system", labelKey: "theme.system" },
 ];
 
+/** Normalizes theme. */
 export const normalizeTheme = (theme) =>
   THEME_OPTIONS.some(({ value }) => value === theme) ? theme : DEFAULT_THEME;
 
+/** Resolves theme. */
 export const resolveTheme = (theme, prefersDark) => {
   const normalizedTheme = normalizeTheme(theme);
 

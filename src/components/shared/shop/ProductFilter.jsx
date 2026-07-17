@@ -10,6 +10,7 @@ import {
   toggleSelection,
 } from "./productFilter.config";
 
+/** Handles product filter view. */
 export const ProductFilterView = ({
   colorOptions,
   labels,
@@ -86,6 +87,7 @@ ProductFilterView.propTypes = {
   sizes: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
+/** Handles product filter. */
 const ProductFilter = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);

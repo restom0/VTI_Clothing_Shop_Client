@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { useCurrency } from "../../currency";
 import { useI18n } from "../../i18n";
 
+/** Handles kpi card. */
 const KpiCard = ({ title, percentage, price, color, icon }) => {
   return (
     <Card className="shadow-sm border border-gray-200 !rounded-lg">
@@ -26,6 +27,7 @@ const KpiCard = ({ title, percentage, price, color, icon }) => {
     </Card>
   );
 };
+/** Formats money. */
 const formatMoney = (money) => {
   return { currencyAmount: money };
 };
@@ -137,9 +139,11 @@ const product = [
     price: "12",
   },
 ];
+/** Handles kpi report. */
 const KpiReport = ({ tab }) => {
   const { t } = useI18n();
   const { formatPrice } = useCurrency();
+  /** Gets display cards. */
   const getDisplayCards = (cards) =>
     cards.map((card) => ({
       ...card,

@@ -9,6 +9,7 @@ export const sortSlice = createSlice({
   name: "sort",
   initialState,
   reducers: {
+    /** Sets sort. */
     setSort: (state, action) => {
       state.id = action.payload.column;
       state.type = action.payload.order;

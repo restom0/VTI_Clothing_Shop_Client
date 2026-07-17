@@ -6,11 +6,13 @@ export const DEFAULT_COLUMN_BREAKPOINTS = Object.freeze([
   { minWidth: 0, columns: 1 },
 ]);
 
+/** Gets column count for width. */
 export const getColumnCountForWidth = (width, breakpoints = DEFAULT_COLUMN_BREAKPOINTS) =>
   breakpoints.find(({ minWidth }) => width >= minWidth)?.columns ??
   breakpoints.at(-1)?.columns ??
   1;
 
+/** Gets initial columns. */
 const getInitialColumns = (breakpoints) => {
   if (typeof window === "undefined") {
     return breakpoints[0]?.columns ?? 1;
@@ -19,12 +21,14 @@ const getInitialColumns = (breakpoints) => {
   return getColumnCountForWidth(window.innerWidth, breakpoints);
 };
 
+/** Uses responsive columns. */
 const useResponsiveColumns = (breakpoints = DEFAULT_COLUMN_BREAKPOINTS) => {
   const [columns, setColumns] = useState(() => getInitialColumns(breakpoints));
 
   useEffect(() => {
     let frame = 0;
 
+    /** Updates columns. */
     const updateColumns = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {

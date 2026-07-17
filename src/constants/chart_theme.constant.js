@@ -8,6 +8,7 @@ export const CHART_SERIES_TOKENS = Object.freeze([
 
 export const CHART_TITLE_FONT_SIZE = 20;
 
+/** Gets CSS token value. */
 export const getCssTokenValue = (token, fallback) => {
   if (typeof window === "undefined") return fallback;
 
@@ -19,12 +20,14 @@ export const getCssTokenValue = (token, fallback) => {
   return value || fallback;
 };
 
+/** Gets chart series color. */
 export const getChartSeriesColor = (index) => {
   const series = CHART_SERIES_TOKENS[index % CHART_SERIES_TOKENS.length];
 
   return getCssTokenValue(series.token, series.fallback);
 };
 
+/** Gets chart dataset theme. */
 export const getChartDatasetTheme = (index) => {
   const color = getChartSeriesColor(index);
 

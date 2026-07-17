@@ -8,12 +8,15 @@ export const activeSlice = createSlice({
   name: "active",
   initialState,
   reducers: {
+    /** Handles increment. */
     increment: (state) => {
       state.value += 1;
     },
+    /** Handles decrement. */
     decrement: (state) => {
       state.value -= 1;
     },
+    /** Sets active. */
     setActive: (state, action) => {
       state.value = action.payload;
     },

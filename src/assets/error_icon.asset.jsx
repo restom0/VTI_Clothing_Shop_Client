@@ -1,4 +1,5 @@
 import "./error_icon.css";
+/** Handles icon error. */
 function IconError() {
   return (
     <svg

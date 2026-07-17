@@ -13,6 +13,7 @@ const SEASON_DOT_COLORS = {
   winter: "#1B509A",
 };
 
+/** Handles season dot. */
 const SeasonDot = ({ value, size = 10 }) => (
   <span
     style={{
@@ -27,6 +28,7 @@ const SeasonDot = ({ value, size = 10 }) => (
   />
 );
 
+/** Handles season switcher. */
 const SeasonSwitcher = () => {
   const { activeSeason, season, setSeason, seasonOptions } = useSeasonMode();
   const { t } = useI18n();

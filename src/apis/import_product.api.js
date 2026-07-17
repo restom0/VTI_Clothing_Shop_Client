@@ -7,6 +7,7 @@ export const importedProductApi = createApi({
   reducerPath: "importedProductApi",
   baseQuery: createBaseQueryWithDummyFallback("importedProduct", {
     baseUrl: SHOP_URL + api_routes.imported_products,
+    /** Handles prepare headers. */
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
       if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -14,16 +15,24 @@ export const importedProductApi = createApi({
     },
   }),
   tagTypes: ["ImportedProduct"],
+  /** Handles endpoints. */
   endpoints: (builder) => ({
+    /** Gets imported products. */
     getImportedProducts: builder.query({
+      /** Handles query. */
       query: () => "",
       providesTags: ["ImportedProduct"],
     }),
+    /** Gets imported product. */
     getImportedProduct: builder.query({
+      /** Handles query. */
       query: ({ filter, id }) => `${filter}/${id || 0}`,
+      /** Handles provides tags. */
       providesTags: (result, error, id) => [{ type: "ImportedProduct", id }],
     }),
+    /** Adds imported product. */
     addImportedProduct: builder.mutation({
+      /** Handles query. */
       query: ({
         product_id,
         color_code,
@@ -73,7 +82,9 @@ export const importedProductApi = createApi({
       }),
       invalidatesTags: ["ImportedProduct"],
     }),
+    /** Updates imported product. */
     updateImportedProduct: builder.mutation({
+      /** Handles query. */
       query: ({
         id,
         product_id,
@@ -130,20 +141,28 @@ export const importedProductApi = createApi({
       }),
       invalidatesTags: ["ImportedProduct"],
     }),
+    /** Deletes imported product. */
     deleteImportedProduct: builder.mutation({
+      /** Handles query. */
       query: (id) => ({
         url: `${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["ImportedProduct"],
     }),
+    /** Gets colors. */
     getColors: builder.query({
+      /** Handles query. */
       query: () => "/colors",
     }),
+    /** Gets sizes. */
     getSizes: builder.query({
+      /** Handles query. */
       query: () => "/sizes",
     }),
+    /** Gets materials. */
     getMaterials: builder.query({
+      /** Handles query. */
       query: () => "/materials",
     }),
   }),

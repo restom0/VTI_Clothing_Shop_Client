@@ -5,6 +5,7 @@ import CategoryFilter from "../components/shared/shop/CategoryFilter";
 import ProductFilter from "../components/shared/shop/ProductFilter";
 import ShopList from "../components/shared/shop/ShopList";
 import { SHOP_MOCK_PRODUCTS } from "../mocks/shop_products.mock";
+/** Handles brandpage. */
 const Brandpage = () => {
   const { id } = useParams();
   const products = SHOP_MOCK_PRODUCTS;

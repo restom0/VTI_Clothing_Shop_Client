@@ -15,6 +15,7 @@ const THEME_ICONS = {
   system: ComputerDesktopIcon,
 };
 
+/** Handles theme switcher. */
 const ThemeSwitcher = () => {
   const { t } = useI18n();
   const { activeTheme, setTheme, theme, themeOptions } = useThemeMode();

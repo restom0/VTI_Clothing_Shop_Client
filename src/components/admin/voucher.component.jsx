@@ -29,6 +29,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { Toast } from "../../configs/sweetalert2.config";
+/** Handles voucher. */
 const Voucher = () => {
   const [code, setCode] = React.useState(null);
   const [inputStock, setInputStock] = React.useState(null);
@@ -43,7 +44,9 @@ const Voucher = () => {
   const selectedId = useSelector((state) => state.selectedId.value);
 
   const [open, setOpen] = React.useState(false);
+  /** Handles open. */
   const handleOpen = () => setOpen(true);
+  /** Handles close. */
   const handleClose = () => setOpen(false);
   const {
     data: vouchers,
@@ -68,6 +71,7 @@ const Voucher = () => {
   if (vouchersLoading) return <Loading />;
   if (vouchersError) return <Errorpage />;
 
+  /** Handles add submit. */
   const handleAddSubmit = async () => {
     try {
       await addVoucher({
@@ -95,6 +99,7 @@ const Voucher = () => {
       });
     }
   };
+  /** Handles update submit. */
   const handleUpdateSubmit = async () => {
     try {
       const message = await updateVoucher({

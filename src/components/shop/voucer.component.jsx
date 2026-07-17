@@ -8,6 +8,7 @@ import { voucher } from "../../constants/tab.constant";
 import { useGetAvailableVouchersQuery, useGetVouchersQuery } from "../../apis/voucher.api";
 import Loading from "../shared/loading.component";
 import { useI18n } from "../../i18n";
+/** Handles voucher. */
 const Voucher = () => {
   const [tab, setTab] = useState("ALL");
   const { t } = useI18n();

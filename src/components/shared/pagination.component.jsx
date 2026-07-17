@@ -4,12 +4,15 @@ import { CardFooter } from "@material-tailwind/react/components/Card";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { decrement, increment, setActive } from "../../features/slices/active.slice";
+/** Handles pagination. */
 const Pagination = ({ page }) => {
   const active = useSelector((state) => state.active.value);
   const dispatch = useDispatch();
+  /** Gets item props. */
   const getItemProps = (index) => ({
     variant: active === index ? "filled" : "text",
     className: active === index ? "bg-[#006edc] text-white" : "",
+    /** Handles click. */
     onClick: () => dispatch(setActive(index)),
   });
   return (

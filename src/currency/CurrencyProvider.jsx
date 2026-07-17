@@ -19,6 +19,7 @@ const CurrencyContext = createContext(null);
 
 const fallbackRates = { [BASE_CURRENCY]: 1 };
 
+/** Handles read cached rates. */
 const readCachedRates = () => {
   if (typeof window === "undefined") return null;
 
@@ -32,12 +33,14 @@ const readCachedRates = () => {
   }
 };
 
+/** Handles write cached rates. */
 const writeCachedRates = (cachePayload) => {
   if (typeof window === "undefined") return;
 
   window.localStorage.setItem(CURRENCY_CACHE_KEY, JSON.stringify(cachePayload));
 };
 
+/** Fetches exchange rates. */
 const fetchExchangeRates = async (signal) => {
   const response = await fetch(EXCHANGE_RATE_API_URL, { signal });
 
@@ -59,6 +62,7 @@ const fetchExchangeRates = async (signal) => {
   };
 };
 
+/** Handles currency provider. */
 export const CurrencyProvider = ({ children }) => {
   const { language } = useI18n();
   const cachedRates = useMemo(readCachedRates, []);
@@ -70,6 +74,7 @@ export const CurrencyProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { currency, locale } = getCurrencyConfigForLanguage(language);
 
+  /** Handles refresh rates. */
   const refreshRates = useCallback(async (options = {}) => {
     const { signal, silent = false } = options;
 
@@ -103,14 +108,17 @@ export const CurrencyProvider = ({ children }) => {
     };
   }, [cachedRates, refreshRates]);
 
+  /** Handles value. */
   const value = useMemo(() => {
     const activeRate = getCurrencyRate(rates, currency);
     const displayCurrency = activeRate ? currency : BASE_CURRENCY;
     const displayLocale = activeRate ? locale : BASE_CURRENCY_LOCALE;
 
+    /** Handles convert price. */
     const convertPrice = (amount, targetCurrency = currency) =>
       convertFromBaseCurrency(amount, rates, targetCurrency);
 
+    /** Formats price. */
     const formatPrice = (amount, targetCurrency = currency) => {
       const targetRate = getCurrencyRate(rates, targetCurrency);
       const safeCurrency = targetRate ? targetCurrency : BASE_CURRENCY;
@@ -149,6 +157,7 @@ CurrencyProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+/** Uses currency. */
 export const useCurrency = () => {
   const context = useContext(CurrencyContext);
 

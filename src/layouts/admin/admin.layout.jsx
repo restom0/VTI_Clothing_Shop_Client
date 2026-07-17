@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import { Toast } from "../../configs/sweetalert2.config";
 import { useSelector } from "react-redux";
 
+/** Handles admin layout. */
 const AdminLayout = ({
   children,
   name,
@@ -68,6 +69,7 @@ const AdminLayout = ({
       });
     }
   }, [deleteOpen, TABLE_ROWS, selectedId, handleDeleteSubmit, handleDeleteClose]);
+  /** Handles update submit. */
   const handleUpdateSubmit = async () => {
     try {
       const message = await updateSubmit();

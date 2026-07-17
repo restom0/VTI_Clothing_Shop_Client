@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteAvatar, resetAvatar } from "../features/slices/avatar_url.slice";
 import { useI18n } from "../i18n";
 
+/** Handles registerpage. */
 const Registerpage = () => {
   const { t } = useI18n();
   const [username, setUsername] = useState("");
@@ -33,6 +34,7 @@ const Registerpage = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
 
+  /** Handles register. */
   const handleRegister = async () => {
     const message = await register({
       name: firstname + " " + lastname,

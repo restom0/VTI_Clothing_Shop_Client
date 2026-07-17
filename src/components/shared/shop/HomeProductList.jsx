@@ -10,6 +10,7 @@ import EastIcon from "@mui/icons-material/East";
 import ProductCard from "./ProductCard";
 import { useI18n } from "../../../i18n";
 
+/** Handles home product list. */
 const HomeProductList = ({ title, products }) => {
   const navigate = useNavigate();
   const { t } = useI18n();
