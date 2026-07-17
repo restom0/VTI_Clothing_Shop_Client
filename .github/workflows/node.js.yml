@@ -5,6 +5,7 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,6 +16,11 @@ jobs:
   build:
     name: Lint, Test & Build
     runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+      SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY || 'VTI_Clothing_Shop_Client' }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL || 'https://sonarcloud.io' }}
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -39,6 +45,13 @@ jobs:
       - name: Test with coverage
         run: yarn test:coverage # enforces coverage thresholds (vite.config.js)
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Publish test results
         if: ${{ always() }}
         uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5
@@ -58,3 +71,42 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Validate Sonar configuration
+        id: sonar_config
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          missing=()
+          [ -n "${SONAR_TOKEN}" ] || missing+=("SONAR_TOKEN secret")
+          [ -n "${SONAR_ORGANIZATION}" ] || missing+=("SONAR_ORGANIZATION secret")
+          [ -n "${SONAR_PROJECT_KEY}" ] || missing+=("SONAR_PROJECT_KEY secret")
+
+          if [ "${#missing[@]}" -gt 0 ]; then
+            printf '::error::Missing required Sonar configuration: %s\n' "${missing[*]}"
+            exit 1
+          fi
+
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+          printf '::notice::If SonarCloud Automatic Analysis is enabled for this project, disable it before using CI analysis.\n'
+
+      - name: SonarCloud Scan
+        id: sonar_scan
+        if: ${{ always() && steps.sonar_config.outputs.ready == 'true' }}
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}
+
+      - name: SonarQube Quality Gate
+        if: ${{ always() && steps.sonar_scan.outcome == 'success' }}
+        uses: SonarSource/sonarqube-quality-gate-action@cf038b0e0cdecfa9e56c198bbb7d21d751d62c3b # v1.2.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
