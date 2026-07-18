@@ -11,6 +11,28 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { STORAGE_KEYS } from "../constants/storage.constant";
 
+/** Builds login credentials from an email, phone number, or username input. */
+export const buildLoginCredentials = (input, password) => {
+  const emailRegExp = new RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
+  const phoneNumberRegExp = new RegExp(/^[0-9]{10,11}$/);
+  if (emailRegExp.test(input)) {
+    return {
+      email: input,
+      password: password,
+    };
+  }
+  if (phoneNumberRegExp.test(input)) {
+    return {
+      phoneNumber: input,
+      password: password,
+    };
+  }
+  return {
+    username: input,
+    password: password,
+  };
+};
+
 /** Handles loginpage. */
 function Loginpage() {
   const navigate = useNavigate();
@@ -20,38 +42,15 @@ function Loginpage() {
   const [data, setData] = React.useState({});
   /** Handles input change. */
   const handleInputChange = (e) => {
-    setInput(e.target.value);
-    if (password !== "") {
-      handleSetData(e.target.value, password);
-    }
+    const nextInput = e.target.value;
+    setInput(nextInput);
+    setData(buildLoginCredentials(nextInput, password));
   };
   /** Handles password change. */
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    if (input !== "") {
-      handleSetData(input, e.target.value);
-    }
-  };
-  /** Handles set data. */
-  const handleSetData = (input, password) => {
-    const emailRegExp = new RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
-    const phoneNumberRegExp = new RegExp(/^[0-9]{10,11}$/);
-    if (emailRegExp.test(input)) {
-      setData({
-        email: input,
-        password: password,
-      });
-    } else if (phoneNumberRegExp.test(input)) {
-      setData({
-        phoneNumber: input,
-        password: password,
-      });
-    } else {
-      setData({
-        username: input,
-        password: password,
-      });
-    }
+    const nextPassword = e.target.value;
+    setPassword(nextPassword);
+    setData(buildLoginCredentials(input, nextPassword));
   };
   /** Handles login. */
   const handleLogin = async () => {

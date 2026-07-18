@@ -9,6 +9,9 @@ import { ChevronDownIcon, Bars2Icon } from "@heroicons/react/24/solid";
 import { account_menu } from "../../../constants/menu_item.constant";
 import { STORAGE_KEYS } from "../../../constants/storage.constant";
 
+/** Checks whether desktop resize should close the admin mobile nav. */
+export const shouldCloseAdminNavOnDesktop = (width) => width >= 960;
+
 /** Handles profile menu. */
 const ProfileMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -81,7 +84,10 @@ const AdminNavbar = () => {
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   React.useEffect(() => {
-    window.addEventListener("resize", () => window.innerWidth >= 960 && setIsNavOpen(false));
+    window.addEventListener(
+      "resize",
+      () => shouldCloseAdminNavOnDesktop(window.innerWidth) && setIsNavOpen(false)
+    );
   }, []);
 
   return (

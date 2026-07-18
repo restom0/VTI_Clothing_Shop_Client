@@ -37,6 +37,21 @@ import {
 } from "../../styles/classNames";
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
 import { INVENTORY_FILTER } from "../../constants/status.constant";
+
+/** Gets imported products matching the selected inventory tab. */
+export const getInventoryProductsByFilter = (importProduct, tab) => {
+  if (tab === INVENTORY_FILTER.AVAILABLE) {
+    return importProduct?.object.filter((product) => product.stock > 0);
+  }
+  if (tab === INVENTORY_FILTER.OUT_OF_STOCK) {
+    return importProduct?.object.filter((product) => product.stock === 0);
+  }
+  if (tab === INVENTORY_FILTER.ALL) {
+    return importProduct?.object;
+  }
+  return undefined;
+};
+
 /** Handles inventory. */
 const Inventory = () => {
   const [tab1, setTab1] = useState(INVENTORY_FILTER.ALL);
@@ -69,15 +84,7 @@ const Inventory = () => {
     error: importProductError,
   } = useGetImportedProductsQuery();
   useEffect(() => {
-    if (tab1 === INVENTORY_FILTER.AVAILABLE) {
-      setImportProducts(importProduct?.object.filter((product) => product.stock > 0));
-    }
-    if (tab1 === INVENTORY_FILTER.OUT_OF_STOCK) {
-      setImportProducts(importProduct?.object.filter((product) => product.stock === 0));
-    }
-    if (tab1 === INVENTORY_FILTER.ALL) {
-      setImportProducts(importProduct?.object);
-    }
+    setImportProducts(getInventoryProductsByFilter(importProduct, tab1));
   }, [tab1, importProduct]);
   if (importProductLoading) return <Loading />;
   if (importProductError) return <div>{importProductError}</div>;

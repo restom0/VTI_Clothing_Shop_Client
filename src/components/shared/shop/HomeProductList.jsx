@@ -10,6 +10,12 @@ import EastIcon from "@mui/icons-material/East";
 import ProductCard from "./ProductCard";
 import { useI18n } from "../../../i18n";
 
+/** Navigates to the product listing page. */
+export const goToProductList = (navigate) => navigate(ROUTES.PRODUCT);
+
+/** Creates the product-list navigation handler. */
+export const createGoToProductListHandler = (navigate) => () => goToProductList(navigate);
+
 /** Handles home product list. */
 const HomeProductList = ({ title, products }) => {
   const navigate = useNavigate();
@@ -23,7 +29,7 @@ const HomeProductList = ({ title, products }) => {
         <h2 className="section-title">{title}</h2>
         <button
           className="flex items-center justify-end gap-1 btn-ghost text-sm ml-auto"
-          onClick={() => navigate(ROUTES.PRODUCT)}
+          onClick={createGoToProductListHandler(navigate)}
         >
           {t("common.view_more")} <EastIcon fontSize="small" />
         </button>

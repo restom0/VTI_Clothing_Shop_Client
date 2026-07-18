@@ -3,6 +3,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const harness = vi.hoisted(() => {
+  const rendered = [];
+
   const createStorage = () => {
     let values = {};
 
@@ -20,8 +22,11 @@ const harness = vi.hoisted(() => {
     };
   };
 
-  const createComponent = (React, tag = "div") => {
-    const MockComponent = ({ children, content, icon, label, value, src, alt, href }) => {
+  const createComponent = (React, tag = "div", name = tag) => {
+    const MockComponent = (componentProps) => {
+      rendered.push({ name, props: componentProps });
+      const { children, content, icon, label, value, src, alt, href } = componentProps;
+
       if (tag === "img") {
         return React.createElement("img", {
           alt: alt ?? "mock image",
@@ -37,9 +42,9 @@ const harness = vi.hoisted(() => {
           ? JSON.stringify(piece)
           : piece
       );
-      const props = href ? { href } : {};
+      const elementProps = href ? { href } : {};
 
-      return React.createElement(tag, props, ...normalizedPieces);
+      return React.createElement(tag, elementProps, ...normalizedPieces);
     };
 
     MockComponent.displayName = `Mock${tag}`;
@@ -50,13 +55,13 @@ const harness = vi.hoisted(() => {
   const moduleFactory = async (names) => {
     const React = await import("react");
 
-    return Object.fromEntries(names.map((name) => [name, createComponent(React)]));
+    return Object.fromEntries(names.map((name) => [name, createComponent(React, "div", name)]));
   };
 
   const defaultModuleFactory = async () => {
     const React = await import("react");
 
-    return { default: createComponent(React) };
+    return { default: createComponent(React, "div", "default") };
   };
 
   const iconModuleFactory = async (names) => {
@@ -74,6 +79,7 @@ const harness = vi.hoisted(() => {
   };
 
   const mutation = vi.fn(() => ({
+    data: { statusCode: 201 },
     unwrap: vi.fn(async () => ({
       object: {
         avatar_url: "avatar.png",
@@ -95,6 +101,7 @@ const harness = vi.hoisted(() => {
     mutation,
     navigateMock: vi.fn(),
     params: { id: "1" },
+    rendered,
     reduxState: {},
   };
 });
@@ -244,6 +251,9 @@ vi.mock("./configs/sweetalert2.config", () => ({
     fire: vi.fn(() => Promise.resolve({ isConfirmed: true })),
   },
 }));
+vi.mock("./utils/delete_image.util", () => ({
+  handleDelete: vi.fn(),
+}));
 
 vi.mock("./assets/login_icon.asset", () => ({
   default: () => React.createElement("svg", { "data-testid": "login-icon" }),
@@ -264,8 +274,11 @@ vi.mock("./components/shared/table.component", () => ({
   default: ({ TABLE_ROWS = [] }) => React.createElement("div", null, `rows:${TABLE_ROWS.length}`),
 }));
 vi.mock("./layouts/admin/admin.layout", () => ({
-  default: ({ bodyDetail, bodyUpdate, children, name, TABLE_ROWS = [] }) =>
-    React.createElement(
+  default: (props) => {
+    harness.rendered.push({ name: "AdminLayout", props });
+    const { bodyDetail, bodyUpdate, children, name, TABLE_ROWS = [] } = props;
+
+    return React.createElement(
       "section",
       null,
       React.createElement("h1", null, name),
@@ -273,7 +286,8 @@ vi.mock("./layouts/admin/admin.layout", () => ({
       React.createElement("div", null, `rows:${TABLE_ROWS.length}`),
       React.createElement("div", null, bodyDetail),
       React.createElement("div", null, bodyUpdate)
-    ),
+    );
+  },
 }));
 vi.mock("./components/upload_image.component", () => ({
   default: ({ image }) => React.createElement("span", null, image),
@@ -611,8 +625,23 @@ const installBrowserState = () => {
 const render = (Component, props = {}) =>
   renderToStaticMarkup(React.createElement(Component, props));
 
+const captured = (name, predicate = () => true) =>
+  harness.rendered.filter((entry) => entry.name === name && predicate(entry.props));
+
+const invokeHandler = async (entry, handlerName = "onClick", event = {}) => {
+  const result = entry?.props?.[handlerName]?.(event);
+  if (result && typeof result.then === "function") await result;
+};
+
+const childText = (value) => {
+  if (Array.isArray(value)) return value.map(childText).join("");
+  if (React.isValidElement(value)) return childText(value.props.children);
+  return value == null ? "" : String(value);
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
+  harness.rendered.length = 0;
   installBrowserState();
   resetApiState();
   resetReduxState();
@@ -938,5 +967,279 @@ describe("Sonar new-code coverage for client UI", () => {
     const { setSidebarItem } = sidebarItemModule;
     expect(sidebarItemReducer(undefined, setSidebarItem({ label: "Orders" })).value).toBe("Orders");
     expect(globalThis.localStorage.setItem).toHaveBeenCalledWith("sidebar_item", "Orders");
+  });
+
+  it("executes targeted new-code handlers and helpers", async () => {
+    const [
+      adminNavbarModule,
+      bannerModule,
+      navbarModule,
+      notificationModule,
+      profileSidebarModule,
+      metricsModule,
+      cartModule,
+      checkoutModule,
+      detailModule,
+      homeProductListModule,
+      loginModule,
+      registerModule,
+      importProductModule,
+      inventoryModule,
+      reportModule,
+    ] = await Promise.all([
+      import("./components/shared/admin/admin_navbar.component.jsx"),
+      import("./components/shared/shop/Banner.jsx"),
+      import("./components/shared/shop/NavbarWithSublist.jsx"),
+      import("./layouts/shop/notification.layout.jsx"),
+      import("./components/shared/profile_sidebar.component.jsx"),
+      import("./components/shared/ReactMetricsMonitor.jsx"),
+      import("./pages/cart.page.jsx"),
+      import("./components/shop/checkout_step_1.component.jsx"),
+      import("./pages/detail_product.page.jsx"),
+      import("./components/shared/shop/HomeProductList.jsx"),
+      import("./pages/login.page.jsx"),
+      import("./pages/register.page.jsx"),
+      import("./components/admin/import_product.component.jsx"),
+      import("./components/admin/inventory.component.jsx"),
+      import("./components/admin/report.component.jsx"),
+    ]);
+
+    const { default: AdminNavbar } = adminNavbarModule;
+    expect(adminNavbarModule.shouldCloseAdminNavOnDesktop(960)).toBe(true);
+    expect(adminNavbarModule.shouldCloseAdminNavOnDesktop(959)).toBe(false);
+    harness.rendered.length = 0;
+    expect(render(AdminNavbar)).toContain("VTI");
+    await invokeHandler(captured("IconButton", (props) => typeof props.onClick === "function")[0]);
+    globalThis.localStorage.removeItem("token");
+    render(AdminNavbar);
+    expect(globalThis.window.location.href).toBe("/login");
+    globalThis.localStorage.setItem("token", "token");
+
+    bannerModule.goToBannerLogin(harness.navigateMock);
+    bannerModule.goToBannerRegister(harness.navigateMock);
+    bannerModule.createBannerLoginHandler(harness.navigateMock)();
+    bannerModule.createBannerRegisterHandler(harness.navigateMock)();
+    expect(bannerModule.shouldCloseBannerOnDesktop(960)).toBe(true);
+    expect(bannerModule.shouldCloseBannerOnDesktop(959)).toBe(false);
+
+    navbarModule.goToNavbarCart(harness.navigateMock, true);
+    navbarModule.goToNavbarCart(harness.navigateMock, false);
+    const toggleState = vi.fn((updater) => updater(false));
+    navbarModule.createToggleNavHandler(toggleState)();
+    expect(toggleState).toHaveBeenCalled();
+    navbarModule.saveCartOrderId({ object: { id: 88 } });
+    navbarModule.saveCartOrderId(null);
+    expect(navbarModule.shouldCloseNavOnDesktop(1200)).toBe(true);
+    expect(navbarModule.shouldCloseNavOnDesktop(320)).toBe(false);
+    harness.rendered.length = 0;
+    render(navbarModule.default);
+    await invokeHandler(captured("IconButton", (props) => typeof props.onClick === "function")[0]);
+
+    harness.rendered.length = 0;
+    render(notificationModule.default, {
+      noti: {
+        icon: React.createElement("svg"),
+        messageKey: "notification.message",
+        nameKey: "notification.title",
+        subtitleKey: "notification.subtitle",
+      },
+    });
+    await invokeHandler(
+      captured("Button", (props) => childText(props.children).includes("common.back_home"))[0]
+    );
+
+    const setTab = vi.fn();
+    harness.rendered.length = 0;
+    render(profileSidebarModule.default, { setTab, tab: 1 });
+    for (const item of captured("ListItem", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(item);
+    }
+    expect(setTab).toHaveBeenCalled();
+    expect(globalThis.localStorage.removeItem).toHaveBeenCalledWith("token");
+
+    const metricDispatch = vi.fn();
+    metricsModule.recordReactRenderSample(false, metricDispatch, "A", "mount", 1, 2, 3, 4);
+    expect(metricDispatch).not.toHaveBeenCalled();
+    metricsModule.recordReactRenderSample(
+      true,
+      metricDispatch,
+      "A",
+      "mount",
+      1.234,
+      2.345,
+      3.456,
+      4.567
+    );
+    expect(metricDispatch).toHaveBeenCalledTimes(1);
+    expect(
+      metricsModule.buildReactRenderMetric("B", "update", 9.876, 8.765, 7.654, 6.543)
+    ).toMatchObject({ actualDuration: 9.88, baseDuration: 8.77, componentId: "B" });
+
+    const storage = {
+      getItem: vi.fn((key) => (key === "token" ? "token" : "order-99")),
+    };
+    expect(cartModule.hasCartToken(storage)).toBe(true);
+    expect(cartModule.getNextCartQuantity({ quantity: 1 }, -1)).toBe(null);
+    expect(cartModule.getNextCartQuantity({ quantity: 1 }, 2)).toBe(3);
+    expect(cartModule.buildCartQuantityPayload({ product_id: { id: 9 } }, 3, storage)).toEqual({
+      id: "order-99",
+      product_id: 9,
+      quantity: 3,
+    });
+
+    const handleNext = vi.fn();
+    globalThis.localStorage.setItem("token", "token");
+    harness.rendered.length = 0;
+    render(checkoutModule.default, { handleNext });
+    for (const item of captured("ListItem", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(item);
+    }
+    await invokeHandler(
+      captured("Button", (props) => childText(props.children).includes("checkout.pay"))[0]
+    );
+    expect(handleNext).toHaveBeenCalled();
+
+    expect(detailModule.getRatingLabelKey(5)).toBe("product.rating_5");
+    expect(detailModule.getRatingLabelKey(4)).toBe("product.rating_4");
+    expect(detailModule.getRatingLabelKey(3)).toBe("product.rating_3");
+    expect(detailModule.getRatingLabelKey(2)).toBe("product.rating_2");
+    expect(detailModule.getRatingLabelKey(1)).toBe("product.rating_1");
+    expect(detailModule.getRatingLabelKey(0)).toBe("product.rating_default");
+    expect(
+      detailModule.getSelectedProductMedia(harness.apiState.onSaleProduct.data, 1, 2, 3)
+    ).toMatchObject({ stock: 8 });
+    expect(detailModule.getSelectedProductMedia({ object: [] }, 1, 2, 3)).toEqual({
+      image: [],
+      stock: 0,
+    });
+    expect(detailModule.buildProductDetailCartPayload({ id: 101 }, 2, storage)).toEqual({
+      order_id: Number("order-99"),
+      product_id: 101,
+      quantity: 2,
+    });
+    harness.rendered.length = 0;
+    render(detailModule.default);
+    for (const button of captured("Button", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(button);
+    }
+
+    homeProductListModule.goToProductList(harness.navigateMock);
+    homeProductListModule.createGoToProductListHandler(harness.navigateMock)();
+
+    expect(loginModule.buildLoginCredentials("ada@example.com", "secret")).toEqual({
+      email: "ada@example.com",
+      password: "secret",
+    });
+    expect(loginModule.buildLoginCredentials("0912345678", "secret")).toEqual({
+      password: "secret",
+      phoneNumber: "0912345678",
+    });
+    expect(loginModule.buildLoginCredentials("ada", "secret")).toEqual({
+      password: "secret",
+      username: "ada",
+    });
+    harness.rendered.length = 0;
+    render(loginModule.default);
+    const loginFields = captured("TextField", (props) => typeof props.onChange === "function");
+    await invokeHandler(loginFields[0], "onChange", { target: { value: "ada@example.com" } });
+    await invokeHandler(loginFields[1], "onChange", { target: { value: "secret" } });
+    await invokeHandler(
+      captured("Button", (props) => childText(props.children).includes("common.login"))[0]
+    );
+
+    expect(
+      registerModule.buildRegisterPayload({
+        address: "1 Main",
+        avatar_url: { publicId: "public", value: "avatar.png" },
+        birthday: "2000-01-01",
+        email: "ada@example.com",
+        firstname: "Ada",
+        gender: "FEMALE",
+        lastname: "Lovelace",
+        password: "secret",
+        phone_number: "0912345678",
+        username: "ada",
+      })
+    ).toMatchObject({ name: "Ada Lovelace", public_id_avatar_url: "public" });
+    harness.rendered.length = 0;
+    render(registerModule.default);
+    for (const input of captured("Input", (props) => typeof props.onChange === "function")) {
+      await invokeHandler(input, "onChange", { target: { value: "typed" } });
+    }
+    for (const radio of captured("Radio", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(radio, "onClick", {
+        target: { defaultValue: "MALE" },
+      });
+    }
+    for (const button of captured("Button", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(button);
+    }
+    harness.mutation.mockImplementationOnce(() => ({
+      data: { message: "Bad register", statusCode: 400 },
+      unwrap: vi.fn(async () => ({ object: {} })),
+    }));
+    await invokeHandler(
+      captured("Button", (props) => childText(props.children).includes("common.register"))[0]
+    );
+
+    expect(importProductModule.genderLabel("MALE")).toBe("Nam");
+    expect(importProductModule.genderLabel("FEMALE")).toContain("N");
+    expect(importProductModule.genderLabel("OTHER")).toBe("Unisex");
+    expect(importProductModule.clampRange(Number.NaN, 0, 10)).toBe(0);
+    expect(importProductModule.clampRange(-1, 0, 10)).toBe(0);
+    expect(importProductModule.clampRange(20, 0, 10)).toBe(10);
+    expect(importProductModule.clampFloor(Number.NaN, 1)).toBe(1);
+    expect(importProductModule.clampFloor(0, 1)).toBe(1);
+    expect(
+      importProductModule.findOldVariant(
+        { object: [importedProduct] },
+        10,
+        "#111111",
+        "M",
+        "Cotton"
+      )
+    ).toEqual(importedProduct);
+    harness.rendered.length = 0;
+    render(importProductModule.default);
+    const changeEvent = { target: { defaultValue: "MALE", value: "42" } };
+    for (const name of ["Input", "TextField", "OutlinedInput", "Select", "Radio"]) {
+      for (const entry of captured(name, (props) => typeof props.onChange === "function")) {
+        await invokeHandler(entry, "onChange", changeEvent);
+      }
+    }
+    for (const button of captured("Button", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(button);
+    }
+    const importLayout = captured("AdminLayout")[0]?.props;
+    await importLayout.updateSubmit();
+    harness.mutation.mockImplementationOnce(() => ({
+      data: { statusCode: 200 },
+      unwrap: vi.fn(async () => ({ object: {} })),
+    }));
+    await importLayout.handleDeleteSubmit();
+
+    expect(
+      inventoryModule.getInventoryProductsByFilter({ object: [importedProduct] }, "ALL")
+    ).toHaveLength(1);
+    expect(
+      inventoryModule.getInventoryProductsByFilter({ object: [importedProduct] }, "AVAILABLE")
+    ).toHaveLength(1);
+    expect(
+      inventoryModule.getInventoryProductsByFilter(
+        { object: [{ ...importedProduct, stock: 0 }] },
+        "OUT_OF_STOCK"
+      )
+    ).toHaveLength(1);
+    expect(
+      inventoryModule.getInventoryProductsByFilter({ object: [importedProduct] }, "OTHER")
+    ).toBeUndefined();
+
+    expect(reportModule.getReportTabLabel("revenue", (key) => key)).toBe("report.tab_revenue");
+    expect(reportModule.getReportTabLabel("missing", (key) => key)).toBe("missing");
+    harness.rendered.length = 0;
+    render(reportModule.default);
+    for (const item of captured("MenuItem", (props) => typeof props.onClick === "function")) {
+      await invokeHandler(item);
+    }
   });
 });

@@ -15,6 +15,21 @@ import { STORAGE_KEYS } from "../../../constants/storage.constant";
 /** Checks whether auth token. */
 const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
+/** Checks whether desktop banner resize should close transient state. */
+export const shouldCloseBannerOnDesktop = (width) => width >= 960;
+
+/** Navigates to login from the banner. */
+export const goToBannerLogin = (navigate) => navigate(ROUTES.LOGIN);
+
+/** Navigates to registration from the banner. */
+export const goToBannerRegister = (navigate) => navigate(ROUTES.REGISTER);
+
+/** Creates the banner login click handler. */
+export const createBannerLoginHandler = (navigate) => () => goToBannerLogin(navigate);
+
+/** Creates the banner registration click handler. */
+export const createBannerRegisterHandler = (navigate) => () => goToBannerRegister(navigate);
+
 /** Handles profile menu view. */
 export const ProfileMenuView = ({ accountItems, avatarUrl, isMenuOpen, onMenuOpenChange }) => (
   <Menu open={isMenuOpen} handler={onMenuOpenChange} placement="bottom-end">
@@ -132,7 +147,7 @@ const Banner = () => {
 
   React.useEffect(() => {
     /** Closes value. */
-    const close = () => window.innerWidth >= 960;
+    const close = () => shouldCloseBannerOnDesktop(window.innerWidth);
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
   }, []);
@@ -141,8 +156,8 @@ const Banner = () => {
     <BannerView
       isAuthenticated={hasAuthToken()}
       labels={getBannerLabels(t)}
-      onLoginClick={() => navigate(ROUTES.LOGIN)}
-      onRegisterClick={() => navigate(ROUTES.REGISTER)}
+      onLoginClick={createBannerLoginHandler(navigate)}
+      onRegisterClick={createBannerRegisterHandler(navigate)}
     />
   );
 };

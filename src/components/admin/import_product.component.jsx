@@ -91,6 +91,8 @@ const findOldVariant = (importedProducts, productId, colorCode, size, material) 
       item.material_id.name === material
   );
 
+export { genderLabel, clampRange, clampFloor, findOldVariant };
+
 // Upload dropzone (empty) or image preview (filled). Keeping the empty/filled
 // choice here removes ~15 conditionals from ImportProduct. `upload`/`deleteButton`
 // are passed as elements so each call site keeps its exact wiring.

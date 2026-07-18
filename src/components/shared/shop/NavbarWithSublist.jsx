@@ -41,6 +41,20 @@ import {
 /** Checks whether auth token. */
 const hasAuthToken = () => Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
 
+/** Checks whether desktop resize should close the mobile nav. */
+export const shouldCloseNavOnDesktop = (width) => width >= 960;
+
+/** Saves the active cart order id for later cart updates. */
+export const saveCartOrderId = (cart, storage = localStorage) => {
+  if (cart) storage.setItem(STORAGE_KEYS.ORDER_ID, cart.object.id);
+};
+
+/** Navigates to cart or login based on authentication state. */
+export const goToNavbarCart = (navigate, hasToken) => navigate(getCartRoute(hasToken));
+
+/** Creates the mobile nav toggle handler. */
+export const createToggleNavHandler = (setOpenNav) => () => setOpenNav((current) => !current);
+
 /** Handles search SVG. */
 const SearchSVG = () => (
   <svg width="13" height="14" viewBox="0 0 14 15" fill="none">
@@ -392,7 +406,7 @@ const NavbarWithSublist = () => {
 
   React.useEffect(() => {
     /** Closes value. */
-    const close = () => window.innerWidth >= 960 && setOpenNav(false);
+    const close = () => shouldCloseNavOnDesktop(window.innerWidth) && setOpenNav(false);
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
   }, []);
@@ -402,18 +416,18 @@ const NavbarWithSublist = () => {
   });
 
   useEffect(() => {
-    if (cart) localStorage.setItem(STORAGE_KEYS.ORDER_ID, cart.object.id);
+    saveCartOrderId(cart);
   }, [cart]);
 
   /** Handles go to cart. */
-  const goToCart = () => navigate(getCartRoute(hasAuthToken()));
+  const goToCart = () => goToNavbarCart(navigate, hasAuthToken());
 
   return (
     <NavbarView
       cart={cart}
       labels={getNavbarLabels(t)}
       onCartClick={goToCart}
-      onToggleNav={() => setOpenNav((current) => !current)}
+      onToggleNav={createToggleNavHandler(setOpenNav)}
       openNav={openNav}
     />
   );

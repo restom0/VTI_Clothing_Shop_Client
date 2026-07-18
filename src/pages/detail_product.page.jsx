@@ -103,7 +103,7 @@ const reviews = [
 ];
 
 /** Gets rating label key. */
-const getRatingLabelKey = (rating) => {
+export const getRatingLabelKey = (rating) => {
   switch (rating) {
     case 5:
       return "product.rating_5";
@@ -119,6 +119,47 @@ const getRatingLabelKey = (rating) => {
       return "product.rating_default";
   }
 };
+
+/** Gets product media and stock for the selected variant. */
+export const getSelectedProductMedia = (product, color, size, material) => {
+  const findImages = (item) =>
+    [
+      item?.product_id?.image_url,
+      item?.product_id?.slider_url_1,
+      item?.product_id?.slider_url_2,
+      item?.product_id?.slider_url_3,
+      item?.product_id?.slider_url_4,
+    ].filter(Boolean);
+  const selected =
+    color &&
+    size &&
+    material &&
+    product?.object?.find(
+      (item) =>
+        item.product_id.color_id.id === color &&
+        item.product_id.size_id.id === size &&
+        item.product_id.material_id.id === material
+    );
+
+  if (selected) {
+    return {
+      image: findImages(selected),
+      stock: selected?.product_id?.stock ?? 0,
+    };
+  }
+
+  return {
+    image: findImages(product?.object?.[0]),
+    stock: 0,
+  };
+};
+
+/** Builds a product detail cart mutation payload. */
+export const buildProductDetailCartPayload = (firstItem, quantity, storage = localStorage) => ({
+  order_id: Number(storage.getItem(STORAGE_KEYS.ORDER_ID)),
+  product_id: firstItem.id,
+  quantity,
+});
 
 /** Handles product detailpage. */
 const ProductDetailpage = () => {
@@ -142,50 +183,10 @@ const ProductDetailpage = () => {
   const { t } = useI18n();
   const [createOrderItem] = useCreateOrderItemMutation();
   useEffect(() => {
-    if (
-      !color ||
-      !size ||
-      !material ||
-      !product?.object ||
-      !product?.object.find(
-        (item) =>
-          item.product_id.color_id.id === color &&
-          item.product_id.size_id.id === size &&
-          item.product_id.material_id.id === material
-      )
-    ) {
-      const first = product?.object?.[0];
-      setImage(
-        first
-          ? [
-              first.product_id?.image_url,
-              first.product_id?.slider_url_1,
-              first.product_id?.slider_url_2,
-              first.product_id?.slider_url_3,
-              first.product_id?.slider_url_4,
-            ].filter(Boolean)
-          : []
-      );
-      setStock(0);
-    } else {
-      const search = product?.object.find(
-        (item) =>
-          item.product_id.color_id.id === color &&
-          item.product_id.size_id.id === size &&
-          item.product_id.material_id.id === material
-      );
-      setImage(
-        [
-          search?.product_id?.image_url,
-          search?.product_id?.slider_url_1,
-          search?.product_id?.slider_url_2,
-          search?.product_id?.slider_url_3,
-          search?.product_id?.slider_url_4,
-        ].filter(Boolean)
-      );
-      setStock(search?.product_id?.stock ?? 0);
-    }
-  }, [select, product?.object, size, material, color]);
+    const selectedMedia = getSelectedProductMedia(product, color, size, material);
+    setImage(selectedMedia.image);
+    setStock(selectedMedia.stock);
+  }, [select, product, size, material, color]);
   if (isLoading)
     return (
       <div className="h-96">
@@ -204,11 +205,7 @@ const ProductDetailpage = () => {
   const handleAddCart = async () => {
     if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {
-      await createOrderItem({
-        order_id: Number(localStorage.getItem(STORAGE_KEYS.ORDER_ID)),
-        product_id: firstItem.id,
-        quantity: 1,
-      }).unwrap();
+      await createOrderItem(buildProductDetailCartPayload(firstItem, 1)).unwrap();
       Toast.fire({ icon: "success", title: t("product.add_cart_success") });
     } catch {
       Toast.fire({ icon: "error", title: t("product.add_cart_failed") });
@@ -219,11 +216,7 @@ const ProductDetailpage = () => {
   const handleAddCarts = async () => {
     if (!localStorage.getItem(STORAGE_KEYS.TOKEN)) return navigate(ROUTES.LOGIN);
     try {
-      await createOrderItem({
-        order_id: Number(localStorage.getItem(STORAGE_KEYS.ORDER_ID)),
-        product_id: firstItem.id,
-        quantity: amount,
-      }).unwrap();
+      await createOrderItem(buildProductDetailCartPayload(firstItem, amount)).unwrap();
       Toast.fire({ icon: "success", title: t("product.add_cart_success") });
     } catch {
       Toast.fire({

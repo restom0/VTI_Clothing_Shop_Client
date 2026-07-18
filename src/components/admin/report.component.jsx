@@ -13,12 +13,17 @@ import Table from "../shared/table.component";
 import { CHART_TITLE_FONT_SIZE, getChartDatasetTheme } from "../../constants/chart_theme.constant";
 import { useI18n } from "../../i18n";
 
+/** Gets translated report tab label. */
+export const getReportTabLabel = (tab, t) => {
+  const activeTab = report_items.find((item) => item.id === tab);
+  return activeTab ? t(activeTab.labelKey) : tab;
+};
+
 /** Handles report. */
 const Report = () => {
   const { t } = useI18n();
   const [tab, setTab] = React.useState("revenue");
-  const activeTab = report_items.find((item) => item.id === tab);
-  const tabLabel = activeTab ? t(activeTab.labelKey) : tab;
+  const tabLabel = getReportTabLabel(tab, t);
   const lineData = {
     labels: [
       t("month.1"),

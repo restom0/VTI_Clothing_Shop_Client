@@ -25,6 +25,31 @@ const formatBytes = (value) => {
 const getMetricValue = (metric) =>
   metric ? Number(metric.value ?? 0).toFixed(metric.value > 100 ? 0 : 2) : "n/a";
 
+/** Builds a render metric payload from React Profiler values. */
+export const buildReactRenderMetric = (
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  startTime,
+  commitTime
+) => ({
+  actualDuration: Number(actualDuration.toFixed(2)),
+  baseDuration: Number(baseDuration.toFixed(2)),
+  commitTime: Number(commitTime.toFixed(2)),
+  componentId: id,
+  phase,
+  route: typeof window === "undefined" ? "unknown" : window.location.pathname,
+  startTime: Number(startTime.toFixed(2)),
+  timestamp: Date.now(),
+});
+
+/** Records a Profiler render sample when monitoring is enabled. */
+export const recordReactRenderSample = (enabled, dispatch, ...profileArgs) => {
+  if (!enabled) return;
+  dispatch(recordReactRender(buildReactRenderMetric(...profileArgs)));
+};
+
 /** Uses browser performance metrics. */
 const useBrowserPerformanceMetrics = (enabled) => {
   const dispatch = useDispatch();
@@ -217,19 +242,15 @@ const ReactMetricsMonitor = ({ children }) => {
 
   /** Handles render. */
   const onRender = (id, phase, actualDuration, baseDuration, startTime, commitTime) => {
-    if (!enabled) return;
-
-    dispatch(
-      recordReactRender({
-        actualDuration: Number(actualDuration.toFixed(2)),
-        baseDuration: Number(baseDuration.toFixed(2)),
-        commitTime: Number(commitTime.toFixed(2)),
-        componentId: id,
-        phase,
-        route: typeof window === "undefined" ? "unknown" : window.location.pathname,
-        startTime: Number(startTime.toFixed(2)),
-        timestamp: Date.now(),
-      })
+    recordReactRenderSample(
+      enabled,
+      dispatch,
+      id,
+      phase,
+      actualDuration,
+      baseDuration,
+      startTime,
+      commitTime
     );
   };
 

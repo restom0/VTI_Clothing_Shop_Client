@@ -14,6 +14,23 @@ import { useCurrency } from "../currency";
 import { useI18n } from "../i18n";
 import { STORAGE_KEYS } from "../constants/storage.constant";
 
+/** Checks whether the cart has an authenticated user. */
+export const hasCartToken = (storage = localStorage) =>
+  Boolean(storage.getItem(STORAGE_KEYS.TOKEN));
+
+/** Gets the next valid cart quantity, or null when the change is invalid. */
+export const getNextCartQuantity = (item, delta) => {
+  const newQty = (item.quantity ?? 0) + delta;
+  return newQty < 1 ? null : newQty;
+};
+
+/** Builds an order-item update payload for the cart API. */
+export const buildCartQuantityPayload = (item, quantity, storage = localStorage) => ({
+  id: storage.getItem(STORAGE_KEYS.ORDER_ID),
+  product_id: item.product_id?.id,
+  quantity,
+});
+
 // ─── SVG icons for quantity stepper ───────────────────────────────
 /** Handles minus SVG. */
 const MinusSVG = () => (
@@ -61,7 +78,7 @@ const CartPage = () => {
   const { t } = useI18n();
 
   // ── All hooks MUST be called unconditionally (Rules of Hooks) ──
-  const hasToken = Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN));
+  const hasToken = hasCartToken();
 
   const { data: cart, isLoading, error } = useGetCartQuery(undefined, { skip: !hasToken });
 
@@ -75,14 +92,10 @@ const CartPage = () => {
   // ── Quantity update handler ────────────────────────────────────
   /** Handles update quantity. */
   const handleUpdateQuantity = async (item, delta) => {
-    const newQty = (item.quantity ?? 0) + delta;
-    if (newQty < 1) return;
+    const newQty = getNextCartQuantity(item, delta);
+    if (newQty === null) return;
     try {
-      await updateOrderItem({
-        id: localStorage.getItem(STORAGE_KEYS.ORDER_ID),
-        product_id: item.product_id?.id,
-        quantity: newQty,
-      });
+      await updateOrderItem(buildCartQuantityPayload(item, newQty));
       Toast.fire({ icon: "success", title: t("common.update_success") });
     } catch {
       Toast.fire({ icon: "error", title: t("common.update_failed") });

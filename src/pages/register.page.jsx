@@ -15,6 +15,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteAvatar, resetAvatar } from "../features/slices/avatar_url.slice";
 import { useI18n } from "../i18n";
 
+/** Builds the register API payload. */
+export const buildRegisterPayload = ({
+  address,
+  avatar_url,
+  birthday,
+  email,
+  firstname,
+  gender,
+  lastname,
+  password,
+  phone_number,
+  username,
+}) => ({
+  name: firstname + " " + lastname,
+  username,
+  password,
+  phone_number,
+  email,
+  birthday,
+  avatar_url,
+  public_id_avatar_url: avatar_url.publicId,
+  address,
+  gender,
+});
+
 /** Handles registerpage. */
 const Registerpage = () => {
   const { t } = useI18n();
@@ -36,18 +61,20 @@ const Registerpage = () => {
 
   /** Handles register. */
   const handleRegister = async () => {
-    const message = await register({
-      name: firstname + " " + lastname,
-      username,
-      password,
-      phone_number,
-      email,
-      birthday,
-      avatar_url,
-      public_id_avatar_url: avatar_url.publicId,
-      address,
-      gender,
-    });
+    const message = await register(
+      buildRegisterPayload({
+        address,
+        avatar_url,
+        birthday,
+        email,
+        firstname,
+        gender,
+        lastname,
+        password,
+        phone_number,
+        username,
+      })
+    );
     if (message.data.statusCode === 201) {
       Toast.fire({
         icon: "success",
