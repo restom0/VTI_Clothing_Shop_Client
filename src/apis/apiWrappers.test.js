@@ -153,6 +153,65 @@ describe("RTK Query API wrappers", () => {
     }
   });
 
+  it("uses live read responses without replacing them with dummy data", async () => {
+    fetch.mockResolvedValue(okResponse({ statusCode: 200, object: [{ id: 42, name: "live" }] }));
+
+    const result = await dispatchEndpoint(brandApi, "getBrands");
+
+    expect(result.data.object[0]).toEqual({ id: 42, name: "live" });
+  });
+
+  it.each([
+    ["PRODUCT", 1, "Everyday Cotton Tee"],
+    ["BRAND", 1, "Everyday Cotton Tee"],
+    ["CATEGORY", 1, "Everyday Cotton Tee"],
+    ["COLOR", 1, "Everyday Cotton Tee"],
+    ["SIZE", 1, "Everyday Cotton Tee"],
+    ["MATERIAL", 1, "Everyday Cotton Tee"],
+    ["ALL", undefined, "Everyday Cotton Tee"],
+  ])("filters imported-product fallback by %s", async (filter, id, expectedName) => {
+    fetch.mockResolvedValue(errorResponse());
+
+    const result = await dispatchEndpoint(importedProductApi, "getImportedProduct", {
+      filter,
+      id,
+    });
+
+    expect(result.data.object[0].product_id.name).toBe(expectedName);
+  });
+
+  it.each([
+    [importedProductApi, "getColors", undefined, "color_name", "Black"],
+    [importedProductApi, "getSizes", undefined, "size", "M"],
+    [importedProductApi, "getMaterials", undefined, "name", "Cotton"],
+    [OrderApi, "getOrders", undefined, "order_code", "ORD-DEMO-001"],
+    [OrderApi, "getOrdersByUser", 2, "receiver_name", "Demo Customer"],
+    [OrderItemApi, "getOrderItems", undefined, "quantity", 2],
+    [OrderItemApi, "getOrderItemsByOrder", 7001, "quantity", 2],
+    [voucherApi, "getAvailableVouchers", undefined, "code", "DEMO10"],
+    [voucherApi, "getVoucher", "bad-id", "code", "DEMO10"],
+  ])("covers additional dummy fallback endpoint %s.%s", async (api, endpoint, arg, key, value) => {
+    fetch.mockResolvedValue(errorResponse());
+
+    const result = await dispatchEndpoint(api, endpoint, arg);
+    const fallbackObject = Array.isArray(result.data.object)
+      ? result.data.object[0]
+      : result.data.object;
+
+    expect(fallbackObject[key]).toBe(value);
+  });
+
+  it("does not use dummy read fallback for failed mutations", async () => {
+    fetch.mockResolvedValue(errorResponse());
+
+    const result = await dispatchEndpoint(brandApi, "addBrand", {
+      description: "Outdoor",
+      name: "Northline",
+    });
+
+    expect(result.error.status).toBe(503);
+  });
+
   it.each([
     [
       accountApi,
