@@ -183,4 +183,80 @@ describe("provider unit coverage", () => {
       "useCurrency must be used inside CurrencyProvider"
     );
   });
+
+  it("refreshes currency rates and handles failed refresh responses", async () => {
+    let currencyContext;
+    const Probe = () => {
+      currencyContext = useCurrency();
+      return <span>{currencyContext.currency}</span>;
+    };
+
+    render(
+      <I18nProvider>
+        <CurrencyProvider>
+          <Probe />
+        </CurrencyProvider>
+      </I18nProvider>
+    );
+
+    fetch.mockResolvedValueOnce({
+      json: async () => ({
+        base: "VND",
+        rates: { USD: 0.00005, VND: 1 },
+        timestamp: 789,
+      }),
+      ok: true,
+    });
+    await currencyContext.refreshRates();
+
+    expect(fetch).toHaveBeenCalledWith(
+      "https://fxapi.app/api/vnd.json",
+      expect.objectContaining({ signal: undefined })
+    );
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      CURRENCY_CACHE_KEY,
+      expect.stringContaining('"providerTimestamp":789')
+    );
+
+    fetch.mockResolvedValueOnce({
+      json: async () => ({ base: "USD", rates: { USD: 1 } }),
+      ok: true,
+    });
+    await currencyContext.refreshRates({ silent: true });
+
+    fetch.mockResolvedValueOnce({
+      json: async () => ({}),
+      ok: false,
+      status: 503,
+    });
+    await currencyContext.refreshRates({ silent: true });
+
+    fetch.mockRejectedValueOnce({ name: "AbortError" });
+    await currencyContext.refreshRates({ silent: true });
+
+    expect(fetch).toHaveBeenCalledTimes(4);
+  });
+
+  it("falls back when cached currency data cannot be parsed", () => {
+    installBrowserGlobals({
+      [CURRENCY_CACHE_KEY]: "{broken json",
+      [LANGUAGE_STORAGE_KEY]: "en",
+    });
+    let currencyContext;
+    const Probe = () => {
+      currencyContext = useCurrency();
+      return <span>{currencyContext.currency}</span>;
+    };
+
+    render(
+      <I18nProvider>
+        <CurrencyProvider>
+          <Probe />
+        </CurrencyProvider>
+      </I18nProvider>
+    );
+
+    expect(currencyContext.rates).toEqual({ VND: 1 });
+    expect(currencyContext.rate).toBe(1);
+  });
 });

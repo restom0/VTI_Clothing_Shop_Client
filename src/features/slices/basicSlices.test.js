@@ -9,12 +9,20 @@ import filterReducer, { setFilter } from "./filter.slice";
 import importedProductReducer, {
   resetImportedProduct,
   setColorCode,
+  setColorName,
+  setGender,
+  setHeight,
   setImportedProduct,
   setImportNumber,
+  setImportPrice,
+  setMaterial,
   setProductId,
+  setSize,
+  setWeight,
 } from "./import_product.slice";
 import nameReducer, { resetName, setName } from "./name.slice";
 import productReducer, { resetProduct, setProduct } from "./product.slice";
+import selectedIdReducer, { resetSelectedId, setSelectedId } from "./select_id.slice";
 import slidersReducer, {
   deleteSlider,
   resetAllSliders,
@@ -71,6 +79,13 @@ describe("basic Redux slices", () => {
 
     expect(draft).toMatchObject({ color_code: "#fff", importNumber: 20, product: { id: 1 } });
     expect(importedProductReducer(draft, setColorCode("#000")).color_code).toBe("#000");
+    expect(importedProductReducer(draft, setColorName("Black")).color_name).toBe("Black");
+    expect(importedProductReducer(draft, setSize("XL")).size).toBe("XL");
+    expect(importedProductReducer(draft, setHeight("180")).height).toBe("180");
+    expect(importedProductReducer(draft, setWeight("80")).weight).toBe("80");
+    expect(importedProductReducer(draft, setMaterial("Linen")).material).toBe("Linen");
+    expect(importedProductReducer(draft, setGender("MALE")).gender).toBe("MALE");
+    expect(importedProductReducer(draft, setImportPrice(200000)).importPrice).toBe(200000);
     expect(importedProductReducer(draft, setProductId({ id: 9 })).product).toEqual({ id: 9 });
     expect(importedProductReducer(draft, setImportNumber(30)).importNumber).toBe(30);
     expect(importedProductReducer(draft, resetImportedProduct())).toMatchObject({
@@ -102,6 +117,17 @@ describe("basic Redux slices", () => {
     expect(slidersReducer(withSlider, resetAllSliders()).slider1).toEqual({
       value: "",
       publicId: "",
+    });
+  });
+
+  it("updates selected id state", () => {
+    expect(selectedIdReducer(undefined, setSelectedId(5))).toEqual({
+      change: false,
+      value: 5,
+    });
+    expect(selectedIdReducer({ change: true, value: 5 }, resetSelectedId())).toEqual({
+      change: false,
+      value: -1,
     });
   });
 });

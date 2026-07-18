@@ -109,6 +109,7 @@ export default defineConfig({
       exclude: [
         "src/**/*.test.{js,jsx}",
         "src/**/*.spec.{js,jsx}",
+        "src/clientComponentHarness.jsx",
         "src/main.jsx",
       ],
       // Quality gate: fail the build if coverage regresses below current levels.

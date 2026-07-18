@@ -1,6 +1,6 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 
 const harness = vi.hoisted(() => {
   const rendered = [];
@@ -459,7 +459,10 @@ vi.mock("./apis/order.api", () => ({
   useGetOrdersQuery: () => harness.apiState.orders,
 }));
 vi.mock("./apis/product.api", () => ({
+  useCreateProductMutation: () => [harness.mutation, { isLoading: false }],
+  useDeleteProductMutation: () => [harness.mutation, { isLoading: false }],
   useGetProductsQuery: () => harness.apiState.products,
+  useUpdateProductMutation: () => [harness.mutation, { isLoading: false }],
 }));
 vi.mock("./apis/user.api", () => ({
   useGetUserProfileQuery: () => harness.apiState.userProfile,
@@ -469,6 +472,7 @@ vi.mock("./apis/user.api", () => ({
 }));
 vi.mock("./apis/voucher.api", () => ({
   useAddVoucherMutation: () => [harness.mutation, { isLoading: false }],
+  useGetAvailableVouchersQuery: () => harness.apiState.availableVouchers,
   useGetVouchersQuery: () => harness.apiState.vouchers,
   useUpdateVoucherMutation: () => [harness.mutation, { isLoading: false }],
 }));
@@ -502,6 +506,9 @@ vi.mock("sweetalert2", () => ({
 vi.mock("./configs/sweetalert2.config", () => ({
   Toast: { fire: vi.fn(() => Promise.resolve({ isConfirmed: true })) },
 }));
+vi.mock("./utils/delete_image.util", () => ({
+  handleDelete: vi.fn(),
+}));
 
 const render = (Component, props = {}) =>
   renderToStaticMarkup(React.createElement(Component, props));
@@ -510,6 +517,17 @@ const captured = (name, predicate = () => true) =>
 const invoke = async (entry, handlerName = "onClick", event = { target: { value: "typed" } }) => {
   const result = entry?.props?.[handlerName]?.(event);
   if (result && typeof result.then === "function") await result;
+};
+const withMockedUseState = async (resolveInitialState, callback) => {
+  const originalUseState = React.useState;
+  let callIndex = 0;
+  React.useState = (initialState) => [resolveInitialState(initialState, callIndex++), vi.fn()];
+
+  try {
+    return await callback();
+  } finally {
+    React.useState = originalUseState;
+  }
 };
 
 beforeEach(() => {
@@ -758,6 +776,11 @@ beforeEach(() => {
     isError: false,
     isLoading: false,
   };
+  harness.apiState.availableVouchers = {
+    data: { object: [] },
+    isError: false,
+    isLoading: false,
+  };
   harness.reduxState = {
     active: { value: 1 },
     openAccordion: { value: 0 },
@@ -767,428 +790,4 @@ beforeEach(() => {
   };
 });
 
-describe("additional client integration coverage", () => {
-  it("renders app routes, shop/admin shells, and static content pages", async () => {
-    const [
-      { default: App },
-      { default: ShopLayout },
-      { default: AdminPage },
-      { default: CareerLayout },
-      { default: HelpCenterLayout },
-      { default: ErrorPage },
-      { default: ForbiddenPage },
-      { default: NotFoundPage },
-      { default: ProductPage },
-      staticPages,
-    ] = await Promise.all([
-      import("./apps/App.jsx"),
-      import("./layouts/shop/shop.layout.jsx"),
-      import("./pages/admin.page.jsx"),
-      import("./layouts/career/career.layout.jsx"),
-      import("./layouts/helpcenter/help_center.layout.jsx"),
-      import("./pages/error.page.jsx"),
-      import("./pages/forbidden.page.jsx"),
-      import("./pages/not_found.page.jsx"),
-      import("./pages/list_product.page.jsx"),
-      import("./pages/static_content.page.jsx"),
-    ]);
-
-    expect(render(App)).toContain("route:/");
-    expect(captured("Route").length).toBeGreaterThan(20);
-    expect(render(ShopLayout)).toContain("shop-banner");
-    expect(render(AdminPage)).toContain("admin-navbar");
-    expect(render(CareerLayout)).toContain("static.careers.title");
-    expect(render(HelpCenterLayout)).toContain("static.help.title");
-    expect(render(ErrorPage)).toContain("notification.error_name");
-    expect(render(ForbiddenPage)).toContain("notification.forbidden_name");
-    expect(render(NotFoundPage)).toContain("notification.not_found_name");
-    expect(render(ProductPage)).toContain("shop.results_count");
-
-    for (const Page of [
-      staticPages.AboutUsPage,
-      staticPages.ContactPage,
-      staticPages.TermsPage,
-      staticPages.PolicyPage,
-      staticPages.FaqPage,
-    ]) {
-      expect(render(Page)).toContain("dailynews.jpg");
-    }
-
-    expect(
-      render(staticPages.default, {
-        actions: [{ href: "/x", label: "Action", variant: "secondary" }],
-        eyebrow: "Eyebrow",
-        faqs: [{ answer: "Answer", question: "Question" }],
-        heroImage: "/hero.jpg",
-        sections: [
-          {
-            description: "Description",
-            icon: () => React.createElement("svg"),
-            title: "Section",
-          },
-        ],
-        stats: [{ label: "Orders", value: "42" }],
-        subtitle: "Subtitle",
-        title: "Title",
-      })
-    ).toContain("Question");
-  });
-
-  it("drives admin table, pagination, sidebar, tabs, and layout handlers", async () => {
-    const [
-      { default: AdminLayout },
-      { default: AdminPagination },
-      { default: SidebarWithSearch },
-      { default: SettingButton },
-      { default: Table },
-      { default: Tablist },
-    ] = await Promise.all([
-      import("./layouts/admin/admin.layout.jsx"),
-      import("./components/shared/admin/admin_pagination.component.jsx"),
-      import("./components/shared/search_sidebar.component.jsx"),
-      import("./components/shared/admin/setting_button.component.jsx"),
-      import("./components/shared/table.component.jsx"),
-      import("./components/shared/list_tab.component.jsx"),
-    ]);
-
-    const tableHead = [
-      { col: 1, label: "Name" },
-      { col: 1, label: "Role" },
-    ];
-    const rows = [
-      { id: 1, name: "Ada", role: "Admin" },
-      { id: 2, name: "Grace", role: "User" },
-    ];
-
-    expect(
-      render(Table, {
-        TABLE_HEAD: tableHead,
-        TABLE_ROWS: rows,
-        deleteContent: "Delete",
-        handleDeleteOpen: vi.fn(),
-        handleDetailOpen: vi.fn(),
-        handleUpdateOpen: vi.fn(),
-        updateContent: "Update",
-      })
-    ).toContain("Ada");
-    expect(
-      render(Table, { TABLE_HEAD: tableHead, TABLE_ROWS: [], noDelete: true, noUpdate: true })
-    ).toContain("table.empty");
-
-    for (const iconButton of captured(
-      "IconButton",
-      (props) => typeof props.onClick === "function"
-    )) {
-      iconButton.props.onClick();
-    }
-    expect(harness.dispatch).toHaveBeenCalled();
-
-    harness.rendered.length = 0;
-    expect(render(AdminPagination, { page: 3 })).toContain("1");
-    for (const button of captured("Button", (props) => typeof props.onClick === "function")) {
-      button.props.onClick();
-    }
-    expect(render(AdminPagination, { page: 1 })).toBe("");
-
-    harness.rendered.length = 0;
-    expect(render(SidebarWithSearch)).toContain("Thống kê");
-    for (const entry of [
-      ...captured("AccordionHeader", (props) => typeof props.onClick === "function"),
-      ...captured("ListItem", (props) => typeof props.onClick === "function"),
-    ]) {
-      entry.props.onClick();
-    }
-    expect(harness.dispatch).toHaveBeenCalled();
-
-    const setTab = vi.fn();
-    harness.rendered.length = 0;
-    expect(
-      render(Tablist, {
-        TABS: [
-          { labelKey: "report.tab_revenue", value: "revenue" },
-          { label: "Brand", value: "brand" },
-        ],
-        setTab,
-        tab: "revenue",
-      })
-    ).toContain("report.tab_revenue");
-    for (const tab of captured("Tab", (props) => typeof props.onClick === "function")) {
-      tab.props.onClick();
-    }
-    expect(setTab).toHaveBeenCalledWith("brand");
-
-    const updateOpen = vi.fn();
-    const deleteOpen = vi.fn();
-    harness.rendered.length = 0;
-    render(SettingButton, {
-      deleteContent: "Delete",
-      handleDeleteOpen: deleteOpen,
-      handleUpdateOpen: updateOpen,
-      id: 99,
-      updateContent: "Update",
-    });
-    for (const iconButton of captured(
-      "IconButton",
-      (props) => typeof props.onClick === "function"
-    )) {
-      iconButton.props.onClick();
-    }
-    expect(updateOpen).toHaveBeenCalled();
-    expect(deleteOpen).toHaveBeenCalled();
-
-    const updateSubmit = vi.fn(async () => ({ data: { statusCode: 200 } }));
-    harness.rendered.length = 0;
-    expect(
-      render(AdminLayout, {
-        TABLE_HEAD: tableHead,
-        TABLE_ROWS: rows,
-        bodyDetail: React.createElement("span", null, "detail"),
-        bodyUpdate: React.createElement("span", null, "update"),
-        children: React.createElement("button", null, "create"),
-        deleteContent: "Delete",
-        handleDeleteSubmit: vi.fn(),
-        headerDetail: "Detail",
-        headerUpdate: "Update",
-        name: "Products",
-        setTab,
-        tab: "revenue",
-        tablist: [{ label: "Revenue", value: "revenue" }],
-        updateContent: "Update",
-        updateSubmit,
-      })
-    ).toContain("Products");
-    await captured("Button", (props) => typeof props.onClick === "function")
-      .at(-1)
-      .props.onClick();
-    expect(updateSubmit).toHaveBeenCalled();
-  });
-
-  it("renders admin resource screens and drives their form handlers", async () => {
-    const [
-      { default: Brand },
-      { default: Category },
-      { default: Comment },
-      { default: Inbox },
-      { default: AllOrder },
-      { default: PaymentChannel },
-      { default: OnsaleProduct },
-      { default: User },
-      { default: Voucher },
-      { default: Web },
-    ] = await Promise.all([
-      import("./components/admin/brand.component.jsx"),
-      import("./components/admin/category.component.jsx"),
-      import("./components/admin/comment.component.jsx"),
-      import("./components/admin/inbox.component.jsx"),
-      import("./components/admin/order.component.jsx"),
-      import("./components/admin/payment_channel.component.jsx"),
-      import("./components/admin/on_sale_product.component.jsx"),
-      import("./components/admin/user.component.jsx"),
-      import("./components/admin/voucher.component.jsx"),
-      import("./components/admin/web.component.jsx"),
-    ]);
-
-    const markup = [
-      render(Brand),
-      render(Category),
-      render(Comment),
-      render(Inbox),
-      render(AllOrder),
-      render(PaymentChannel),
-      render(OnsaleProduct),
-      render(User),
-      render(Voucher),
-      render(Web),
-    ].join(" ");
-
-    expect(markup).toContain("Nike");
-    expect(markup).toContain("Shirts");
-    expect(markup).toContain("Lượt bình luận");
-    expect(markup).toContain("Runner Tee");
-    expect(markup).toContain("Lên giá sản phẩm");
-    expect(markup).toContain("Ada User");
-    expect(markup).toContain("SAVE10");
-    expect(markup).toContain("notification.not_found_name");
-
-    for (const entry of [
-      ...captured("TextField", (props) => typeof props.onChange === "function"),
-      ...captured("OutlinedInput", (props) => typeof props.onChange === "function"),
-      ...captured("Select", (props) => typeof props.onChange === "function"),
-    ]) {
-      await invoke(entry, "onChange", { target: { value: "42" } });
-    }
-    for (const entry of captured("DatePicker", (props) => typeof props.onChange === "function")) {
-      await invoke(entry, "onChange", "2026-07-18");
-    }
-    for (const entry of [
-      ...captured("Button", (props) => typeof props.onClick === "function"),
-      ...captured("IconButton", (props) => typeof props.onClick === "function"),
-    ]) {
-      await invoke(entry);
-    }
-    expect(harness.mutation).toHaveBeenCalled();
-
-    harness.apiState.brands = { data: null, error: null, isLoading: true };
-    expect(render(Brand)).toContain("loading.label");
-
-    harness.apiState.categories = {
-      data: null,
-      error: { message: "Category failed" },
-      isLoading: false,
-    };
-    expect(render(Category)).toContain("Category failed");
-
-    harness.apiState.orders = {
-      data: null,
-      error: { message: "Order failed" },
-      isLoading: false,
-    };
-    expect(render(AllOrder)).toContain("error");
-
-    harness.apiState.vouchers = { data: null, isError: true, isLoading: false };
-    expect(render(Voucher)).toContain("notification.error_name");
-
-    harness.apiState.brands = {
-      data: { object: [{ description: "Athletic gear", id: 1, name: "Nike" }] },
-      error: null,
-      isLoading: false,
-    };
-    harness.apiState.categories = {
-      data: { object: [{ description: "Everyday shirts", id: 1, name: "Shirts" }] },
-      error: null,
-      isLoading: false,
-    };
-    harness.apiState.inputSales = {
-      data: null,
-      error: { message: "Input sale failed" },
-      isLoading: false,
-    };
-    expect(render(OnsaleProduct)).toContain("Input sale failed");
-  });
-
-  it("renders profile user info states and drives profile handlers", async () => {
-    const { default: UserInfo } = await import("./components/shop/user_info.component.jsx");
-    const profileMarkup = render(UserInfo);
-
-    expect(profileMarkup).toContain("profile.personal_info");
-    expect(profileMarkup).toContain("profile.connections");
-    expect(captured("Avatar", (props) => props.src === "/avatar.png")).toHaveLength(1);
-
-    for (const entry of [
-      ...captured("TextField", (props) => typeof props.onChange === "function"),
-      ...captured("RadioGroup", (props) => typeof props.onChange === "function"),
-    ]) {
-      await invoke(entry, "onChange", { target: { value: "changed" } });
-    }
-    for (const entry of captured("DatePicker", (props) => typeof props.onChange === "function")) {
-      await invoke(entry, "onChange", "2026-07-18");
-    }
-    for (const entry of [
-      ...captured("Avatar", (props) => typeof props.onClick === "function"),
-      ...captured("Button", (props) => typeof props.onClick === "function"),
-    ]) {
-      await invoke(entry);
-    }
-    expect(harness.mutation).toHaveBeenCalled();
-
-    harness.apiState.userProfile = { data: null, isError: false, isLoading: true };
-    expect(render(UserInfo)).toContain("loading.label");
-
-    harness.apiState.userProfile = { data: null, isError: true, isLoading: false };
-    expect(render(UserInfo)).toContain("profile.load_failed");
-  });
-
-  it("renders checkout, notification, switcher, media, and country components", async () => {
-    const [
-      { default: CheckoutPage },
-      { default: CheckoutStep2 },
-      { default: CheckoutStep3 },
-      { default: CountrySelect },
-      { default: Footer, FooterView },
-      { default: LanguageSwitcher },
-      { default: LazyImage },
-      { default: Loading },
-      { default: NotificationLayout },
-      { default: ParallaxBanner },
-      { default: ScrollReveal },
-      { default: SeasonSwitcher },
-      { default: ThemeSwitcher },
-    ] = await Promise.all([
-      import("./pages/checkout.page.jsx"),
-      import("./components/shop/checkout_step_2.component.jsx"),
-      import("./components/shop/checkout_step_3.component.jsx"),
-      import("./components/country_select.component.jsx"),
-      import("./components/shared/shop/Footer.jsx"),
-      import("./components/shared/LanguageSwitcher.jsx"),
-      import("./components/shared/LazyImage.jsx"),
-      import("./components/shared/loading.component.jsx"),
-      import("./layouts/shop/notification.layout.jsx"),
-      import("./components/shared/ParallaxBanner.jsx"),
-      import("./components/shared/ScrollReveal.jsx"),
-      import("./components/shared/SeasonSwitcher.jsx"),
-      import("./components/shared/ThemeSwitcher.jsx"),
-    ]);
-
-    expect(render(CheckoutPage)).toContain("checkout-step-1");
-    const handleNext = vi.fn();
-    const handlePrev = vi.fn();
-    harness.rendered.length = 0;
-    expect(render(CheckoutStep2, { handleNext, handlePrev })).toContain("checkout.payment_gateway");
-    for (const entry of [
-      ...captured("Button", (props) => typeof props.onClick === "function"),
-      ...captured("IconButton", (props) => typeof props.onClick === "function"),
-      ...captured("Typography", (props) => typeof props.onClick === "function"),
-    ]) {
-      entry.props.onClick();
-    }
-    expect(handleNext).toHaveBeenCalled();
-    expect(handlePrev).toHaveBeenCalled();
-    expect(render(CheckoutStep3)).toContain("notification.checkout_success_name");
-
-    expect(
-      render(NotificationLayout, {
-        noti: { icon: <svg />, messageKey: "m", nameKey: "n", subtitleKey: "s" },
-      })
-    ).toContain("common.back_home");
-    expect(render(Footer)).toContain("VTI Shop");
-    expect(
-      render(FooterView, {
-        footerMenu: [
-          { items: [{ labelKey: "footer.home", link: "/" }], titleKey: "footer.products" },
-        ],
-        socialLinks: [{ href: "https://example.com", label: "Example", Icon: () => <svg /> }],
-        t: (key) => key,
-        year: 2026,
-      })
-    ).toContain("2026");
-    expect(render(Loading)).toContain("loading.label");
-    expect(render(CountrySelect)).toContain("United Arab Emirates");
-    expect(render(LazyImage, { alt: "shirt", aspectRatio: "4/3", src: "shirt.jpg" })).toContain(
-      "shirt.jpg"
-    );
-    expect(render(LazyImage)).toContain("lazy-image-wrapper");
-    expect(render(ScrollReveal, { children: "Reveal", delay: "0.1s", stagger: true })).toContain(
-      "Reveal"
-    );
-    expect(
-      render(ParallaxBanner, {
-        children: "Hero",
-        height: "320px",
-        imageUrl: "/hero.jpg",
-        overlay: 0.4,
-        speed: 0.2,
-      })
-    ).toContain("Hero");
-
-    harness.rendered.length = 0;
-    expect(render(LanguageSwitcher)).toContain("language.english");
-    expect(render(ThemeSwitcher)).toContain("theme.light");
-    expect(render(SeasonSwitcher)).toContain("season.auto");
-    for (const item of captured("MenuItem", (props) => typeof props.onClick === "function")) {
-      item.props.onClick();
-    }
-    expect(harness.setLanguage).toHaveBeenCalledWith("vi");
-    expect(harness.setTheme).toHaveBeenCalledWith("system");
-    expect(harness.setSeason).toHaveBeenCalledWith("summer");
-  });
-});
+export { React, harness, render, captured, invoke, withMockedUseState };
