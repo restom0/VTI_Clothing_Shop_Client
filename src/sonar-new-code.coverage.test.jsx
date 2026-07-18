@@ -1079,7 +1079,7 @@ describe("Sonar new-code coverage for client UI", () => {
       getItem: vi.fn((key) => (key === "token" ? "token" : "order-99")),
     };
     expect(cartModule.hasCartToken(storage)).toBe(true);
-    expect(cartModule.getNextCartQuantity({ quantity: 1 }, -1)).toBe(null);
+    expect(cartModule.getNextCartQuantity({ quantity: 1 }, -1)).toBeNull();
     expect(cartModule.getNextCartQuantity({ quantity: 1 }, 2)).toBe(3);
     expect(cartModule.buildCartQuantityPayload({ product_id: { id: 9 } }, 3, storage)).toEqual({
       id: "order-99",

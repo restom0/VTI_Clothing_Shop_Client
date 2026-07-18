@@ -33,7 +33,7 @@ const getMetricValue = (metric) => {
 const observePerformanceEntries = (type, handler, observers) => {
   try {
     const observer = new window.PerformanceObserver((list) => {
-      list.getEntries().forEach(handler);
+      list.getEntries().forEach((entry) => handler(entry));
     });
     observer.observe({ type, buffered: true });
     observers.push(observer);

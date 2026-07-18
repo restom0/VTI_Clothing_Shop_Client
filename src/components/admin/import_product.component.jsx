@@ -306,7 +306,7 @@ const ImportProduct = () => {
     } catch (err) {
       console.error(err);
       await Toast.fire({ icon: "error", title: "Thêm thương hiệu thất bại" });
-      if (err && err.status === 401) {
+      if (err?.status === 401) {
         localStorage.clear();
         navigate(ROUTES.LOGIN);
       }
