@@ -40,24 +40,24 @@ const Kpi = ({ stat }) => {
   const { formatPrice, locale } = useCurrency();
   const numberFormatter = new Intl.NumberFormat(locale);
   const orderUnit = t("kpi.order_unit");
-  const rows = data.map((item, index) => {
-    const values = [
-      formatPrice(stat.income),
-      `${numberFormatter.format(stat.order)} ${orderUnit}`,
-      `${numberFormatter.format(stat.completed)} ${orderUnit}`,
-      numberFormatter.format(stat.user),
-      numberFormatter.format(stat.product ?? stat.soldProduct ?? 0),
-    ];
-
-    return { title: t(item.titleKey), price: values[index] };
-  });
+  const valuesByTitleKey = {
+    "kpi.revenue": formatPrice(stat.income),
+    "kpi.order_count": `${numberFormatter.format(stat.order)} ${orderUnit}`,
+    "kpi.completed_orders": `${numberFormatter.format(stat.completed)} ${orderUnit}`,
+    "kpi.user_count": numberFormatter.format(stat.user),
+    "kpi.products_sold": numberFormatter.format(stat.product ?? stat.soldProduct ?? 0),
+  };
+  const rows = data.map((item) => ({
+    title: t(item.titleKey),
+    price: valuesByTitleKey[item.titleKey],
+  }));
 
   return (
     <section className="container mx-auto py-5 pe-6">
       <div className="flex justify-between md:items-center"></div>
       <div className="flex flex-col">
-        {rows.map((props, key) => (
-          <KpiCard key={key} {...props} />
+        {rows.map((props) => (
+          <KpiCard key={props.title} {...props} />
         ))}
       </div>
     </section>
@@ -65,9 +65,6 @@ const Kpi = ({ stat }) => {
 };
 KpiCard.propTypes = {
   title: PropTypes.string.isRequired,
-  percentage: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired,
 };
 export default Kpi;

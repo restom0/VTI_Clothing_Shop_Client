@@ -25,7 +25,7 @@ const PARALLAX_IMAGE = "https://images.unsplash.com/photo-1558618666-fcd25c85cd6
 
 /** Renders slide. */
 const renderSlide = (slide, index) => (
-  <SwiperSlide key={index}>
+  <SwiperSlide key={slide}>
     <img src={slide} alt={`Slide ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
   </SwiperSlide>
 );

@@ -142,7 +142,7 @@ const CartPage = () => {
         </div>
 
         {/* Item rows */}
-        {items.map((item, index) => {
+        {items.map((item) => {
           const salePrice = item.product_id?.sale_price ?? 0;
           const discount = item.product_id?.discount ?? 0;
           const unitPrice = salePrice * (1 - discount / 100);
@@ -150,7 +150,7 @@ const CartPage = () => {
           const productName = item.product_id?.product_id?.product_id?.name ?? t("common.product");
 
           return (
-            <div className="cart-row" key={index}>
+            <div className="cart-row" key={item.id ?? item.product_id?.id ?? productName}>
               <Checkbox color="blue" />
               <div className="col-span-2">
                 <img
@@ -219,7 +219,9 @@ const CartPage = () => {
             <span className="summary-label">{t("checkout.discount_code")}</span>
             <span className="summary-label">- 0%</span>
           </div>
-          <button className="btn-outline w-full mt-4">{t("cart.enter_discount_code")}</button>
+          <button type="button" className="btn-outline w-full mt-4">
+            {t("cart.enter_discount_code")}
+          </button>
         </div>
 
         {/* Order summary card */}
@@ -237,6 +239,7 @@ const CartPage = () => {
             <span className="cart-total-value">{formatPrice(total)}</span>
           </div>
           <button
+            type="button"
             className="btn-primary w-full mt-4"
             onClick={() => navigate(ROUTES.CHECKOUT)}
             disabled={items.length === 0}

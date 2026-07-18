@@ -36,7 +36,7 @@ export const getCurrencyFractionDigits = (currency) =>
 
 /** Normalizes exchange rates. */
 export const normalizeExchangeRates = (payload) => {
-  if (!payload || payload.base !== BASE_CURRENCY || !payload.rates) {
+  if (payload?.base !== BASE_CURRENCY || !payload?.rates) {
     return null;
   }
 

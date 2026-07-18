@@ -315,7 +315,7 @@ const getPath = (args) => {
 
 /** Gets id from args. */
 const getIdFromArgs = (args) => {
-  const id = Number(getPath(args).split("/").filter(Boolean).at(-1));
+  const id = Number(getPath(args).split("/").findLast(Boolean));
   return Number.isNaN(id) ? null : id;
 };
 
@@ -449,7 +449,7 @@ const FALLBACKS = {
 };
 
 /** Handles clone. */
-const clone = (value) => JSON.parse(JSON.stringify(value));
+const clone = (value) => structuredClone(value);
 
 /** Checks whether read request. */
 const isReadRequest = (args) => {

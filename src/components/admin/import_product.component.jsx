@@ -74,12 +74,24 @@ import {
 } from "../../styles/classNames";
 
 /** Handles gender label. */
-const genderLabel = (gender) => (gender === "MALE" ? "Nam" : gender === "FEMALE" ? "Nữ" : "Unisex");
+const genderLabel = (gender) => {
+  if (gender === "MALE") return "Nam";
+  if (gender === "FEMALE") return "Nữ";
+  return "Unisex";
+};
 
 /** Clamps range. */
-const clampRange = (raw, min, max) => (Number.isNaN(raw) || raw < min ? min : Math.min(raw, max));
+const clampRange = (raw, min, max) => {
+  const value = Number(raw);
+  if (Number.isNaN(value)) return min;
+  return Math.min(Math.max(value, min), max);
+};
 /** Clamps floor. */
-const clampFloor = (raw, min) => (Number.isNaN(raw) || raw < min ? min : raw);
+const clampFloor = (raw, min) => {
+  const value = Number(raw);
+  if (Number.isNaN(value)) return min;
+  return Math.max(value, min);
+};
 
 /** Finds old variant. */
 const findOldVariant = (importedProducts, productId, colorCode, size, material) =>
@@ -171,7 +183,7 @@ const ImportProduct = () => {
   // const slider2 = useSelector((state) => state.slider2);
   // const slider3 = useSelector((state) => state.slider3);
   // const slider4 = useSelector((state) => state.slider4);
-  const [avatar_url, setAvatar_Url] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
   const [slider1, setSlider1] = useState("");
   const [slider2, setSlider2] = useState("");
   const [slider3, setSlider3] = useState("");
@@ -182,7 +194,7 @@ const ImportProduct = () => {
   const [publicIdSlider3, setPublicIdSlider3] = useState("");
   const [publicIdSlider4, setPublicIdSlider4] = useState("");
 
-  const [updateAvatar_Url, setUpdateAvatar_Url] = useState("");
+  const [updateAvatarUrl, setUpdateAvatarUrl] = useState("");
   const [updateSlider1, setUpdateSlider1] = useState("");
   const [updateSlider2, setUpdateSlider2] = useState("");
   const [updateSlider3, setUpdateSlider3] = useState("");
@@ -197,8 +209,8 @@ const ImportProduct = () => {
   const [oldOpen, setOldOpen] = useState(false);
   const selectedId = useSelector((state) => state.selectedId.value);
   const [product, setProduct] = useState(null);
-  const [color_code, setColorCode] = useState("");
-  const [color_name, setColorName] = useState("");
+  const [colorCode, setColorCode] = useState("");
+  const [colorName, setColorName] = useState("");
   const [size, setSize] = useState("");
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
@@ -206,8 +218,8 @@ const ImportProduct = () => {
   const [gender, setGender] = useState("");
   const [importPrice, setImportPrice] = useState(1000);
   const [importNumber, setImportNumber] = useState(1);
-  const [updateColor_code, setUpdateColorCode] = useState("");
-  const [updateColor_name, setUpdateColorName] = useState("");
+  const [updateColorCode, setUpdateColorCode] = useState("");
+  const [updateColorName, setUpdateColorName] = useState("");
   const [updateSize, setUpdateSize] = useState("");
   const [updateHeight, setUpdateHeight] = useState(0);
   const [updateWeight, setUpdateWeight] = useState(0);
@@ -239,15 +251,15 @@ const ImportProduct = () => {
   /** Handles import payload. */
   const importPayload = () => ({
     product_id: product,
-    color_code: color_code,
-    color_name: color_name,
+    color_code: colorCode,
+    color_name: colorName,
     size: size,
     height: height,
     weight: weight,
     material: material,
     gender: gender,
     importPrice: Number(importPrice),
-    image_url: avatar_url,
+    image_url: avatarUrl,
     slider_url_1: slider1,
     slider_url_2: slider2,
     slider_url_3: slider3,
@@ -262,7 +274,7 @@ const ImportProduct = () => {
   /** Resets new form. */
   const resetNewForm = () => {
     handleNewClose();
-    setAvatar_Url("");
+    setAvatarUrl("");
     setSlider1("");
     setSlider2("");
     setSlider3("");
@@ -309,15 +321,15 @@ const ImportProduct = () => {
       color_id: search?.color_id.id || "",
       size_id: search?.size_id.id,
       material_id: search?.material_id.id,
-      color_code: updateColor_code,
-      color_name: updateColor_name,
+      color_code: updateColorCode,
+      color_name: updateColorName,
       size: updateSize,
       height: updateHeight,
       weight: updateWeight,
       material: updateMaterial,
       gender: updateGender,
       importPrice: updateImportPrice,
-      image_url: updateAvatar_Url,
+      image_url: updateAvatarUrl,
       slider_url_1: updateSlider1,
       slider_url_2: updateSlider2,
       slider_url_3: updateSlider3,
@@ -359,7 +371,7 @@ const ImportProduct = () => {
         setUpdateSlider2(search.slider_url_2);
         setUpdateSlider3(search.slider_url_3);
         setUpdateSlider4(search.slider_url_4);
-        setUpdateAvatar_Url(search.image_url);
+        setUpdateAvatarUrl(search.image_url);
         setUpdateColorCode(search.color_id.color_code);
         setUpdateColorName(search.color_id.color_name);
         setUpdateSize(search.size_id.size);
@@ -382,12 +394,12 @@ const ImportProduct = () => {
     const imported_product = importedProducts?.object.find(
       (row) =>
         row.product_id.id === product &&
-        row.color_id.id === color_code &&
+        row.color_id.id === colorCode &&
         row.size_id.size === size &&
         row.material_id.id === material
     );
     if (imported_product) {
-      setAvatar_Url(imported_product.image_url);
+      setAvatarUrl(imported_product.image_url);
       setSlider1(imported_product.slider_url_1);
       setSlider2(imported_product.slider_url_2);
       setSlider3(imported_product.slider_url_3);
@@ -404,7 +416,7 @@ const ImportProduct = () => {
       setWeight(imported_product.size_id.weight.replace("kg", "").trim());
       setGender(imported_product.gender);
     }
-  }, [product, color_code, size, material, importedProducts?.object]);
+  }, [product, colorCode, size, material, importedProducts?.object]);
   if (isLoading || isLoading_ImportProducts) return <Loading />;
   if (error || isError_ImportedProducts) return navigate(ROUTES.ERROR);
   // Single accessor for "show the selected imported product's field, else blank".
@@ -416,7 +428,7 @@ const ImportProduct = () => {
   /** Handles import field. */
   const importField = (selector, fallback = "") =>
     selectedImport ? (selector(selectedImport) ?? fallback) : fallback;
-  const oldVariant = findOldVariant(importedProducts, product, color_code, size, material);
+  const oldVariant = findOldVariant(importedProducts, product, colorCode, size, material);
   const ListImportProducts = importedProducts.object.map((product) => {
     return {
       id: product.id,
@@ -585,17 +597,17 @@ const ImportProduct = () => {
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 <ImageSlot
-                  value={updateAvatar_Url}
+                  value={updateAvatarUrl}
                   imageKey="avatar_url"
                   caption="Hình đại diện"
                   isAvatar
-                  previewSrc={updateAvatar_Url}
+                  previewSrc={updateAvatarUrl}
                   previewWrapClassName={IMPORT_AVATAR_PREVIEW_CLASSNAME}
                   previewImgClassName={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
                   upload={
                     <ImageUpload
                       image="avatar_url"
-                      setAvatar={setUpdateAvatar_Url}
+                      setAvatar={setUpdateAvatarUrl}
                       setPublicId={setUpdatePublicIdAvatar}
                     />
                   }
@@ -603,7 +615,7 @@ const ImportProduct = () => {
                     <Button
                       onClick={() => {
                         handleDelete(publicIdAvatar);
-                        setUpdateAvatar_Url("");
+                        setUpdateAvatarUrl("");
                         setUpdatePublicIdAvatar("");
                       }}
                       color="red"
@@ -744,8 +756,8 @@ const ImportProduct = () => {
                     >
                       {products &&
                         products.object.length > 0 &&
-                        products.object.map((item, index) => (
-                          <MenuItem key={index} value={item.id}>
+                        products.object.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
                             {item.name}
                           </MenuItem>
                         ))}
@@ -757,7 +769,7 @@ const ImportProduct = () => {
                   <TextField
                     size="small"
                     type="color"
-                    value={updateColor_code}
+                    value={updateColorCode}
                     pattern="#[a-fA-F0-9]{6}"
                     placeholder="#000000"
                     onChange={(e) => setUpdateColorCode(e.target.value)}
@@ -767,7 +779,7 @@ const ImportProduct = () => {
                   <Typography variant="h6">Màu sắc: </Typography>
                   <TextField
                     size="small"
-                    value={updateColor_name}
+                    value={updateColorName}
                     placeholder="Đen"
                     onChange={(e) => setUpdateColorName(e.target.value)}
                   />
@@ -912,17 +924,17 @@ const ImportProduct = () => {
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 <ImageSlot
-                  value={avatar_url}
+                  value={avatarUrl}
                   imageKey="avatar_url"
                   caption="Hình đại diện"
                   isAvatar
-                  previewSrc={avatar_url}
+                  previewSrc={avatarUrl}
                   previewWrapClassName={IMPORT_AVATAR_PREVIEW_CLASSNAME}
                   previewImgClassName={IMPORT_AVATAR_PREVIEW_IMAGE_CLASSNAME}
                   upload={
                     <ImageUpload
                       image="avatar_url"
-                      setAvatar={setAvatar_Url}
+                      setAvatar={setAvatarUrl}
                       setPublicId={setPublicIdAvatar}
                     />
                   }
@@ -930,7 +942,7 @@ const ImportProduct = () => {
                     <Button
                       onClick={() => {
                         handleDelete(publicIdAvatar);
-                        setAvatar_Url("");
+                        setAvatarUrl("");
                         setPublicIdAvatar("");
                       }}
                       color="red"
@@ -1071,8 +1083,8 @@ const ImportProduct = () => {
                     >
                       {products &&
                         products.object.length > 0 &&
-                        products.object.map((item, index) => (
-                          <MenuItem key={index} value={item.id}>
+                        products.object.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
                             {item.name}
                           </MenuItem>
                         ))}
@@ -1084,7 +1096,7 @@ const ImportProduct = () => {
                   <TextField
                     size="small"
                     type="color"
-                    value={color_code}
+                    value={colorCode}
                     pattern="#[a-fA-F0-9]{6}"
                     placeholder="#000000"
                     onChange={(e) => setColorCode(e.target.value)}
@@ -1095,7 +1107,7 @@ const ImportProduct = () => {
                   <TextField
                     type="text"
                     size="small"
-                    value={color_name}
+                    value={colorName}
                     placeholder="Đen"
                     onChange={(e) => setColorName(e.target.value)}
                   />
@@ -1174,7 +1186,7 @@ const ImportProduct = () => {
                     size="small"
                     value={importNumber}
                     placeholder="Cotton"
-                    onChange={(e) => setImportNumber(e.target.value < 1 ? 1 : e.target.value)}
+                    onChange={(e) => setImportNumber(clampFloor(e.target.value, 1))}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1184,7 +1196,7 @@ const ImportProduct = () => {
                     value={importPrice}
                     placeholder="1000"
                     endAdornment={<InputAdornment position="end">đ</InputAdornment>}
-                    onChange={(e) => setImportPrice(e.target.value < 1000 ? 1000 : e.target.value)}
+                    onChange={(e) => setImportPrice(clampFloor(e.target.value, 1000))}
                   />
                 </div>
               </div>
@@ -1209,7 +1221,7 @@ const ImportProduct = () => {
             <div className={IMPORT_FORM_GRID_CLASSNAME}>
               <div className={IMPORT_UPLOAD_STACK_CLASSNAME}>
                 <ImageSlot
-                  value={avatar_url}
+                  value={avatarUrl}
                   imageKey="avatar_url"
                   caption="Hình đại diện"
                   isAvatar
@@ -1265,8 +1277,8 @@ const ImportProduct = () => {
                     >
                       {products &&
                         products.object.length > 0 &&
-                        products.object.map((item, index) => (
-                          <MenuItem key={index} value={item.id}>
+                        products.object.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
                             {item.name}
                           </MenuItem>
                         ))}
@@ -1277,14 +1289,14 @@ const ImportProduct = () => {
                   <Typography variant="h6">Mã màu: </Typography>
                   <FormControl fullWidth>
                     <Select
-                      value={color_code}
+                      value={colorCode}
                       onChange={(e) => setColorCode(e.target.value)}
                       size="small"
                     >
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
-                        importedProducts.object.map((item, index) => (
-                          <MenuItem key={index} value={item.color_id.color_code}>
+                        importedProducts.object.map((item) => (
+                          <MenuItem key={item.color_id.color_code} value={item.color_id.color_code}>
                             {item.color_id.color_code}
                           </MenuItem>
                         ))}
@@ -1298,7 +1310,7 @@ const ImportProduct = () => {
                     disabled
                     value={
                       importedProducts.object?.find(
-                        (item) => item.product_id.id === product && item.color_id.id === color_code
+                        (item) => item.product_id.id === product && item.color_id.id === colorCode
                       )?.color_id.color_name
                     }
                     placeholder="Trắng"
@@ -1318,8 +1330,8 @@ const ImportProduct = () => {
                     <Select value={size} onChange={(e) => setSize(e.target.value)} size="small">
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
-                        importedProducts.object.map((item, index) => (
-                          <MenuItem key={index} value={item.size_id.size}>
+                        importedProducts.object.map((item) => (
+                          <MenuItem key={item.size_id.size} value={item.size_id.size}>
                             {item.size_id.size}
                           </MenuItem>
                         ))}
@@ -1365,8 +1377,8 @@ const ImportProduct = () => {
                     >
                       {importedProducts &&
                         importedProducts.object.length > 0 &&
-                        importedProducts.object.map((item, index) => (
-                          <MenuItem key={index} value={item.material_id.name}>
+                        importedProducts.object.map((item) => (
+                          <MenuItem key={item.material_id.name} value={item.material_id.name}>
                             {item.material_id.name}
                           </MenuItem>
                         ))}
@@ -1406,13 +1418,7 @@ const ImportProduct = () => {
                     size="small"
                     value={importNumber}
                     placeholder="1"
-                    onChange={(e) =>
-                      setImportNumber(
-                        isNaN(Number(e.target.value)) || Number(e.target.value) < 1
-                          ? 1
-                          : Number(e.target.value)
-                      )
-                    }
+                    onChange={(e) => setImportNumber(clampFloor(e.target.value, 1))}
                   />
                 </div>
                 <div className={IMPORT_FORM_FIELD_CLASSNAME}>
@@ -1422,13 +1428,7 @@ const ImportProduct = () => {
                     value={importPrice}
                     placeholder="1000"
                     endAdornment={<InputAdornment position="end">đ</InputAdornment>}
-                    onChange={(e) =>
-                      setImportPrice(
-                        isNaN(Number(e.target.value)) || Number(e.target.value) < 1000
-                          ? 1000
-                          : Number(e.target.value)
-                      )
-                    }
+                    onChange={(e) => setImportPrice(clampFloor(e.target.value, 1000))}
                   />
                 </div>
               </div>

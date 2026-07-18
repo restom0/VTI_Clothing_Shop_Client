@@ -75,10 +75,10 @@ const SearchSVG = () => (
 /** Handles nav skeleton. */
 export const NavSkeleton = () => (
   <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-    {NAV_SKELETON_WIDTHS.map((width, index) => (
+    {NAV_SKELETON_WIDTHS.map((width) => (
       <SkeletonBlock
         as="li"
-        key={index}
+        key={width}
         className="skeleton-nav-item list-none"
         style={{ width }}
       />

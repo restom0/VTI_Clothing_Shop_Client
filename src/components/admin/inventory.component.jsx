@@ -88,174 +88,171 @@ const Inventory = () => {
   }, [tab1, importProduct]);
   if (importProductLoading) return <Loading />;
   if (importProductError) return <div>{importProductError}</div>;
-  const listImportedProducts =
-    importProducts &&
-    importProducts.map((item) => {
-      return {
-        id: item.id,
-        avatar: (
-          <img className="h-auto w-16 mx-auto" src={item.image_url} alt={item.product_id.name} />
-        ),
-        name: item.product_id.name,
-        sku: item.sku,
-        price: formatPrice(item.importPrice),
-        stock: item.stock,
-      };
-    });
+  const listImportedProducts = importProducts?.map((item) => {
+    return {
+      id: item.id,
+      avatar: (
+        <img className="h-auto w-16 mx-auto" src={item.image_url} alt={item.product_id.name} />
+      ),
+      name: item.product_id.name,
+      sku: item.sku,
+      price: formatPrice(item.importPrice),
+      stock: item.stock,
+    };
+  });
   return (
-    <>
-      <AdminLayout
-        name="Kho hàng"
-        tab={tab1}
-        setTab={setTab1}
-        tablist={inventory_tab}
-        TABLE_HEAD={inventory}
-        TABLE_ROWS={listImportedProducts ? listImportedProducts : []}
-        updateContent="Chỉnh sửa"
-        deleteContent="Xóa"
-        size="xl"
-        headerDetail={"Chi tiết sản phẩm #" + "001"}
-        bodyDetail={
-          <section className="px-8 h-[65vh] overflow-auto">
-            <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
-              <div className="grid-cols-1 ">
-                <div className="h-[300px] w-96 mx-auto">
-                  <Swiper
-                    slidesPerView={1}
-                    spaceBetween={30}
-                    modules={[Navigation]}
-                    className="mySwiper1 h-[300px] w-[500px]"
-                  >
-                    {product.imageUrl.map((url, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={url} />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-                {/* <img
+    <AdminLayout
+      name="Kho hàng"
+      tab={tab1}
+      setTab={setTab1}
+      tablist={inventory_tab}
+      TABLE_HEAD={inventory}
+      TABLE_ROWS={listImportedProducts ?? []}
+      updateContent="Chỉnh sửa"
+      deleteContent="Xóa"
+      size="xl"
+      headerDetail={"Chi tiết sản phẩm #" + "001"}
+      bodyDetail={
+        <section className="px-8 h-[65vh] overflow-auto">
+          <div className="mx-auto container grid place-items-center grid-cols-1 md:grid-cols-2">
+            <div className="grid-cols-1 ">
+              <div className="h-[300px] w-96 mx-auto">
+                <Swiper
+                  slidesPerView={1}
+                  spaceBetween={30}
+                  modules={[Navigation]}
+                  className="mySwiper1 h-[300px] w-[500px]"
+                >
+                  {product.imageUrl.map((url) => (
+                    <SwiperSlide key={url}>
+                      <img src={url} alt={product.title} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+              {/* <img
               src="https://www.material-tailwind.com/image/product-4.png"
               alt="pink blazer"
               className=""
             /> */}
-                <div className={ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME}>
-                  <Swiper
-                    slidesPerView={4}
-                    spaceBetween={30}
-                    modules={[Navigation]}
-                    loop={true}
-                    className={ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME}
-                  >
-                    {product.imageUrl.map((url, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={url} />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-                <div className={PRODUCT_META_GRID_CLASSNAME}>
-                  <Typography variant="h6">Giá nhập:</Typography>
-                  <Typography variant="small">$1,490</Typography>
-                  <Typography variant="h6">Giá bán:</Typography>
-                  <Typography variant="small">$1,490</Typography>
-                  <Typography variant="h6">Giảm giá:</Typography>
-                  <Typography variant="small">10%</Typography>
-                </div>
+              <div className={ADMIN_PRODUCT_THUMB_MEDIA_CLASSNAME}>
+                <Swiper
+                  slidesPerView={4}
+                  spaceBetween={30}
+                  modules={[Navigation]}
+                  loop={true}
+                  className={ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME}
+                >
+                  {product.imageUrl.map((url) => (
+                    <SwiperSlide key={url}>
+                      <img src={url} alt={product.title} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
-              <div>
-                <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
-                  {product.title}
-                </Typography>
-                <div className={PRODUCT_META_GRID_CLASSNAME}>
-                  <Typography variant="h6">Thương hiệu:</Typography>
-                  <Typography variant="small">Nike</Typography>
-                  <Typography variant="h6">Danh mục:</Typography>
-                  <Typography variant="small">Quần áo</Typography>
-                </div>
-                <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>Mô tả</Typography>
-                <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
-                  {product.short_description}
-                </Typography>
-                <div className={PRODUCT_RATING_ROW_CLASSNAME}>
-                  <Rating readOnly value={product.rating} className="disabled text-amber-500" />
-                  <Typography className="!text-sm font-bold !text-gray-700">
-                    {product.rating.toPrecision(2)}/5 (100 reviews)
-                  </Typography>
-                </div>
-                <div className={PRODUCT_VARIANT_GRID_CLASSNAME}>
-                  <Typography color="blue-gray" variant="h6" className="col-span-2">
-                    Màu sắc
-                  </Typography>
-                  <Typography color="blue-gray" variant="h6">
-                    Kích cỡ
-                  </Typography>
-                  <Typography color="blue-gray" variant="h6">
-                    Chất liệu
-                  </Typography>
-                  <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
-                    {product.colors.map((color, index) => (
-                      <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={index}>
-                        <Button
-                          size="lg"
-                          variant="gradient"
-                          color="white"
-                          className="rounded-full"
-                          style={{ backgroundColor: color.color }}
-                        >
-                          {" "}
-                        </Button>
-                        <Typography>{color.label}</Typography>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="my-8 mt-3 flex flex-col gap-2">
-                    {product.sizes.map((size, index) => (
-                      <Typography key={index} className="!text-gray-700 text-center">
-                        {size}
-                      </Typography>
-                    ))}
-                  </div>
-                  <div className="my-8 mt-3 flex flex-col gap-2">
-                    {product.materials.map((material, index) => (
-                      <Typography key={index} className="!text-gray-700 text-center">
-                        {material}
-                      </Typography>
-                    ))}
-                  </div>
-                </div>
-                <div className="grid grid-cols-2">
-                  <Dialog open={open} handler={handleOpen}>
-                    <DialogHeader className="pb-0 flex justify-between">
-                      <Typography variant="h4">Nhập sản phẩm mới</Typography>
-                      <IconButton className="border-none" variant="outlined" onClick={handleOpen}>
-                        <CloseIcon />
-                      </IconButton>
-                    </DialogHeader>
-                    <DialogBody>
-                      The key to more success is to have a lot of pillows. Put it this way, it took
-                      me twenty five years to get these plants, twenty five years of blood sweat and
-                      tears, and I&apos;m never giving up, I&apos;m just getting started. I&apos;m
-                      up to something. Fan luv.
-                    </DialogBody>
-                    <DialogFooter>
-                      <Button variant="text" color="red" onClick={handleOpen} className="mr-1">
-                        <span>Cancel</span>
-                      </Button>
-                      <Button variant="gradient" color="green" onClick={handleOpen}>
-                        <span>Confirm</span>
-                      </Button>
-                    </DialogFooter>
-                  </Dialog>
-                </div>
+              <div className={PRODUCT_META_GRID_CLASSNAME}>
+                <Typography variant="h6">Giá nhập:</Typography>
+                <Typography variant="small">$1,490</Typography>
+                <Typography variant="h6">Giá bán:</Typography>
+                <Typography variant="small">$1,490</Typography>
+                <Typography variant="h6">Giảm giá:</Typography>
+                <Typography variant="small">10%</Typography>
               </div>
             </div>
-          </section>
-        }
-        noUpdate
-      >
-        <div className="flex items-center justify-between gap-4">
-          {/* <Select label="Phân loại theo">
+            <div>
+              <Typography className={PRODUCT_TITLE_CLASSNAME} variant="h3">
+                {product.title}
+              </Typography>
+              <div className={PRODUCT_META_GRID_CLASSNAME}>
+                <Typography variant="h6">Thương hiệu:</Typography>
+                <Typography variant="small">Nike</Typography>
+                <Typography variant="h6">Danh mục:</Typography>
+                <Typography variant="small">Quần áo</Typography>
+              </div>
+              <Typography className={PRODUCT_DESCRIPTION_LABEL_CLASSNAME}>Mô tả</Typography>
+              <Typography className={PRODUCT_DESCRIPTION_TEXT_CLASSNAME}>
+                {product.short_description}
+              </Typography>
+              <div className={PRODUCT_RATING_ROW_CLASSNAME}>
+                <Rating readOnly value={product.rating} className="disabled text-amber-500" />
+                <Typography className="!text-sm font-bold !text-gray-700">
+                  {product.rating.toPrecision(2)}/5 (100 reviews)
+                </Typography>
+              </div>
+              <div className={PRODUCT_VARIANT_GRID_CLASSNAME}>
+                <Typography color="blue-gray" variant="h6" className="col-span-2">
+                  Màu sắc
+                </Typography>
+                <Typography color="blue-gray" variant="h6">
+                  Kích cỡ
+                </Typography>
+                <Typography color="blue-gray" variant="h6">
+                  Chất liệu
+                </Typography>
+                <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
+                  {product.colors.map((color) => (
+                    <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={color.label}>
+                      <Button
+                        size="lg"
+                        variant="gradient"
+                        color="white"
+                        className="rounded-full"
+                        style={{ backgroundColor: color.color }}
+                      >
+                        {" "}
+                      </Button>
+                      <Typography>{color.label}</Typography>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="my-8 mt-3 flex flex-col gap-2">
+                  {product.sizes.map((size) => (
+                    <Typography key={size} className="!text-gray-700 text-center">
+                      {size}
+                    </Typography>
+                  ))}
+                </div>
+                <div className="my-8 mt-3 flex flex-col gap-2">
+                  {product.materials.map((material) => (
+                    <Typography key={material} className="!text-gray-700 text-center">
+                      {material}
+                    </Typography>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-2">
+                <Dialog open={open} handler={handleOpen}>
+                  <DialogHeader className="pb-0 flex justify-between">
+                    <Typography variant="h4">Nhập sản phẩm mới</Typography>
+                    <IconButton className="border-none" variant="outlined" onClick={handleOpen}>
+                      <CloseIcon />
+                    </IconButton>
+                  </DialogHeader>
+                  <DialogBody>
+                    The key to more success is to have a lot of pillows. Put it this way, it took me
+                    twenty five years to get these plants, twenty five years of blood sweat and
+                    tears, and I&apos;m never giving up, I&apos;m just getting started. I&apos;m up
+                    to something. Fan luv.
+                  </DialogBody>
+                  <DialogFooter>
+                    <Button variant="text" color="red" onClick={handleOpen} className="mr-1">
+                      <span>Cancel</span>
+                    </Button>
+                    <Button variant="gradient" color="green" onClick={handleOpen}>
+                      <span>Confirm</span>
+                    </Button>
+                  </DialogFooter>
+                </Dialog>
+              </div>
+            </div>
+          </div>
+        </section>
+      }
+      noUpdate
+    >
+      <div className="flex items-center justify-between gap-4">
+        {/* <Select label="Phân loại theo">
             <Option value="">Không có</Option>
             <Option value="Color">Thương hiệu</Option>
             <Option value="Color">Loại sản phẩm</Option>
@@ -263,16 +260,15 @@ const Inventory = () => {
             <Option value="Material">Chất liệu</Option>
             <Option value="Type">Loại sản phẩm</Option>
           </Select> */}
-          <Input
-            size="sm"
-            label="Tìm kiếm"
-            iconFamily="material-icons"
-            iconName="search"
-            placeholder="Tìm kiếm sản phẩm"
-          />
-        </div>
-      </AdminLayout>
-    </>
+        <Input
+          size="sm"
+          label="Tìm kiếm"
+          iconFamily="material-icons"
+          iconName="search"
+          placeholder="Tìm kiếm sản phẩm"
+        />
+      </div>
+    </AdminLayout>
   );
 };
 

@@ -23,7 +23,7 @@ import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -54,7 +54,7 @@ const UserInfo = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reTypePassword, setReTypePassword] = useState("");
-  const [isGoogleLinked] = React.useState(false);
+  const isGoogleLinked = false;
   const { t } = useI18n();
   const { data: user, isLoading, isError } = useGetUserProfileQuery();
   /** Handles close. */
@@ -142,8 +142,8 @@ const UserInfo = () => {
         phone_number: phone,
         address,
         birthday: dayjs(birthday).format("YYYY-MM-DD"),
-        avatar_url: avatar ? avatar : user?.object.avatar_url,
-        public_id_avatar_url: publicId ? publicId : user?.object.public_id_avatar_url,
+        avatar_url: avatar || user?.object.avatar_url,
+        public_id_avatar_url: publicId || user?.object.public_id_avatar_url,
       }).unwrap();
       if (response.statusCode === 200) {
         Toast.fire({
@@ -173,7 +173,7 @@ const UserInfo = () => {
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-7 grid grid-cols-3 mt-5 gap-4">
               <Avatar
-                src={avatar ? avatar : user?.object.avatar_url}
+                src={avatar || user?.object.avatar_url}
                 alt={t("profile.avatar")}
                 className="mx-auto my-auto"
                 sx={{ width: 100, height: 100 }}
@@ -383,8 +383,14 @@ const UserInfo = () => {
                         </Typography>
                       </div>
                     </div>
-                    <div className="col-span-4 my-auto" onClick={handleOpenClick}>
-                      <Button color="error" size="sm" variant="outlined" className="w-full">
+                    <div className="col-span-4 my-auto">
+                      <Button
+                        color="error"
+                        size="sm"
+                        variant="outlined"
+                        className="w-full"
+                        onClick={handleOpenClick}
+                      >
                         {t("profile.change")}
                       </Button>
                     </div>
@@ -432,7 +438,8 @@ const UserInfo = () => {
                 className="w-full !mt-4"
                 color="error"
                 onClick={() => {
-                  (handleDelete({ publicId }), setAvatar(null));
+                  handleDelete({ publicId });
+                  setAvatar(null);
                 }}
               >
                 {t("profile.delete_image")}

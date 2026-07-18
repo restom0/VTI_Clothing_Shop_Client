@@ -35,12 +35,12 @@ const applyThemeToDocument = (activeTheme) => {
 
 /** Handles app theme provider. */
 export const AppThemeProvider = ({ children }) => {
-  const [theme, setThemeState] = useState(getInitialTheme);
+  const [theme, setTheme] = useState(getInitialTheme);
   const [prefersDark, setPrefersDark] = useState(getPrefersDark);
 
   /** Sets theme. */
-  const setTheme = useCallback((nextTheme) => {
-    setThemeState(normalizeTheme(nextTheme));
+  const updateTheme = useCallback((nextTheme) => {
+    setTheme(normalizeTheme(nextTheme));
   }, []);
 
   const activeTheme = resolveTheme(theme, prefersDark);
@@ -71,11 +71,11 @@ export const AppThemeProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       activeTheme,
-      setTheme,
+      setTheme: updateTheme,
       theme,
       themeOptions: THEME_OPTIONS,
     }),
-    [activeTheme, setTheme, theme]
+    [activeTheme, updateTheme, theme]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

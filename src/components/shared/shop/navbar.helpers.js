@@ -10,7 +10,7 @@ export const getDropdownColumnCount = (items) => {
   const itemCount = Array.isArray(items) ? items.length : 0;
 
   if (itemCount <= 0) return 1;
-  return itemCount <= 3 ? itemCount : 3;
+  return Math.min(itemCount, 3);
 };
 
 /** Gets cart items. */

@@ -22,8 +22,25 @@ const formatBytes = (value) => {
 };
 
 /** Gets metric value. */
-const getMetricValue = (metric) =>
-  metric ? Number(metric.value ?? 0).toFixed(metric.value > 100 ? 0 : 2) : "n/a";
+const getMetricValue = (metric) => {
+  if (!metric) return "n/a";
+
+  const precision = metric.value > 100 ? 0 : 2;
+  return Number(metric.value ?? 0).toFixed(precision);
+};
+
+/** Observes performance entries when supported by the browser. */
+const observePerformanceEntries = (type, handler, observers) => {
+  try {
+    const observer = new window.PerformanceObserver((list) => {
+      list.getEntries().forEach(handler);
+    });
+    observer.observe({ type, buffered: true });
+    observers.push(observer);
+  } catch {
+    // Some browsers do not expose every entry type.
+  }
+};
 
 /** Builds a render metric payload from React Profiler values. */
 export const buildReactRenderMetric = (
@@ -89,34 +106,27 @@ const useBrowserPerformanceMetrics = (enabled) => {
     }
 
     const observers = [];
-    /** Handles observe. */
-    const observe = (type, handler) => {
-      try {
-        const observer = new window.PerformanceObserver((list) => {
-          list.getEntries().forEach((entry) => handler(entry));
-        });
-        observer.observe({ type, buffered: true });
-        observers.push(observer);
-      } catch {
-        // Some browsers do not expose every entry type.
-      }
-    };
-
-    observe("paint", (entry) => recordPerformanceEntry(entry));
-    observe("largest-contentful-paint", (entry) =>
-      recordPerformanceEntry(entry, "largest-contentful-paint")
+    observePerformanceEntries("paint", (entry) => recordPerformanceEntry(entry), observers);
+    observePerformanceEntries(
+      "largest-contentful-paint",
+      (entry) => recordPerformanceEntry(entry, "largest-contentful-paint"),
+      observers
     );
-    observe("layout-shift", (entry) => {
-      if (entry.hadRecentInput) return;
-      dispatch(
-        recordWebMetric({
-          name: "layout-shift",
-          route: window.location.pathname,
-          timestamp: Date.now(),
-          value: Number(entry.value ?? 0),
-        })
-      );
-    });
+    observePerformanceEntries(
+      "layout-shift",
+      (entry) => {
+        if (entry.hadRecentInput) return;
+        dispatch(
+          recordWebMetric({
+            name: "layout-shift",
+            route: window.location.pathname,
+            timestamp: Date.now(),
+            value: Number(entry.value ?? 0),
+          })
+        );
+      },
+      observers
+    );
 
     return () => observers.forEach((observer) => observer.disconnect());
   }, [dispatch, enabled]);

@@ -8,7 +8,7 @@ const generateSHA1 = (data) => {
 
 /** Handles generate signature. */
 const generateSignature = (publicId, apiSecret) => {
-  const timestamp = new Date().getTime();
+  const timestamp = Date.now();
   return `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
 };
 
@@ -17,7 +17,7 @@ export const handleDelete = (avatar_url) => {
   const cloudName = import.meta.env.VITE_REACT_APP_CLOUD_NAME;
   const apiKey = import.meta.env.VITE_REACT_APP_APIKEY;
   const apiSecret = import.meta.env.VITE_REACT_APP_APISECRET;
-  const timestamp = new Date().getTime();
+  const timestamp = Date.now();
   const signature = generateSHA1(generateSignature(avatar_url, apiSecret));
   const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`;
 

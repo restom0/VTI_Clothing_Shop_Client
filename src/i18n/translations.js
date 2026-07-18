@@ -1,11 +1,7 @@
-import {
-  FALLBACK_LANGUAGE,
-  LANGUAGE_STORAGE_KEY,
-  SUPPORTED_LANGUAGES,
-  translations,
-} from "./generated/labels.js";
+import { FALLBACK_LANGUAGE, SUPPORTED_LANGUAGES, translations } from "./generated/labels.js";
 
-export { FALLBACK_LANGUAGE, LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, translations };
+export { LANGUAGE_STORAGE_KEY } from "./generated/labels.js";
+export { FALLBACK_LANGUAGE, SUPPORTED_LANGUAGES, translations };
 
 /** Normalizes language. */
 export const normalizeLanguage = (language) => {
@@ -18,7 +14,8 @@ export const normalizeLanguage = (language) => {
 /** Handles interpolate message. */
 export const interpolateMessage = (template, params = {}) =>
   Object.entries(params).reduce(
-    (message, [key, value]) => message.replace(new RegExp(`\\{${key}\\}`, "g"), String(value)),
+    (message, [key, value]) =>
+      message.replace(new RegExp(String.raw`\{${key}\}`, "g"), String(value)),
     template
   );
 

@@ -27,7 +27,9 @@ import { Toast } from "../../configs/sweetalert2.config";
 const Category = () => {
   const [addOpen, setAddOpen] = useState(false);
   /** Handles add open. */
-  const handleAddOpen = () => setAddOpen(!addOpen);
+  const handleAddOpen = () => {
+    setAddOpen((isOpen) => !isOpen);
+  };
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -101,13 +103,13 @@ const Category = () => {
     }
   };
   if (isLoading) return <Loading />;
-  if (error) return "An error has occurred: " + error.message;
+  if (error) return <div>An error has occurred: {error.message}</div>;
   return (
     <>
       <AdminLayout
         name="Danh sách danh mục"
         TABLE_HEAD={category}
-        TABLE_ROWS={categories.object ? categories.object : []}
+        TABLE_ROWS={categories.object ?? []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"

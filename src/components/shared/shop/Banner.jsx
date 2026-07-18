@@ -112,13 +112,13 @@ export const BannerView = ({ isAuthenticated, labels, onLoginClick, onRegisterCl
 
       {!isAuthenticated ? (
         <div className="flex items-center gap-1">
-          <button className="btn-ghost px-3 py-1 text-sm" onClick={onLoginClick}>
+          <button type="button" className="btn-ghost px-3 py-1 text-sm" onClick={onLoginClick}>
             {labels.login}
           </button>
           <span className="text-sm" style={{ color: "var(--color-text-muted)" }}>
             /
           </span>
-          <button className="btn-ghost px-3 py-1 text-sm" onClick={onRegisterClick}>
+          <button type="button" className="btn-ghost px-3 py-1 text-sm" onClick={onRegisterClick}>
             {labels.register}
           </button>
         </div>

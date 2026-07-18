@@ -58,6 +58,17 @@ const TABLE_ROWS = [
   },
 ];
 
+const ORDER_STATUS_COLORS = {
+  [ORDER_STATUS.CANCELLED]: "red",
+  [ORDER_STATUS.COMPLETED]: "green",
+  [ORDER_STATUS.CONFIRMED]: "cyan",
+  [ORDER_STATUS.DELIVERING]: "blue",
+  [ORDER_STATUS.ON_HOLD]: "blue-gray",
+};
+
+/** Gets order status color. */
+const getOrderStatusColor = (status) => ORDER_STATUS_COLORS[status] ?? "red";
+
 /** Handles order. */
 const Order = () => {
   const [tab, setTab] = React.useState("ALL");
@@ -94,7 +105,7 @@ const Order = () => {
               const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
               return (
-                <tr key={index}>
+                <tr key={id}>
                   <td className={classes}>
                     <div className="flex items-center gap-3">
                       <Typography variant="small" color="blue-gray" className="font-normal">
@@ -113,17 +124,7 @@ const Order = () => {
                         variant="ghost"
                         size="sm"
                         value={getOrderStatusLabel(status)}
-                        color={
-                          status === ORDER_STATUS.ON_HOLD
-                            ? "blue-gray"
-                            : status === ORDER_STATUS.CONFIRMED
-                              ? "cyan"
-                              : status === ORDER_STATUS.DELIVERING
-                                ? "blue"
-                                : status === ORDER_STATUS.COMPLETED
-                                  ? "green"
-                                  : "red"
-                        }
+                        color={getOrderStatusColor(status)}
                       />
                     </div>
                   </td>

@@ -29,6 +29,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { Toast } from "../../configs/sweetalert2.config";
+
+/** Clamps a numeric field to a minimum value. */
+const clampMinimum = (raw, min = 0) => {
+  const value = Number(raw);
+  if (Number.isNaN(value)) return min;
+  return Math.max(value, min);
+};
+
+/** Clamps a numeric field to a percentage range. */
+const clampPercent = (raw) => Math.min(clampMinimum(raw), 100);
+
 /** Handles voucher. */
 const Voucher = () => {
   const [code, setCode] = React.useState(null);
@@ -134,7 +145,7 @@ const Voucher = () => {
         name="Khuyến mãi"
         updateSubmit={handleUpdateSubmit}
         TABLE_HEAD={voucher}
-        TABLE_ROWS={listVouchers ? listVouchers : []}
+        TABLE_ROWS={listVouchers ?? []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -220,15 +231,7 @@ const Voucher = () => {
                     className="col-span-2"
                     size="small"
                     value={updateValue}
-                    onChange={(e) =>
-                      setUpdateValue(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 100
-                            ? 100
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateValue(clampPercent(e.target.value))}
                     endAdornment={<InputAdornment position="end">%</InputAdornment>}
                   />
                   <Typography variant="h6" color="blue-gray" className="my-auto">
@@ -239,11 +242,7 @@ const Voucher = () => {
                     className="col-span-2"
                     size="small"
                     value={updateInputStock}
-                    onChange={(e) =>
-                      setUpdateInputStock(
-                        isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
-                      )
-                    }
+                    onChange={(e) => setUpdateInputStock(clampMinimum(e.target.value))}
                   />
                   <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày áp dụng:
@@ -355,15 +354,7 @@ const Voucher = () => {
                     className="col-span-2"
                     size="small"
                     value={value}
-                    onChange={(e) =>
-                      setValue(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 100
-                            ? 100
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setValue(clampPercent(e.target.value))}
                     endAdornment={<InputAdornment position="end">%</InputAdornment>}
                   />
                   <Typography variant="h6" color="blue-gray" className="my-auto">
@@ -374,11 +365,7 @@ const Voucher = () => {
                     className="col-span-2"
                     size="small"
                     value={inputStock}
-                    onChange={(e) =>
-                      setInputStock(
-                        isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
-                      )
-                    }
+                    onChange={(e) => setInputStock(clampMinimum(e.target.value))}
                   />
                   <Typography variant="h6" color="blue-gray" className="my-auto">
                     Ngày áp dụng:

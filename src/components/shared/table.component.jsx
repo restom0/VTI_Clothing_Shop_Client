@@ -71,7 +71,7 @@ const Table = ({
             {pageItems.length > 0 ? (
               <>
                 {topPadding > 0 && (
-                  <tr aria-hidden="true">
+                  <tr>
                     <td colSpan={totalColSpan} style={{ height: topPadding, padding: 0 }} />
                   </tr>
                 )}
@@ -80,11 +80,11 @@ const Table = ({
 
                   return (
                     <tr key={row.id ?? virtualRow.key} className="border-b border-gray-200">
-                      {Object.values(row)
+                      {Object.entries(row)
                         .slice(1)
-                        .map((value, index) => (
+                        .map(([key, value], index) => (
                           <td
-                            key={index}
+                            key={key}
                             className="p-4"
                             onClick={() => selectRow(row.id)}
                             colSpan={TABLE_HEAD[index].col}
@@ -111,7 +111,7 @@ const Table = ({
                   );
                 })}
                 {bottomPadding > 0 && (
-                  <tr aria-hidden="true">
+                  <tr>
                     <td colSpan={totalColSpan} style={{ height: bottomPadding, padding: 0 }} />
                   </tr>
                 )}

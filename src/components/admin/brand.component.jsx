@@ -108,7 +108,7 @@ const Brand = () => {
       <AdminLayout
         name="Danh sách thương hiệu"
         TABLE_HEAD={brand}
-        TABLE_ROWS={brands.object ? brands.object : []}
+        TABLE_ROWS={brands.object ?? []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="md"

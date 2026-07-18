@@ -122,6 +122,17 @@ const TABLE_ROWS = [
     date: "23/04/18",
   },
 ];
+
+/** Clamps a numeric field to a minimum value. */
+const clampMinimum = (raw, min = 0) => {
+  const value = Number(raw);
+  if (Number.isNaN(value)) return min;
+  return Math.max(value, min);
+};
+
+/** Clamps a numeric field to a percentage range. */
+const clampPercent = (raw) => Math.min(clampMinimum(raw), 100);
+
 /** Handles onsale product. */
 const OnsaleProduct = () => {
   const [filters, setFilters] = React.useState("ALL");
@@ -135,8 +146,8 @@ const OnsaleProduct = () => {
   const [discount, setDiscount] = React.useState(0);
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
-  const [import_product, setImport_Product] = React.useState(null);
-  const [updateImport_Product, setUpdateImport_Product] = React.useState(null);
+  const [importProductRows, setImportProductRows] = React.useState(null);
+  const [updateImportProductRows, setUpdateImportProductRows] = React.useState(null);
   const [updateSalePercentage, setUpdateSalePercentage] = React.useState(100);
   const [updateDiscount, setUpdateDiscount] = React.useState(0);
   const [updateStartDate, setUpdateStartDate] = React.useState(null);
@@ -195,7 +206,7 @@ const OnsaleProduct = () => {
 
   useEffect(() => {
     if (values || (!values && filters === "ALL")) {
-      setImport_Product(
+      setImportProductRows(
         previews?.object.map((preview) => {
           return {
             sku: preview.product_id.name,
@@ -210,8 +221,8 @@ const OnsaleProduct = () => {
     }
   }, [values, previews, filters, prices, discounts, formatPrice]);
   useEffect(() => {
-    if (setUpdateFilter || (!setUpdateFilter && updateFilter === "ALL")) {
-      setUpdateImport_Product(
+    if (updateFilterId || (!updateFilterId && updateFilter === "ALL")) {
+      setUpdateImportProductRows(
         updatePreviews?.object.map((preview) => {
           return {
             sku: preview.product_id.name,
@@ -225,6 +236,7 @@ const OnsaleProduct = () => {
     }
   }, [
     updateFilter,
+    updateFilterId,
     updatePreviews,
     updateSalePercentage,
     updateDiscount,
@@ -387,7 +399,7 @@ const OnsaleProduct = () => {
         updateSubmit={handleUpdateInputSales}
         name="Lên giá sản phẩm"
         TABLE_HEAD={onsaleproduct}
-        TABLE_ROWS={ListInputSales ? ListInputSales : []}
+        TABLE_ROWS={ListInputSales ?? []}
         updateContent="Chỉnh sửa"
         deleteContent="Xóa"
         size="xl"
@@ -480,28 +492,26 @@ const OnsaleProduct = () => {
               <table className="w-full min-w-max table-auto text-left">
                 <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                 <tbody>
-                  {updateImport_Product &&
-                    updateImport_Product.length > 0 &&
-                    updateImport_Product
-                      .slice((subActive - 1) * 5, subActive * 5)
-                      .map((row, index) => (
-                        <tr key={index} className="text-center border-b border-gray-200">
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
-                              {value}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
+                  {updateImportProductRows &&
+                    updateImportProductRows.length > 0 &&
+                    updateImportProductRows.slice((subActive - 1) * 5, subActive * 5).map((row) => (
+                      <tr key={row.sku} className="text-center border-b border-gray-200">
+                        {Object.entries(row).map(([key, value]) => (
+                          <td className="p-2" key={key}>
+                            {value}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
               <div className="flex justify-between mt-3">
                 <Typography variant="p">
-                  Tất cả: {updateImport_Product?.length || 0} sản phẩm
+                  Tất cả: {updateImportProductRows?.length || 0} sản phẩm
                 </Typography>
-                {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
+                {Math.ceil((updateImportProductRows?.length || 0) / 5) > 1 && (
                   <Pagination
-                    count={Math.ceil(updateImport_Product.length / 5)}
+                    count={Math.ceil(updateImportProductRows.length / 5)}
                     page={subActive}
                     onChange={(e, value) => setSubActive(value)}
                   />
@@ -530,8 +540,8 @@ const OnsaleProduct = () => {
                     </Typography>
                     <FormControl size="small" className="col-span-2" fullWidth required>
                       <Select id="demo-simple-select2" value={updateFilter} disabled>
-                        {filter_items.map((item, index) => (
-                          <MenuItem key={index} value={item.value}>
+                        {filter_items.map((item) => (
+                          <MenuItem key={item.value} value={item.value}>
                             {item.label}
                           </MenuItem>
                         ))}
@@ -546,8 +556,8 @@ const OnsaleProduct = () => {
                         value={filter_items}
                         onChange={(e) => setUpdateFilterId(e.target.value)}
                       >
-                        {filter_items.map((item, index) => (
-                          <MenuItem key={index} value={item.value}>
+                        {filter_items.map((item) => (
+                          <MenuItem key={item.value} value={item.value}>
                             {item.label}
                           </MenuItem>
                         ))}
@@ -561,11 +571,7 @@ const OnsaleProduct = () => {
                       className="col-span-2"
                       size="small"
                       value={updateSalePercentage}
-                      onChange={(e) =>
-                        setUpdateSalePercentage(
-                          isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value
-                        )
-                      }
+                      onChange={(e) => setUpdateSalePercentage(clampMinimum(e.target.value))}
                     />
                     <Typography variant="h6" color="blue-gray" className="my-auto">
                       Giảm giá:
@@ -574,15 +580,7 @@ const OnsaleProduct = () => {
                       className="col-span-2"
                       size="small"
                       value={updateDiscount}
-                      onChange={(e) =>
-                        setUpdateDiscount(
-                          isNaN(e.target.value) || e.target.value < 0
-                            ? 0
-                            : e.target.value > 100
-                              ? 100
-                              : e.target.value
-                        )
-                      }
+                      onChange={(e) => setUpdateDiscount(clampPercent(e.target.value))}
                       endAdornment={<InputAdornment position="end">%</InputAdornment>}
                     />
                     <Typography variant="h6" color="blue-gray" className="my-auto">
@@ -628,14 +626,14 @@ const OnsaleProduct = () => {
                 <table className="w-full min-w-max table-auto text-left">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePriceList} />
                   <tbody>
-                    {updateImport_Product &&
-                      updateImport_Product.length > 0 &&
-                      updateImport_Product
+                    {updateImportProductRows &&
+                      updateImportProductRows.length > 0 &&
+                      updateImportProductRows
                         .slice((subActive - 1) * 5, subActive * 5)
-                        .map((row, index) => (
-                          <tr key={index} className="text-center border-b border-gray-200">
-                            {Object.values(row).map((value, index) => (
-                              <td className="p-2" key={index}>
+                        .map((row) => (
+                          <tr key={row.sku} className="text-center border-b border-gray-200">
+                            {Object.entries(row).map(([key, value]) => (
+                              <td className="p-2" key={key}>
                                 {value}
                               </td>
                             ))}
@@ -645,11 +643,11 @@ const OnsaleProduct = () => {
                 </table>
                 <div className="flex justify-between mt-3">
                   <Typography variant="p">
-                    Tất cả: {updateImport_Product?.length || 0} sản phẩm
+                    Tất cả: {updateImportProductRows?.length || 0} sản phẩm
                   </Typography>
-                  {Math.ceil((updateImport_Product?.length || 0) / 5) > 1 && (
+                  {Math.ceil((updateImportProductRows?.length || 0) / 5) > 1 && (
                     <Pagination
-                      count={Math.ceil(updateImport_Product.length / 5)}
+                      count={Math.ceil(updateImportProductRows.length / 5)}
                       page={subActive}
                       onChange={(e, value) => setSubActive(value)}
                     />
@@ -714,8 +712,8 @@ const OnsaleProduct = () => {
                       value={value}
                       onChange={(e) => setValue(e.target.value)}
                     >
-                      {products?.object?.map((product, index) => (
-                        <MenuItem key={index} value={product.id}>
+                      {products?.object?.map((product) => (
+                        <MenuItem key={product.id} value={product.id}>
                           {product.name}
                         </MenuItem>
                       ))}
@@ -734,9 +732,7 @@ const OnsaleProduct = () => {
                     id="outlined-basic"
                     variant="outlined"
                     value={price}
-                    onChange={(e) =>
-                      setPrice(isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value)
-                    }
+                    onChange={(e) => setPrice(clampMinimum(e.target.value))}
                   />
                 </div>
                 <div>
@@ -751,15 +747,7 @@ const OnsaleProduct = () => {
                     id="outlined-basic"
                     variant="outlined"
                     value={discount}
-                    onChange={(e) =>
-                      setDiscount(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 100
-                            ? 100
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setDiscount(clampPercent(e.target.value))}
                   />
                 </div>
                 <div>
@@ -817,8 +805,8 @@ const OnsaleProduct = () => {
                   <tbody>
                     {import_products?.object
                       ?.filter((product) => product.product_id.id === value)
-                      .map((product, index) => (
-                        <tr key={index} className="text-center border-b border-gray-200">
+                      .map((product) => (
+                        <tr key={product.id} className="text-center border-b border-gray-200">
                           {/* <td className="p-2">{product.id}</td> */}
                           <td className="p-2">{product.sku}</td>
                           {/* <td className="p-2">{product.color_id.color_name}</td>
@@ -890,8 +878,8 @@ const OnsaleProduct = () => {
                     value={filters}
                     onChange={(e) => setFilters(e.target.value)}
                   >
-                    {filter_items.map((item, index) => (
-                      <MenuItem key={index} value={item.value}>
+                    {filter_items.map((item) => (
+                      <MenuItem key={item.value} value={item.value}>
                         {item.label}
                       </MenuItem>
                     ))}
@@ -911,38 +899,38 @@ const OnsaleProduct = () => {
                       onChange={(e) => setValues(e.target.value)}
                     >
                       {filters === "PRODUCT" &&
-                        products?.object?.map((brand, index) => (
-                          <MenuItem key={index} value={brand.id}>
+                        products?.object?.map((brand) => (
+                          <MenuItem key={brand.id} value={brand.id}>
                             {brand.name}
                           </MenuItem>
                         ))}
                       {filters === "BRAND" &&
-                        brands?.object?.map((brand, index) => (
-                          <MenuItem key={index} value={brand.id}>
+                        brands?.object?.map((brand) => (
+                          <MenuItem key={brand.id} value={brand.id}>
                             {brand.name}
                           </MenuItem>
                         ))}
                       {filters === "CATEGORY" &&
-                        categories?.object?.map((category, index) => (
-                          <MenuItem key={index} value={category.id}>
+                        categories?.object?.map((category) => (
+                          <MenuItem key={category.id} value={category.id}>
                             {category.name}
                           </MenuItem>
                         ))}
                       {filters === "COLOR" &&
-                        colors?.object?.map((color, index) => (
-                          <MenuItem key={index} value={color.id}>
+                        colors?.object?.map((color) => (
+                          <MenuItem key={color.id} value={color.id}>
                             {color.color_name}
                           </MenuItem>
                         ))}
                       {filters === "SIZE" &&
-                        sizes?.object?.map((size, index) => (
-                          <MenuItem key={index} value={size.id}>
+                        sizes?.object?.map((size) => (
+                          <MenuItem key={size.id} value={size.id}>
                             {size.size}
                           </MenuItem>
                         ))}
                       {filters === "MATERIAL" &&
-                        materials?.object?.map((material, index) => (
-                          <MenuItem key={index} value={material.id}>
+                        materials?.object?.map((material) => (
+                          <MenuItem key={material.id} value={material.id}>
                             {material.name}
                           </MenuItem>
                         ))}
@@ -961,9 +949,7 @@ const OnsaleProduct = () => {
                     id="outlined-basic"
                     variant="outlined"
                     value={prices}
-                    onChange={(e) =>
-                      setPrices(isNaN(e.target.value) || e.target.value < 0 ? 0 : e.target.value)
-                    }
+                    onChange={(e) => setPrices(clampMinimum(e.target.value))}
                   />
                 </div>
                 <div>
@@ -978,15 +964,7 @@ const OnsaleProduct = () => {
                     id="outlined-basic"
                     variant="outlined"
                     value={discounts}
-                    onChange={(e) =>
-                      setDiscounts(
-                        isNaN(e.target.value) || e.target.value < 0
-                          ? 0
-                          : e.target.value > 100
-                            ? 100
-                            : e.target.value
-                      )
-                    }
+                    onChange={(e) => setDiscounts(clampPercent(e.target.value))}
                   />
                 </div>
                 <div>
@@ -1039,12 +1017,12 @@ const OnsaleProduct = () => {
                 <table className="w-full text-center table-auto ">
                   <TableHeader noDelete noUpdate TABLE_HEAD={changePricesList} />
                   <tbody>
-                    {import_product &&
-                      import_product.length > 0 &&
-                      import_product.slice((subActive - 1) * 5, subActive * 5).map((row, index) => (
-                        <tr key={index} className="text-center border-b border-gray-200">
-                          {Object.values(row).map((value, index) => (
-                            <td className="p-2" key={index}>
+                    {importProductRows &&
+                      importProductRows.length > 0 &&
+                      importProductRows.slice((subActive - 1) * 5, subActive * 5).map((row) => (
+                        <tr key={row.sku} className="text-center border-b border-gray-200">
+                          {Object.entries(row).map(([key, value]) => (
+                            <td className="p-2" key={key}>
                               {value}
                             </td>
                           ))}
@@ -1054,9 +1032,9 @@ const OnsaleProduct = () => {
                 </table>
                 <div className="flex justify-between mt-3">
                   <Typography variant="p">
-                    Tất cả: {import_product?.length || 0} sản phẩm
+                    Tất cả: {importProductRows?.length || 0} sản phẩm
                   </Typography>
-                  {Math.ceil((import_product?.length || 0) / 5) > 1 && (
+                  {Math.ceil((importProductRows?.length || 0) / 5) > 1 && (
                     <Pagination
                       count={Math.ceil(TABLE_ROWS.length / 5)}
                       page={subActive}

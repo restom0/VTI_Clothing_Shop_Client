@@ -59,21 +59,20 @@ const Web = () => {
     }
   }, [deleteOpen, handleDeleteOpen]);
   return (
-    <>
-      <Container className="mt-5">
-        <div className="flex items-center justify-between mb-5">
-          <Typography variant="h4" color="blue-gray" className="font-bold">
-            Danh sách trang web
-          </Typography>
-          <div className="flex items-center justify-between gap-4">
-            {/* <Button
+    <Container className="mt-5">
+      <div className="flex items-center justify-between mb-5">
+        <Typography variant="h4" color="blue-gray" className="font-bold">
+          Danh sách trang web
+        </Typography>
+        <div className="flex items-center justify-between gap-4">
+          {/* <Button
               className=" !border-gray-300"
               color="gray"
               variant="outlined"
             >
               Thêm mới
             </Button> */}
-            {/* <Select label="Phân loại theo">
+          {/* <Select label="Phân loại theo">
               <Option value="">Không có</Option>
               <Option value="Color">Thương hiệu</Option>
               <Option value="Color">Loại sản phẩm</Option>
@@ -88,19 +87,18 @@ const Web = () => {
               iconName="search"
               placeholder="Tìm kiếm sản phẩm"
             /> */}
-          </div>
         </div>
-        <Table
-          TABLE_HEAD={web}
-          TABLE_ROWS={TABLE_ROWS}
-          handleUpdateOpen={handleUpdateOpen}
-          handleDeleteOpen={handleDeleteOpen}
-          handleDetailOpen={handleDetailOpen}
-          updateContent="Khôi phục trang web"
-          deleteContent="Bảo trì trang web"
-        />
-      </Container>
-    </>
+      </div>
+      <Table
+        TABLE_HEAD={web}
+        TABLE_ROWS={TABLE_ROWS}
+        handleUpdateOpen={handleUpdateOpen}
+        handleDeleteOpen={handleDeleteOpen}
+        handleDetailOpen={handleDetailOpen}
+        updateContent="Khôi phục trang web"
+        deleteContent="Bảo trì trang web"
+      />
+    </Container>
   );
 };
 

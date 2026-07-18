@@ -17,54 +17,52 @@ const Log = () => {
   if (isLogsLoading) return <Loading />;
   if (logsError) return navigate(ROUTES.ERROR);
   return (
-    <>
-      <AdminLayout
-        name="Lịch sử hoạt động"
-        TABLE_HEAD={history}
-        TABLE_ROWS={logs ? (logs.objects ? logs.objects : []) : []}
-        noUpdate
-        noDelete
-        noDetail
-      >
-        <div className="flex items-center justify-between gap-4">
-          <div className="shrink-0">
-            <Menu>
-              <MenuHandler>
-                <Button
-                  color="gray"
-                  variant="outlined"
-                  className="flex items-center gap-1 !border-gray-300"
-                >
+    <AdminLayout
+      name="Lịch sử hoạt động"
+      TABLE_HEAD={history}
+      TABLE_ROWS={logs?.objects ?? []}
+      noUpdate
+      noDelete
+      noDetail
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="shrink-0">
+          <Menu>
+            <MenuHandler>
+              <Button
+                color="gray"
+                variant="outlined"
+                className="flex items-center gap-1 !border-gray-300"
+              >
+                {
                   {
-                    {
-                      ALL: "Tất cả",
-                      DAY: "Hôm nay",
-                      MONTH: "Tháng này",
-                      YEAR: "Năm nay",
-                    }[filter]
-                  }
-                  <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-gray-900" />
-                </Button>
-              </MenuHandler>
-              <MenuList>
-                <MenuItem onClick={(e) => setFilter(e.target.value)} value="ALL">
-                  Tất cả
-                </MenuItem>
-                <MenuItem onClick={(e) => setFilter(e.target.value)} value="DAY">
-                  Hôm nay
-                </MenuItem>
-                <MenuItem onClick={(e) => setFilter(e.target.value)} value="MONTH">
-                  Tháng này
-                </MenuItem>
-                <MenuItem onClick={(e) => setFilter(e.target.value)} value="YEAR">
-                  Năm nay
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </div>
+                    ALL: "Tất cả",
+                    DAY: "Hôm nay",
+                    MONTH: "Tháng này",
+                    YEAR: "Năm nay",
+                  }[filter]
+                }
+                <ChevronDownIcon strokeWidth={4} className="w-3 h-3 text-gray-900" />
+              </Button>
+            </MenuHandler>
+            <MenuList>
+              <MenuItem onClick={(e) => setFilter(e.target.value)} value="ALL">
+                Tất cả
+              </MenuItem>
+              <MenuItem onClick={(e) => setFilter(e.target.value)} value="DAY">
+                Hôm nay
+              </MenuItem>
+              <MenuItem onClick={(e) => setFilter(e.target.value)} value="MONTH">
+                Tháng này
+              </MenuItem>
+              <MenuItem onClick={(e) => setFilter(e.target.value)} value="YEAR">
+                Năm nay
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </div>
-      </AdminLayout>
-    </>
+      </div>
+    </AdminLayout>
     // <Container className="mt-5">
     //   <div className="flex items-center justify-between mb-5">
     //     <Typography variant="h3" color="blue-gray" className="font-bold">

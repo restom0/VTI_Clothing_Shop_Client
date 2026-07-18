@@ -41,25 +41,23 @@ const inventory = [
 const onsaleproduct = [
   {
     label: (
-      <>
-        <Menu>
-          <MenuHandler>
-            <div className="flex items-center gap-4">
-              Tất cả
-              <FilterListIcon className="h-5 w-5" />
-            </div>
-          </MenuHandler>
-          <MenuList>
-            <MenuItem>Tất cả</MenuItem>
-            <MenuItem>Sản phẩm</MenuItem>
-            <MenuItem>Thương hiệu</MenuItem>
-            <MenuItem>Danh mục</MenuItem>
-            <MenuItem>Màu sắc</MenuItem>
-            <MenuItem>Kích thước</MenuItem>
-            <MenuItem>Chất liệu</MenuItem>
-          </MenuList>
-        </Menu>
-      </>
+      <Menu>
+        <MenuHandler>
+          <div className="flex items-center gap-4">
+            Tất cả
+            <FilterListIcon className="h-5 w-5" />
+          </div>
+        </MenuHandler>
+        <MenuList>
+          <MenuItem>Tất cả</MenuItem>
+          <MenuItem>Sản phẩm</MenuItem>
+          <MenuItem>Thương hiệu</MenuItem>
+          <MenuItem>Danh mục</MenuItem>
+          <MenuItem>Màu sắc</MenuItem>
+          <MenuItem>Kích thước</MenuItem>
+          <MenuItem>Chất liệu</MenuItem>
+        </MenuList>
+      </Menu>
     ),
     col: 1,
   },

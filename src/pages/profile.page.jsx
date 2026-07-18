@@ -6,16 +6,12 @@ import { profile_menu } from "../constants/menu_item.constant";
 const Profilepage = () => {
   const [tab, setTab] = React.useState(0);
   return (
-    <>
-      <div className="page-container profile-page">
-        <div>
-          <ProfileSidebar tab={tab} setTab={setTab} />
-        </div>
-        <div className="profile-content">
-          {profile_menu.map(({ link }, index) => tab === index && link)}
-        </div>
+    <div className="page-container profile-page">
+      <div>
+        <ProfileSidebar tab={tab} setTab={setTab} />
       </div>
-    </>
+      <div className="profile-content">{profile_menu[tab]?.link}</div>
+    </div>
   );
 };
 

@@ -17,10 +17,10 @@ import { STORAGE_KEYS } from "../../constants/storage.constant";
 /** Handles step1 checkout. */
 const Step1Checkout = ({ handleNext }) => {
   const { t } = useI18n();
-  const [check, setCheck] = React.useState(localStorage.getItem(STORAGE_KEYS.TOKEN) ? true : false);
+  const [check, setCheck] = React.useState(Boolean(localStorage.getItem(STORAGE_KEYS.TOKEN)));
 
-  const [check1, setCheck1] = React.useState(false);
-  const [check2, setCheck2] = React.useState(false);
+  const [check1, setCheck1] = React.useState(0);
+  const [check2, setCheck2] = React.useState(0);
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
   return (
@@ -199,11 +199,7 @@ const Step1Checkout = ({ handleNext }) => {
                   <Radio
                     checked={check2 === 2}
                     name="method"
-                    label={
-                      <>
-                        <Typography>{t("checkout.payment_card")}</Typography>
-                      </>
-                    }
+                    label={<Typography>{t("checkout.payment_card")}</Typography>}
                   />
                 </div>
               </ListItem>

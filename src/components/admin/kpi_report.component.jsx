@@ -156,13 +156,13 @@ const KpiReport = ({ tab }) => {
     <section className="container mx-auto py-5 px-8">
       <div className="mt-6 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-center md:gap-2.5 gap-4">
         {tab === "revenue" &&
-          getDisplayCards(income).map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(income).map((props) => <KpiCard key={props.title} {...props} />)}
         {tab === "brand" &&
-          getDisplayCards(brand).map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(brand).map((props) => <KpiCard key={props.title} {...props} />)}
         {tab === "category" &&
-          getDisplayCards(category).map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(category).map((props) => <KpiCard key={props.title} {...props} />)}
         {tab === "product" &&
-          getDisplayCards(product).map((props, key) => <KpiCard key={key} {...props} />)}
+          getDisplayCards(product).map((props) => <KpiCard key={props.title} {...props} />)}
       </div>
     </section>
   );
@@ -172,9 +172,9 @@ KpiReport.propTypes = {
 };
 KpiCard.propTypes = {
   title: PropTypes.string.isRequired,
-  percentage: PropTypes.string.isRequired,
+  percentage: PropTypes.string,
   price: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired,
+  color: PropTypes.string,
+  icon: PropTypes.element,
 };
 export default KpiReport;

@@ -24,11 +24,11 @@ const applySeasonToDocument = (activeSeason) => {
 
 /** Handles app season provider. */
 export const AppSeasonProvider = ({ children }) => {
-  const [season, setSeasonState] = useState(getInitialSeason);
+  const [season, setSeason] = useState(getInitialSeason);
 
   /** Sets season. */
-  const setSeason = useCallback((next) => {
-    setSeasonState(normalizeSeason(next));
+  const updateSeason = useCallback((next) => {
+    setSeason(normalizeSeason(next));
   }, []);
 
   // The "active" season is what the CSS actually uses — auto resolved to real name
@@ -49,10 +49,10 @@ export const AppSeasonProvider = ({ children }) => {
     () => ({
       activeSeason, // resolved: "spring" | "summer" | "autumn" | "winter"
       season, // stored: "auto" | "spring" | "summer" | "autumn" | "winter"
-      setSeason,
+      setSeason: updateSeason,
       seasonOptions: SEASON_OPTIONS,
     }),
-    [activeSeason, season, setSeason]
+    [activeSeason, season, updateSeason]
   );
 
   return <SeasonContext.Provider value={value}>{children}</SeasonContext.Provider>;

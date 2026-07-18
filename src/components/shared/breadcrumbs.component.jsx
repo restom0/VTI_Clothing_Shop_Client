@@ -2,8 +2,6 @@ import { ROUTES } from "../../constants/routes.constant";
 import { useLocation } from "react-router-dom";
 import { Breadcrumbs } from "@material-tailwind/react/components/Breadcrumbs";
 
-import PropTypes from "prop-types";
-
 /** Handles breadcrumbs with icon. */
 const BreadcrumbsWithIcon = () => {
   const location = useLocation();
@@ -26,7 +24,7 @@ const BreadcrumbsWithIcon = () => {
         // Construct the path for each breadcrumb
         const pathTo = `/${pathname.slice(0, index + 1).join("/")}`;
         return (
-          <a key={index} href={pathTo} className="opacity-60 uppercase">
+          <a key={pathTo} href={pathTo} className="opacity-60 uppercase">
             <span>{item}</span>
           </a>
         );
@@ -38,7 +36,4 @@ const BreadcrumbsWithIcon = () => {
   );
 };
 
-BreadcrumbsWithIcon.propTypes = {
-  name: PropTypes.string,
-};
 export default BreadcrumbsWithIcon;

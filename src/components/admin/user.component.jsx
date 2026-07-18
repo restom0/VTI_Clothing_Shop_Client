@@ -38,7 +38,7 @@ const User = () => {
       </div>
       <Table
         TABLE_HEAD={user}
-        TABLE_ROWS={users.object.length > 0 ? users.object : []}
+        TABLE_ROWS={users.object ?? []}
         active={active}
         setActive={setActive}
         deleteOpen={detailOpen}

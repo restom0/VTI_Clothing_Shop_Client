@@ -78,16 +78,18 @@ const ProfileMenu = () => {
 
 /** Handles admin navbar. */
 const AdminNavbar = () => {
-  const [, setIsNavOpen] = React.useState(false);
+  const [isNavOpen, setIsNavOpen] = React.useState(false);
 
   /** Toggles is nav open. */
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => shouldCloseAdminNavOnDesktop(window.innerWidth) && setIsNavOpen(false)
-    );
+    const closeOnDesktop = () => {
+      if (shouldCloseAdminNavOnDesktop(window.innerWidth)) setIsNavOpen(false);
+    };
+
+    window.addEventListener("resize", closeOnDesktop);
+    return () => window.removeEventListener("resize", closeOnDesktop);
   }, []);
 
   return (
@@ -105,6 +107,8 @@ const AdminNavbar = () => {
           variant="text"
           onClick={toggleIsNavOpen}
           className="ml-auto mr-2 lg:hidden"
+          aria-expanded={isNavOpen}
+          aria-label="Toggle navigation"
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>

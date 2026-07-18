@@ -28,6 +28,7 @@ const HomeProductList = ({ title, products }) => {
         <div />
         <h2 className="section-title">{title}</h2>
         <button
+          type="button"
           className="flex items-center justify-end gap-1 btn-ghost text-sm ml-auto"
           onClick={createGoToProductListHandler(navigate)}
         >
@@ -54,8 +55,8 @@ const HomeProductList = ({ title, products }) => {
         loop={true}
         className="mySwiper"
       >
-        {products.map((product, index) => (
-          <SwiperSlide key={index} className="mb-5">
+        {products.map((product) => (
+          <SwiperSlide key={product.id} className="mb-5">
             <ProductCard {...product} />
           </SwiperSlide>
         ))}

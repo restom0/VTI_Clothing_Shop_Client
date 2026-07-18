@@ -54,7 +54,7 @@ const VirtualizedGrid = memo(
       // measureElement: DOM node → đo chiều cao thực sau khi render
       // giúp layout chính xác khi card có chiều cao khác nhau
       measureElement:
-        typeof window !== "undefined" && navigator.userAgent.indexOf("Firefox") === -1
+        typeof window !== "undefined" && !navigator.userAgent.includes("Firefox")
           ? (element) => element?.getBoundingClientRect().height
           : undefined,
     });
@@ -71,7 +71,7 @@ const VirtualizedGrid = memo(
       >
         <div
           className="virtual-canvas"
-          role="presentation"
+          role="rowgroup"
           style={{ height: rowVirtualizer.getTotalSize() }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => (

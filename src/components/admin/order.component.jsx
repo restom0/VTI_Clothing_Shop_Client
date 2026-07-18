@@ -39,192 +39,190 @@ const AllOrder = () => {
     };
   });
   return (
-    <>
-      <AdminLayout
-        tab={tab}
-        setTab={setTab}
-        name="Danh sách đơn hàng"
-        tablist={allorder_tab}
-        TABLE_HEAD={allorder}
-        TABLE_ROWS={listOrders ? listOrders : []}
-        updateContent="Chỉnh sửa"
-        deleteContent="Xóa"
-        noUpdate
-        noDelete
-        size="xl"
-        headerDetail="Chi tiết đơn hàng"
-        overflow
-        bodyDetail={
-          <Card>
-            <CardBody>
-              <div className="grid grid-cols-3 mb-5">
-                <Typography variant="h5" color="blue-gray" className="font-bold">
-                  Thông tin liên hệ
-                </Typography>
-                <div className="col-span-2 grid grid-cols-3 gap-2">
-                  <Typography variant="h6" color="blue-gray">
-                    Tên người nhận:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.receiver_name}
-                  </Typography>
-                  <Typography variant="h6" color="blue-gray">
-                    Địa chỉ nhận hàng:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.address}
-                  </Typography>
-                  <Typography variant="h6" color="blue-gray">
-                    Số điện thoại người nhận:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.phone_number}
-                  </Typography>
-                </div>
-              </div>
-              <Divider />
-              <div className="grid grid-cols-3 mt-5 mb-5">
-                <Typography variant="h5" color="blue-gray" className="font-bold">
-                  Phương thức thanh toán
-                </Typography>
-                <div className="col-span-2 grid grid-cols-3 gap-2">
-                  <Typography variant="h6" color="blue-gray">
-                    Hình thức thanh toán:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.payment_method}
-                  </Typography>
-                  <Typography variant="h6" color="blue-gray">
-                    Trạng thái:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.payment_status}
-                  </Typography>
-                </div>
-              </div>
-              <Divider />
-              <div className="grid grid-cols-3 mt-5 mb-5">
-                <Typography variant="h5" color="blue-gray" className="font-bold">
-                  Phương thức vận chuyển
-                </Typography>
-                <div className="col-span-2 grid grid-cols-3 gap-2">
-                  <Typography variant="h6" color="blue-gray">
-                    Hình thức vận chuyển:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    Giao hàng tiêu chuẩn
-                  </Typography>
-                  <Typography variant="h6" color="blue-gray">
-                    Trạng thái:
-                  </Typography>
-                  <Typography variant="body" className="col-span-2" color="blue-gray">
-                    {orders?.object.find((order) => order.id === selectedId)?.payment_status}
-                  </Typography>
-                </div>
-              </div>
-              <Divider />
-              <Typography variant="h5" color="blue-gray" className="font-bold mt-5">
-                Danh sách sản phẩm
+    <AdminLayout
+      tab={tab}
+      setTab={setTab}
+      name="Danh sách đơn hàng"
+      tablist={allorder_tab}
+      TABLE_HEAD={allorder}
+      TABLE_ROWS={listOrders ?? []}
+      updateContent="Chỉnh sửa"
+      deleteContent="Xóa"
+      noUpdate
+      noDelete
+      size="xl"
+      headerDetail="Chi tiết đơn hàng"
+      overflow
+      bodyDetail={
+        <Card>
+          <CardBody>
+            <div className="grid grid-cols-3 mb-5">
+              <Typography variant="h5" color="blue-gray" className="font-bold">
+                Thông tin liên hệ
               </Typography>
-              <table className="w-full min-w-max table-auto text-left mt-5">
-                <thead>
-                  <tr>
-                    {TABLE_HEAD.map((head) => (
-                      <th key={head} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal leading-none opacity-70"
-                        >
-                          {head}
-                        </Typography>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders?.object
-                    .find((order) => order.id === selectedId)
-                    ?.orderItems.slice((subactive - 1) * 5, subactive * 5)
-                    .map((item, index) => {
-                      const isLast =
-                        index ===
-                        orders?.object.find((order) => order.id === selectedId)?.orderItems.length -
-                          1;
-                      const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+              <div className="col-span-2 grid grid-cols-3 gap-2">
+                <Typography variant="h6" color="blue-gray">
+                  Tên người nhận:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.receiver_name}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Địa chỉ nhận hàng:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.address}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Số điện thoại người nhận:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.phone_number}
+                </Typography>
+              </div>
+            </div>
+            <Divider />
+            <div className="grid grid-cols-3 mt-5 mb-5">
+              <Typography variant="h5" color="blue-gray" className="font-bold">
+                Phương thức thanh toán
+              </Typography>
+              <div className="col-span-2 grid grid-cols-3 gap-2">
+                <Typography variant="h6" color="blue-gray">
+                  Hình thức thanh toán:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.payment_method}
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Trạng thái:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.payment_status}
+                </Typography>
+              </div>
+            </div>
+            <Divider />
+            <div className="grid grid-cols-3 mt-5 mb-5">
+              <Typography variant="h5" color="blue-gray" className="font-bold">
+                Phương thức vận chuyển
+              </Typography>
+              <div className="col-span-2 grid grid-cols-3 gap-2">
+                <Typography variant="h6" color="blue-gray">
+                  Hình thức vận chuyển:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  Giao hàng tiêu chuẩn
+                </Typography>
+                <Typography variant="h6" color="blue-gray">
+                  Trạng thái:
+                </Typography>
+                <Typography variant="body" className="col-span-2" color="blue-gray">
+                  {orders?.object.find((order) => order.id === selectedId)?.payment_status}
+                </Typography>
+              </div>
+            </div>
+            <Divider />
+            <Typography variant="h5" color="blue-gray" className="font-bold mt-5">
+              Danh sách sản phẩm
+            </Typography>
+            <table className="w-full min-w-max table-auto text-left mt-5">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head) => (
+                    <th key={head} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {orders?.object
+                  .find((order) => order.id === selectedId)
+                  ?.orderItems.slice((subactive - 1) * 5, subactive * 5)
+                  .map((item, index) => {
+                    const isLast =
+                      index ===
+                      orders?.object.find((order) => order.id === selectedId)?.orderItems.length -
+                        1;
+                    const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
-                      return (
-                        <tr key={index}>
-                          <td className={classes}>
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {index + 1}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {item.product_id.product_id.product_id.name}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {quantityFormatter.format(item.quantity)}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {formatPrice(
-                                item.product_id.sale_price * (1 - item.product_id.discount / 100)
-                              )}
-                            </Typography>
-                          </td>
-                          <td className={classes}>
-                            <Typography variant="small" color="blue-gray" className="font-normal">
-                              {formatPrice(
-                                item.product_id.sale_price *
-                                  (1 - item.product_id.discount / 100) *
-                                  item.quantity
-                              )}
-                            </Typography>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  <tr className="bg-blue-gray-50/50">
-                    <td className="p-4">Tổng cộng</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td className="p-4">
-                      {formatPrice(
-                        orders?.object.find((order) => order.id === selectedId)?.total_price
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <Pagination
-                page={Math.ceil(
-                  orders?.object.find((order) => order.id === selectedId)?.orderItems.length / 5
-                )}
-                active={subactive}
-                setActive={setSubactive}
-              />
-            </CardBody>
-          </Card>
-        }
-      >
-        <div className="flex items-center justify-between gap-4">
-          <Input
-            className="w-full"
-            size="small"
-            label="Tìm kiếm sản phẩm"
-            variant="outlined"
-            autoComplete="off"
-            placeholder="Tìm kiếm sản phẩm"
-          />
-        </div>
-      </AdminLayout>
-    </>
+                    return (
+                      <tr key={item.id ?? item.product_id?.id ?? item.product_id?.sku}>
+                        <td className={classes}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            {index + 1}
+                          </Typography>
+                        </td>
+                        <td className={classes}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            {item.product_id.product_id.product_id.name}
+                          </Typography>
+                        </td>
+                        <td className={classes}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            {quantityFormatter.format(item.quantity)}
+                          </Typography>
+                        </td>
+                        <td className={classes}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            {formatPrice(
+                              item.product_id.sale_price * (1 - item.product_id.discount / 100)
+                            )}
+                          </Typography>
+                        </td>
+                        <td className={classes}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            {formatPrice(
+                              item.product_id.sale_price *
+                                (1 - item.product_id.discount / 100) *
+                                item.quantity
+                            )}
+                          </Typography>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                <tr className="bg-blue-gray-50/50">
+                  <td className="p-4">Tổng cộng</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td className="p-4">
+                    {formatPrice(
+                      orders?.object.find((order) => order.id === selectedId)?.total_price
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <Pagination
+              page={Math.ceil(
+                orders?.object.find((order) => order.id === selectedId)?.orderItems.length / 5
+              )}
+              active={subactive}
+              setActive={setSubactive}
+            />
+          </CardBody>
+        </Card>
+      }
+    >
+      <div className="flex items-center justify-between gap-4">
+        <Input
+          className="w-full"
+          size="small"
+          label="Tìm kiếm sản phẩm"
+          variant="outlined"
+          autoComplete="off"
+          placeholder="Tìm kiếm sản phẩm"
+        />
+      </div>
+    </AdminLayout>
   );
 };
 

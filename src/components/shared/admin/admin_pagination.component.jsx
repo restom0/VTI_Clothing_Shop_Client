@@ -32,11 +32,14 @@ const AdminPagination = ({ page }) => {
               </Button>
 
               <div className="flex items-center gap-2">
-                {Array.from({ length: page }, (_, index) => (
-                  <Button key={index} {...getItemProps(index + 1)}>
-                    {index + 1}
-                  </Button>
-                ))}
+                {Array.from({ length: page }, (_, index) => {
+                  const pageNumber = index + 1;
+                  return (
+                    <Button key={pageNumber} {...getItemProps(pageNumber)}>
+                      {pageNumber}
+                    </Button>
+                  );
+                })}
               </div>
 
               <Button

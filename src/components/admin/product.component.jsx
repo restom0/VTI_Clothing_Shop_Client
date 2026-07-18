@@ -52,7 +52,7 @@ import {
 import { SHOP_PRODUCT_COLORS } from "../../mocks/shop_products.mock";
 /** Handles product list. */
 const ProductList = () => {
-  const [open] = React.useState(false);
+  const open = false;
 
   const product = {
     id: 0,
@@ -180,16 +180,18 @@ const ProductList = () => {
   };
   if (isLoading_Brand || isLoading_Category || isLoading_Product) return <Loading />;
   if (isError_Brand || isError_Category || isError_Product) return navigate(ROUTES.ERROR);
-  const ListProduct = [];
-  products && products.object.length > 0;
-  products.object.map((item) => {
-    ListProduct.push({
+  const productImages = product.imageUrl.map((url, position) => ({
+    alt: `${product.title} ${position + 1}`,
+    key: `${product.id}-${position + 1}`,
+    url,
+  }));
+  const ListProduct =
+    products?.object?.map((item) => ({
       id: item.id,
       name: item.name,
       brand: item.brand_id.name,
       category: item.category_id.name,
-    });
-  });
+    })) ?? [];
   return (
     <>
       <AdminLayout
@@ -211,9 +213,9 @@ const ProductList = () => {
                     modules={[Navigation]}
                     className="mySwiper1 h-[300px] w-[500px]"
                   >
-                    {product.imageUrl.map((url, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={url} />
+                    {productImages.map(({ alt, key, url }) => (
+                      <SwiperSlide key={key}>
+                        <img src={url} alt={alt} />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -231,9 +233,9 @@ const ProductList = () => {
                     loop={true}
                     className={ADMIN_PRODUCT_THUMB_SWIPER_CLASSNAME}
                   >
-                    {product.imageUrl.map((url, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={url} />
+                    {productImages.map(({ alt, key, url }) => (
+                      <SwiperSlide key={key}>
+                        <img src={url} alt={alt} />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -278,8 +280,8 @@ const ProductList = () => {
                     Chất liệu
                   </Typography>
                   <div className={PRODUCT_COLOR_COLUMN_CLASSNAME}>
-                    {product.colors.map((color, index) => (
-                      <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={index}>
+                    {product.colors.map((color) => (
+                      <div className={PRODUCT_COLOR_ROW_CLASSNAME} key={color.label}>
                         <Button
                           size="lg"
                           variant="gradient"
@@ -295,15 +297,15 @@ const ProductList = () => {
                   </div>
 
                   <div className="my-8 mt-3 flex flex-col gap-2">
-                    {product.sizes.map((size, index) => (
-                      <Typography key={index} className="!text-gray-700 text-center">
+                    {product.sizes.map((size) => (
+                      <Typography key={size} className="!text-gray-700 text-center">
                         {size}
                       </Typography>
                     ))}
                   </div>
                   <div className="my-8 mt-3 flex flex-col gap-2">
-                    {product.materials.map((material, index) => (
-                      <Typography key={index} className="!text-gray-700 text-center">
+                    {product.materials.map((material) => (
+                      <Typography key={material} className="!text-gray-700 text-center">
                         {material}
                       </Typography>
                     ))}
@@ -360,8 +362,8 @@ const ProductList = () => {
               <FormControl fullWidth>
                 <Select value={updateBrand} onChange={(e) => setUpdateBrand(e.target.value)}>
                   {brands?.object?.length > 0 &&
-                    brands.object.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
+                    brands.object.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}
@@ -376,8 +378,8 @@ const ProductList = () => {
                 <Select value={updateCategory} onChange={(e) => setUpdateCategory(e.target.value)}>
                   {categories &&
                     categories.object.length > 0 &&
-                    categories.object.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
+                    categories.object.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}
@@ -450,8 +452,8 @@ const ProductList = () => {
                   onChange={(e) => setBrand(e.target.value)}
                 >
                   {brands?.object?.length > 0 &&
-                    brands.object.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
+                    brands.object.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}
@@ -466,8 +468,8 @@ const ProductList = () => {
                 <Select value={category} onChange={(e) => setCategory(e.target.value)}>
                   {categories &&
                     categories.object.length > 0 &&
-                    categories.object.map((item, index) => (
-                      <MenuItem key={index} value={item.id}>
+                    categories.object.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
                         {item.name}
                       </MenuItem>
                     ))}

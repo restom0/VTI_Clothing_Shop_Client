@@ -30,11 +30,11 @@ const getInitialLanguage = () => {
 
 /** Handles i18n provider. */
 export const I18nProvider = ({ children }) => {
-  const [language, setLanguageState] = useState(getInitialLanguage);
+  const [language, setLanguage] = useState(getInitialLanguage);
 
   /** Sets language. */
-  const setLanguage = useCallback((nextLanguage) => {
-    setLanguageState(normalizeLanguage(nextLanguage) ?? FALLBACK_LANGUAGE);
+  const updateLanguage = useCallback((nextLanguage) => {
+    setLanguage(normalizeLanguage(nextLanguage) ?? FALLBACK_LANGUAGE);
   }, []);
 
   useEffect(() => {
@@ -49,11 +49,11 @@ export const I18nProvider = ({ children }) => {
 
     return {
       language,
-      setLanguage,
+      setLanguage: updateLanguage,
       supportedLanguages: SUPPORTED_LANGUAGES,
       t,
     };
-  }, [language, setLanguage]);
+  }, [language, updateLanguage]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };

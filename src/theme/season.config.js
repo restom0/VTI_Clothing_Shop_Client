@@ -53,7 +53,7 @@ export const SEASON_OPTIONS = [
 /** Handles detect season by month. */
 export const detectSeasonByMonth = () => {
   const month = new Date().getMonth() + 1; // 1–12
-  const season = SEASON_OPTIONS.find((opt) => opt.months && opt.months.includes(month));
+  const season = SEASON_OPTIONS.find((opt) => opt.months?.includes(month));
   return season?.value ?? "spring";
 };
 

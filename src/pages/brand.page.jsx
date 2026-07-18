@@ -12,7 +12,7 @@ const Brandpage = () => {
   return (
     <main className="page-container shop-browse-page">
       <div className="mb-5">
-        <BreadcrumbsWithIcon name={id ? id : null} />
+        <BreadcrumbsWithIcon name={id ?? null} />
       </div>
       <div className="shop-browse-layout">
         <aside className="shop-filter-panel">

@@ -37,6 +37,7 @@ export const ProductFilterView = ({
     <div className="grid grid-cols-3 gap-2">
       {sizes.map((size) => (
         <button
+          type="button"
           key={size}
           className={`btn-size ${selectedSize === size ? "active" : ""}`}
           onClick={() => onSizeSelect(size)}
@@ -50,6 +51,7 @@ export const ProductFilterView = ({
     <div className="flex flex-wrap gap-3">
       {colorOptions.map(({ color, label }) => (
         <button
+          type="button"
           key={color}
           title={label}
           aria-label={label}

@@ -45,14 +45,14 @@ const Registerpage = () => {
   const { t } = useI18n();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [phone_number, setPhone_Number] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
   const [gender, setGender] = useState("");
-  const [address] = useState("");
+  const address = "";
   const avatar_url = useSelector((state) => state.avatar_url.value);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const Registerpage = () => {
         gender,
         lastname,
         password,
-        phone_number,
+        phone_number: phoneNumber,
         username,
       })
     );
@@ -148,8 +148,8 @@ const Registerpage = () => {
               variant="standard"
               label={t("auth.phone")}
               placeholder="0912345678"
-              onChange={(e) => setPhone_Number(e.target.value)}
-              value={phone_number}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={phoneNumber}
             />
           </div>
           <div className="flex flex-col">
@@ -257,19 +257,17 @@ const Registerpage = () => {
               disabled={
                 username === "" &&
                 password === "" &&
-                phone_number === "" &&
+                phoneNumber === "" &&
                 confirmPassword === "" &&
                 firstname === "" &&
                 lastname === "" &&
                 email === "" &&
                 birthday === ""
-                  ? true
-                  : false
               }
               onClick={() => {
                 setPassword("");
                 setUsername("");
-                setPhone_Number("");
+                setPhoneNumber("");
                 setConfirmPassword("");
                 setPassword("");
                 dispatch(resetAvatar());
@@ -291,15 +289,13 @@ const Registerpage = () => {
                 isLoading ||
                 username === "" ||
                 password === "" ||
-                phone_number === "" ||
+                phoneNumber === "" ||
                 password !== confirmPassword ||
                 confirmPassword === "" ||
                 firstname === "" ||
                 lastname === "" ||
                 email === "" ||
                 birthday === ""
-                  ? true
-                  : false
               }
               onClick={handleRegister}
               color="indigo"
